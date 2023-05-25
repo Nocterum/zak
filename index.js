@@ -46,12 +46,18 @@ const start = async () => {
 
         try {
 
-            if (text === '/start') {
-                await UserModel.create({chatId});
-                return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}, меня зовут бот Зак. 
-                \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
-                \nЧтобы начать работу выбери в меню команду /startwork.`)
-            }
+                try {
+                    if (text === '/start') {
+                        const user = await UserModel.create({chatId});
+                        console.log('Новый пользователь создан:', user);
+                        return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}, меня зовут бот Зак. 
+                        \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
+                        \nЧтобы начать работу выбери в меню команду /startwork.`)
+                    }
+                } catch (e) {
+                    console.log('Ошибка при создании нового пользователя', e);
+                }
+            
     
             if (text === '/info') {
                 return bot.sendMessage(chatId, `Последняя введеная команда "Команда"`)
@@ -71,7 +77,7 @@ const start = async () => {
             }
     
         } catch (e) {
-            return bot.sendMessage(chatId, 'Ошибка в исполнении кода');
+            return bot.sendMessage(chatId, 'Ошибка в исполнении кода', e);
 
         }
 
