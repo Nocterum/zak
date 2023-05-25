@@ -34,6 +34,7 @@ const start = async () => {
     try {
         await sequelize.authenticate()
         await sequelize.sync()
+        await console.log('Подключение к БД установленно');
     } catch(err) {
         console.log('Подключение к БД сломалось', err)
     }

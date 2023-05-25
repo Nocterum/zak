@@ -6,8 +6,8 @@ const User = sequelize.define( 'user', {
     chatId: {type: DataTypes.INTEGER, unique:true},
     right: {type: DataTypes.INTEGER, defaultValue: 0},
     wrong: {type: DataTypes.INTEGER, defaultValue: 0},
-    lastCommand: {type: DataTypes.INTEGER, defaultValue: 'отсутствует'},
-    prelastCommand: {type: DataTypes.INTEGER, defaultValue: 'отсутствует'},
+    lastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
+    preLastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
 })
 
 module.exports = User;
