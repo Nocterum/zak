@@ -1,7 +1,7 @@
 const sequelize = require('./db');
 const {DataTypes} = require('sequelize');
 
-const User = sequelize.define( 'user', {
+const UserModel = sequelize.define( 'users', {
     id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
     chatId: {type: DataTypes.INTEGER, unique:true},
     right: {type: DataTypes.INTEGER, defaultValue: 0},
@@ -10,4 +10,4 @@ const User = sequelize.define( 'user', {
     preLastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
 })
 
-module.exports = User;
+module.exports = UserModel;
