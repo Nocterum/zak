@@ -34,9 +34,8 @@ const start = async () => {
     try {
         await sequelize.authenticate()
         await sequelize.sync()
-        await console.log()
-    } catch (e) {
-        console.log('Подключение к БД сломалось', e)
+    } catch(err) {
+        console.log('Подключение к БД сломалось', err)
     }
 
     bot.on('message', async msg => {
