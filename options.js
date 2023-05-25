@@ -18,4 +18,12 @@ module.exports = {
         })
     },
 
+    resetOptions: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Сбросить результаты', callback_data: '/reset'}],
+            ]
+        })
+    },
+
 }

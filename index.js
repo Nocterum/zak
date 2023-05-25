@@ -3,7 +3,7 @@ const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {polling:true});
 
 //импорты
-const {gameOptions, againOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -57,16 +57,24 @@ const start = async () => {
                 } catch (e) {
                     console.log('Ошибка при создании нового пользователя', e);
                 }
-            
+
+            const user = await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
     
             if (text === '/info') {
                 return bot.sendMessage(chatId, `Последняя введеная команда "Команда"`)
             }
 
             if (text === '/infogame') {
-                const user = await UserModel.findOne({chatId})
+                
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"
-                                                \nНеправильных ответов: "${user.wrong}"`);
+                                                \nНеправильных ответов: "${user.wrong}"
+                                                \nПоследняя команда: "${user.lastcommand}"
+                                                \nПредпоследняя команда: "${user.preLastcommand}"`, resetOptions);
+                                                
             }
     
             if (text === '/game') {
@@ -93,15 +101,35 @@ const start = async () => {
         const chatId = msg.message.chat.id;
         console.log(msg)
 
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        })
+
         if (data === '/again') {
             return startGame(chatId)
         }
 
-        if (data == chats[chatId]) {
+        if(data === '/reset') {
+            if (user) {
+                user.right = 0;
+                user.wrong = 0;
+                await user.save();
+            } else {
+                await UserModel.create({chatId, right: 0, wrong: 0});
+            }
+            await bot.sendMessage(chatId, `Результаты игры сброшенны: \nправильных ${user.right}, неправильных ${user.wrong}`, againOptions)
+        }
+
+        if (data == chats[chatId] && user.lastcommand === '/game' || '/again') {
+            user.right += 1;
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
         } else {
+            user.wrong += 1;
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
         }
+
     })
 }
 
