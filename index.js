@@ -13,7 +13,7 @@ chats = {};
 //меню
 bot.setMyCommands([
     {command: '/startwork', description:'Начало работы'},
-    {command: '/start', description:'Начальное'},
+    {command: '/start', description:'Начальное приветствие'},
     {command: '/infowork', description:'Проверка введенных параметров'},
     {command: '/game', description:'Игра в угадайку'},
     {command: '/infogame', description:'Результаты в игре'},
@@ -44,21 +44,35 @@ const start = async () => {
         const chatId = msg.chat.id;
         console.log(msg)
 
-        if (text === '/start') {
-            return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}, меня зовут бот Зак. 
-            \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
-            \nЧтобы начать работу выбери в меню команду /startwork.`)
-        }
+        try {
 
-        if (text === '/info') {
-            return bot.sendMessage(chatId, `Последняя введеная команда "Команда"`)
-        }
+            if (text === '/start') {
+                await UserModel.create({chatId});
+                return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}, меня зовут бот Зак. 
+                \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
+                \nЧтобы начать работу выбери в меню команду /startwork.`)
+            }
+    
+            if (text === '/info') {
+                return bot.sendMessage(chatId, `Последняя введеная команда "Команда"`)
+            }
 
-        if (text === '/game') {
-            await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
-            const randomNumber = Math.floor(Math.random() * 10)
-            chats[chatId] = randomNumber;
-            return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+            if (text === '/infogame') {
+                const user = await UserModel.findOne({chatId})
+                return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"
+                                                \nНеправильных ответов: "${user.wrong}"`);
+            }
+    
+            if (text === '/game') {
+                await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
+                const randomNumber = Math.floor(Math.random() * 10)
+                chats[chatId] = randomNumber;
+                return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+            }
+    
+        } catch (e) {
+            return bot.sendMessage(chatId, 'Ошибка в исполнении кода');
+
         }
 
         await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')

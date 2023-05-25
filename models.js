@@ -9,3 +9,5 @@ const User = sequelize.define( 'user', {
     lastCommand: {type: DataTypes.INTEGER, defaultValue: 'отсутствует'},
     prelastCommand: {type: DataTypes.INTEGER, defaultValue: 'отсутствует'},
 })
+
+module.exports = User;
