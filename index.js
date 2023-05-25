@@ -1,10 +1,11 @@
 const TelegramApi = require('node-telegram-bot-api');
-const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA'
-const bot = new TelegramApi(token, {polling:true})
+const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+const bot = new TelegramApi(token, {polling:true});
 
 //импорты
-const {gameOptions, againOptions} = require('./options')
-const sequelize = require('./db')
+const {gameOptions, againOptions} = require('./options');
+const sequelize = require('./db');
+const User = require('./models');
 
 //глобальные переменные
 chats = {};
@@ -33,6 +34,7 @@ const start = async () => {
     try {
         await sequelize.authenticate()
         await sequelize.sync()
+        await console.log()
     } catch (e) {
         console.log('Подключение к БД сломалось', e)
     }
@@ -75,7 +77,7 @@ const start = async () => {
             return startGame(chatId)
         }
 
-        if (data === chats[chatId]) {
+        if (data == chats[chatId]) {
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
         } else {
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
