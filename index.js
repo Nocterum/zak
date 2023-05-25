@@ -4,6 +4,7 @@ const bot = new TelegramApi(token, {polling:true})
 
 //импорты
 const {gameOptions, againOptions} = require('./options')
+const sequelize = require('./db')
 
 //глобальные переменные
 chats = {};
@@ -27,7 +28,14 @@ const startGame = async (chatId) => {
 
 //-------------------------------------------------------------------------------------------------------------------------------------
 
-const start = () => {
+const start = async () => {
+
+    try {
+        await sequelize.authenticate()
+        await sequelize.sync()
+    } catch (e) {
+        console.log('Подключение к БД сломалось', e)
+    }
 
     bot.on('message', async msg => {
         const text = msg.text;
