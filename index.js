@@ -27,13 +27,6 @@ const startGame = async (chatId) => {
         await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
     }
 
-const saveCodeQuerry = async () => {
-    user.preLastCommand = user.lastCommand;
-    user.lastCommand = data;
-    await user.save();
-}
-
-
 //-------------------------------------------------------------------------------------------------------------------------------------
 
 const start = async () => {
@@ -97,21 +90,22 @@ const start = async () => {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
                 return bot.sendMessage(chatId, 
-                    `Последняя введеная команда "Команда"`)
+                    `Последняя команда:
+                    \n"${user.lastCommand}"
+                    \nПредпоследняя команда:
+                    \n"${user.preLastCommand}"`);
             }
 
+            //результаты игры
             if (text === '/infogame') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
                 return bot.sendMessage(chatId, 
                     `Правильных ответов: "${user.right}"
-                    \nНеправильных ответов: "${user.wrong}"
-                    \nПоследняя команда:
-                    \n"${user.lastCommand}"
-                    \nПредпоследняя команда:
-                    \n"${user.preLastCommand}"`, resetOptions);   
+                    \nНеправильных ответов: "${user.wrong}"`, resetOptions)   
             }
     
+            //функция игры
             if (text === '/game') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
@@ -122,7 +116,19 @@ const start = async () => {
                 return bot.sendMessage(chatId, 
                     `Отгадывай:`, gameOptions)
             }
-    
+
+            //Записываем название бренда в ячейку БД
+            if(user.lastCommand === '/enterBrand') {
+                await user.update({vendorCode: text});
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
+            }
+            
+            //Записываем артикул в ячейку БД
+            if(user.lastCommand === '/enterVC') {
+                await user.update({vendorCode: text});
+                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
+            }
+            
         } catch (e) {
             return bot.sendMessage(chatId, 
                 'Ошибка в исполнении кода', e);
@@ -153,19 +159,36 @@ const start = async () => {
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = data;
+            await user.save();
             return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
         }
 
         //Вводим название бренда
         if(data === '/enterBrand') {
-            saveCodeQuerry(chatId);
-                return bot.sendMessage(chatId, 'Введите название бренда:\n`в оригинальном написании`');
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = data;
+            await user.save();
+                return bot.sendMessage(chatId, 
+                    `Введите название бренда:`);
         }
 
         //вводим артикул
         if(data === '/enterVC') {
-            saveCodeQuerry(chatId);
-            return bot.sendMessage(chatId, `Введите артикул:`);
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = data;
+            await user.save();
+            return bot.sendMessage(chatId, 
+                `Введите артикул:`);
+        }
+
+        if(data === '/work2') {
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
+        }
+
+        if(data === '/work3') {
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
         //рестарт игры
@@ -217,7 +240,6 @@ const start = async () => {
         await user.save();
 
     })
-
 
 }
 
