@@ -3,20 +3,20 @@ const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {polling:true});
 
 //импорты
-const {gameOptions, againOptions, resetOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, work1Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
 //глобальные переменные
 chats = {};
 
-//меню
+//меню команд
 bot.setMyCommands([
-    {command: '/startwork', description:'Начало работы'},
     {command: '/start', description:'Начальное приветствие'},
+    {command: '/startwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
-    {command: '/game', description:'Игра в угадайку'},
     {command: '/infogame', description:'Результаты в игре'},
+    {command: '/game', description:'Игра в угадайку'},
 ])
 
 
@@ -26,6 +26,12 @@ const startGame = async (chatId) => {
         chats[chatId] = randomNumber;
         await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
     }
+
+const saveCodeQuerry = async () => {
+    user.preLastCommand = user.lastCommand;
+    user.lastCommand = data;
+    await user.save();
+}
 
 
 //-------------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +59,7 @@ const start = async () => {
         });
 
         try {
-
+            //старт
             try {
                 if (text === '/start') {
 
@@ -81,7 +87,12 @@ const start = async () => {
                 console.log('Ошибка при создании нового пользователя', e);
             }
 
-    
+            //Главное меню
+            if (text === '/startwork') {
+                return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+            }
+
+            //вывод информации
             if (text === '/info') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
@@ -140,6 +151,24 @@ const start = async () => {
             }
         })
 
+        //Наличие, сроки, резерв
+        if(data === '/work1') {
+            return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
+        }
+
+        //Вводим название бренда
+        if(data === '/enterBrand') {
+            saveCodeQuerry(chatId);
+                return bot.sendMessage(chatId, 'Введите название бренда:\n`в оригинальном написании`');
+        }
+
+        //вводим артикул
+        if(data === '/enterVC') {
+            saveCodeQuerry(chatId);
+            return bot.sendMessage(chatId, `Введите артикул:`);
+        }
+
+        //рестарт игры
         if (data === '/again') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
@@ -147,6 +176,7 @@ const start = async () => {
             return startGame(chatId);
         }
 
+        //сброс результатов игры
         if(data === '/reset') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
@@ -165,6 +195,7 @@ const start = async () => {
                 \nнеправильных ${user.wrong}`, againOptions)
         }
 
+        //запись результата игры в БД
         if (user.lastCommand === '/game' || '/again') {
 
             if (data == chats[chatId]) {
@@ -178,7 +209,6 @@ const start = async () => {
                 return bot.sendMessage(chatId, 
                     `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
             }
-        } else {
         }
 
         await bot.sendSticker(chatId, 

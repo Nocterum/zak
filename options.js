@@ -26,4 +26,25 @@ module.exports = {
         })
     },
 
+    workOptions: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Наличие/сроки/резерв', callback_data: '/work1'}],
+                [{text: 'Превью изображений', callback_data: '/work2'}],
+                [{text: 'Добавить в заказ', callback_data: '/work3'}],
+
+            ]
+        })
+    },
+
+    work1Options: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Ввести бренд', callback_data: '/enterBrand'}],
+                [{text: 'ВВести артикул ', callback_data: '/enterVC'}],
+
+            ]
+        })
+    },
+
 }
