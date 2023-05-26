@@ -66,9 +66,6 @@ const start = async () => {
                             \nЧтобы начать работу выбери в меню команду /startwork.`)
                     } else {
                         await UserModel.create({chatId});
-                        user.preLastCommand = '';
-                        user.lastCommand = '/start';
-                        await user.save();
                         console.log('Новый пользователь создан:', user);
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
@@ -123,13 +120,15 @@ const start = async () => {
 
             //Записываем название бренда в ячейку БД
             if(user.lastCommand === '/enterBrand') {
-                await user.update({brand: text});
+                user.brand = text;
+                await user.save();
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
             }
             
             //Записываем артикул в ячейку БД
             if(user.lastCommand === '/enterVC') {
-                await user.update({vendorCode: text});
+                user.vendorCode = text;
+                await user.save();
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
             }
             
