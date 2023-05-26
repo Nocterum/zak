@@ -60,7 +60,6 @@ const start = async () => {
                     if (user) {
                         user.preLastCommand = user.lastCommand;
                         user.lastCommand = text;
-                        await user.save();
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак. 
                             \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
@@ -68,7 +67,6 @@ const start = async () => {
                     } else {
                         user.preLastCommand = user.lastCommand;
                         user.lastCommand = text;
-                        await user.save();
                         console.log('Новый пользователь создан:', user);
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
@@ -85,15 +83,15 @@ const start = async () => {
 
     
             if (text === '/info') {
-                await user.update(chatId, {preLastCommand: lastCommand});
-                await user.update(chatId, {lastCommand: '/info'});
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
                 return bot.sendMessage(chatId, 
                     `Последняя введеная команда "Команда"`)
             }
 
             if (text === '/infogame') {
-                await user.update(chatId, {preLastCommand: lastCommand});
-                await user.update(chatId, {lastCommand: '/infogame'});
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
                 return bot.sendMessage(chatId, 
                     `Правильных ответов: "${user.right}"
                     \nНеправильных ответов: "${user.wrong}"
@@ -103,8 +101,8 @@ const start = async () => {
             }
     
             if (text === '/game') {
-                await user.update(chatId, {preLastCommand: lastCommand});
-                await user.update(chatId, {lastCommand: '/game'});
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
                 await bot.sendMessage(chatId, 
                     `Сейчас загадаю цифру`)
                 const randomNumber = Math.floor(Math.random() * 10)
@@ -118,6 +116,8 @@ const start = async () => {
                 'Ошибка в исполнении кода', e);
 
         }
+
+        await user.save();
 
         await bot.sendSticker(chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
@@ -140,19 +140,18 @@ const start = async () => {
         })
 
         if (data === '/again') {
-            await user.update(chatId, {preLastCommand: lastCommand});
-            await user.update(chatId, {lastCommand: '/again'});
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = text;
             return startGame(chatId)
         }
 
         if(data === '/reset') {
-            await user.update(chatId, {preLastCommand: lastCommand});
-            await user.update(chatId, {lastCommand: '/reset'});
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = text;
 
             if (user) {
                 user.right = 0;
                 user.wrong = 0;
-                await user.save();
             } else {
                 await UserModel.create({chatId, right: 0, wrong: 0});
             }
@@ -171,8 +170,10 @@ const start = async () => {
             return bot.sendMessage(chatId, 
                 `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
         }
-
+        
     })
+
+    await user.save();
 }
 
 start()
