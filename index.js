@@ -48,6 +48,7 @@ const start = async () => {
         const chatId = msg.chat.id;
         const name = msg.from.first_name;
         const last_name = msg.from.last_name;
+
         console.log(msg)
 
         const user = await UserModel.findOne({
@@ -62,7 +63,7 @@ const start = async () => {
 
                     if (user) {
 
-                        await user.update({preLastCommand: lastCommand, lastCommand: text});
+                        await user.update({preLastCommand: user.lastCommand, lastCommand: text, firstName: name, lastName: last_name});
                         return bot.sendMessage(chatId, 
                             `И снова здравствуй, ${msg.from.first_name}!
                             \nВыбери команду /startwork, чтобы начать работу)`)
