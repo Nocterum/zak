@@ -50,8 +50,6 @@ const start = async () => {
                 chatId: chatId
             }
         });
-        
-        await UserModel.create({chatId});
 
         try {
             //старт
