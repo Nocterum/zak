@@ -61,9 +61,8 @@ const start = async () => {
                 if (text === '/start') {
 
                     if (user) {
-                        user.preLastCommand = user.lastCommand;
-                        user.lastCommand = text;
-                        await user.save();
+
+                        await user.update({preLastCommand: lastCommand, lastCommand: text});
                         return bot.sendMessage(chatId, 
                             `И снова здравствуй, ${msg.from.first_name}!
                             \nВыбери команду /startwork, чтобы начать работу)`)
