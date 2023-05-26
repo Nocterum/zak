@@ -9,6 +9,9 @@ const UserModel = require('./models');
 
 //глобальные переменные
 chats = {};
+brandx = {};
+vendorCodex = {};
+typex = {};
 
 //меню команд
 bot.setMyCommands([
@@ -51,11 +54,10 @@ const start = async () => {
             }
         });
 
-        try {
             //старт
             try {
                 if (text === '/start') {
-
+                    
                     if (user) {
                         user.preLastCommand = user.lastCommand;
                         user.lastCommand = text;
@@ -63,20 +65,34 @@ const start = async () => {
                         return bot.sendMessage(chatId, 
                             `И снова здравствуй, ${msg.from.first_name}!
                             \nВыбери команду /startwork, чтобы начать работу)`)
-                    } else {
-                        await UserModel.create({chatId});
-                        console.log('Новый пользователь создан:', user);
-                        return bot.sendMessage(chatId, 
-                            `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
-                            \nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных. 
-                            \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
-                            \nЧтобы начать работу выбери в меню команду /startwork `)
+                        } else {
+                            await UserModel.create({chatId});
+                            console.log('Новый пользователь создан:', user);
+                            return bot.sendMessage(chatId, 
+                                `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
+                                \nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных. 
+                                \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
+                                \nЧтобы начать работу выбери в меню команду /startwork `)
                     }
                     
                 }
-
+                
             } catch (e) {
                 console.log('Ошибка при создании нового пользователя', e);
+            }
+            
+            //Записываем название бренда в ячейку БД
+            if (user.lastCommand === '/enterBrand') {
+                user.brand = text;
+                await user.save();
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
+            }
+            
+            //Записываем артикул в ячейку БД
+            if (user.lastCommand === '/enterVC') {
+                user.vendorCode = text;
+                await user.save();
+                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
             }
 
             //Главное меню
@@ -120,25 +136,6 @@ const start = async () => {
                     `Отгадывай:`, gameOptions)
             }
 
-            //Записываем название бренда в ячейку БД
-            if (user.lastCommand === '/enterBrand') {
-                user.brand = text;
-                await user.save();
-                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
-            }
-            
-            //Записываем артикул в ячейку БД
-            if (user.lastCommand === '/enterVC') {
-                user.vendorCode = text;
-                await user.save();
-                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
-            }
-            
-        } catch (e) {
-            return bot.sendMessage(chatId, 
-                'Ошибка в исполнении кода слушателя сообщений', e);
-
-        }
 
         await user.save();
 
