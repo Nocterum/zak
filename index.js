@@ -59,7 +59,8 @@ const start = async () => {
             //старт
             try {
                 if (text === '/start') {
-                    
+                    user.sync({ alter: true })
+
                     if (user) {
                         user.preLastCommand = user.lastCommand;
                         user.lastCommand = text;
@@ -94,8 +95,7 @@ const start = async () => {
 
             //Записываем название бренда в ячейку БД
             if (user.lastCommand == '/enterBrand') {
-                user.brand = text;
-                await user.save();
+                user.set({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
             }
             
