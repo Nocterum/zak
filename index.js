@@ -141,13 +141,13 @@ const start = async () => {
 
         if (data === '/again') {
             user.preLastCommand = user.lastCommand;
-            user.lastCommand = text;
+            user.lastCommand = data;
             return startGame(chatId)
         }
 
         if(data === '/reset') {
             user.preLastCommand = user.lastCommand;
-            user.lastCommand = text;
+            user.lastCommand = data;
 
             if (user) {
                 user.right = 0;
@@ -177,7 +177,7 @@ const start = async () => {
 
         await bot.sendSticker(chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-            
+
         await user.save();
 
     })
