@@ -119,7 +119,7 @@ const start = async () => {
             }
 
             //Записываем название бренда в ячейку БД
-            if(user.lastCommand === '/enterBrand') {
+            if(text === text && user.lastCommand === '/enterBrand') {
                 user.brand = text;
                 await user.save();
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
