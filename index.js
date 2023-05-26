@@ -39,6 +39,12 @@ const start = async () => {
     } catch(err) {
         console.log('Подключение к БД сломалось', err)
     }
+    
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
 
     //слушатель сообщений
     bot.on('message', async msg => {
@@ -46,11 +52,7 @@ const start = async () => {
         const chatId = msg.chat.id;
         console.log(msg)
 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-        });
+
 
         try {
 
