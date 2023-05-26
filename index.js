@@ -82,6 +82,9 @@ const start = async () => {
 
             //Главное меню
             if (text === '/startwork') {
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
+                await user.save();
                 return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
             }
 
@@ -119,14 +122,14 @@ const start = async () => {
             }
 
             //Записываем название бренда в ячейку БД
-            if(text === text && user.lastCommand === '/enterBrand') {
+            if (user.lastCommand === '/enterBrand') {
                 user.brand = text;
                 await user.save();
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
             }
             
             //Записываем артикул в ячейку БД
-            if(user.lastCommand === '/enterVC') {
+            if (user.lastCommand === '/enterVC') {
                 user.vendorCode = text;
                 await user.save();
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
@@ -189,10 +192,16 @@ const start = async () => {
         }
 
         if(data === '/work2') {
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = data;
+            await user.save();
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
         if(data === '/work3') {
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = data;
+            await user.save();
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
