@@ -35,11 +35,11 @@ const startGame = async (chatId) => {
 const start = async () => {
 
     try {
-        await sequelize.authenticate()
-        await sequelize.sync()
+        await sequelize.authenticate();
+        await sequelize.sync();
         await console.log('Подключение к БД установленно');
     } catch(err) {
-        console.log('Подключение к БД сломалось', err)
+        console.log('Подключение к БД сломалось', err);
     }
 
     //слушатель сообщений
@@ -59,7 +59,6 @@ const start = async () => {
             //старт
             try {
                 if (text === '/start') {
-                    user.sync({ alter: true })
 
                     if (user) {
                         user.preLastCommand = user.lastCommand;
