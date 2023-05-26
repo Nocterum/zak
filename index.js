@@ -68,6 +68,7 @@ const start = async () => {
                         } else {
                             await UserModel.create({chatId});
                             console.log('Новый пользователь создан:', user);
+                            await user.update({firstName: msg.from.first_name, lastName: msg.from.last_name});
                             return bot.sendMessage(chatId, 
                                 `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
                                 \nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных. 
@@ -81,20 +82,6 @@ const start = async () => {
                 console.log('Ошибка при создании нового пользователя', e);
             }
             
-            //Записываем название бренда в ячейку БД
-            if (user.lastCommand === '/enterBrand') {
-                user.brand = text;
-                await user.save();
-                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
-            }
-            
-            //Записываем артикул в ячейку БД
-            if (user.lastCommand === '/enterVC') {
-                user.vendorCode = text;
-                await user.save();
-                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
-            }
-
             //Главное меню
             if (text === '/startwork') {
                 user.preLastCommand = user.lastCommand;
@@ -103,6 +90,20 @@ const start = async () => {
                 return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
             }
 
+            //Записываем название бренда в ячейку БД
+            if (user.lastCommand == '/enterBrand') {
+                user.brand = text;
+                await user.save();
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
+            }
+            
+            //Записываем артикул в ячейку БД
+            if (user.lastCommand == '/enterVC') {
+                user.vendorCode = text;
+                await user.save();
+                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
+            }
+            
             //вывод информации
             if (text === '/infowork') {
                 user.preLastCommand = user.lastCommand;

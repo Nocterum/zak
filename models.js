@@ -6,6 +6,8 @@ const UserModel = sequelize.define( 'user', {
     chatId: {type: DataTypes.INTEGER, unique:true},
     right: {type: DataTypes.INTEGER, defaultValue: 0},
     wrong: {type: DataTypes.INTEGER, defaultValue: 0},
+    firstName: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
+    lastName: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
     lastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
     preLastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
     brand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
