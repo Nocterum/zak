@@ -139,31 +139,31 @@ const start = async () => {
             }
         })
 
-        try {
+        if (data === '/again') {
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = text;
+            return startGame(chatId)
+        }
 
-            if (data === '/again') {
-                user.preLastCommand = user.lastCommand;
-                user.lastCommand = text;
-                return startGame(chatId)
+        if(data === '/reset') {
+            user.preLastCommand = user.lastCommand;
+            user.lastCommand = text;
+
+            if (user) {
+                user.right = 0;
+                user.wrong = 0;
+            } else {
+                await UserModel.create({chatId, right: 0, wrong: 0});
             }
-    
-            if(data === '/reset') {
-                user.preLastCommand = user.lastCommand;
-                user.lastCommand = text;
-    
-                if (user) {
-                    user.right = 0;
-                    user.wrong = 0;
-                } else {
-                    await UserModel.create({chatId, right: 0, wrong: 0});
-                }
-                return bot.sendMessage(chatId, 
-                    `Результаты игры сброшенны: 
-                    \nправильных ${user.right}, 
-                    \nнеправильных ${user.wrong}`, againOptions)
-            }
-    
-            if (data == chats[chatId] && user.lastCommand === '/game' || '/again') {
+            return bot.sendMessage(chatId, 
+                `Результаты игры сброшенны: 
+                \nправильных ${user.right}, 
+                \nнеправильных ${user.wrong}`, againOptions)
+        }
+
+        if (user.lastCommand === '/game' || '/again') {
+
+            if (data == chats[chatId]) {
                 user.right += 1;
                 return bot.sendMessage(chatId, 
                     `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
@@ -172,12 +172,12 @@ const start = async () => {
                 return bot.sendMessage(chatId, 
                     `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
             }
-
-        } catch (e) {
-            await bot.sendSticker(chatId, 
-                'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
+        } else {
         }
-        
+
+        await bot.sendSticker(chatId, 
+            'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
+            
         await user.save();
 
     })
