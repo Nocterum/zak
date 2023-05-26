@@ -6,12 +6,12 @@ const UserModel = sequelize.define( 'user', {
     chatId: {type: DataTypes.INTEGER, unique:true},
     right: {type: DataTypes.INTEGER, defaultValue: 0},
     wrong: {type: DataTypes.INTEGER, defaultValue: 0},
-    firstName: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    lastName: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    lastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    preLastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    brand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    vendorCode: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
+    firstName: {type: DataTypes.CHAR,},
+    lastName: {type: DataTypes.CHAR},
+    lastCommand: {type: DataTypes.CHAR},
+    preLastCommand: {type: DataTypes.CHAR},
+    brand: {type: DataTypes.CHAR},
+    vendorCode: {type: DataTypes.CHAR},
 })
 
 module.exports = UserModel;
