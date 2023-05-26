@@ -58,16 +58,22 @@ const start = async () => {
                 if (text === '/start') {
 
                     if (user) {
-                        await user.update(chatId, {preLastCommand: lastCommand});
-                        await user.update(chatId, {lastCommand: '/start'});
+                        await user.update({
+                            preLastCommand: lastCommand, 
+                            lastCommand: '/start',
+                            ...user.get()
+                        });
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак. 
                             \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
                             \nЧтобы начать работу выбери в меню команду /startwork.`)
                     } else {
-                        await user.update(chatId, {preLastCommand: lastCommand});
-                        await user.update(chatId, {lastCommand: '/start'});
                         const user = await UserModel.create({chatId});
+                        await user.update({
+                            preLastCommand: '', 
+                            lastCommand: '/start',
+                            ...user.get()
+                        });
                         console.log('Новый пользователь создан:', user);
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
