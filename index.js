@@ -86,14 +86,12 @@ const start = async () => {
             }
 
             //вывод информации
-            if (text === '/info') {
+            if (text === '/infoWork') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
                 return bot.sendMessage(chatId, 
-                    `Последняя команда:
-                    \n"${user.lastCommand}"
-                    \nПредпоследняя команда:
-                    \n"${user.preLastCommand}"`);
+                    `Последняя команда:"${user.lastCommand}"
+                    \nПредпоследняя команда:"${user.preLastCommand}"`);
             }
 
             //результаты игры
@@ -197,6 +195,7 @@ const start = async () => {
         if (data === '/again') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
+            await user.save();
             return startGame(chatId);
         }
 
@@ -204,10 +203,12 @@ const start = async () => {
         if(data === '/reset') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
+            await user.save();
 
             if (user) {
                 user.right = 0;
                 user.wrong = 0;
+                await user.save();
             } else {
                 await UserModel.create({chatId, right: 0, wrong: 0});
             }
@@ -222,10 +223,12 @@ const start = async () => {
 
             if (data == chats[chatId]) {
                 user.right += 1;
+                await user.save();
                 return bot.sendMessage(chatId, 
                     `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
             } else {
                 user.wrong += 1;
+                await user.save();
                 return bot.sendMessage(chatId, 
                     `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
             }
@@ -238,8 +241,6 @@ const start = async () => {
 
         await bot.sendSticker(chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-
-        await user.save();
 
     })
 
