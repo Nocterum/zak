@@ -46,6 +46,8 @@ const start = async () => {
     bot.on('message', async msg => {
         const text = msg.text;
         const chatId = msg.chat.id;
+        const name = msg.from.first_name;
+        const last_name = msg.from.last_name;
         console.log(msg)
 
         const user = await UserModel.findOne({
@@ -68,7 +70,7 @@ const start = async () => {
                         } else {
                             await UserModel.create({chatId});
                             console.log('Новый пользователь создан:', user);
-                            await user.update({firstName: msg.from.first_name, lastName: msg.from.last_name});
+                            await user.set({firstName: name, lastName: last_name});
                             return bot.sendMessage(chatId, 
                                 `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
                                 \nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных. 
