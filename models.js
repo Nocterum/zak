@@ -8,8 +8,8 @@ const UserModel = sequelize.define( 'user', {
     wrong: {type: DataTypes.INTEGER, defaultValue: 0},
     lastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
     preLastCommand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    brand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
-    vendorCode: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
+    //brand: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
+    //vendorCode: {type: DataTypes.CHAR, defaultValue: 'отсутствует'},
 })
 
 module.exports = UserModel;
