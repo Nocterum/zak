@@ -95,8 +95,13 @@ const start = async () => {
 
             //Записываем название бренда в ячейку БД
             if (user.lastCommand == '/enterBrand') {
-                user.set({brand: text});
+                try {
+                    user.set({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
+                } catch (e) {
+                    console.log('Запись бренда не состоялась', e)
+                }
+                
             }
             
             //Записываем артикул в ячейку БД
