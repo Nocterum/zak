@@ -95,9 +95,10 @@ const start = async () => {
                 return bot.sendMessage(chatId, 
                     `Правильных ответов: "${user.right}"
                     \nНеправильных ответов: "${user.wrong}"
-                    \nПоследняя команда: "${user.lastCommand}"
-                    \nПредпоследняя команда: "${user.preLastCommand}"`, resetOptions);
-                                                
+                    \nПоследняя команда:
+                    \n"${user.lastCommand}"
+                    \nПредпоследняя команда:
+                    \n"${user.preLastCommand}"`, resetOptions);   
             }
     
             if (text === '/game') {
@@ -142,16 +143,19 @@ const start = async () => {
         if (data === '/again') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
-            return startGame(chatId)
+            await user.save();
+            return startGame(chatId);
         }
 
         if(data === '/reset') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
+            await user.save();
 
             if (user) {
                 user.right = 0;
                 user.wrong = 0;
+                await user.save();
             } else {
                 await UserModel.create({chatId, right: 0, wrong: 0});
             }
@@ -165,10 +169,12 @@ const start = async () => {
 
             if (data == chats[chatId]) {
                 user.right += 1;
+                await user.save();
                 return bot.sendMessage(chatId, 
                     `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
             } else {
                 user.wrong += 1;
+                await user.save();
                 return bot.sendMessage(chatId, 
                     `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
             }
