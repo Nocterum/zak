@@ -131,7 +131,7 @@ const start = async () => {
             
         } catch (e) {
             return bot.sendMessage(chatId, 
-                'Ошибка в исполнении кода', e);
+                'Ошибка в исполнении кода слушателя сообщений', e);
 
         }
 
@@ -155,7 +155,9 @@ const start = async () => {
             where: {
                 chatId: chatId
             }
-        })
+        });
+
+        try {
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
@@ -195,7 +197,6 @@ const start = async () => {
         if (data === '/again') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
-            await user.save();
             return startGame(chatId);
         }
 
@@ -203,12 +204,10 @@ const start = async () => {
         if(data === '/reset') {
             user.preLastCommand = user.lastCommand;
             user.lastCommand = data;
-            await user.save();
 
             if (user) {
                 user.right = 0;
                 user.wrong = 0;
-                await user.save();
             } else {
                 await UserModel.create({chatId, right: 0, wrong: 0});
             }
@@ -223,15 +222,18 @@ const start = async () => {
 
             if (data == chats[chatId]) {
                 user.right += 1;
-                await user.save();
                 return bot.sendMessage(chatId, 
                     `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
             } else {
                 user.wrong += 1;
-                await user.save();
                 return bot.sendMessage(chatId, 
                     `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
             }
+        }
+
+        } catch (err) {
+            return bot.sendMessage(chatId, 
+                'Ошибка в исполнении кода прослушивателя колбэков', e);
         }
 
         await bot.sendSticker(chatId, 
