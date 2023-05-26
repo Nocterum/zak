@@ -86,7 +86,7 @@ const start = async () => {
             }
 
             //вывод информации
-            if (text === '/infoWork') {
+            if (text === '/infowork') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
                 return bot.sendMessage(chatId, 
