@@ -50,6 +50,8 @@ const start = async () => {
                 chatId: chatId
             }
         });
+        
+        await UserModel.create({chatId});
 
         try {
             //старт
@@ -59,13 +61,16 @@ const start = async () => {
                     if (user) {
                         user.preLastCommand = user.lastCommand;
                         user.lastCommand = text;
+                        await user.save();
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак. 
                             \nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.
                             \nЧтобы начать работу выбери в меню команду /startwork.`)
                     } else {
-                        user.preLastCommand = user.lastCommand;
-                        user.lastCommand = text;
+                        await UserModel.create({chatId});
+                        user.preLastCommand = '';
+                        user.lastCommand = '/start';
+                        await user.save();
                         console.log('Новый пользователь создан:', user);
                         return bot.sendMessage(chatId, 
                             `Привет, ${msg.from.first_name}. Меня зовут бот Зак.
@@ -89,15 +94,17 @@ const start = async () => {
             if (text === '/infowork') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
+                await user.save();
                 return bot.sendMessage(chatId, 
-                    `Последняя команда:"${user.lastCommand}"
-                    \nПредпоследняя команда:"${user.preLastCommand}"`);
+                    `Последняя команда: ${user.lastCommand}
+                    \nПредпоследняя команда: ${user.preLastCommand}`);
             }
 
             //результаты игры
             if (text === '/infogame') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
+                await user.save();
                 return bot.sendMessage(chatId, 
                     `Правильных ответов: "${user.right}"
                     \nНеправильных ответов: "${user.wrong}"`, resetOptions)   
@@ -107,6 +114,7 @@ const start = async () => {
             if (text === '/game') {
                 user.preLastCommand = user.lastCommand;
                 user.lastCommand = text;
+                await user.save();
                 await bot.sendMessage(chatId, 
                     `Сейчас загадаю цифру`)
                 const randomNumber = Math.floor(Math.random() * 10)
@@ -117,7 +125,7 @@ const start = async () => {
 
             //Записываем название бренда в ячейку БД
             if(user.lastCommand === '/enterBrand') {
-                await user.update({vendorCode: text});
+                await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
             }
             
