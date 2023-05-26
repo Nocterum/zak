@@ -39,12 +39,6 @@ const start = async () => {
     } catch(err) {
         console.log('Подключение к БД сломалось', err)
     }
-    
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        }
-    });
 
     //слушатель сообщений
     bot.on('message', async msg => {
@@ -52,7 +46,11 @@ const start = async () => {
         const chatId = msg.chat.id;
         console.log(msg)
 
-
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
 
         try {
 
@@ -141,41 +139,50 @@ const start = async () => {
             }
         })
 
-        if (data === '/again') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = text;
-            return startGame(chatId)
-        }
+        try {
 
-        if(data === '/reset') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = text;
-
-            if (user) {
-                user.right = 0;
-                user.wrong = 0;
-            } else {
-                await UserModel.create({chatId, right: 0, wrong: 0});
+            if (data === '/again') {
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
+                return startGame(chatId)
             }
-            return bot.sendMessage(chatId, 
-                `Результаты игры сброшенны: 
-                \nправильных ${user.right}, 
-                \nнеправильных ${user.wrong}`, againOptions)
-        }
+    
+            if(data === '/reset') {
+                user.preLastCommand = user.lastCommand;
+                user.lastCommand = text;
+    
+                if (user) {
+                    user.right = 0;
+                    user.wrong = 0;
+                } else {
+                    await UserModel.create({chatId, right: 0, wrong: 0});
+                }
+                return bot.sendMessage(chatId, 
+                    `Результаты игры сброшенны: 
+                    \nправильных ${user.right}, 
+                    \nнеправильных ${user.wrong}`, againOptions)
+            }
+    
+            if (data == chats[chatId] && user.lastCommand === '/game' || '/again') {
+                user.right += 1;
+                return bot.sendMessage(chatId, 
+                    `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
+            } else {
+                user.wrong += 1;
+                return bot.sendMessage(chatId, 
+                    `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
+            }
 
-        if (data == chats[chatId] && user.lastCommand === '/game' || '/again') {
-            user.right += 1;
-            return bot.sendMessage(chatId, 
-                `Ты отгадал цифру "${chats[chatId]}"`, againOptions)
-        } else {
-            user.wrong += 1;
-            return bot.sendMessage(chatId, 
-                `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
+        } catch (e) {
+            await bot.sendSticker(chatId, 
+                'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
         }
         
+        await user.save();
+
     })
 
-    await user.save();
+
 }
 
 start()
