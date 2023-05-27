@@ -183,6 +183,17 @@ const start = async () => {
         });
 
         try {
+        
+            //Записываем название бренда в ячейку БД
+            if (user.lastCommand === '/enterBrand') {
+                try {
+                await user.set({brand: text});
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
+                } catch (e) {
+                    console.log('Запись бренда не состоялась', e)
+                }
+                            
+            }
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
