@@ -46,8 +46,7 @@ const start = async () => {
     bot.on('message', async msg => {
         const text = msg.text;
         const chatId = msg.chat.id;
-        const name = msg.from.first_name;
-        const last_name = msg.from.last_name;
+
 
         console.log(msg)
 
@@ -59,43 +58,46 @@ const start = async () => {
 
             //старт
             try {
+
                 if (text === '/start') {
 
                     try {
-                    let user = await UserModel.findOne({
-                        where: {
-                            chatId: chatId
-                        }
-                    });
-
-                    if (!user) {
-                        user = await UserModel.create({chatId});
-                        console.log('Новый пользователь создан:');
-                    }
-                    await user.set({firstName: name, lastName: last_name, preLastCommand: user.lastCommand, lastCommand: text,});
-                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
-                } catch (e) {
-                    console.log('Ошибка при создании нового пользователя', e);
-                }
-
-                    
-/*                    if (user) {
-
-                        await user.update ({
-                            preLastCommand: user.lastCommand, 
-                            lastCommand: text, 
-                            firstName: name, 
-                            lastName: last_name
+                        let user = await UserModel.findOne({
+                            where: {
+                                chatId: chatId
+                            }
                         });
-                        return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
-                        } else {
-                            const user = await UserModel.findOne({where: {chatId: chatId}});
-                            await UserModel.create({chatId});
-                            console.log('Новый пользователь создан:', user);
-                            user.set({firstName: name, lastName: last_name});
-                            return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork `)
+
+                        if (user) {
+
+                            await user.update ({
+                                preLastCommand: user.lastCommand, 
+                                lastCommand: text, 
+                                firstName: msg.from.first_name, 
+                                lastName: msg.from.last_name, 
+                            });
+
+                            return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
+                        }
+
+                        if (!user) {
+                            user = await UserModel.create({chatId});
+                            console.log('Новый пользователь создан:');
+
+                            await user.set({
+                                preLastCommand: user.lastCommand, 
+                                lastCommand: text,
+                                firstName: msg.from.first_name, 
+                                lastName: msg.from.last_name, 
+                            });
+
+                            return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
+                        }
+
+                    } catch (e) {
+                    console.log('Ошибка при создании нового пользователя', e);
                     }
-*/                 
+  
                 }
              
             } catch (e) {
