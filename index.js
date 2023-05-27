@@ -120,14 +120,14 @@ const start = async () => {
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
                 await user.update({brand: text});
-                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено\nМожете перезаписать бренд или продолжить:`, VCOptions);
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено\n(для перезаписи введите бренд повторно)`, VCOptions);
   
             }
             
             //Записываем артикул в ячейку БД
             if (lc === '/enterVC') {
                 await user.update({vendorCode: text});
-                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён\nМожете перезаписать артикул или продолжить:`, startFindOptions);
+                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён\n(для перезаписи введите артикул повторно)`, startFindOptions);
             }
             
             //вывод информации
