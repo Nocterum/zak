@@ -29,22 +29,40 @@ module.exports = {
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Наличие/сроки/резерв', callback_data: '/work1'}],
-                [{text: 'Превью изображений', callback_data: '/work2'}],
-                [{text: 'Добавить в заказ', callback_data: '/work3'}],
+                [{text: 'Текстиль', callback_data: 'Текстиль'}],
+                [{text: 'Обои', callback_data: 'Обои'}],
 
             ]
         })
     },
 
-    work1Options: {
+    brandOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Ввести бренд', callback_data: '/enterBrand'}],
-                [{text: 'Ввести артикул ', callback_data: '/enterVC'}],
 
             ]
         })
     },
+
+    VCOptions: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Ввести артикул', callback_data: '/enterVC'}],
+                [{text: 'Начать поиск', callback_data: '/startFind'}],
+
+            ]
+        })
+    },
+
+    startFindOptions: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Начать поиск', callback_data: '/startFind'}],
+
+            ]
+        })
+    },
+
 
 }

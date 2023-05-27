@@ -12,6 +12,7 @@ const UserModel = sequelize.define( 'user', {
     preLastCommand: {type: DataTypes.CHAR},
     brand: {type: DataTypes.CHAR},
     vendorCode: {type: DataTypes.CHAR},
+    typeFind: {type: DataTypes.TEXT('tiny')},
 })
 
 module.exports = UserModel;

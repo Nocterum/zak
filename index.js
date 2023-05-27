@@ -3,7 +3,7 @@ const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {polling:true});
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, work1Options} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -119,19 +119,15 @@ const start = async () => {
 
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
-                try {
                 await user.update({brand: text});
-                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
-                } catch (e) {
-                    console.log('Запись бренда не состоялась', e)
-                }
-                
+                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено\nМожете перезаписать бренд или продолжить:`, VCOptions);
+  
             }
             
             //Записываем артикул в ячейку БД
             if (lc === '/enterVC') {
                 await user.update({vendorCode: text});
-                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
+                return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён\nМожете перезаписать артикул или продолжить:`, startFindOptions);
             }
             
             //вывод информации
@@ -193,7 +189,26 @@ const start = async () => {
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
             });
-            return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
+            return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', workOptions);
+        }
+
+        //запись typeFind
+        if(data === 'Текстиль') {
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+                typeFinde: data,
+            });
+            return bot.sendMessage(chatId, `${data}, так и запишем`, workOptions);
+        }
+
+        if(data === 'Обои') {
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+                typeFinde: data,
+            });
+            return bot.sendMessage(chatId, `${data}, так и запишем`, workOptions);
         }
 
         //Вводим название бренда
@@ -215,7 +230,17 @@ const start = async () => {
             lc = data;
             return bot.sendMessage(chatId, `Введите артикул:`);
         }
-
+        
+        //поиск по введенным параметрам: brand, vendorCode, typeFind
+        if(data === '/startFind') {
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
+            lc = null;
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
+        }
+        //превью фото
         if(data === '/work2') {
             await user.update ({
                 preLastCommand: user.lastCommand,
@@ -224,6 +249,7 @@ const start = async () => {
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
+        //добавить в заказ
         if(data === '/work3') {
             await user.update ({
                 preLastCommand: user.lastCommand,
@@ -231,6 +257,7 @@ const start = async () => {
             });
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
+
 
         //рестарт игры
         if (data === '/again') {
