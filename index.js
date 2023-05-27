@@ -12,6 +12,8 @@ chats = {};
 brandx = {};
 vendorCodex = {};
 typex = {};
+lc = {};
+plc = {};
 
 //меню команд
 bot.setMyCommands([
@@ -116,7 +118,7 @@ const start = async () => {
             }
 
             //Записываем название бренда в ячейку БД
-            if (text != 0 && user.lastCommand === '/enterBrand') {
+            if (lc === '/enterBrand') {
                 try {
                 await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
@@ -127,7 +129,7 @@ const start = async () => {
             }
             
             //Записываем артикул в ячейку БД
-            if (text != 0 && user.lastCommand === '/enterVC') {
+            if (lc === '/enterVC') {
                 await user.update({vendorCode: text});
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
             }
@@ -200,7 +202,8 @@ const start = async () => {
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
             });
-                return bot.sendMessage(chatId, `Введите название бренда:`);
+            lc = data;
+            return bot.sendMessage(chatId, `Введите название бренда:`);
         }
 
         //вводим артикул
@@ -209,6 +212,7 @@ const start = async () => {
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
             });
+            lc = data;
             return bot.sendMessage(chatId, `Введите артикул:`);
         }
 
