@@ -199,7 +199,7 @@ const start = async () => {
                 lastCommand: data,
                 typeFinde: data,
             });
-            return bot.sendMessage(chatId, `${data}, так и запишем`, workOptions);
+            return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         }
 
         if(data === 'Обои') {
@@ -208,7 +208,7 @@ const start = async () => {
                 lastCommand: data,
                 typeFinde: data,
             });
-            return bot.sendMessage(chatId, `${data}, так и запишем`, workOptions);
+            return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         }
 
         //Вводим название бренда
