@@ -61,7 +61,25 @@ const start = async () => {
             try {
                 if (text === '/start') {
 
-                    if (user) {
+                    try {
+                    let user = await UserModel.findOne({
+                        where: {
+                            chatId: chatId
+                        }
+                    });
+
+                    if (!user) {
+                        user = await UserModel.create({chatId});
+                        console.log('Новый пользователь создан:');
+                    }
+                    await user.set({firstName: name, lastName: last_name});
+                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
+                } catch (e) {
+                    console.log('Ошибка при создании нового пользователя', e);
+
+
+                    
+/*                    if (user) {
 
                         await user.update ({
                             preLastCommand: user.lastCommand, 
@@ -77,13 +95,13 @@ const start = async () => {
                             user.set({firstName: name, lastName: last_name});
                             return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а так же узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork `)
                     }
-                    
+*/                 
                 }
-                
+             
             } catch (e) {
                 console.log('Ошибка при создании нового пользователя', e);
             }
-            
+              
             //Главное меню
             if (text === '/startwork') {
                 await user.update ({
