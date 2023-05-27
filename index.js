@@ -63,7 +63,12 @@ const start = async () => {
 
                     if (user) {
 
-                        await user.update({preLastCommand: user.lastCommand, lastCommand: text, firstName: name, lastName: last_name});
+                        await user.update ({
+                            preLastCommand: user.lastCommand, 
+                            lastCommand: text, 
+                            firstName: name, 
+                            lastName: last_name
+                        });
                         return bot.sendMessage(chatId, 
                             `И снова здравствуй, ${msg.from.first_name}!
                             \nВыбери команду /startwork, чтобы начать работу)`)
@@ -93,7 +98,7 @@ const start = async () => {
             }
 
             //Записываем название бренда в ячейку БД
-            if (user.lastCommand == '/enterBrand') {
+            if (user && user.lastCommand == '/enterBrand') {
                 try {
                     user.set({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
@@ -104,7 +109,7 @@ const start = async () => {
             }
             
             //Записываем артикул в ячейку БД
-            if (user.lastCommand == '/enterVC') {
+            if (user && user.lastCommand == '/enterVC') {
                 user.vendorCode = text;
                 await user.save();
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
