@@ -13,7 +13,8 @@ module.exports = {
     againOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Повторить?', callback_data: '/again'}],
+                [{text: 'Играть ещё раз?', callback_data: '/again'}],
+                [{text: 'Показать результаты', callback_data: '/infogame'}],
             ]
         })
     },

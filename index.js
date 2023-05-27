@@ -268,6 +268,15 @@ const start = async () => {
             return startGame(chatId);
         }
 
+        //рестарт игры
+        if (data === '/infogame') {
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
+            return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
+        }
+
         //сброс результатов игры
         if(data === '/reset') {
             await user.update ({
