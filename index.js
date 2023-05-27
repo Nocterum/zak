@@ -86,14 +86,14 @@ const start = async () => {
             //Главное меню
             if (text === '/startwork') {
                 await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: text,
+                    preLastCommand: user.lastCommand,
+                    lastCommand: text,
                 });
                 return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
             }
 
             //Записываем название бренда в ячейку БД
-            if (user && user.lastCommand == '/enterBrand') {
+            if (user && user.lastCommand === '/enterBrand') {
                 try {
                 await user.set({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
@@ -104,7 +104,7 @@ const start = async () => {
             }
             
             //Записываем артикул в ячейку БД
-            if (user && user.lastCommand == '/enterVC') {
+            if (user && user.lastCommand === '/enterVC') {
                 user.vendorCode = text;
                 await user.save();
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
@@ -112,25 +112,28 @@ const start = async () => {
             
             //вывод информации
             if (text === '/infowork') {
-                user.preLastCommand = user.lastCommand;
-                user.lastCommand = text;
-                await user.save();
+                await user.update ({
+                    preLastCommand: user.lastCommand,
+                    lastCommand: text,
+                });
                 return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}`);
             }
 
             //результаты игры
             if (text === '/infogame') {
-                user.preLastCommand = user.lastCommand;
-                user.lastCommand = text;
-                await user.save();
+                await user.update ({
+                    preLastCommand: user.lastCommand,
+                    lastCommand: text,
+                });
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)   
             }
     
             //функция игры
             if (text === '/game') {
-                user.preLastCommand = user.lastCommand;
-                user.lastCommand = text;
-                await user.save();
+                await user.update ({
+                    preLastCommand: user.lastCommand,
+                    lastCommand: text,
+                });
                 await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
                 const randomNumber = Math.floor(Math.random() * 10)
                 chats[chatId] = randomNumber;
@@ -162,60 +165,69 @@ const start = async () => {
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
             return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
         }
 
         //Вводим название бренда
         if(data === '/enterBrand') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
                 return bot.sendMessage(chatId, `Введите название бренда:`);
         }
 
         //вводим артикул
         if(data === '/enterVC') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
             return bot.sendMessage(chatId, `Введите артикул:`);
         }
 
         if(data === '/work2') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
         if(data === '/work3') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
             return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
         }
 
         //рестарт игры
         if (data === '/again') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
             return startGame(chatId);
         }
 
         //сброс результатов игры
         if(data === '/reset') {
-            user.preLastCommand = user.lastCommand;
-            user.lastCommand = data;
-            await user.save();
+            await user.update ({
+                preLastCommand: user.lastCommand,
+                lastCommand: data,
+            });
 
             if (user) {
-                user.right = 0;
-                user.wrong = 0;
-                await user.save();
+                await user.update ({
+                    right: 0,
+                    wrong: 0,
+                });
+
             } else {
                 await UserModel.create({chatId, right: 0, wrong: 0});
             }
