@@ -72,11 +72,11 @@ const start = async () => {
                         user = await UserModel.create({chatId});
                         console.log('Новый пользователь создан:');
                     }
-                    await user.set({firstName: name, lastName: last_name});
+                    await user.set({firstName: name, lastName: last_name, preLastCommand: user.lastCommand, lastCommand: text,});
                     return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш "${chatId}" в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
                 } catch (e) {
                     console.log('Ошибка при создании нового пользователя', e);
-
+                }
 
                     
 /*                    if (user) {
