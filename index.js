@@ -116,7 +116,7 @@ const start = async () => {
             }
 
             //Записываем название бренда в ячейку БД
-            if (user && user.lastCommand === '/enterBrand') {
+            if (text != 0 && user.lastCommand === '/enterBrand') {
                 try {
                 await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
@@ -127,7 +127,7 @@ const start = async () => {
             }
             
             //Записываем артикул в ячейку БД
-            if (user && user.lastCommand === '/enterVC') {
+            if (text != 0 && user.lastCommand === '/enterVC') {
                 await user.update({vendorCode: text});
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
             }
