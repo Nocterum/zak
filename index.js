@@ -82,10 +82,10 @@ const start = async () => {
 
                         if (!user) {
                             user = await UserModel.create({chatId});
-                            console.log('Новый пользователь создан:');
-                            
-                            user.set({
-                                preLastCommand: user.lastCommand, 
+                            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+
+                            await user.update({
+                                preLastCommand: 'нет', 
                                 lastCommand: text,
                                 firstName: msg.from.first_name, 
                                 lastName: msg.from.last_name, 
