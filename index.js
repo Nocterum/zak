@@ -118,7 +118,7 @@ const start = async () => {
             //Записываем название бренда в ячейку БД
             if (user && user.lastCommand === '/enterBrand') {
                 try {
-                await user.set({brand: text});
+                await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
                 } catch (e) {
                     console.log('Запись бренда не состоялась', e)
@@ -128,8 +128,7 @@ const start = async () => {
             
             //Записываем артикул в ячейку БД
             if (user && user.lastCommand === '/enterVC') {
-                user.vendorCode = text;
-                await user.save();
+                await user.update({vendorCode: text});
                 return bot.sendMessage(chatId, `Артикул "${text}" успешно сохранён`);
             }
             
@@ -185,17 +184,6 @@ const start = async () => {
         });
 
         try {
-        
-            //Записываем название бренда в ячейку БД
-            if (user.lastCommand === '/enterBrand') {
-                try {
-                await user.set({brand: text});
-                return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено`);
-                } catch (e) {
-                    console.log('Запись бренда не состоялась', e)
-                }
-                            
-            }
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
