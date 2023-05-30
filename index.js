@@ -136,7 +136,7 @@ const start = async () => {
                     preLastCommand: user.lastCommand,
                     lastCommand: text,
                 });
-                return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}\nВы ищите: ${user.typeFind} бренда ${user.brand}, арт: ${user.vendorCode}`);
+                return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}\nВы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}`);
             }
 
             //результаты игры
