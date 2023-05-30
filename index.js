@@ -165,7 +165,7 @@ bot.on('message', async msg => {
                 await user.update({brand: text});
                 const enterBrandtxt = `Название бренда "${text}" успешно сохранено\n <pre>для перезаписи введите бренд повторно</pre> `;
                 const enterBrandopt = {parse_mode: 'HTML'};
-                return bot.sendMessage(chatId, enterBrandtxt, {enterBrandopt, VCOptions});
+                return bot.sendMessage(chatId, enterBrandtxt, VCOptions, enterBrandopt);
                 //return bot.sendMessage(chatId, `Название бренда "${text}" успешно сохранено\n||для перезаписи введите бренд повторно||`, VCOptions);
   
             }
