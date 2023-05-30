@@ -48,14 +48,15 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
-        await console.log('Подключение к БД установленно');
+        await console.log('Подключение к базе данных установленно');
     } catch(err) {
-        console.log('Подключение к БД сломалось', err);
+        console.log('Подключение к базе данных сломалось', err);
     }
 
 //слушатель команд======================================================================================
     bot.onText(/\/start/, async msg => {
-        const chatId = msg.chat.id; 
+        const chatId = msg.chat.id;
+        const text = msg.text;
     
         try {
             let user = await UserModel.findOne({
