@@ -38,6 +38,7 @@ module.exports = {
     },
 
     brandOptions: {
+        parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Ввести бренд', callback_data: '/enterBrand'}],
@@ -47,6 +48,7 @@ module.exports = {
     },
 
     VCOptions: {
+        parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Ввести артикул', callback_data: '/enterVC'}],
