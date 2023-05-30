@@ -169,7 +169,7 @@ const start = async () => {
             }
 
             if (text.toLowerCase() === 'привет') {
-                bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/581/7e9/5817e933-8e1b-4a32-9916-e70988bca0bd/192/17.webp')
+                return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/581/7e9/5817e933-8e1b-4a32-9916-e70988bca0bd/192/17.webp')
             }
 
 
