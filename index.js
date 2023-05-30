@@ -283,7 +283,7 @@ bot.on('message', async msg => {
                 lastCommand: data,
             });
             lc = null;
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке %xF0%x9F%x98%x85😅');
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
         }
         //превью фото
         if(data === '/work2') {
@@ -291,7 +291,7 @@ bot.on('message', async msg => {
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
             });
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке %xF0%x9F%x98%x85😅');
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
         }
 
         //добавить в заказ
@@ -300,7 +300,7 @@ bot.on('message', async msg => {
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
             });
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке');
+            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
         }
 
 
