@@ -58,6 +58,7 @@ module.exports = {
     },
 
     startFindOptions: {
+        parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Начать поиск', callback_data: '/startFind'}],
