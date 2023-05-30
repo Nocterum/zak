@@ -136,7 +136,7 @@ const start = async () => {
                     preLastCommand: user.lastCommand,
                     lastCommand: text,
                 });
-                return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}`);
+                return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}\nВы ищите: ${user.typeFind} бренда ${user.brand}, арт: ${user.vendorCode}`, null , parse_mode, {markeDown});
             }
 
             //результаты игры
@@ -197,7 +197,7 @@ const start = async () => {
             await user.update ({
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
-                typeFinde: data,
+                typeFind: data,
             });
             return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         }
@@ -206,7 +206,7 @@ const start = async () => {
             await user.update ({
                 preLastCommand: user.lastCommand,
                 lastCommand: data,
-                typeFinde: data,
+                typeFind: data,
             });
             return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         }
