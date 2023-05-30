@@ -90,9 +90,8 @@ const start = async () => {
                 return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
             }
     
-                
-    
         } catch (e) {
+        await bot.sendMessage(chatId, 'Ошибка при создании нового пользователя')
         console.log('Ошибка при создании нового пользователя', e);
         }    
     })
@@ -215,12 +214,10 @@ bot.on('message', async msg => {
                 return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
             }
 
-
-        await user.save();
-
+/*
         await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
         return bot.sendMessage(chatId, 'Не понимаю тебя..')
-
+*/
     })
 
 //слушатель колбэков==========================================================================================================================================
