@@ -1,6 +1,14 @@
 const TelegramApi = require('node-telegram-bot-api');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
-const bot = new TelegramApi(token, {polling:true});
+const bot = new TelegramApi(token, {
+    polling: {
+        interval: 300, //между запросами с клиента на сервер тг "млсек"
+        autoStart: true, //обработка всех команд отправленных до запуска программы
+        params: {
+            timeout:10 //таймаут между запросами "млсек"
+        }
+    }
+});
 
 //импорты
 const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions} = require('./options');
@@ -158,6 +166,10 @@ const start = async () => {
                 const randomNumber = Math.floor(Math.random() * 10)
                 chats[chatId] = randomNumber;
                 return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+            }
+
+            if (text.toLowerCase() === 'привет') {
+                bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/581/7e9/5817e933-8e1b-4a32-9916-e70988bca0bd/192/17.webp')
             }
 
 
