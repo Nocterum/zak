@@ -163,14 +163,14 @@ bot.on('message', async msg => {
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
                 await user.update({brand: text});
-                return bot.sendMessage(chatId, `Название бренда "<strong>${text}</strong>" успешно сохранено\n<pre>для перезаписи введите бренд повторно</pre>`, VCOptions);
+                return bot.sendMessage(chatId, `Название бренда "<strong>${text}</strong>" успешно сохранено\n<small>для перезаписи введите бренд повторно</small>`, VCOptions);
   
             }
             
             //Записываем артикул в ячейку БД
             if (lc === '/enterVC') {
                 await user.update({vendorCode: text});
-                return bot.sendMessage(chatId, `Артикул "<strong>${text}</strong>" успешно сохранён\n<pre>для перезаписи введите артикул повторно</pre>`, startFindOptions);
+                return bot.sendMessage(chatId, `Артикул "<strong>${text}</strong>" успешно сохранён\n<small>для перезаписи введите артикул повторно</small>`, startFindOptions);
             }
             
             //вывод информации
