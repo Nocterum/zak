@@ -53,47 +53,48 @@ const start = async () => {
         console.log('Подключение к БД сломалось', err);
     }
 
-bot.onText(/\/start/, async msg => {
-    const chatId = msg.chat.id; 
-
-    try {
-        let user = await UserModel.findOne({
-            where: {
-                chatId: chatId
+//слушатель команд======================================================================================
+    bot.onText(/\/start/, async msg => {
+        const chatId = msg.chat.id; 
+    
+        try {
+            let user = await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
+    
+            if (user) {
+                await user.update ({
+                    preLastCommand: user.lastCommand, 
+                    lastCommand: text, 
+                    firstName: msg.from.first_name, 
+                    lastName: msg.from.last_name, 
+                });
+    
+                return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
             }
-        });
-
-        if (user) {
-            await user.update ({
-                preLastCommand: user.lastCommand, 
-                lastCommand: text, 
-                firstName: msg.from.first_name, 
-                lastName: msg.from.last_name, 
-            });
-
-            return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
-        }
-
-        if (!user) {
-            user = await UserModel.create({chatId});
-            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-
-            await user.update({
-                preLastCommand: 'нет', 
-                lastCommand: text,
-                firstName: msg.from.first_name, 
-                lastName: msg.from.last_name, 
-            });
-
-            return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
-        }
-
-            
-
-    } catch (e) {
-    console.log('Ошибка при создании нового пользователя', e);
-    }    
-})
+    
+            if (!user) {
+                user = await UserModel.create({chatId});
+                console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+    
+                await user.update({
+                    preLastCommand: 'нет', 
+                    lastCommand: text,
+                    firstName: msg.from.first_name, 
+                    lastName: msg.from.last_name, 
+                });
+    
+                return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
+            }
+    
+                
+    
+        } catch (e) {
+        console.log('Ошибка при создании нового пользователя', e);
+        }    
+    })
 
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
