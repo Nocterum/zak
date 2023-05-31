@@ -118,7 +118,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nначать работу: /startwork,\nпроверить введенные данные:/infowork\nизменить e-mail:`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \nНачать работу: /startwork,\nПроверить введенные данные: /infowork\nИзменить e-mail: /editEmail`)
                 }
 
                 if (!user) {
@@ -147,9 +147,12 @@ bot.on('message', async msg => {
                     return editEmail(chatId);
                 } else {
                     return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
-                }
+                } 
+            }
 
-                
+            //изменить e-mail
+            if (text === '/editEmail') {
+                return editEmail(chatId);
             }
 
             //Записываем e-mail в ячейку БД
