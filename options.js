@@ -31,7 +31,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/startwork'}],
+                [{text: 'Продолжить', text: '/startwork'}],
             ]
         })
     },

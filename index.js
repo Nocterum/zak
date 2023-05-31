@@ -35,10 +35,15 @@ bot.setMyCommands([
 
 
 const startGame = async (chatId) => {
-        const randomNumber = Math.floor(Math.random() * 10)
-        chats[chatId] = randomNumber;
-        await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
-    }
+    const randomNumber = Math.floor(Math.random() * 10)
+    chats[chatId] = randomNumber;
+    await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+}
+
+const editEmail = async (chatId) => {
+    lc = '/editEmail'
+    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
+}
 
 //=============================================================================================================
 
@@ -110,9 +115,10 @@ bot.on('message', async msg => {
                     }
                 });
 
+                //главное меню
                 if (user) {
-                    lc = text;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nначать работу: /startwork,\nпроверить введенные данные:/infowork`)
+                    lc = null;
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nначать работу: /startwork,\nпроверить введенные данные:/infowork\nизменить e-mail:`)
                 }
 
                 if (!user) {
@@ -123,7 +129,7 @@ bot.on('message', async msg => {
                         firstName: msg.from.first_name, 
                         lastName: msg.from.last_name, 
                     });
-                    lc = text;
+                    lc = null;
                     return bot.sendMessage(chatId, `Привет, ${msg.from.first_name} 'Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
                 }
 
@@ -137,20 +143,19 @@ bot.on('message', async msg => {
             if (text === '/startwork') {
 
                 if (!user.email) {
-                    lc = text;
-                    return bot.sendMessage(chatId, 'Для начала введите ваш рабочий e-mail, это пригодится нам для работы в дальнейшем:')
+                    await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
+                    return editEmail(chatId);
                 } else {
-                    lc = null;
                     return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
                 }
 
                 
             }
 
-            //Записываем e-маил в ячейку БД
-            if (lc === '/startwork') {
+            //Записываем e-mail в ячейку БД
+            if (lc === '/editEmail') {
                 await user.update({email: text});
-                return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите email повторно)</pre>`, startworkOptions)
+                return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startworkOptions)
   
             }            
 
@@ -169,7 +174,7 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nпоследняя команда: ${lc}`);
+                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nВаш email:${user.email}\nпоследняя команда: ${lc}`);
             }
 
             //результаты игры
@@ -219,7 +224,13 @@ bot.on('message', async msg => {
 
         try {
 
-        //Наличие, сроки, резерв
+        //начало работы
+        if(data === '/startwork') {
+            lc = null;
+            return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+        }
+        
+        //наличие, сроки, резерв
         if(data === '/work1') {
             lc = data;
             return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
@@ -233,6 +244,7 @@ bot.on('message', async msg => {
             return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         }
 
+        //запись typeFind
         if(data === 'Обои') {
             await user.update ({
                 typeFind: data,
