@@ -27,6 +27,15 @@ module.exports = {
         })
     },
 
+    startworkOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Продолжить', callback_data: '/startwork'}],
+            ]
+        })
+    },
+
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [

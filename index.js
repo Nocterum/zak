@@ -11,7 +11,7 @@ const bot = new TelegramApi(token, {
 });
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startworkOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -112,7 +112,7 @@ bot.on('message', async msg => {
 
                 if (user) {
                     lc = text;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\n/startwork, чтобы начать работу\n/infowork, чтобы проверить введенную информацию)`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nначать работу: /startwork,\nпроверить введенные данные:/infowork`)
                 }
 
                 if (!user) {
@@ -124,7 +124,7 @@ bot.on('message', async msg => {
                         lastName: msg.from.last_name, 
                     });
                     lc = text;
-                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
+                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name} 'Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
                 }
 
             } catch (e) {
@@ -135,9 +135,24 @@ bot.on('message', async msg => {
 
         //Главное меню
             if (text === '/startwork') {
-                lc = text;
-                return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+
+                if (!user.email) {
+                    lc = text;
+                    return bot.sendMessage(chatId, 'Для начала введите ваш рабочий e-mail, это пригодится нам для работы в дальнейшем:')
+                } else {
+                    lc = null;
+                    return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+                }
+
+                
             }
+
+            //Записываем e-маил в ячейку БД
+            if (lc === '/startwork') {
+                await user.update({email: text});
+                return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите email повторно)</pre>`, startworkOptions)
+  
+            }            
 
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
@@ -171,6 +186,12 @@ bot.on('message', async msg => {
                 chats[chatId] = randomNumber;
                 return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
             }
+
+            if (text === 'recreatetable' && chatId === '356339062') {
+                await User.sync({ force: true })
+                return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
+            }
+
 
             if (text.toLowerCase() === 'привет' + '') {
                 return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
