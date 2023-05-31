@@ -30,9 +30,18 @@ module.exports = {
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
+                [{text: 'Остатки/сроки/резерв', callback_data: '/work1'}],
+                [{text: 'Превью изображений', callback_data: '/work2'}],
+                [{text: 'Добавить в заказ', callback_data: '/work3'}],
+            ]
+        })
+    },
+
+    work1Options: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
                 [{text: 'Текстиль', callback_data: 'Текстиль'}],
                 [{text: 'Обои', callback_data: 'Обои'}],
-
             ]
         })
     },
@@ -42,7 +51,6 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Ввести бренд', callback_data: '/enterBrand'}],
-
             ]
         })
     },
@@ -52,7 +60,6 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Ввести артикул', callback_data: '/enterVC'}],
-
             ]
         })
     },
@@ -62,7 +69,6 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Начать поиск', callback_data: '/startFind'}],
-
             ]
         })
     },

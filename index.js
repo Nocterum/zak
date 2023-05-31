@@ -25,11 +25,11 @@ plc = {};
 
 //меню команд
 bot.setMyCommands([
-    {command: '/start', description:'Начальное приветствие'},
+    {command: '/start', description:'Главное меню'},
     {command: '/startwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
-    {command: '/infogame', description:'Результаты в игре'},
-    {command: '/game', description:'Игра в угадайку'},
+    //{command: '/infogame', description:'Результаты в игре'},
+    //{command: '/game', description:'Игра в угадайку'},
 ])
 
 
@@ -66,13 +66,6 @@ const start = async () => {
             });
     
             if (user) {
-                await user.update ({
-                    preLastCommand: user.lastCommand, 
-                    lastCommand: text, 
-                    firstName: msg.from.first_name, 
-                    lastName: msg.from.last_name, 
-                });
-    
                 return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
             }
     
@@ -81,8 +74,6 @@ const start = async () => {
                 console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
     
                 await user.update({
-                    preLastCommand: 'нет', 
-                    lastCommand: text,
                     firstName: msg.from.first_name, 
                     lastName: msg.from.last_name, 
                 });
@@ -120,15 +111,8 @@ bot.on('message', async msg => {
                 });
 
                 if (user) {
-
-                    await user.update ({
-                        preLastCommand: user.lastCommand, 
-                        lastCommand: text, 
-                        firstName: msg.from.first_name, 
-                        lastName: msg.from.last_name, 
-                    });
-
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\nВыбери команду /startwork, чтобы начать работу)`)
+                    lc = text;
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}!\n/startwork, чтобы начать работу\n/infowork, чтобы проверить введенную информацию)`)
                 }
 
                 if (!user) {
@@ -136,12 +120,10 @@ bot.on('message', async msg => {
                     console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
 
                     await user.update({
-                        preLastCommand: 'нет', 
-                        lastCommand: text,
                         firstName: msg.from.first_name, 
                         lastName: msg.from.last_name, 
                     });
-    
+                    lc = text;
                     return bot.sendMessage(chatId, `Привет, ${msg.from.first_name}. Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
                 }
 
@@ -153,10 +135,7 @@ bot.on('message', async msg => {
 
         //Главное меню
             if (text === '/startwork') {
-                await user.update ({
-                    preLastCommand: user.lastCommand,
-                    lastCommand: text,
-                });
+                lc = text;
                 return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
             }
 
@@ -175,35 +154,25 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                await user.update ({
-                    preLastCommand: user.lastCommand,
-                    lastCommand: text,
-                });
-                return bot.sendMessage(chatId, `Последняя команда: ${user.lastCommand}\nПредпоследняя команда: ${user.preLastCommand}\nВы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}`);
+                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nпоследняя команда: ${lc}`);
             }
 
             //результаты игры
             if (text === '/infogame') {
-                await user.update ({
-                    preLastCommand: user.lastCommand,
-                    lastCommand: text,
-                });
+                lc = text;
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)   
             }
     
             //функция игры
             if (text === '/game') {
-                await user.update ({
-                    preLastCommand: user.lastCommand,
-                    lastCommand: text,
-                });
+                lc = text;
                 await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
                 const randomNumber = Math.floor(Math.random() * 10)
                 chats[chatId] = randomNumber;
                 return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
             }
 
-            if (text.toLowerCase() === 'привет') {
+            if (text.toLowerCase() === 'привет' + '') {
                 return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
             }
 
@@ -218,6 +187,7 @@ bot.on('message', async msg => {
     bot.on('callback_query', async msg => {
         const data = msg.data;
         const chatId = msg.message.chat.id;
+        const sorry = 'Извините, эта функция ещё в разработке 😅';
         console.log(msg)
 
         const user = await UserModel.findOne({
@@ -230,18 +200,13 @@ bot.on('message', async msg => {
 
         //Наличие, сроки, резерв
         if(data === '/work1') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
-            return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', workOptions);
+            lc = data;
+            return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
         }
 
         //запись typeFind
         if(data === 'Текстиль') {
             await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
                 typeFind: data,
             });
             return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
@@ -249,8 +214,6 @@ bot.on('message', async msg => {
 
         if(data === 'Обои') {
             await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
                 typeFind: data,
             });
             return bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
@@ -258,76 +221,49 @@ bot.on('message', async msg => {
 
         //Вводим название бренда
         if(data === '/enterBrand') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
             lc = data;
             return bot.sendMessage(chatId, `Введите название бренда:`);
         }
 
         //вводим артикул
         if(data === '/enterVC') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
             lc = data;
             return bot.sendMessage(chatId, `Введите артикул:`);
         }
         
         //поиск по введенным параметрам: brand, vendorCode, typeFind
         if(data === '/startFind') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
             lc = null;
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
+            return bot.sendMessage(chatId, sorry);
         }
+
         //превью фото
         if(data === '/work2') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
+            lc = null;
+            return bot.sendMessage(chatId, sorry);
         }
 
         //добавить в заказ
         if(data === '/work3') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
-            return bot.sendMessage(chatId, 'Извините, эта функция ещё в разработке 😅');
+            lc = null;
+            return bot.sendMessage(chatId, sorry);
         }
 
 
         //рестарт игры
         if (data === '/again') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
+            lc = data;
             return startGame(chatId);
         }
 
         //рестарт игры
         if (data === '/infogame') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
+            lc = null;
             return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
         }
 
         //сброс результатов игры
         if(data === '/reset') {
-            await user.update ({
-                preLastCommand: user.lastCommand,
-                lastCommand: data,
-            });
 
             if (user) {
                 await user.update ({
@@ -342,7 +278,7 @@ bot.on('message', async msg => {
         }
 
         //запись результата игры в БД
-        if (user.lastCommand === '/game' || '/again') {
+        if (lc === '/game' || '/again') {
 
             if (data == chats[chatId]) {
                 user.right += 1;
@@ -358,9 +294,6 @@ bot.on('message', async msg => {
         } catch (err) {
             return bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', e);
         }
-
-        await bot.sendSticker(chatId, 
-            'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
 
     })
 
