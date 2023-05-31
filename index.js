@@ -174,7 +174,7 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nВаш email:${user.email}\nпоследняя команда: ${lc}`);
+                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nВаш email: ${user.email}`);
             }
 
             //результаты игры
