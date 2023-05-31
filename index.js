@@ -118,7 +118,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \n\nНачать работу: /startwork,\n\nПроверить введенные данные: /infowork\n\nИзменить e-mail: /editEmail`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \n\nНачать работу: /startwork,\n\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail`)
                 }
 
                 if (!user) {
