@@ -118,7 +118,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork\nИзменить e-mail: /editEmail`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \n\nНачать работу: /startwork,\n\nПроверить введенные данные: /infowork\n\nИзменить e-mail: /editEmail`)
                 }
 
                 if (!user) {
@@ -177,7 +177,7 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                return bot.sendMessage(chatId, `Вы ищите: ${user.typeFind}\nбренд: ${user.brand}\nартикул: ${user.vendorCode}\nВаш email: ${user.email}`);
+                return bot.sendMessage(chatId, `Вы ищите: \n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
             }
 
             //результаты игры
