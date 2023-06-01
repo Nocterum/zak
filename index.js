@@ -1,5 +1,5 @@
 const TelegramApi = require('node-telegram-bot-api');
-const ky = require('ky');
+const axios = require('axios');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -32,10 +32,7 @@ bot.setMyCommands([
 
 
 //функции=========================================================================================
-const request = (async () => {
-    const repositories = await ky('https://api.github.com/users/sindresorhus/repos');
-    console.log(repositories);
-  })();
+
 
 const startGame = async (chatId) => {
     const randomNumber = Math.floor(Math.random() * 10)
@@ -278,7 +275,7 @@ bot.on('message', async msg => {
         if(data === '/work3') {
             lc = null;
             return request(chatId);
-            //return bot.sendMessage(chatId, sorry);
+            return bot.sendMessage(chatId, sorry);
         }
 
 
