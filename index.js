@@ -179,7 +179,7 @@ bot.on('message', async msg => {
                 return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
             }
 
-            if (text != '/game' || '/infogame') {
+            if (text !== '/game' || '/infogame') {
                 await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
                 return bot.sendMessage(chatId, 'Не понимаю тебя..')
             }
