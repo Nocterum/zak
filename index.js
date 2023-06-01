@@ -11,7 +11,7 @@ const bot = new TelegramApi(token, {
 });
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startworkOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -30,6 +30,7 @@ bot.setMyCommands([
 ])
 
 
+//функции=========================================================================================
 
 const startGame = async (chatId) => {
     const randomNumber = Math.floor(Math.random() * 10)
@@ -39,6 +40,11 @@ const startGame = async (chatId) => {
 
 const editEmail = async (chatId) => {
     lc = '/editEmail'
+    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
+}
+
+const editNickname = async (chatId) => {
+    lc = '/editNickname'
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
 }
 
@@ -92,7 +98,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${msg.from.first_name}! \n\nНачать работу: /startwork,\n\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${user.nickname}! \n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
                 }
 
                 if (!user) {
@@ -103,8 +109,8 @@ bot.on('message', async msg => {
                         firstName: msg.from.first_name, 
                         lastName: msg.from.last_name, 
                     });
-                    lc = null;
-                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name} 'Меня зовут бот Зак.\nПриятно познакомиться! Я успешно внёс Ваш id:${chatId} в свою базу данных.\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nЧтобы начать работу выбери в меню команду /startwork`);
+                    lc = '/editNickname';
+                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name} 'Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
                 }
 
             } catch (e) {
@@ -132,15 +138,24 @@ bot.on('message', async msg => {
             //Записываем e-mail в ячейку БД
             if (lc === '/editEmail') {
                 await user.update({email: text});
-                return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startworkOptions)
-  
+                return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
             }            
+
+            //изменить Nickname
+            if (text === '/editNickname') {
+                return editNickname(chatId);
+            }
+            
+            //Записываем Nickname в ячейку БД
+            if (lc === '/editNickname') {
+                await user.update({nickname: text});
+                return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомнил.\n<pre>(для перезаписи введите e-mail повторно)</pre>`, mainMenuOptions)
+            }
 
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
                 await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
-  
             }
             
             //Записываем артикул в ячейку БД

@@ -27,11 +27,21 @@ module.exports = {
         })
     },
 
-    startworkOptions: {
+    mainMenuOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'В главное меню', callback_data: '/start'}],
+            ]
+        })
+    },
+
+    startWorkOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Продолжить', callback_data: '/startwork'}],
+                [{text: 'В главное меню', callback_data: '/start'}],
             ]
         })
     },
