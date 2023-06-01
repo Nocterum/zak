@@ -78,7 +78,7 @@ const start = async () => {
         const text = msg.text;
 
         lc = text;
-        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)   
+        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"\n${lmId2, lmId1, lmId0}`, resetOptions)   
     })
 
 
