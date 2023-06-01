@@ -19,9 +19,6 @@ const UserModel = require('./models');
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
-lmId0 = {};    //id последнего сообщения
-lmId1 = {};    //id предпоследнего сообщения 
-lmId2 = {};    //id пред-предпоследнего сообщения     
 
 //меню команд
 bot.setMyCommands([
@@ -62,15 +59,12 @@ const start = async () => {
     bot.onText(/\/game/, async msg => {
         const chatId = msg.chat.id;
         const text = msg.text;
-        const messageId = msg.message_id;
 
         lc = text;
         await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
-        lmId2 = messageId - 1;
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
         await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
-        return lmId1 = messageId - 2;
     })
 
 //слушатель сообщений==========================================================================================
@@ -175,7 +169,7 @@ bot.on('message', async msg => {
                 const text = msg.text;
     
                 lc = text;
-                return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"\n${lmId2, lmId1, lmId0}`, resetOptions)
+                return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
             }   
 
             if (text !== '/game') {
@@ -295,13 +289,11 @@ bot.on('message', async msg => {
             if (data == chats[chatId]) {
                 user.right += 1;
                 await user.save();
-                await bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
-                return lmId0 = msg.message.id - 3;
+                return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
             } else {
                 user.wrong += 1;
                 await user.save();
-                await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions)
-                return lmId0 = msg.message.id - 3;
+                return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);return
             }
         }
 
