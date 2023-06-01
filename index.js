@@ -98,7 +98,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${user.nickname}! \n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${user.nickname}\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
                 }
 
                 if (!user) {
@@ -166,7 +166,7 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                return bot.sendMessage(chatId, `Вы ищите: \n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+                return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
             }
 
             if (text === 'recreatetable' && chatId === '356339062') {
