@@ -14,7 +14,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-const json = require('./request'); 
+const ky = request('ky');
 
 //глобальные переменные
 chats = {};
@@ -32,6 +32,8 @@ bot.setMyCommands([
 
 
 //функции=========================================================================================
+
+//const json = ky.get('https://opusdeco.ru/', {json: {foo: true}}).json();
 
 const startGame = async (chatId) => {
     const randomNumber = Math.floor(Math.random() * 10)
