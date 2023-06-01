@@ -45,7 +45,7 @@ const editEmail = async (chatId) => {
 
 const editNickname = async (chatId) => {
     lc = '/editNickname'
-    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
+    return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
 //=============================================================================================================
