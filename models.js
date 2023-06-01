@@ -6,12 +6,12 @@ const UserModel = sequelize.define( 'user', {
     chatId: {type: DataTypes.BIGINT, unique:true},
     right: {type: DataTypes.SMALLINT, defaultValue: 0},
     wrong: {type: DataTypes.SMALLINT, defaultValue: 0},
-    firstName: {type: DataTypes.CHAR,},
-    lastName: {type: DataTypes.CHAR},
-    nickname: {type: DataTypes.CHAR},
-    email: {type: DataTypes.CHAR},
-    brand: {type: DataTypes.CHAR},
-    vendorCode: {type: DataTypes.CHAR},
+    firstName: {type: DataTypes.TEXT('tiny')},
+    lastName: {type: DataTypes.TEXT('tiny')},
+    nickname: {type: DataTypes.TEXT('tiny')},
+    email: {type: DataTypes.TEXT('tiny')},
+    brand: {type: DataTypes.TEXT('tiny')},
+    vendorCode: {type: DataTypes.TEXT('tiny')},
     typeFind: {type: DataTypes.TEXT('tiny')},
 })
 

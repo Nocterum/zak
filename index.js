@@ -98,7 +98,7 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуй, ${user.nickname}\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+                    return bot.sendMessage(chatId, `И снова здравствуй, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
                 }
 
                 if (!user) {
@@ -214,7 +214,7 @@ bot.on('message', async msg => {
         //главное меню
         if (data === '/start') {
             lc = null;
-            return bot.sendMessage(chatId, `Главное меню, ${user.nickname}! \n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
         
         //начало работы
