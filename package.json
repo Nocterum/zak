@@ -8,9 +8,11 @@
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nocterum",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.4.0",
+    "ky": "^0.33.3",
     "node-telegram-bot-api": "^0.61.0",
     "nodemon": "^2.0.22",
     "pg": "^8.11.0",

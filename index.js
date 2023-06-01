@@ -14,6 +14,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
+const json = require('./request'); 
 
 //глобальные переменные
 chats = {};
@@ -272,7 +273,8 @@ bot.on('message', async msg => {
         //добавить в заказ
         if(data === '/work3') {
             lc = null;
-            return bot.sendMessage(chatId, sorry);
+            //return bot.sendMessage(chatId, sorry);
+            console.log(json);
         }
 
 
