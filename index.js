@@ -62,7 +62,7 @@ const start = async () => {
     bot.onText(/\/game/, async msg => {
         const chatId = msg.chat.id;
         const text = msg.text;
-        const messageId = query.message.id
+        const messageId = msg.message_id - 1;
 
         lc = text;
         await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
