@@ -110,7 +110,7 @@ bot.on('message', async msg => {
                         lastName: msg.from.last_name, 
                     });
                     lc = '/editNickname';
-                    return bot.sendMessage(chatId, `Привет, ${msg.from.first_name} 'Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
+                    return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
                 }
 
             } catch (e) {
@@ -149,7 +149,7 @@ bot.on('message', async msg => {
             //Записываем Nickname в ячейку БД
             if (lc === '/editNickname') {
                 await user.update({nickname: text});
-                return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомнил.\n<pre>(для перезаписи введите e-mail повторно)</pre>`, mainMenuOptions)
+                return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите e-mail повторно)</pre>`, mainMenuOptions)
             }
 
             //Записываем название бренда в ячейку БД
@@ -183,7 +183,7 @@ bot.on('message', async msg => {
                 const chatId = msg.chat.id;
                 const text = msg.text;
     
-                lc = text;
+                lc = null;
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
             }   
 
@@ -211,6 +211,12 @@ bot.on('message', async msg => {
 
         try {
 
+        //главное меню
+        if (data === '/start') {
+            lc = null;
+            return bot.sendMessage(chatId, `Главное меню, ${user.nickname}! \n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+        }
+        
         //начало работы
         if(data === '/startwork') {
             lc = null;
