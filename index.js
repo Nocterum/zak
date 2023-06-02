@@ -163,14 +163,14 @@ bot.on('message', async msg => {
             //изменить e-mail
             if (text === '/editEmail') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 return editEmail(chatId);
             }
 
             //Записываем e-mail в ячейку БД
             if (lc === '/editEmail') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await user.update({email: text});
                 return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
             }            
@@ -178,14 +178,14 @@ bot.on('message', async msg => {
             //изменить Nickname
             if (text === '/editNickname') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 return editNickname(chatId);
             }
             
             //Записываем Nickname в ячейку БД
             if (lc === '/editNickname') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await user.update({nickname: text});
                 return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
             }
@@ -193,7 +193,7 @@ bot.on('message', async msg => {
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
             }
@@ -201,7 +201,7 @@ bot.on('message', async msg => {
             //Записываем артикул в ячейку БД
             if (lc === '/enterVC') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await user.update({vendorCode: text});
                 return bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
             }
@@ -209,12 +209,12 @@ bot.on('message', async msg => {
             //вывод информации
             if (text === '/infowork') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
             }
 
             if (text === 'recreatetable' && chatId === '356339062') {
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await User.sync({ force: true })
                 return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
             }
@@ -226,14 +226,14 @@ bot.on('message', async msg => {
 
             if (text === '/infogame') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 lc = null;
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
             }   
 
             if (text !== '/game') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id);
+                await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
                 return bot.sendMessage(chatId, 'Не понимаю тебя..')
             }
@@ -259,28 +259,28 @@ bot.on('message', async msg => {
 
         //главное меню
         if (data === '/start') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
         
         //начало работы
         if(data === '/startwork') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
         }
         
-        //наличие, сроки, резерв
+        //наличие, сроки, резерв           
         if(data === '/work1') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = data;
             return bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
         }
 
         //запись typeFind
         if(data === 'Текстиль') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             await user.update ({
                 typeFind: data,
             });
@@ -289,7 +289,7 @@ bot.on('message', async msg => {
 
         //запись typeFind
         if(data === 'Обои') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             await user.update ({
                 typeFind: data,
             });
@@ -298,35 +298,35 @@ bot.on('message', async msg => {
 
         //Вводим название бренда
         if(data === '/enterBrand') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = data;
             return bot.sendMessage(chatId, `Введите название бренда:`);
         }
 
         //вводим артикул
         if(data === '/enterVC') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = data;
             return bot.sendMessage(chatId, `Введите артикул:`);
         }
         
         //поиск по введенным параметрам: brand, vendorCode, typeFind
         if(data === '/startFind') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, sorry);
         }
 
         //превью фото
         if(data === '/work2') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, sorry);
         }
 
         //добавить в заказ
         if(data === '/work3') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, sorry);
         }
@@ -334,22 +334,21 @@ bot.on('message', async msg => {
 
         //рестарт игры
         if (data === '/again') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = data;
             return startGame(chatId);
         }
 
         //рестарт игры
         if (data === '/infogame') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
         }
 
         //сброс результатов игры
         if(data === '/reset') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
-
+            await bot.deleteMessage(chatId, msg.message.message_id);
             if (user) {
                 await user.update ({
                     right: 0,
@@ -357,16 +356,14 @@ bot.on('message', async msg => {
                 });
 
             } else {
-                await bot.deleteMessage(chatId, sentMsg.message_id);
-                await UserModel.create({chatId, right: 0, wrong: 0});
-            }
+            await bot.deleteMessage(chatId, msg.message.message_id);
+        }
             return bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
         }
 
         //запись результата игры в БД
         if (lc === '/game' || '/again') {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
-
+            await bot.deleteMessage(chatId, msg.message.message_id);
             if (data == chats[chatId]) {
                 user.right += 1;
                 await user.save();
@@ -379,7 +376,7 @@ bot.on('message', async msg => {
         }
 
         } catch (err) {
-            await bot.deleteMessage(chatId, sentMsg.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);            
             return bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
         }
 
