@@ -66,6 +66,37 @@ const start = async () => {
     }
 
 //слушатель команд======================================================================================
+//старт
+bot.onText(/\/start/, async msg => {
+    await bot.deleteMessage(chatId, msg.message_id);   
+    try {
+        let user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        //главное меню
+        if (user) {
+            lc = null;
+            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+        } else {
+            user = await UserModel.create({chatId});
+            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+             await user.update({
+                firstName: msg.from.first_name, 
+                lastName: msg.from.last_name, 
+            });
+            lc = '/editNickname';
+            await bot.sendMessage(chatId, '(´｡• ◡ •｡`) '
+            return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
+        }  
+     } catch (e) {
+    console.log('Ошибка при создании нового пользователя', e);
+    }
+
+}
+
     bot.onText(/\/game/, async msg => {
         const chatId = msg.chat.id;
         const text = msg.text;
@@ -93,12 +124,6 @@ const start = async () => {
     })    
 */
 
-//слушатель сообщений бота
-bot.on('message', async sentMsg => {
-    const botMsgId = sentMsg.message_id;
-    botMsgIdx = botMsgId;
-})
-
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
@@ -110,7 +135,7 @@ bot.on('message', async msg => {
             chatId: chatId
         }
     });
-
+/*
     //старт
         if (text === '/start') {
             await bot.deleteMessage(chatId, msg.message_id);
@@ -146,8 +171,20 @@ bot.on('message', async msg => {
             }
 
         }
+*/
+    if (text === '/mainmenu') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
 
-        //Главное меню
+
+        //главное меню
+        if (user) {
+            lc = null;
+            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            }
+        }
+
+        //начало работы
             if (text === '/startwork') {
                 await bot.deleteMessage(chatId, msg.message_id);
                 await bot.deleteMessage(chatId, (msg.message_id -= 1));
