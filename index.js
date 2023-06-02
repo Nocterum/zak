@@ -85,14 +85,14 @@ const start = async () => {
             })
     });
 
-    bot.onText(/\/infogame/, async msg => {
+/*    bot.onText(/\/infogame/, async msg => {
         const chatId = msg.chat.id;
         const text = msg.text;
 
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-    })
-
+    })    
+*/    
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
@@ -107,6 +107,7 @@ bot.on('message', async msg => {
 
     //старт
         if (text === '/start') {
+            bot.deleteMessage(chatId, msg.message_id);
 
             try {
                 let user = await UserModel.findOne({
@@ -141,6 +142,7 @@ bot.on('message', async msg => {
 
         //Главное меню
             if (text === '/startwork') {
+                bot.deleteMessage(chatId, msg.message_id);
 
                 if (!user.email) {
                     await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
@@ -152,44 +154,52 @@ bot.on('message', async msg => {
 
             //изменить e-mail
             if (text === '/editEmail') {
+                bot.deleteMessage(chatId, msg.message_id);
                 return editEmail(chatId);
             }
 
             //Записываем e-mail в ячейку БД
             if (lc === '/editEmail') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await user.update({email: text});
                 return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
             }            
 
             //изменить Nickname
             if (text === '/editNickname') {
+                bot.deleteMessage(chatId, msg.message_id);
                 return editNickname(chatId);
             }
             
             //Записываем Nickname в ячейку БД
             if (lc === '/editNickname') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await user.update({nickname: text});
                 return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
             }
 
             //Записываем название бренда в ячейку БД
             if (lc === '/enterBrand') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await user.update({brand: text});
                 return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
             }
             
             //Записываем артикул в ячейку БД
             if (lc === '/enterVC') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await user.update({vendorCode: text});
                 return bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
             }
             
             //вывод информации
             if (text === '/infowork') {
+                bot.deleteMessage(chatId, msg.message_id);
                 return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
             }
 
             if (text === 'recreatetable' && chatId === '356339062') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await User.sync({ force: true })
                 return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
             }
@@ -199,12 +209,14 @@ bot.on('message', async msg => {
                 return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
             }
 
-//            if (text === '/infogame') {
-  //              lc = null;
-    //            return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-      //      }   
+            if (text === '/infogame') {
+                bot.deleteMessage(chatId, msg.message_id);
+                lc = null;
+                return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
+            }   
 
             if (text !== '/game') {
+                bot.deleteMessage(chatId, msg.message_id);
                 await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
                 return bot.sendMessage(chatId, 'Не понимаю тебя..')
             }
