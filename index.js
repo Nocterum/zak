@@ -20,7 +20,7 @@ const UserModel = require('./models');
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
-let botMsgIdx;
+botMsgIdx = {};    //айди последнего сообщения от бота
 
 
 //меню команд
