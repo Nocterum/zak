@@ -149,95 +149,96 @@ bot.on('message', async msg => {
             }
         }
 
-        //начало работы
-        if (text === '/startwork') {
-            await bot.deleteMessage(chatId, msg.message_id);
-
-            if (!user.email) {
-                await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
-                return editEmail(chatId);
-            } else {
-                return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
-            } 
-        }
-
-        //изменить e-mail
-        if (text === '/editEmail') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
+    //начало работы
+    if (text === '/startwork') {
+        
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        if (!user.email) {
+            await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
             return editEmail(chatId);
-        }
+        } else {
+            return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+        } 
+    }
 
-        //Записываем e-mail в ячейку БД
-        if (lc === '/editEmail') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await user.update({email: text});
-            return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
-        }            
+    //изменить e-mail
+    if (text === '/editEmail') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        return editEmail(chatId);
+    }
 
-        //изменить Nickname
-        if (text === '/editNickname') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            return editNickname(chatId);
-        }
-        
-        //Записываем Nickname в ячейку БД
-        if (lc === '/editNickname') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await user.update({nickname: text});
-            return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
-        }
+    //Записываем e-mail в ячейку БД
+    if (lc === '/editEmail') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await user.update({email: text});
+        return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
+    }            
 
-        //Записываем название бренда в ячейку БД
-        if (lc === '/enterBrand') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await user.update({brand: text});
-            return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
-        }
-        
-        //Записываем артикул в ячейку БД
-        if (lc === '/enterVC') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await user.update({vendorCode: text});
-            return bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
-        }
-        
-        //вывод информации
-        if (text === '/infowork') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
-        }
+    //изменить Nickname
+    if (text === '/editNickname') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        return editNickname(chatId);
+    }
+    
+    //Записываем Nickname в ячейку БД
+    if (lc === '/editNickname') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await user.update({nickname: text});
+        return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
+    }
 
-        if (text === 'recreatetable' && chatId === '356339062') {
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await User.sync({ force: true })
-            return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
-        }
+    //Записываем название бренда в ячейку БД
+    if (lc === '/enterBrand') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await user.update({brand: text});
+        return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
+    }
+    
+    //Записываем артикул в ячейку БД
+    if (lc === '/enterVC') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await user.update({vendorCode: text});
+        return bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
+    }
+    
+    //вывод информации
+    if (text === '/infowork') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+    }
+
+    if (text === 'recreatetable' && chatId === '356339062') {
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await User.sync({ force: true })
+        return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
+    }
 
 
-        if (text.toLowerCase() === 'привет' + '') {
-            return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
-        }
+    if (text.toLowerCase() === 'привет' + '') {
+        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
+    }
 
-        if (text === '/infogame') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            lc = null;
-            return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        }   
+    if (text === '/infogame') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        lc = null;
+        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
+    }   
 
-        if (text !== '/game' && text !== '/start') {
-            await bot.deleteMessage(chatId, msg.message_id);
-            await bot.deleteMessage(chatId, (msg.message_id -= 1));
-            await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-            return bot.sendMessage(chatId, 'Не понимаю тебя..')
-        }
+    if (text !== '/game' && text !== '/start') {
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
+        return bot.sendMessage(chatId, 'Не понимаю тебя..')
+    }
 
 })
 
