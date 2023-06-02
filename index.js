@@ -125,7 +125,6 @@ bot.on('message', async msg => {
                 //главное меню
                 if (user) {
                     lc = null;
-                    await bot.deleteMessage(chatId, msg.message_id)
                     return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
                         .then((sentMsg) => {
                             console.log(sentMsg);
