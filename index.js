@@ -69,9 +69,9 @@ const start = async () => {
 //слушатель команд======================================================================================
 
 //старт
-bot.onText(/\/start/, aqesync msg => {
-    1231231231weuywugeqjweqwe23123
-    const chaqweqwetId = msg.chat.id;
+bot.onText(/\/start/, async msg => {
+
+    const chatId = msg.chat.id;
 
     await bot.deleteMessage(chatId, msg.message_id);
     try {
