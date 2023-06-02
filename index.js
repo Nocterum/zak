@@ -133,25 +133,32 @@ bot.onText(/\/infogame/, async msg => {
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
-    const msgId3 = msg.message_id -= 3;
-    const msgId2 = msg.message_id -= 2;
-    const msgId1 = msg.message_id -= 1;
-    const msgId_1 = msg.message_id +=1; 
+    const msgId0 = msg.message_id;
+    const msgId_3 = (msgId0 -= 3);
+    const msgId_2 = (msgId0 -= 2);
+    const msgId_1 = (msgId0 -= 1);
+    const msgId1 = (msgId0 += 1);
+    const msgId2 = (msgId0 += 2);  
     //удаление последних сообщений
     const delMsg = async (chatId) => {
-
-        if (msg && msgId2) {
-
-                await bot.deleteMessage(chatId, msgId2);
-
-        } else if (msg && msgId1) {
-
-                await bot.deleteMessage(chatId, msgId1);
-
+        if (msg && msgId_3) {
+            await bot.deleteMessage(chatId, msgId_3);
         }
-                await bot.deleteMessage(chatId, msg.message_id);
-                return bot.deleteMessage(chatId, msgId_1 );
-
+        if (msg && msgId_2) {
+            await bot.deleteMessage(chatId, msgId_2);
+        }
+        if (msg && msgId_1) {
+            await bot.deleteMessage(chatId, msgId_1);
+        }
+        if (msg && msgId0) {
+            await bot.deleteMessage(chatId, msgId0);
+        }
+        if (msg && msgId1) {
+            return bot.deleteMessage(chatId, msgId1);
+        }
+        if (msg && msgId2) {
+            return bot.deleteMessage(chatId, msgId2);
+        }
     }
     console.log(msg)
 
@@ -260,25 +267,33 @@ bot.on('message', async msg => {
         const data = msg.data;
         const chatId = msg.message.chat.id;
         const sorry = 'Извините, эта функция ещё в разработке 😅';
-        const msgId3 = msg.message.message_id -= 3;
-        const msgId2 = msg.message.message_id -= 2;
-        const msgId1 = msg.message.message_id -= 1;
+        const msgId0 = msg.message.message_id;
+        const msgId_3 = (msgId0 -= 3);
+        const msgId_2 = (msgId0 -= 2);
+        const msgId_1 = (msgId0 -= 1);
+        const msgId1 = (msgId0 += 1);
+        const msgId2 = (msgId0 += 2);  
         //удаление последних сообщений
         const delMsg = async (chatId) => {
-
-                if (msg && msgId3) {
-    
-                await bot.deleteMessage(chatId, msg.message.message_id -= 3);
-            } else if (msg && msgId2) {
-    
-                await bot.deleteMessage(chatId, msg.message.message_id -= 2);
-            } else if (msg && msgId1) {
-                
-                await bot.deleteMessage(chatId, msg.message.message_id -= 1);
+            if (msg && msgId_3) {
+                await bot.deleteMessage(chatId, msgId_3);
             }
-            return bot.deleteMessage(chatId, msg.message.message_id);
-
-    }
+            if (msg && msgId_2) {
+                await bot.deleteMessage(chatId, msgId_2);
+            }
+            if (msg && msgId_1) {
+                await bot.deleteMessage(chatId, msgId_1);
+            }
+            if (msg && msgId0) {
+                await bot.deleteMessage(chatId, msgId0);
+            }
+            if (msg && msgId1) {
+                return bot.deleteMessage(chatId, msgId1);
+            }
+            if (msg && msgId2) {
+                return bot.deleteMessage(chatId, msgId2);
+            }
+        }
         console.log(msg)
 
         const user = await UserModel.findOne({
