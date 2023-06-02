@@ -52,6 +52,13 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+const delMsg = async (chatId) => {
+    await bot.deleteMessage(chatId, msg.message_id -= 1);
+    await bot.deleteMessage(chatId, msg.message_id);
+    await bot.deleteMessage(chatId, msg.message_id +=1);
+    return bot.deleteMessage(chatId, msg.message_id +=1);
+}
+
 //=============================================================================================================
 
 const start = async () => {
@@ -158,9 +165,7 @@ bot.on('message', async msg => {
         } else {
             await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
         } 
-        await bot.deleteMessage(chatId, msg.message_id -= 1);
-        await bot.deleteMessage(chatId, msg.message_id);
-        return bot.deleteMessage(chatId, msg.message_id +=1);
+        return delMsg(chatId);
     }
 
     //изменить e-mail
