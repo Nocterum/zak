@@ -20,9 +20,8 @@ const UserModel = require('./models');
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
-let message0Id;
-let message1Id;
-let message2Id;
+let botMsgIdx;
+
 
 //меню команд
 bot.setMyCommands([
@@ -92,11 +91,19 @@ const start = async () => {
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
     })    
-*/    
+*/
+
+//слушатель сообщений бота
+bot.on('message', async sentMsg => {
+    const botMsgId = sentMsg.message_id;
+    botMsgIdx = botMsgId;
+})
+
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
+    const sentMsg = sentMsg.message_id;
     console.log(msg)
 
     const user = await UserModel.findOne({
@@ -144,7 +151,7 @@ bot.on('message', async msg => {
         //Главное меню
             if (text === '/startwork') {
                 await bot.deleteMessage(chatId, msg.message_id);
-                await bot.deleteMessage(chatId, sentMsg.message_id - 1);
+                await bot.deleteMessage(chatId, botMsgIdx);
 
                 if (!user.email) {
                     await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
