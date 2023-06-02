@@ -20,6 +20,8 @@ const UserModel = require('./models');
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
+mid = {};
+
 
 //меню команд
 bot.setMyCommands([
@@ -89,6 +91,7 @@ bot.on('message', async msg => {
 
     //старт
         if (text === '/start') {
+            mid = result.message_id;
 
             try {
                 let user = await UserModel.findOne({
@@ -168,7 +171,8 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+                await bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+                mid = result.message_id;
             }
 
             if (text === 'recreatetable' && chatId === '356339062') {
