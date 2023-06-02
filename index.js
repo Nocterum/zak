@@ -105,7 +105,7 @@ bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
     await bot.deleteMessage(chatId, msg.message_id);
-        lc = null;
+        lc = '/game';
         await bot.sendMessage(chatId, `Игра "угадай число"`)
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
@@ -366,7 +366,7 @@ bot.on('message', async msg => {
         }
 
         //запись результата игры в БД
-        if (lc === '/game' || '/again') {
+        if (lc === '/game' || lc === '/again') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             if (data == chats[chatId]) {
                 user.right += 1;
