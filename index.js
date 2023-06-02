@@ -137,18 +137,33 @@ bot.on('message', async msg => {
         const msgId3 = msg.message_id -= 3;
         const msgId2 = msg.message_id -= 2;
         const msgId1 = msg.message_id -= 1;
-            if (msg && msgId3) {
-
-            await bot.deleteMessage(chatId, msg.message_id -= 3);
-        } else if (msg && msgId2) {
-
-            await bot.deleteMessage(chatId, msg.message_id -= 2);
-        } else if (msg && msgId1) {
+        if (msg && msgId3) {
+            try {
+                await bot.deleteMessage(chatId, msg.message_id -= 3);
+            } catch {
+                console.log('ошибка в -3 сообщении')
+            }
             
-            await bot.deleteMessage(chatId, msg.message_id -= 1);
+        } else if (msg && msgId2) {
+            try {
+                await bot.deleteMessage(chatId, msg.message_id -= 2);
+            } catch {
+                console.log('ошибка в -2 сообщении')
+            }
+        } else if (msg && msgId1) {
+            try {
+                await bot.deleteMessage(chatId, msg.message_id -= 1);
+            } catch {
+                console.log('ошибка в -1 сообщении')
+            }
         }
         await bot.deleteMessage(chatId, msg.message_id);
-        return bot.deleteMessage(chatId, msg.message_id += 1);
+        try {
+            return bot.deleteMessage(chatId, msg.message_id += 1);
+        } catch {
+            console.log('ошибка в +1 сообщении')
+        }
+
 
 
     }
