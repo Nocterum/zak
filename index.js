@@ -70,7 +70,7 @@ const start = async () => {
 
 //старт
 bot.onText(/\/start/, async msg => {
-
+    123123123123123
     const chatId = msg.chat.id;
 
     await bot.deleteMessage(chatId, msg.message_id);
