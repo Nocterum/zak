@@ -112,8 +112,8 @@ bot.onText(/\/game/, async msg => {
         message1Id = sentMsg.message_id;
         console.log(sentMsg);
     })
-    await bot.deleteMessage(chatId, msg.message_id -= 2)
-    return bot.deleteMessage(chatId, msg.message_id -= 1);
+    await bot.deleteMessage(chatId, msg.message_id -= 1)
+    return bot.deleteMessage(chatId, msg.message_id);
     }),
 
 bot.onText(/\/infogame/, async msg => {
@@ -121,8 +121,8 @@ bot.onText(/\/infogame/, async msg => {
 
         lc = null;
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        await bot.deleteMessage(chatId, msg.message_id -= 2)
-        return bot.deleteMessage(chatId, msg.message_id -= 1);
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }) 
 )
 
@@ -144,10 +144,10 @@ bot.on('message', async msg => {
         
         if (user) {
             lc = null;
-            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
-        await bot.deleteMessage(chatId, msg.message_id -= 2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
         }
 
     //начало работы
@@ -158,87 +158,88 @@ bot.on('message', async msg => {
         } else {
             await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
         } 
-        await bot.deleteMessage(chatId, msg.message_id -= 2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1);
+        await bot.deleteMessage(chatId, msg.message_id);
+        return bot.deleteMessage(chatId, msg.message_id +=1);
     }
 
     //изменить e-mail
     if (text === '/editEmail') {
         await editEmail(chatId);
-        await bot.deleteMessage(chatId, msg.message_id -= 2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
     //Записываем e-mail в ячейку БД
     if (lc === '/editEmail') {
         await user.update({email: text});
         await bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, begintWorkOptions)
-        await bot.deleteMessage(chatId, msg.message_id -= 2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }            
 
     //изменить Nickname
     if (text === '/editNickname') {
         await editNickname(chatId);
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
     
     //Записываем Nickname в ячейку БД
     if (lc === '/editNickname') {
         await user.update({nickname: text});
         await bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
     //Записываем название бренда в ячейку БД
     if (lc === '/enterBrand') {
         await user.update({brand: text});
         await bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
     
     //Записываем артикул в ячейку БД
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
         await bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
     
     //вывод информации
     if (text === '/infowork') {
         await bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
     if (text === 'recreatetable' && chatId === '356339062') {
         await UserModel.sync({ force: true })
         await bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
     if (text.toLowerCase() === 'привет' + '') {
         await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
     if (text === '/infogame') {
         lc = null;
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }   
 
     if (text !== '/game' && text !== '/start') {
         await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-        await bot.deleteMessage(chatId, msg.message_id -=2);
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
+        await bot.deleteMessage(chatId, msg.message_id -= 1)
+        return bot.deleteMessage(chatId, msg.message_id);
     }
 
 })
@@ -263,21 +264,21 @@ bot.on('message', async msg => {
         if (data === '/mainmenu') {
             lc = null;
             await bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
         
         //начало работы
         if(data === '/beginwork') {
             lc = null;
             await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
         
         //наличие, сроки, резерв           
         if(data === '/work1') {
             lc = data;
             await bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //запись typeFind
@@ -286,7 +287,7 @@ bot.on('message', async msg => {
                 typeFind: data,
             });
             await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //запись typeFind
@@ -295,42 +296,42 @@ bot.on('message', async msg => {
                 typeFind: data,
             });
             await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //Вводим название бренда
         if(data === '/enterBrand') {
             lc = data;
             await bot.sendMessage(chatId, `Введите название бренда:`);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //вводим артикул
         if(data === '/enterVC') {
             lc = data;
             await bot.sendMessage(chatId, `Введите артикул:`);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
         
         //поиск по введенным параметрам: brand, vendorCode, typeFind
         if(data === '/startFind') {
             lc = null;
             await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //превью фото
         if(data === '/work2') {
             lc = null;
             await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //добавить в заказ
         if(data === '/work3') {
             lc = null;
             await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
 
@@ -338,14 +339,14 @@ bot.on('message', async msg => {
         if (data === '/again') {
             lc = data;
             await startGame(chatId);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //рестарт игры
         if (data === '/infogame') {
             lc = null;
             await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //сброс результатов игры
@@ -360,7 +361,7 @@ bot.on('message', async msg => {
             await bot.deleteMessage(chatId, msg.message.message_id);
         }
             await bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
         //запись результата игры в БД
@@ -379,7 +380,7 @@ bot.on('message', async msg => {
 
         } catch (err) {      
             await bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
-            return bot.deleteMessage(chatId, (msg.message_id -= 1));
+            return bot.deleteMessage(chatId, (msg.message.message_id -=1));
         }
 
     })
