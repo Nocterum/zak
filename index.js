@@ -52,12 +52,6 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
-const delMsg = async (chatId) => {
-    await bot.deleteMessage(chatId, msg.message_id -= 1);
-    await bot.deleteMessage(chatId, msg.message_id);
-    await bot.deleteMessage(chatId, msg.message_id +=1);
-    return bot.deleteMessage(chatId, msg.message_id +=1);
-}
 
 //=============================================================================================================
 
@@ -138,6 +132,13 @@ bot.onText(/\/infogame/, async msg => {
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
+    //удаление последних сообщений
+    const delMsg = async (chatId) => {
+        await bot.deleteMessage(chatId, msg.message_id -= 1);
+        await bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, msg.message_id +=1);
+        return bot.deleteMessage(chatId, msg.message_id +=1);
+    }
     console.log(msg)
 
     const user = await UserModel.findOne({
@@ -145,6 +146,8 @@ bot.on('message', async msg => {
             chatId: chatId
         }
     });
+
+
 
     //главное меню
     if (text === '/mainmenu') {
