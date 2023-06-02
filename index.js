@@ -88,7 +88,7 @@ bot.onText(/\/start/, async msg => {
                 lastName: msg.from.last_name, 
             });
             lc = '/editNickname';
-            await bot.sendMessage(chatId, '(´｡• ◡ •｡`) '
+            await bot.sendMessage(chatId, '(´｡• ◡ •｡`) ')
             return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
         }  
      } catch (e) {
