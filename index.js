@@ -68,7 +68,6 @@ const start = async () => {
 //слушатель команд======================================================================================
 //старт
 bot.onText(/\/start/, async msg => {
-    const text = msg.text;
     const chatId = msg.chat.id;
  
     try {
@@ -99,15 +98,11 @@ bot.onText(/\/start/, async msg => {
 
 },
 
-    (/\/game/, async msg => {
-        const chatId = msg.chat.id;
-        const text = msg.text;
+bot.onText(/\/game/, async msg => {
+    const chatId = msg.chat.id;
 
         lc = text;
         await bot.sendMessage(chatId, `Игра "угадай число"`)
-            .then((sentMsg) => {
-                message0Id = sentMsg.message_id;
-            })
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
         return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
@@ -115,17 +110,16 @@ bot.onText(/\/start/, async msg => {
                 message1Id = sentMsg.message_id;
                 console.log(sentMsg);
             })
-    })
-)
+    }),
 
-/*    bot.onText(/\/infogame/, async msg => {
-        const chatId = msg.chat.id;
-        const text = msg.text;
+bot.onText(/\/infogame/, async msg => {
+    const chatId = msg.chat.id;
 
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-    })    
-*/
+    }) 
+)
+
 
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
@@ -271,7 +265,7 @@ bot.on('message', async msg => {
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
             }   
 
-            if (text !== ('/game' || '/start')) {
+            if (text !== '/game' && text !== '/start') {
                 await bot.deleteMessage(chatId, msg.message_id);
                 await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
