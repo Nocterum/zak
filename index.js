@@ -151,9 +151,11 @@ bot.on('message', async msg => {
 
     //начало работы
     if (text === '/startwork') {
-        
-        await bot.deleteMessage(chatId, msg.message_id);
-        await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        if (msg && msg.message_id) {
+            await bot.deleteMessage(chatId, msg.message_id);
+            await bot.deleteMessage(chatId, (msg.message_id -= 1));
+        }
+
         if (!user.email) {
             await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
             return editEmail(chatId);
