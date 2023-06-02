@@ -262,7 +262,7 @@ bot.on('message', async msg => {
         try {
 
         //главное меню
-        if (data === '/start') {
+        if (data === '/mainmenu') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
