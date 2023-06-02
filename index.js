@@ -140,28 +140,28 @@ bot.on('message', async msg => {
         if (msg && msgId3) {
             try {
                 await bot.deleteMessage(chatId, msg.message_id -= 3);
-            } catch {
-                console.log('ошибка в -3 сообщении')
+            } catch (e) {
+                console.log('ошибка в -3 сообщении', (e))
             }
             
         } else if (msg && msgId2) {
             try {
                 await bot.deleteMessage(chatId, msg.message_id -= 2);
-            } catch {
-                console.log('ошибка в -2 сообщении')
+            } catch (e) {
+                console.log('ошибка в -2 сообщении', e)
             }
         } else if (msg && msgId1) {
             try {
                 await bot.deleteMessage(chatId, msg.message_id -= 1);
-            } catch {
-                console.log('ошибка в -1 сообщении')
+            } catch (e) {
+                console.log('ошибка в -1 сообщении', e)
             }
         }
         await bot.deleteMessage(chatId, msg.message_id);
         try {
             return bot.deleteMessage(chatId, msg.message_id += 1);
-        } catch {
-            console.log('ошибка в +1 сообщении')
+        } catch (e) {
+            console.log('ошибка в +1 сообщении', e)
         }
 
 
