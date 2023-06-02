@@ -137,13 +137,13 @@ bot.on('message', async msg => {
         const msgId3 = msg.message_id -= 3;
         const msgId2 = msg.message_id -= 2;
         const msgId1 = msg.message_id -= 1;
-            if (msgId3) {
+            if (msg && msgId3) {
 
             await bot.deleteMessage(chatId, msg.message_id -= 3);
-        } else if (msgId2) {
+        } else if (msg && msgId2) {
 
             await bot.deleteMessage(chatId, msg.message_id -= 2);
-        } else if (msgId1) {
+        } else if (msg && msgId1) {
             
             await bot.deleteMessage(chatId, msg.message_id -= 1);
         }
@@ -264,13 +264,13 @@ bot.on('message', async msg => {
             const msgId3 = msg.message.message_id -= 3;
             const msgId2 = msg.message.message_id -= 2;
             const msgId1 = msg.message.message_id -= 1;
-                if (msgId3) {
+                if (msg && msgId3) {
     
                 await bot.deleteMessage(chatId, msg.message.message_id -= 3);
-            } else if (msgId2) {
+            } else if (msg && msgId2) {
     
                 await bot.deleteMessage(chatId, msg.message.message_id -= 2);
-            } else if (msgId1) {
+            } else if (msg && msgId1) {
                 
                 await bot.deleteMessage(chatId, msg.message.message_id -= 1);
             }
