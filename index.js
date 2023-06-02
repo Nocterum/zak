@@ -68,6 +68,9 @@ const start = async () => {
 //слушатель команд======================================================================================
 //старт
 bot.onText(/\/start/, async msg => {
+    const text = msg.text;
+    const chatId = msg.chat.id;
+    
     await bot.deleteMessage(chatId, msg.message_id);   
     try {
         let user = await UserModel.findOne({
@@ -269,7 +272,7 @@ bot.on('message', async msg => {
                 return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
             }   
 
-            if (text !== '/game') {
+            if (text !== '/game' || '/start') {
                 await bot.deleteMessage(chatId, msg.message_id);
                 await bot.deleteMessage(chatId, (msg.message_id -= 1));
                 await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
