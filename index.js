@@ -147,9 +147,8 @@ bot.on('message', async msg => {
                 await bot.deleteMessage(chatId, msg.message_id -= 1);
 
         }
-                await bot.deleteMessage(chatId, msg.message_id);
+                return bot.deleteMessage(chatId, msg.message_id);
 
-            return bot.deleteMessage(chatId, msg.message_id += 1);
     }
     console.log(msg)
 
@@ -273,8 +272,8 @@ bot.on('message', async msg => {
                 
                 await bot.deleteMessage(chatId, msg.message.message_id -= 1);
             }
-            await bot.deleteMessage(chatId, msg.message.message_id);
-            return bot.deleteMessage(chatId, msg.message.message_id += 1);
+            return bot.deleteMessage(chatId, msg.message.message_id);
+
     }
         console.log(msg)
 
