@@ -291,7 +291,6 @@ bot.on('message', async msg => {
         //рестарт игры
         if (data === '/again') {
             lc = data;
-            await bot.deleteMessage(chatId, message0Id);
             return startGame(chatId);
         }
 
@@ -322,17 +321,11 @@ bot.on('message', async msg => {
             if (data == chats[chatId]) {
                 user.right += 1;
                 await user.save();
-                await bot.deleteMessage(chatId, message1Id);
-                await bot.deleteMessage(chatId, message0Id);
                 await bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
-                return message0Id = (sentMsg.message_id);
             } else {
                 user.wrong += 1;
                 await user.save();
-                await bot.deleteMessage(chatId, message1Id);
-                await bot.deleteMessage(chatId, message0Id);
-                await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);
-                return message0Id = (sentMsg.message_id);    
+                await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
             }
         }
 
