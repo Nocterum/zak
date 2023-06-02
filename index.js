@@ -134,6 +134,7 @@ bot.on('message', async msg => {
     const chatId = msg.chat.id;
     //удаление последних сообщений
     const delMsg = async (chatId) => {
+        await bot.deleteMessage(chatId, msg.message_id -= 2);
         await bot.deleteMessage(chatId, msg.message_id -= 1);
         await bot.deleteMessage(chatId, msg.message_id);
         return bot.deleteMessage(chatId, msg.message_id += 1);
