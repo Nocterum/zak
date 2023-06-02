@@ -107,7 +107,7 @@ bot.on('message', async msg => {
 
     //старт
         if (text === '/start') {
-            bot.deleteMessage(chatId, msg.message_id);
+            await bot.deleteMessage(chatId, msg.message_id);
 
             try {
                 let user = await UserModel.findOne({
@@ -120,7 +120,9 @@ bot.on('message', async msg => {
                 if (user) {
                     lc = null;
                     return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-                        .then(console.log(sentMsg))
+                        .then((sentMsg) => {
+                            console.log(sentMsg);
+                        })
                 } else {
                     user = await UserModel.create({chatId});
                     console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
