@@ -25,7 +25,7 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 
 //меню команд
 bot.setMyCommands([
-    {command: '/start', description:'Главное меню'},
+    {command: '/mainmenu', description:'Главное меню'},
     {command: '/startwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
     //{command: '/infogame', description:'Результаты в игре'},
@@ -66,10 +66,12 @@ const start = async () => {
     }
 
 //слушатель команд======================================================================================
+
 //старт
 bot.onText(/\/start/, async msg => {
     const chatId = msg.chat.id;
- 
+
+    await bot.deleteMessage(chatId, msg.message_id);
     try {
         let user = await UserModel.findOne({
             where: {
@@ -101,7 +103,8 @@ bot.onText(/\/start/, async msg => {
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
-        lc = text;
+    await bot.deleteMessage(chatId, msg.message_id);
+        lc = null;
         await bot.sendMessage(chatId, `Игра "угадай число"`)
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
@@ -115,6 +118,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/infogame/, async msg => {
     const chatId = msg.chat.id;
 
+    await bot.deleteMessage(chatId, msg.message_id);
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
     }) 
@@ -132,43 +136,7 @@ bot.on('message', async msg => {
             chatId: chatId
         }
     });
-/*
-    //старт
-        if (text === '/start') {
-            await bot.deleteMessage(chatId, msg.message_id);
 
-            try {
-                let user = await UserModel.findOne({
-                    where: {
-                        chatId: chatId
-                    }
-                });
-
-                //главное меню
-                if (user) {
-                    lc = null;
-                    return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-                        .then((sentMsg) => {
-                            console.log(sentMsg);
-                        })
-                } else {
-                    user = await UserModel.create({chatId});
-                    console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-
-                    await user.update({
-                        firstName: msg.from.first_name, 
-                        lastName: msg.from.last_name, 
-                    });
-                    lc = '/editNickname';
-                    return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
-                }
-
-            } catch (e) {
-            console.log('Ошибка при создании нового пользователя', e);
-            }
-
-        }
-*/
     if (text === '/mainmenu') {
         await bot.deleteMessage(chatId, msg.message_id);
         await bot.deleteMessage(chatId, (msg.message_id -= 1));
