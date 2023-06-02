@@ -95,9 +95,9 @@ bot.onText(/\/start/, async msg => {
     console.log('Ошибка при создании нового пользователя', e);
     }
 
-}
+},
 
-    bot.onText(/\/game/, async msg => {
+    (/\/game/, async msg => {
         const chatId = msg.chat.id;
         const text = msg.text;
 
@@ -113,7 +113,8 @@ bot.onText(/\/start/, async msg => {
                 message1Id = sentMsg.message_id;
                 console.log(sentMsg);
             })
-    });
+    })
+)
 
 /*    bot.onText(/\/infogame/, async msg => {
         const chatId = msg.chat.id;
