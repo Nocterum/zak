@@ -140,7 +140,8 @@ bot.on('message', async msg => {
 
         } else if (msg && (msg.message_id -= 2)) {
 
-        await bot.deleteMessage(chatId, msg.message_id -= 2);
+            await bot.deleteMessage(chatId, msg.message_id -= 2);
+        }
         await bot.deleteMessage(chatId, msg.message_id -= 1);
         await bot.deleteMessage(chatId, msg.message_id);
         return bot.deleteMessage(chatId, msg.message_id += 1);
@@ -256,16 +257,17 @@ bot.on('message', async msg => {
         const sorry = 'Извините, эта функция ещё в разработке 😅';
         //удаление последних сообщений
         const delMsg = async (chatId) => {
-        if (msg && (msg.message.message_id -= 3)) {
+            if (msg && (msg.message.message_id -= 3)) {
             
-            await bot.deleteMessage(chatId, msg.message.message_id -= 3);
+                await bot.deleteMessage(chatId, msg.message.message_id -= 3);
 
-        } else if (msg && (msg.message.message_id -= 2)) {
+            } else if (msg && (msg.message.message_id -= 2)) {
 
             await bot.deleteMessage(chatId, msg.message.message_id -= 2);
-            await bot.deleteMessage(chatId, msg.message.message_id -= 1);
-            await bot.deleteMessage(chatId, msg.message.message_id);
-            return bot.deleteMessage(chatId, msg.message.message_id += 1);
+            }
+                await bot.deleteMessage(chatId, msg.message.message_id -= 1);
+                await bot.deleteMessage(chatId, msg.message.message_id);
+                return bot.deleteMessage(chatId, msg.message.message_id += 1);
     }
         console.log(msg)
 
