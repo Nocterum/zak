@@ -158,7 +158,6 @@ bot.on('message', async msg => {
         }
 
         if (!user.email) {
-            await bot.sendMessage(chatId, 'Для начала сообщите мне Ваш рабочий e-mail, это потребуется нам в дальнейшем')
             return editEmail(chatId);
         } else {
             return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
@@ -239,8 +238,7 @@ bot.on('message', async msg => {
     if (text !== '/game' && text !== '/start') {
         await bot.deleteMessage(chatId, msg.message_id);
         await bot.deleteMessage(chatId, (msg.message_id -= 1));
-        await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-        return bot.sendMessage(chatId, 'Не понимаю тебя..')
+        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
     }
 
 })
