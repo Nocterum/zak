@@ -103,7 +103,6 @@ bot.on('message', async sentMsg => {
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
-    const sentMsg = sentMsg.message_id;
     console.log(msg)
 
     const user = await UserModel.findOne({
