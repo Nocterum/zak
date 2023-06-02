@@ -12,7 +12,7 @@ const bot = new TelegramApi(token, {
 });
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, startWorkOptions, mainMenuOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, begintWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -26,7 +26,7 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 //меню команд
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
-    {command: '/startwork', description:'Начало работы'},
+    {command: '/beginwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
     //{command: '/infogame', description:'Результаты в игре'},
     //{command: '/game', description:'Игра в угадайку'},
@@ -82,7 +82,7 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
-            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -145,12 +145,13 @@ bot.on('message', async msg => {
 
         if (user) {
             lc = null;
-            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
             }
         }
 
     //начало работы
-    if (text === '/startwork') {
+    if (text === '/beginwork') {
+
         if (msg && msg.message_id) {
             await bot.deleteMessage(chatId, msg.message_id);
             await bot.deleteMessage(chatId, (msg.message_id -= 1));
@@ -176,7 +177,7 @@ bot.on('message', async msg => {
         await bot.deleteMessage(chatId, msg.message_id);
         await bot.deleteMessage(chatId, (msg.message_id -= 1));
         await user.update({email: text});
-        return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, startWorkOptions)
+        return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, begintWorkOptions)
     }            
 
     //изменить Nickname
@@ -264,11 +265,11 @@ bot.on('message', async msg => {
         if (data === '/start') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
-            return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /startwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
         
         //начало работы
-        if(data === '/startwork') {
+        if(data === '/beginwork') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
             return bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)

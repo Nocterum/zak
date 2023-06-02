@@ -31,17 +31,17 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'В главное меню', callback_data: '/start'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
     },
 
-    startWorkOptions: {
+    begintWorkOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/startwork'}],
-                [{text: 'В главное меню', callback_data: '/start'}],
+                [{text: 'Продолжить', callback_data: '/beginwork'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
     },
