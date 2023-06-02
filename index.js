@@ -71,7 +71,7 @@ const start = async () => {
         const text = msg.text;
 
         lc = text;
-        await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
+        await bot.sendMessage(chatId, `Игра "угадай число"`)
             .then((sentMsg) => {
                 message0Id = sentMsg.message_id;
             })
