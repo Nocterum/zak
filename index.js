@@ -134,6 +134,12 @@ bot.on('message', async msg => {
     const chatId = msg.chat.id;
     //удаление последних сообщений
     const delMsg = async (chatId) => {
+        if (msg && (msg.message_id -= 3)) {
+
+            await bot.deleteMessage(chatId, msg.message_id -= 3);
+
+        } else if (msg && (msg.message_id -= 2)) {
+
         await bot.deleteMessage(chatId, msg.message_id -= 2);
         await bot.deleteMessage(chatId, msg.message_id -= 1);
         await bot.deleteMessage(chatId, msg.message_id);
@@ -250,6 +256,13 @@ bot.on('message', async msg => {
         const sorry = 'Извините, эта функция ещё в разработке 😅';
         //удаление последних сообщений
         const delMsg = async (chatId) => {
+        if (msg && (msg.message.message_id -= 3)) {
+            
+            await bot.deleteMessage(chatId, msg.message.message_id -= 3);
+
+        } else if (msg && (msg.message.message_id -= 2)) {
+
+            await bot.deleteMessage(chatId, msg.message.message_id -= 2);
             await bot.deleteMessage(chatId, msg.message.message_id -= 1);
             await bot.deleteMessage(chatId, msg.message.message_id);
             return bot.deleteMessage(chatId, msg.message.message_id += 1);
