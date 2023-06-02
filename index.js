@@ -20,8 +20,9 @@ const UserModel = require('./models');
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
-mid = {};
-
+let message0Id;
+let message1Id;
+let message2Id;
 
 //меню команд
 bot.setMyCommands([
@@ -72,9 +73,15 @@ const start = async () => {
 
         lc = text;
         await bot.sendMessage(chatId, `Сейчас загадаю цифру`)
+            .then((sentMsg) => {
+                message0Id = sentMsg.message_id;
+            })
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
-        await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+        return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+            .then((sentMsg) => {
+                message1Id = sentMsg.message_id;
+            })
     })
 
 //слушатель сообщений==========================================================================================
@@ -91,7 +98,6 @@ bot.on('message', async msg => {
 
     //старт
         if (text === '/start') {
-            mid = result.message_id;
 
             try {
                 let user = await UserModel.findOne({
@@ -171,8 +177,7 @@ bot.on('message', async msg => {
             
             //вывод информации
             if (text === '/infowork') {
-                await bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
-                mid = result.message_id;
+                return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
             }
 
             if (text === 'recreatetable' && chatId === '356339062') {
@@ -286,7 +291,7 @@ bot.on('message', async msg => {
         //рестарт игры
         if (data === '/again') {
             lc = data;
-            bot.deleteMessage(chatId, {lmId0, lmId1, lmId2});
+            await bot.deleteMessage(chatId, message0Id);
             return startGame(chatId);
         }
 
@@ -317,11 +322,15 @@ bot.on('message', async msg => {
             if (data == chats[chatId]) {
                 user.right += 1;
                 await user.save();
-                return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
+                await bot.deleteMessage(chatId, {message1Id, message0Id});
+                await bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
+                return message0Id = (sentMsg.message_id);
             } else {
                 user.wrong += 1;
                 await user.save();
-                return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);return
+                await bot.deleteMessage(chatId, {message1Id, message0Id});
+                await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);
+                return message0Id = (sentMsg.message_id);    
             }
         }
 
