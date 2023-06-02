@@ -315,21 +315,21 @@ bot.on('message', async msg => {
         if(data === '/startFind') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
-            return bot.sendMessage(chatId, sorry);
+            return bot.sendMessage(chatId, sorry, mainMenuOptions);
         }
 
         //превью фото
         if(data === '/work2') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
-            return bot.sendMessage(chatId, sorry);
+            return bot.sendMessage(chatId, sorry, mainMenuOptions);
         }
 
         //добавить в заказ
         if(data === '/work3') {
             await bot.deleteMessage(chatId, msg.message.message_id);
             lc = null;
-            return bot.sendMessage(chatId, sorry);
+            return bot.sendMessage(chatId, sorry, mainMenuOptions);
         }
 
 
