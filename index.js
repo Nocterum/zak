@@ -81,6 +81,7 @@ const start = async () => {
         return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
             .then((sentMsg) => {
                 message1Id = sentMsg.message_id;
+                console.log(sentMsg);
             })
     })
 
@@ -283,7 +284,6 @@ bot.on('message', async msg => {
         //добавить в заказ
         if(data === '/work3') {
             lc = null;
-            return request(chatId);
             return bot.sendMessage(chatId, sorry);
         }
 
@@ -335,7 +335,7 @@ bot.on('message', async msg => {
         }
 
         } catch (err) {
-            return bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', e);
+            return bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
         }
 
     })
