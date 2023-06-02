@@ -134,15 +134,19 @@ bot.on('message', async msg => {
     const chatId = msg.chat.id;
     //удаление последних сообщений
     const delMsg = async (chatId) => {
-        if (msg && (msg.message_id -= 3)) {
+        const msgId3 = msg.message_id -= 3;
+        const msgId2 = msg.message_id -= 2;
+        const msgId1 = msg.message_id -= 1;
+            if (msgId3) {
 
             await bot.deleteMessage(chatId, msg.message_id -= 3);
-
-        } else if (msg && (msg.message_id -= 2)) {
+        } else if (msgId2) {
 
             await bot.deleteMessage(chatId, msg.message_id -= 2);
+        } else if (msgId1) {
+            
+            await bot.deleteMessage(chatId, msg.message_id -= 1);
         }
-        await bot.deleteMessage(chatId, msg.message_id -= 1);
         await bot.deleteMessage(chatId, msg.message_id);
         return bot.deleteMessage(chatId, msg.message_id += 1);
 
@@ -257,17 +261,21 @@ bot.on('message', async msg => {
         const sorry = 'Извините, эта функция ещё в разработке 😅';
         //удаление последних сообщений
         const delMsg = async (chatId) => {
-            if (msg && (msg.message.message_id -= 3)) {
-            
+            const msgId3 = msg.message.message_id -= 3;
+            const msgId2 = msg.message.message_id -= 2;
+            const msgId1 = msg.message.message_id -= 1;
+                if (msgId3) {
+    
                 await bot.deleteMessage(chatId, msg.message.message_id -= 3);
-
-            } else if (msg && (msg.message.message_id -= 2)) {
-
-            await bot.deleteMessage(chatId, msg.message.message_id -= 2);
-            }
+            } else if (msgId2) {
+    
+                await bot.deleteMessage(chatId, msg.message.message_id -= 2);
+            } else if (msgId1) {
+                
                 await bot.deleteMessage(chatId, msg.message.message_id -= 1);
-                await bot.deleteMessage(chatId, msg.message.message_id);
-                return bot.deleteMessage(chatId, msg.message.message_id += 1);
+            }
+            await bot.deleteMessage(chatId, msg.message.message_id);
+            return bot.deleteMessage(chatId, msg.message.message_id += 1);
     }
         console.log(msg)
 
