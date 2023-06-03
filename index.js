@@ -105,10 +105,9 @@ bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
     lc = '/game';
-    await bot.sendMessage(chatId, `Игра "угадай число"`)
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
-    await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+    await bot.sendMessage(chatId, `Попробуй угадать число, которое я загадал😏`, gameOptions)
     await bot.deleteMessage(chatId, (msg.message_id -= 2))
     return bot.deleteMessage(chatId, (msg.message_id -= 1));
     }),
@@ -381,12 +380,12 @@ bot.on('message', async msg => {
                 user.right += 1;
                 await user.save();
                 await delMsg(chatId);
-                await bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
+                return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
             } else {
                 user.wrong += 1;
                 await user.save();
                 await delMsg(chatId);
-                await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
+                return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
             }
         }
 
