@@ -96,7 +96,7 @@ bot.onText(/\/start/, async msg => {
 
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
-    bot.deleteMessage(chatId, msg.message.message_id)
+
     lc = '/game';
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
@@ -376,12 +376,14 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save();
-            await delMsg(chatId);
+            //await delMsg(chatId);
+            await bot.deleteMessage(chatId, msg.message.message_id)
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            await delMsg(chatId);
+            //await delMsg(chatId);
+            await bot.deleteMessage(chatId, msg.message.message_id)
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
