@@ -257,9 +257,7 @@ bot.on('callback_query', async msg => {
     const startGame = async (chatId) => {
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
-        await bot.sendMessage(chatId, `Отгадывай:${msg.message.message_id}`, gameOptions)
-        await bot.deleteMessage(chatId, (msg.message.message_id -= 2));
-        return bot.deleteMessage(chatId, (msg.message.message_id));
+        return bot.sendMessage(chatId, `Отгадывай:${msg.message.message_id}`, gameOptions)
     }
 
     const user = await UserModel.findOne({
@@ -348,6 +346,7 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
+        await delMsg(chatId);
         return startGame(chatId);
     }
 
