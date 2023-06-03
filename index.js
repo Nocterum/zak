@@ -35,15 +35,6 @@ bot.setMyCommands([
 
 //функции=========================================================================================
 
-
-const startGame = async (chatId) => {
-    const randomNumber = Math.floor(Math.random() * 10)
-    chats[chatId] = randomNumber;
-    await bot.sendMessage(chatId, `Отгадывай:${msg.message_id}`, gameOptions)
-    await bot.deleteMessage(chatId, (msg.message_id -= 2))
-    return bot.deleteMessage(chatId, (msg.message_id -= 1));
-}
-
 const editEmail = async (chatId) => {
     lc = '/editEmail'
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
@@ -132,7 +123,7 @@ bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
 
-    //удаление последних сообщений
+    //функция удаления последних сообщений
     const delMsg = async (chatId) => {
 
         if (msg && msgId2) {
@@ -246,156 +237,165 @@ bot.on('message', async msg => {
 
 //слушатель колбэков==========================================================================================================================================
 
-    bot.on('callback_query', async msg => {
-        const data = msg.data;
-        const chatId = msg.message.chat.id;
-        const sorry = 'Извините, эта функция ещё в разработке 😅';
-        const msgId2 = (msg.message.message_id -= 2);
-        const msgId1 = (msg.message.message_id -= 1);
+bot.on('callback_query', async msg => {
+    const data = msg.data;
+    const chatId = msg.message.chat.id;
+    const sorry = 'Извините, эта функция ещё в разработке 😅';
+    const msgId2 = (msg.message.message_id -= 2);
+    const msgId1 = (msg.message.message_id -= 1);
 
-        //удаление последних сообщений
-        const delMsg = async (chatId) => {
-            if (msg && msgId2) {
-                await bot.deleteMessage(chatId, msgId2);
-            }
-            if (msg) {
-                return bot.deleteMessage(chatId, msgId1);
-            }
+    //удаление последних сообщений
+    const delMsg = async (chatId) => {
+        if (msg && msgId2) {
+            await bot.deleteMessage(chatId, msgId2);
         }
-        console.log(msg)
+        if (msg) {
+            return bot.deleteMessage(chatId, msgId1);
+        }
+    }
+    console.log(msg)
 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
+    //функция перезапуска игры
+    const startGame = async (chatId) => {
+        const randomNumber = Math.floor(Math.random() * 10)
+        chats[chatId] = randomNumber;
+        await bot.sendMessage(chatId, `Отгадывай:${msg.message.message_id}`, gameOptions)
+        await bot.deleteMessage(chatId, (msg.message.message_id -= 2))
+        return bot.deleteMessage(chatId, (msg.message.message_id -= 1));
+    }
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+
+    try {
+
+    //главное меню
+    if (data === '/mainmenu') {
+        lc = null;
+        await bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+        return delMsg(chatId);
+    }
+        
+    //начало работы
+    if(data === '/beginwork') {
+        lc = null;
+        await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+        return delMsg(chatId);
+    }
+    
+    //наличие, сроки, резерв           
+    if(data === '/work1') {
+        lc = data;
+        await bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
+        return delMsg(chatId);
+    }
+
+    //запись typeFind
+    if(data === 'Текстиль') {
+        await user.update ({
+            typeFind: data,
         });
+        await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
+        return delMsg(chatId);
+    }
 
-        try {
+    //запись typeFind
+    if(data === 'Обои') {
+        await user.update ({
+            typeFind: data,
+        });
+        await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
+        return delMsg(chatId);
+    }
 
-        //главное меню
-        if (data === '/mainmenu') {
-            lc = null;
-            await bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-            return delMsg(chatId);
-        }
-        
-        //начало работы
-        if(data === '/beginwork') {
-            lc = null;
-            await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
-            return delMsg(chatId);
-        }
-        
-        //наличие, сроки, резерв           
-        if(data === '/work1') {
-            lc = data;
-            await bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
-            return delMsg(chatId);
-        }
+    //Вводим название бренда
+    if(data === '/enterBrand') {
+        lc = data;
+        await bot.sendMessage(chatId, `Введите название бренда:`);
+        return delMsg(chatId);
+    }
 
-        //запись typeFind
-        if(data === 'Текстиль') {
+    //вводим артикул
+    if(data === '/enterVC') {
+        lc = data;
+        await bot.sendMessage(chatId, `Введите артикул:`);
+        return delMsg(chatId);
+    }
+    
+    //поиск по введенным параметрам: brand, vendorCode, typeFind
+    if(data === '/startFind') {
+        lc = null;
+        await bot.sendMessage(chatId, sorry, mainMenuOptions);
+        return delMsg(chatId);
+    }
+
+    //превью фото
+    if(data === '/work2') {
+        lc = null;
+        await bot.sendMessage(chatId, sorry, mainMenuOptions);
+        return delMsg(chatId);
+    }
+
+    //добавить в заказ
+    if(data === '/work3') {
+        lc = null;
+        await bot.sendMessage(chatId, sorry, mainMenuOptions);
+        return delMsg(chatId);
+    }
+
+
+    //рестарт игры
+    if (data === '/again') {
+        lc = data;
+        return startGame(chatId);
+    }
+
+    //рестарт игры
+    if (data === '/infogame') {
+        lc = null;
+        await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
+        return delMsg(chatId);
+    }
+
+    //сброс результатов игры
+    if(data === '/reset') {
+        if (user) {
             await user.update ({
-                typeFind: data,
+                right: 0,
+                wrong: 0,
             });
-            await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
-            return delMsg(chatId);
-        }
 
-        //запись typeFind
-        if(data === 'Обои') {
-            await user.update ({
-                typeFind: data,
-            });
-            await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
-            return delMsg(chatId);
-        }
+        } else {
+        await bot.deleteMessage(chatId, msg.message.message_id);
+    }
+        await bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
+        return delMsg(chatId);
+    }
 
-        //Вводим название бренда
-        if(data === '/enterBrand') {
-            lc = data;
-            await bot.sendMessage(chatId, `Введите название бренда:`);
-            return delMsg(chatId);
+    //запись результата игры в БД
+    if (lc === '/game' || lc === '/again') {
+        if (data == chats[chatId]) {
+            user.right += 1;
+            await user.save();
+            await delMsg(chatId);
+            return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
+        } else {
+            user.wrong += 1;
+            await user.save();
+            await delMsg(chatId);
+            return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
+    }
 
-        //вводим артикул
-        if(data === '/enterVC') {
-            lc = data;
-            await bot.sendMessage(chatId, `Введите артикул:`);
-            return delMsg(chatId);
-        }
-        
-        //поиск по введенным параметрам: brand, vendorCode, typeFind
-        if(data === '/startFind') {
-            lc = null;
-            await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return delMsg(chatId);
-        }
+    } catch (err) {      
+        await bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
+        return delMsg(chatId);
+    }
 
-        //превью фото
-        if(data === '/work2') {
-            lc = null;
-            await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return delMsg(chatId);
-        }
-
-        //добавить в заказ
-        if(data === '/work3') {
-            lc = null;
-            await bot.sendMessage(chatId, sorry, mainMenuOptions);
-            return delMsg(chatId);
-        }
-
-
-        //рестарт игры
-        if (data === '/again') {
-            lc = data;
-            return startGame(chatId);
-        }
-
-        //рестарт игры
-        if (data === '/infogame') {
-            lc = null;
-            await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
-            return delMsg(chatId);
-        }
-
-        //сброс результатов игры
-        if(data === '/reset') {
-            if (user) {
-                await user.update ({
-                    right: 0,
-                    wrong: 0,
-                });
-
-            } else {
-            await bot.deleteMessage(chatId, msg.message.message_id);
-        }
-            await bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
-            return delMsg(chatId);
-        }
-
-        //запись результата игры в БД
-        if (lc === '/game' || lc === '/again') {
-            if (data == chats[chatId]) {
-                user.right += 1;
-                await user.save();
-                await delMsg(chatId);
-                return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
-            } else {
-                user.wrong += 1;
-                await user.save();
-                await delMsg(chatId);
-                return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
-            }
-        }
-
-        } catch (err) {      
-            await bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
-            return delMsg(chatId);
-        }
-
-    })
+})
 
 }
 
