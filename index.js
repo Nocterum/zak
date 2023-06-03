@@ -39,7 +39,9 @@ bot.setMyCommands([
 const startGame = async (chatId) => {
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
-    await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+    await bot.sendMessage(chatId, `Отгадывай:${msg.message_id}`, gameOptions)
+    await bot.deleteMessage(chatId, (msg.message_id -= 2))
+    return bot.deleteMessage(chatId, (msg.message_id -= 1));
 }
 
 const editEmail = async (chatId) => {
@@ -107,7 +109,7 @@ bot.onText(/\/game/, async msg => {
     lc = '/game';
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
-    await bot.sendMessage(chatId, `Попробуй угадать число, которое я загадал😏`, gameOptions)
+    await bot.sendMessage(chatId, `Отгадай число😏 ${msg.message_id}`, gameOptions)
     await bot.deleteMessage(chatId, (msg.message_id -= 2))
     return bot.deleteMessage(chatId, (msg.message_id -= 1));
     }),
@@ -348,8 +350,7 @@ bot.on('message', async msg => {
         //рестарт игры
         if (data === '/again') {
             lc = data;
-            await startGame(chatId);
-            return delMsg(chatId);
+            return startGame(chatId);
         }
 
         //рестарт игры
