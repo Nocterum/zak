@@ -346,6 +346,7 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
+        await bot.deleteMessage(chatId, msg.message.message_id)
         return startGame(chatId);
     }
 
