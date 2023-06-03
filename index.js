@@ -101,8 +101,8 @@ bot.onText(/\/game/, async msg => {
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
     await bot.sendMessage(chatId, `Отгадай число😏 ${msg.message_id}`, gameOptions)
-    await bot.deleteMessage(chatId, (msg.message_id -= 2))
-    return bot.deleteMessage(chatId, (msg.message_id -= 1));
+    await bot.deleteMessage(chatId, (msg.message_id -= 1));
+    return bot.deleteMessage(chatId, (msg.message_id));
     }),
 
 bot.onText(/\/infogame/, async msg => {
@@ -260,8 +260,8 @@ bot.on('callback_query', async msg => {
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
         await bot.sendMessage(chatId, `Отгадывай:${msg.message.message_id}`, gameOptions)
-        await bot.deleteMessage(chatId, (msg.message.message_id -= 2))
-        return bot.deleteMessage(chatId, (msg.message.message_id -= 1));
+        await bot.deleteMessage(chatId, (msg.message.message_id -= 1));
+        return bot.deleteMessage(chatId, (msg.message.message_id));
     }
 
     const user = await UserModel.findOne({
