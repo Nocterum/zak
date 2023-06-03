@@ -134,7 +134,7 @@ bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
     const msgId0 = msg.message_id;
-    const msgId1 = (msgId0 += 1);
+    const msgId1 = (msg.message_id += 1);
 
     //удаление последних сообщений
     const delMsg = async (chatId) => {
@@ -255,6 +255,7 @@ bot.on('message', async msg => {
         const chatId = msg.message.chat.id;
         const sorry = 'Извините, эта функция ещё в разработке 😅';
         const msgId0 = msg.message.message_id;
+        const msgId1 = (msg.message.message_id += 1);
 
         //удаление последних сообщений
         const delMsg = async (chatId) => {
