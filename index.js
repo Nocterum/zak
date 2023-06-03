@@ -346,7 +346,7 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
-        await bot.deleteMessage(chatId, msg.message.message_id)
+        await bot.deleteMessage(chatId, (msg.message.message_id +=3))
         return startGame(chatId);
     }
 
@@ -366,7 +366,7 @@ bot.on('callback_query', async msg => {
             });
 
         } else {
-        await bot.deleteMessage(chatId, msg.message.message_id);
+            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
     }
         await bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
         return delMsg(chatId);
@@ -378,13 +378,13 @@ bot.on('callback_query', async msg => {
             user.right += 1;
             await user.save();
             //await delMsg(chatId);
-            await bot.deleteMessage(chatId, msg.message.message_id)
+            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
             //await delMsg(chatId);
-            await bot.deleteMessage(chatId, msg.message.message_id)
+            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
