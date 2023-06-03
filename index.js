@@ -109,12 +109,8 @@ bot.onText(/\/game/, async msg => {
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
     await bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
-    .then((sentMsg) => {
-        message1Id = sentMsg.message_id;
-        console.log(sentMsg);
-    })
-    await bot.deleteMessage(chatId, msg.message_id -= 1)
-    return bot.deleteMessage(chatId, msg.message_id);
+    await bot.deleteMessage(chatId, (msg.message_id -= 2))
+    return bot.deleteMessage(chatId, (msg.message_id -= 1));
     }),
 
 bot.onText(/\/infogame/, async msg => {
@@ -122,8 +118,8 @@ bot.onText(/\/infogame/, async msg => {
 
         lc = null;
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        await bot.deleteMessage(chatId, msg.message_id -= 1)
-        return bot.deleteMessage(chatId, msg.message_id);
+        await bot.deleteMessage(chatId, (msg.message_id -= 2))
+        return bot.deleteMessage(chatId, (msg.message_id -= 1));
     }) 
 )
 
