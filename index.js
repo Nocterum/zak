@@ -70,11 +70,11 @@ const start = async () => {
 
 //старт
 bot.onText(/\/start/, async msg => {
-
     const chatId = msg.chat.id;
 
     await bot.deleteMessage(chatId, msg.message_id);
     try {
+        
         let user = await UserModel.findOne({
             where: {
                 chatId: chatId
@@ -254,16 +254,15 @@ bot.on('message', async msg => {
         const data = msg.data;
         const chatId = msg.message.chat.id;
         const sorry = 'Извините, эта функция ещё в разработке 😅';
-        const msgId0 = msg.message.message_id;
-        const msgId1 = (msg.message.message_id += 1);
+
 
         //удаление последних сообщений
         const delMsg = async (chatId) => {
-            if (msg && msgId0) {
-                await bot.deleteMessage(chatId, msgId0);
+            if (msg && msg.message.message_id) {
+                await bot.deleteMessage(chatId, msg.message.message_id);
             }
-            if (msg && msgId1) {
-                return bot.deleteMessage(chatId, msgId1);
+            if (msg) {
+                return bot.deleteMessage(chatId, (msg.message.message_id += 1));
             }
         }
         console.log(msg)
