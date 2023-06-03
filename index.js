@@ -96,7 +96,7 @@ bot.onText(/\/start/, async msg => {
 
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
-
+    bot.deleteMessage(chatId, msg.message.message_id)
     lc = '/game';
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
@@ -346,12 +346,6 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
-        if (msg && msgId2) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
-        if (msg) {
-            await bot.deleteMessage(chatId, msgId1);
-        }
         return startGame(chatId);
     }
 
