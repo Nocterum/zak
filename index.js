@@ -161,7 +161,7 @@ bot.on('message', async msg => {
         
         if (user) {
             lc = null;
-            await bot.sendMessage(chatId, `И снова здравствуйте${msg.message_id}, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
         return delMsg(chatId);
         }
@@ -172,7 +172,7 @@ bot.on('message', async msg => {
         if (!user.email) {
             await editEmail(chatId);
         } else {
-            await bot.sendMessage(chatId, `И так, с чего начнем?${msg.message_id}`, workOptions)
+            await bot.sendMessage(chatId, `И так, с чего начнем?`, workOptions)
         } 
         return delMsg(chatId);
     }
