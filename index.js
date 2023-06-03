@@ -381,14 +381,15 @@ bot.on('message', async msg => {
 
         //запись результата игры в БД
         if (lc === '/game' || lc === '/again') {
-            await bot.deleteMessage(chatId, msg.message.message_id);
             if (data == chats[chatId]) {
                 user.right += 1;
                 await user.save();
+                await delMsg(chatId);
                 await bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
             } else {
                 user.wrong += 1;
                 await user.save();
+                await delMsg(chatId);
                 await bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
             }
         }
