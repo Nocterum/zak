@@ -353,8 +353,8 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/infogame') {
         lc = null;
-        await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
-        return delMsg(chatId);
+        await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
     }
 
     //сброс результатов игры
@@ -364,12 +364,9 @@ bot.on('callback_query', async msg => {
                 right: 0,
                 wrong: 0,
             });
-
-        } else {
-            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
-    }
-        await bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
-        return delMsg(chatId);
+        }
+        await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+        return bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
     }
 
     //запись результата игры в БД
