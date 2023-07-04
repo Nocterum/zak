@@ -1,5 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
+const cheerio = require('cheerio');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -84,7 +85,6 @@ bot.onText(/\/start/, async msg => {
                 firstName: msg.from.first_name, 
                 lastName: msg.from.last_name, 
             });
-
             lc = '/editNickname';
             return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
         }  
@@ -324,7 +324,30 @@ bot.on('callback_query', async msg => {
     //поиск по введенным параметрам: brand, vendorCode, typeFind
     if(data === '/startFind') {
         lc = null;
-        await bot.sendMessage(chatId, sorry, mainMenuOptions);
+        //Отправляем HTML запрос на сайт
+        axios.get ('https://opusdeco.ru/search/')
+            .then((response) => {
+                //Используем cheerio для парсинга полученной HTML страницы 
+                const $ = cheerio.load(response.data);
+
+                 // Находим все элементы с информацией и выводим их в лог
+                $('.product').each((index, element) => {
+                const productName = $(element).find('.product-name').text().trim();
+                const productPrice = $(element).find('.product-price').text().trim();
+
+                console.log(Product Name: ${productName});
+                console.log(Product Price: ${productPrice});
+                console.log('---------------------');
+                });
+        // Отправляем сообщение с результатами поиска в чат Telegram
+        return bot.sendMessage(chatId, 'Результаты поиска были выведены в лог.');
+        })
+        .catch((error) => {
+            console.error(error);
+            bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
+        });
+
+        //await bot.sendMessage(chatId, sorry, mainMenuOptions);
         return delMsg(chatId);
     }
 
