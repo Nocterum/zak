@@ -335,8 +335,8 @@ bot.on('callback_query', async msg => {
                 const productName = $(element).find('.product-name').text().trim();
                 const productPrice = $(element).find('.product-price').text().trim();
 
-                console.log(Product Name: ${productName});
-                console.log(Product Price: ${productPrice});
+                console.log(`Product Name: ${productName}`);
+                console.log(`Product Price: ${productPrice}`);
                 console.log('---------------------');
                 });
         // Отправляем сообщение с результатами поиска в чат Telegram
