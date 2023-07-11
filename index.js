@@ -348,7 +348,7 @@ bot.on('callback_query', async msg => {
             
             if (availabilityButton) {
                 // Нажимаем на кнопку
-                availabilityButton.click();
+                availabilityButton.trigger('click');
 
                 // Ждем некоторое время, чтобы модальное окно успело открыться
                 await new Promise(resolve => setTimeout(resolve, 2000));
