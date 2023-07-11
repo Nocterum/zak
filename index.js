@@ -326,6 +326,7 @@ bot.on('callback_query', async msg => {
         lc = null;
 
     try {
+
         //формируем URL для поиска
         const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.typeFind}+${user.vendorCode}`;
         
@@ -335,10 +336,7 @@ bot.on('callback_query', async msg => {
         const $ = cheerio.load(response.data);
 
         // Находим ссылку на первый товар в результате поиска
-        const firstProductLink = await page.evaluate(() => {
-            const linkElement = document.evaluate("/html/body/main/div/div[2]/div/div/div/div[2]/h3/a", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            return linkElement.getAttribute('href');
-          });
+        const firstProductLink = $('<h3 class="item__card__title card-product-general__title mb-2">').attr('href');
         
         if (firstProductLink) {
             // Переходим на страницу товара
@@ -360,6 +358,7 @@ bot.on('callback_query', async msg => {
 
                 // Отправляем информацию пользователю
                 bot.sendMessage(chatId, modalContent);
+            
             } else {
                 bot.sendMessage(chatId, 'Кнопка для проверки наличия товара не найдена.');
             }
@@ -370,10 +369,10 @@ bot.on('callback_query', async msg => {
         console.log('Ошибка при выполнении запроса', e);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
     }
-            
+   
         return delMsg(chatId);
     }
-
+    
     //превью фото
     if(data === '/work2') {
         lc = null;
