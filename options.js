@@ -59,7 +59,7 @@ module.exports = {
     work1Options: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Текстиль', callback_data: 'Ткань'}],
+                [{text: 'Ткань', callback_data: 'Ткань'}],
                 [{text: 'Обои', callback_data: 'Обои'}],
             ]
         })

@@ -335,8 +335,10 @@ bot.on('callback_query', async msg => {
         const $ = cheerio.load(response.data);
 
         // Находим ссылку на первый товар в результате поиска
-        const firstProductLink = document.querySelector("#comp_1c3e41f17320009e96f67c1f220f8180 > div > div > div.item__card__desc > h3 > a").getAttribute('href');      
-        document.querySelector("#comp_1c3e41f17320009e96f67c1f220f8180 > div > div > div.item__card__desc > h3 > a")
+        const firstProductLink = await page.evaluate(() => {
+            const linkElement = document.evaluate("/html/body/main/div/div[2]/div/div/div/div[2]/h3/a", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            return linkElement.getAttribute('href');
+          });
         
         if (firstProductLink) {
             // Переходим на страницу товара
