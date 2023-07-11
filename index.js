@@ -324,30 +324,50 @@ bot.on('callback_query', async msg => {
     //поиск по введенным параметрам: brand, vendorCode, typeFind
     if(data === '/startFind') {
         lc = null;
-        //Отправляем HTML запрос на сайт
-        axios.get ('https://opusdeco.ru/search/')
-            .then((response) => {
-                //Используем cheerio для парсинга полученной HTML страницы 
-                const $ = cheerio.load(response.data);
 
-                 // Находим все элементы с информацией и выводим их в лог
-                $('.product').each((index, element) => {
-                const productName = $(element).find('.product-name').text().trim();
-                const productPrice = $(element).find('.product-price').text().trim();
+    try {
+        //формируем URL для поиска
+        const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.typeFind}+${vendorCode}`;
+        
 
-                console.log(`Product Name: ${productName}`);
-                console.log(`Product Price: ${productPrice}`);
-                console.log('---------------------');
-                });
-        // Отправляем сообщение с результатами поиска в чат Telegram
-        return bot.sendMessage(chatId, 'Результаты поиска были выведены в лог.');
-        })
-        .catch((error) => {
-            console.error(error);
-            bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
-        });
+        //Отправляем запрос на сайт
+        const response = await axios.get(searchUrl);
+        const $ = cheerio.load(response.data);
 
-        //await bot.sendMessage(chatId, sorry, mainMenuOptions);
+        // Находим ссылку на первый товар в результате поиска
+        const firstProductLink = $('.card-product').first().attr('href');      
+
+        if (firstProductLink) {
+            // Переходим на страницу товара
+            const productResponse = await axios.get(`https://opusdeco.ru${firstProductLink}`);
+            const $$ = cheerio.load(productResponse.data);
+            
+            // Находим кнопку для проверки наличия товара
+            const availabilityButton = $$('[data-target="#stockAvailabilityModal"]').first(); 
+            
+            if (availabilityButton) {
+                // Нажимаем на кнопку
+                availabilityButton.click();
+
+                // Ждем некоторое время, чтобы модальное окно успело открыться
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Получаем информацию из модального окна
+                const modalContent = $$('#stockAvailabilityModal .modal-content').text().trim();
+
+                // Отправляем информацию пользователю
+                bot.sendMessage(chatId, modalContent);
+            } else {
+                bot.sendMessage(chatId, 'Кнопка для проверки наличия товара не найдена.');
+            }
+        } else {
+            bot.sendMessage(chatId, 'Товары не найдены.');
+        }
+    } catch (e) {
+        console.log('Ошибка при выполнении запроса', e);
+        bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
+    }
+            
         return delMsg(chatId);
     }
 
