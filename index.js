@@ -329,26 +329,31 @@ bot.on('callback_query', async msg => {
 
         //формируем URL для поиска
         const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.typeFind}+${user.vendorCode}`;
-        
+        console.log('сформированна ссылка');
 
         //Отправляем запрос на сайт
         const response = await axios.get(searchUrl);
         const $ = cheerio.load(response.data);
+        console.log('запрос на сайт отправлен');
 
         // Находим ссылку на первый товар в результате поиска
         const firstProductLink = $('h3.item__card__title.card-product-general__title.mb-2 a').attr('href');
-        
+        console.log('искомая ссылка открыта');
+
         if (firstProductLink) {
             // Переходим на страницу товара
             const productResponse = await axios.get(`https://opusdeco.ru${firstProductLink}`);
             const $$ = cheerio.load(productResponse.data);
+            console.log('успешно зашёл на страницу товара');
             
             // Находим кнопку для проверки наличия товара
             const availabilityButton = $$('[data-target="#stockAvailabilityModal"]').first(); 
-            
+            console.log('кнопка "узнать наличие" найдена');
+
             if (availabilityButton) {
                 // Нажимаем на кнопку
                 availabilityButton.trigger('click');
+                console.log('кнопка нажата');
 
                 // Ждем некоторое время, чтобы модальное окно успело открыться
                 await new Promise(resolve => setTimeout(resolve, 2000));
