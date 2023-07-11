@@ -327,7 +327,7 @@ bot.on('callback_query', async msg => {
 
     try {
         //формируем URL для поиска
-        const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.typeFind}+${vendorCode}`;
+        const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.typeFind}+${user.vendorCode}`;
         
 
         //Отправляем запрос на сайт
