@@ -290,7 +290,7 @@ bot.on('callback_query', async msg => {
     }
 
     //запись typeFind
-    if(data === 'Текстиль') {
+    if(data === 'Ткань') {
         await user.update ({
             typeFind: data,
         });
@@ -336,7 +336,8 @@ bot.on('callback_query', async msg => {
 
         // Находим ссылку на первый товар в результате поиска
         const firstProductLink = document.querySelector("#comp_1c3e41f17320009e96f67c1f220f8180 > div > div > div.item__card__desc > h3 > a").getAttribute('href');      
-
+        document.querySelector("#comp_1c3e41f17320009e96f67c1f220f8180 > div > div > div.item__card__desc > h3 > a")
+        
         if (firstProductLink) {
             // Переходим на страницу товара
             const productResponse = await axios.get(`https://opusdeco.ru${firstProductLink}`);
