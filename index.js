@@ -336,7 +336,7 @@ bot.on('callback_query', async msg => {
         const $ = cheerio.load(response.data);
 
         // Находим ссылку на первый товар в результате поиска
-        const firstProductLink = $('<h3 class="item__card__title card-product-general__title mb-2">').attr('href');
+        const firstProductLink = $('h3.item__card__title.card-product-general__title.mb-2 a').attr('href');
         
         if (firstProductLink) {
             // Переходим на страницу товара
