@@ -347,28 +347,24 @@ bot.on('callback_query', async msg => {
             console.log('успешно зашёл на страницу товара');
             
             // Находим кнопку для проверки наличия товара
-            const availabilityButton = $$('[data-target="#stockAvailabilityModal"]').first(); 
+            //const availabilityTable = $$('[data-target="#stockAvailabilityModal"]').first();
+            const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             console.log('кнопка "узнать наличие" найдена');
 
-            if (availabilityButton) {
-                // Нажимаем на кнопку
-                availabilityButton.trigger('click');
-                console.log('кнопка нажата');
-
-                // Ждем некоторое время, чтобы модальное окно успело открыться
-                await new Promise(resolve => setTimeout(resolve, 2000));
-
-                // Получаем информацию из модального окна
-                const modalContent = $$('#stockAvailabilityModal .modal-content').text().trim();
+            if (availabilityTable) {
+                // Получаем текстовое содержимое таблицы
+                const modalContent = availabilityTable.text().trim();
+                console.log('информация полученна');
 
                 // Отправляем информацию пользователю
                 bot.sendMessage(chatId, modalContent);
+                console.log('информация успешно отправленна');
             
             } else {
-                bot.sendMessage(chatId, 'Кнопка для проверки наличия товара не найдена.');
+                bot.sendMessage(chatId, 'Информация о наличии товара не найдена.');
             }
         } else {
-            bot.sendMessage(chatId, 'Товары не найдены.');
+            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
         }
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
