@@ -346,15 +346,17 @@ bot.on('callback_query', async msg => {
             const $$ = cheerio.load(productResponse.data);
             console.log('успешно зашёл на страницу товара');
             
-
-
             // Создаем пустую строку для хранения текстового содержимого таблицы
             let availabilityContent = '';
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
 
-            if (availabilityTable) {
+            // Проверяем наличие таблицы
+            if (availabilityTable.length === 0) {
+            // Отправляем сообщение о отсутствии товара
+            return bot.sendMessage(chatId, 'В данный момент товар отсутствует на нашем складе');
+            }
 
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
@@ -369,23 +371,23 @@ bot.on('callback_query', async msg => {
                 availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
                 availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
                 availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
-                });
-
-            } else {
-                bot.sendMessage(chatId, 'Информация о наличии товара не найдена.');
-                await  delMsg(chatId);
-            }
+            });
 
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = '';
 
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
-
-            if (expectedArrivalTable) {
+            
+            // Проверяем наличие таблицы
+            if (expectedArrivalTable.length === 0) {
+                // Отправляем сообщение о отсутствии товара
+                return bot.sendMessage(chatId, `${availabilityContent}Информация о поступлении отсутствует`);
+            }
 
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+
 
             // Итерируем по строкам таблицы ожидаемого поступления
             expectedArrivalRows.each((index, row) => {
@@ -403,18 +405,12 @@ bot.on('callback_query', async msg => {
                 bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
                 console.log('информация успешно отправленна');
                 return delMsg(chatId);
-            
 
-            } else {
-                bot.sendMessage(chatId, 'Информация о поступлении товара не найдена.');
-                await  delMsg(chatId);   
-            }
-                
         } else {
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
             return delMsg(chatId);
         }
-        
+
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
