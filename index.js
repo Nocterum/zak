@@ -372,6 +372,9 @@ bot.on('callback_query', async msg => {
 
                 // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
                 let expectedArrivalContent = '';
+
+                // Находим таблицу ожидаемого поступления
+                const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
                 
                 // Находим строки в таблице ожидаемого поступления
                 const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
