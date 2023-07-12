@@ -361,7 +361,10 @@ bot.on('callback_query', async msg => {
                 const cells = $$(row).find('td');
 
                 // Получаем текст из ячеек и добавляем его к строке modalContent
-                modalContent += `${$$(cells[0]).text().trim()}: ${$$(cells[1]).text().trim()}\n`;
+                modalContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
+                modalContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
+                modalContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
+                modalContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
                 });
 
                 // Отправляем информацию пользователю
