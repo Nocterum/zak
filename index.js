@@ -353,22 +353,43 @@ bot.on('callback_query', async msg => {
             if (availabilityTable) {
 
                 // Создаем пустую строку для хранения текстового содержимого таблицы
-                let modalContent = '';
+                let availabilityContent = '';
 
-                // Итерируем по строкам таблицы
-                availabilityTable.find('tr').each((index, row) => {
-                // Находим ячейки в текущей строке
-                const cells = $$(row).find('td');
+                // Находим строки в таблице наличия товара
+                const availabilityRows = availabilityTable.find('tbody tr');
 
-                // Получаем текст из ячеек и добавляем его к строке modalContent
-                modalContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
-                modalContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
-                modalContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
-                modalContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
+                // Итерируем по строкам таблицы наличия товара
+                availabilityRows.each((index, row) => {
+                    // Находим ячейки в текущей строке
+                    const cells = $$(row).find('td');
+  
+                    // Получаем текст из ячеек и добавляем его к строке availabilityContent
+                    availabilityContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
+                    availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
+                    availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
+                    availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
+                });
+
+                // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
+                let expectedArrivalContent = '';
+                
+                // Находим строки в таблице ожидаемого поступления
+                const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+
+                // Итерируем по строкам таблицы ожидаемого поступления
+                expectedArrivalRows.each((index, row) => {
+                    // Находим ячейки в текущей строке
+                    const cells = $$(row).find('td');
+  
+                    // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
+                    expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
+                    expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
+                    expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
+                    expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
                 });
 
                 // Отправляем информацию пользователю
-                bot.sendMessage(chatId, modalContent);
+                bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
                 console.log('информация успешно отправленна');
             
             } else {
