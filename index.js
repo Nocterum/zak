@@ -347,14 +347,22 @@ bot.on('callback_query', async msg => {
             console.log('успешно зашёл на страницу товара');
             
             // Находим кнопку для проверки наличия товара
-            //const availabilityTable = $$('[data-target="#stockAvailabilityModal"]').first();
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             console.log('кнопка "узнать наличие" найдена');
 
             if (availabilityTable) {
-                // Получаем текстовое содержимое таблицы
-                const modalContent = availabilityTable.text().trim();
-                console.log('информация полученна');
+
+                // Создаем пустую строку для хранения текстового содержимого таблицы
+                let modalContent = '';
+
+                // Итерируем по строкам таблицы
+                availabilityTable.find('tr').each((index, row) => {
+                // Находим ячейки в текущей строке
+                const cells = $$(row).find('td');
+
+                // Получаем текст из ячеек и добавляем его к строке modalContent
+                modalContent += '${$$(cells[0]).text().trim()}: ${$$(cells[1]).text().trim()}\n';
+                });
 
                 // Отправляем информацию пользователю
                 bot.sendMessage(chatId, modalContent);
