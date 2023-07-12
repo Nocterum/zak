@@ -346,68 +346,82 @@ bot.on('callback_query', async msg => {
             const $$ = cheerio.load(productResponse.data);
             console.log('успешно зашёл на страницу товара');
             
-            // Находим кнопку для проверки наличия товара
+
+
+            // Создаем пустую строку для хранения текстового содержимого таблицы
+            let availabilityContent = '';
+
+            // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
-            console.log('кнопка "узнать наличие" найдена');
 
             if (availabilityTable) {
 
-                // Создаем пустую строку для хранения текстового содержимого таблицы
-                let availabilityContent = '';
+            // Находим строки в таблице наличия товара
+            const availabilityRows = availabilityTable.find('tbody tr');
 
-                // Находим строки в таблице наличия товара
-                const availabilityRows = availabilityTable.find('tbody tr');
-
-                // Итерируем по строкам таблицы наличия товара
-                availabilityRows.each((index, row) => {
-                    // Находим ячейки в текущей строке
-                    const cells = $$(row).find('td');
+            // Итерируем по строкам таблицы наличия товара
+            availabilityRows.each((index, row) => {
+                // Находим ячейки в текущей строке
+                const cells = $$(row).find('td');
   
-                    // Получаем текст из ячеек и добавляем его к строке availabilityContent
-                    availabilityContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
-                    availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
-                    availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
-                    availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
+                // Получаем текст из ячеек и добавляем его к строке availabilityContent
+                availabilityContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
+                availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
+                availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
+                availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
                 });
 
-                // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
-                let expectedArrivalContent = '';
+            } else {
+                bot.sendMessage(chatId, 'Информация о наличии товара не найдена.');
+                await  delMsg(chatId);
+            }
 
-                // Находим таблицу ожидаемого поступления
-                const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
-                
-                // Находим строки в таблице ожидаемого поступления
-                const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+            // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
+            let expectedArrivalContent = '';
 
-                // Итерируем по строкам таблицы ожидаемого поступления
-                expectedArrivalRows.each((index, row) => {
-                    // Находим ячейки в текущей строке
-                    const cells = $$(row).find('td');
+            // Находим таблицу ожидаемого поступления
+            const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
+
+            if (expectedArrivalTable) {
+
+            // Находим строки в таблице ожидаемого поступления
+            const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+
+            // Итерируем по строкам таблицы ожидаемого поступления
+            expectedArrivalRows.each((index, row) => {
+                // Находим ячейки в текущей строке
+                const cells = $$(row).find('td');
   
-                    // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
-                    expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
-                    expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
-                    expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
-                    expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
-                });
+                // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
+                expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
+                expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
+                expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
+                expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
+            });
 
                 // Отправляем информацию пользователю
                 bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
                 console.log('информация успешно отправленна');
+                return delMsg(chatId);
             
+
             } else {
-                bot.sendMessage(chatId, 'Информация о наличии товара не найдена.');
+                bot.sendMessage(chatId, 'Информация о поступлении товара не найдена.');
+                await  delMsg(chatId);   
             }
+                
         } else {
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
+            return delMsg(chatId);
         }
+        
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
-    }
-   
         return delMsg(chatId);
     }
+   
+}
     
     //превью фото
     if(data === '/work2') {
