@@ -355,7 +355,7 @@ bot.on('callback_query', async msg => {
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
             // Отправляем сообщение о отсутствии товара
-            return bot.sendMessage(chatId, 'В данный момент товар отсутствует на нашем складе');
+            return bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
             }
 
             // Находим строки в таблице наличия товара
