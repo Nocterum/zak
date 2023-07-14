@@ -114,11 +114,11 @@ const startFind = async (chatId) => {
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = '';
 
-
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
+            console.log(availabilityTable, expectedArrivalTable)
             
 
             // Проверяем наличие таблицы
