@@ -141,7 +141,7 @@ const startFind = async (chatId) => {
             
 
             // Отправляем информацию пользователю
-            if (availabilityRows === expectedArrivalRows) {
+            if (availabilityRows == expectedArrivalRows) {
                 bot.sendMessage(chatId, `${availabilityContent}`);
                 console.log('информация о наличии успешно отправленна');
                 return delMsg(chatId);
