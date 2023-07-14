@@ -127,9 +127,6 @@ const startFind = async (chatId) => {
             const availabilityRows = availabilityTable.find('tbody tr');
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
-            // Находим заголовок наличия
-
-            console.log(availabilityRows, expectedArrivalRows);
 
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
