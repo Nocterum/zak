@@ -69,7 +69,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Ввести бренд', callback_data: '/enterBrand'}],
+                [{text: 'Продолжить', callback_data: '/enterBrand'}],
             ]
         })
     },
@@ -78,7 +78,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Ввести артикул', callback_data: '/enterVC'}],
+                [{text: 'Продолжить', callback_data: '/enterVC'}],
             ]
         })
     },
