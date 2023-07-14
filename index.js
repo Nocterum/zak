@@ -45,8 +45,11 @@ const editNickname = async (chatId) => {
 }
 
 const delMsg = async (chatId) => {
+    bot.on('message', async msg => {
+    const text = msg.text; 
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
+
     
     try {
         if (msg && msgId2) {
@@ -58,7 +61,7 @@ const delMsg = async (chatId) => {
     } catch(e) {
         console.log('Ошибка при выполнении функции удаления', e);
     }
-
+});
 }
 
 const startFind = async (chatId) => {
