@@ -49,6 +49,13 @@ const editNickname = async (chatId) => {
 const startFind = async (chatId) => {
     lc = null;
 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+
+
     try {
 
         //формируем URL для поиска
