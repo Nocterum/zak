@@ -114,8 +114,7 @@ const startFind = async (chatId) => {
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = '';
 
-            // Проверяем наличие таблицы наличия на складе
-            const availabilityTablex = expectedArrivalTable.prev('table');
+
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             // Находим таблицу ожидаемого поступления
@@ -167,7 +166,7 @@ const startFind = async (chatId) => {
                 return delMsg(chatId);
             }
 
-            if (availabilityTablex.length === 0) {
+            if (availabilityTable.length === 0) {
               // Отправляем информацию о поставках товара
               bot.sendMessage(chatId, expectedArrivalContent);
               console.log('информация о поставках успешно отправлена');
