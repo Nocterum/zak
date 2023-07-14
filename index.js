@@ -46,6 +46,96 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+const startFind = async (chatId) => {
+    lc = null;
+
+    try {
+
+        //формируем URL для поиска
+        const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.vendorCode}`;
+        console.log('сформированна ссылка');
+
+        //Отправляем запрос на сайт
+        const response = await axios.get(searchUrl);
+        const $ = cheerio.load(response.data);
+        console.log('запрос на сайт отправлен');
+
+        // Находим ссылку на первый товар в результате поиска
+        const firstProductLink = $('h3.item__card__title.card-product-general__title.mb-2 a').attr('href');
+        console.log('искомая ссылка открыта');
+
+        if (firstProductLink) {
+            // Переходим на страницу товара
+            const productResponse = await axios.get(`https://opusdeco.ru${firstProductLink}`);
+            const $$ = cheerio.load(productResponse.data);
+            console.log('успешно зашёл на страницу товара');
+            
+            // Создаем пустую строку для хранения текстового содержимого таблицы
+            let availabilityContent = '';
+            // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
+            let expectedArrivalContent = '';
+
+            // Находим таблицу с наличием товара
+            const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
+            // Находим таблицу ожидаемого поступления
+            const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
+
+            // Проверяем наличие таблицы
+            if (availabilityTable.length === 0) {
+            // Отправляем сообщение о отсутствии товара
+            return bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
+            }
+
+            // Находим строки в таблице наличия товара
+            const availabilityRows = availabilityTable.find('tbody tr');
+
+            // Итерируем по строкам таблицы наличия товара
+            availabilityRows.each((index, row) => {
+                // Находим ячейки в текущей строке
+                const cells = $$(row).find('td');
+  
+                // Получаем текст из ячеек и добавляем его к строке availabilityContent
+                availabilityContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
+                availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
+                availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
+                availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
+            });
+            
+            if (availabilityTable !== expectedArrivalTable) {
+
+                // Находим строки в таблице ожидаемого поступления
+                const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+
+                // Итерируем по строкам таблицы ожидаемого поступления
+                expectedArrivalRows.each((index, row) => {
+                // Находим ячейки в текущей строке
+                const cells = $$(row).find('td');
+  
+                // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
+                expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
+                expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
+                expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
+                expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
+                });
+            }
+
+            // Отправляем информацию пользователю
+            bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
+            console.log('информация успешно отправленна');
+            return delMsg(chatId);
+
+        } else {
+            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
+            return delMsg(chatId);
+        }
+
+    } catch (e) {
+        console.log('Ошибка при выполнении запроса', e);
+        bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
+        return delMsg(chatId);
+    }
+   
+}
 
 //=============================================================================================================
 
@@ -158,7 +248,8 @@ bot.on('message', async msg => {
         if (!user.email) {
             await editEmail(chatId);
         } else {
-            await bot.sendMessage(chatId, `И так, с чего начнем?`, workOptions)
+            lc = '/enterBrand';
+            await bot.sendMessage(chatId, `Введите название бренда:`);
         } 
         return delMsg(chatId);
     }
@@ -199,8 +290,7 @@ bot.on('message', async msg => {
     //Записываем артикул в ячейку БД
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
-        await bot.sendMessage(chatId, `Артикул "<b>${text}</b>" успешно сохранён\n<pre>(для перезаписи введите артикул повторно)</pre>`, startFindOptions);
-        return delMsg(chatId);
+        return startFind;
     }
     
     //вывод информации
@@ -277,8 +367,8 @@ bot.on('callback_query', async msg => {
         
     //начало работы
     if(data === '/beginwork') {
-        lc = null;
-        await bot.sendMessage(chatId, 'И так, с чего начнем?', workOptions)
+        lc = '/enterBrand';
+        await bot.sendMessage(chatId, `Введите название бренда:`);
         return delMsg(chatId);
     }
     
@@ -289,7 +379,7 @@ bot.on('callback_query', async msg => {
         return delMsg(chatId);
     }
 
-    //запись typeFind
+/*    //запись typeFind
     if(data === 'Ткань') {
         await user.update ({
             typeFind: data,
@@ -305,15 +395,15 @@ bot.on('callback_query', async msg => {
         });
         await bot.sendMessage(chatId, `${data}, так и запишем..`, brandOptions);
         return delMsg(chatId);
-    }
+    }   
 
     //Вводим название бренда
     if(data === '/enterBrand') {
-        lc = data;
+        lc = '/enterBrand';
         await bot.sendMessage(chatId, `Введите название бренда:`);
         return delMsg(chatId);
     }
-
+*/
     //вводим артикул
     if(data === '/enterVC') {
         lc = data;
@@ -321,7 +411,7 @@ bot.on('callback_query', async msg => {
         return delMsg(chatId);
     }
     
-    //поиск по введенным параметрам: brand, vendorCode, typeFind
+/*    //поиск по введенным параметрам: brand, vendorCode, typeFind
     if(data === '/startFind') {
         lc = null;
 
@@ -377,7 +467,7 @@ bot.on('callback_query', async msg => {
                 availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
             
-            if (availabilityTable != expectedArrivalTable) {
+            if (availabilityTable !== expectedArrivalTable) {
 
                 // Находим строки в таблице ожидаемого поступления
                 const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
@@ -412,7 +502,7 @@ bot.on('callback_query', async msg => {
     }
    
 }
-    
+*/    
     //превью фото
     if(data === '/work2') {
         lc = null;
