@@ -48,17 +48,9 @@ const delMsg = async (chatId) => {
     bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
-    const msgdataId2 = (msg.message.message_id -= 2);
-    const msgdataId1 = (msg.message.message_id -= 1);
-
+    })
     
     try {
-        if (msg && msgdataId2) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
-        if (msg && msgdataId1) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
         if (msg && msgId2) {
             await bot.deleteMessage(chatId, msgId2);
         }
@@ -66,9 +58,24 @@ const delMsg = async (chatId) => {
             return bot.deleteMessage(chatId, msgId1);
         }
     } catch(e) {
-        console.log('Ошибка при выполнении функции удаления', e);
+
+        bot.on('callback_query', async msg => {
+            const msgdataId2 = (msg.message.message_id -= 2);
+            const msgdataId1 = (msg.message.message_id -= 1);
+        })
+
+        try {
+            if (msg && msgdataId2) {
+                await bot.deleteMessage(chatId, msgdataId2);
+            }
+            if (msg) {
+                return bot.deleteMessage(chatId, msgdataId1);
+            }
+        } catch(err) {
+            console.log('Ошибка при выполнении функции удаления', err);
+        }
+
     }
-});
 }
 
 const startFind = async (chatId) => {
