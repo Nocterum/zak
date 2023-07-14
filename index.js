@@ -122,7 +122,6 @@ const startFind = async (chatId) => {
             const index2 = $$('th .col').attr('scope').last;
             console.log(index1, index2)
             
-
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
             // Отправляем сообщение о отсутствии товара
@@ -161,7 +160,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
             
-            if (expectedArrivalTable.length === 0) {
+            if (expectedArrivalTable.length === 1) {
                 // Отправляем информацию о наличии товара
                 bot.sendMessage(chatId, availabilityContent);
                 console.log('информация о наличии успешно отправлена');
