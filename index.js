@@ -290,7 +290,7 @@ bot.on('message', async msg => {
     //Записываем артикул в ячейку БД
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
-        return startFind;
+        return startFind(chatId);
     }
     
     //вывод информации
