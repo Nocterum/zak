@@ -115,18 +115,10 @@ const startFind = async (chatId) => {
             let expectedArrivalContent = '';
 
             // Находим таблицу с наличием товара
-            const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
+            const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
             // Находим таблицу ожидаемого поступления
-            const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
-            const index1 = $$('th .col').attr('scope').first();
-            const index2 = $$('th .col').attr('scope').last();
+            const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').eq(1);
             
-            // Проверяем наличие таблицы
-            if (availabilityTable.length === 0) {
-            // Отправляем сообщение о отсутствии товара
-            return bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
-            }
-
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
             // Находим строки в таблице ожидаемого поступления
@@ -158,8 +150,16 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
-            
-            if (expectedArrivalTable.length === 1) {
+
+            // Проверяем наличие таблицы
+            if (availabilityTable.length === 0) {
+                // Отправляем сообщение о отсутствии товара
+                bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
+                console.log('информация об отсутствии товара отправленна');
+                return delMsg(chatId);
+            }
+                
+            if (expectedArrivalTable.length === 0) {
                 // Отправляем информацию о наличии товара
                 bot.sendMessage(chatId, availabilityContent);
                 console.log('информация о наличии успешно отправлена');
@@ -173,17 +173,18 @@ const startFind = async (chatId) => {
               return delMsg(chatId);
             }
 
-            if (expectedArrivalRows.length === 1) {
+//            if (expectedArrivalRows.length === 1) {
               // Отправляем информацию о наличии товара
-              bot.sendMessage(chatId, availabilityContent);
-              console.log('информация о наличии успешно отправлена');
-              return delMsg(chatId);
-            }
+//              bot.sendMessage(chatId, availabilityContent);
+//              console.log('информация о наличии успешно отправлена');
+//              return delMsg(chatId);
+//            }
             
+            if (availabilityTable !== expectedArrivalTable) {
             bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
             console.log('информация о наличии и поставках успешно отправленна');
             return delMsg(chatId);
-            
+            }
 
         } else {
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
