@@ -118,7 +118,9 @@ const startFind = async (chatId) => {
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
-            console.log(availabilityTable, expectedArrivalTable)
+            const index1 = $$('th .col').attr('scope').first;
+            const index2 = $$('th .col').attr('scope').last;
+            console.log(index1, index2)
             
 
             // Проверяем наличие таблицы
