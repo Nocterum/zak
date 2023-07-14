@@ -106,6 +106,7 @@ const startFind = async (chatId) => {
 
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
+
                 // Находим ячейки в текущей строке
                 const cells = $$(row).find('td');
   
@@ -116,28 +117,35 @@ const startFind = async (chatId) => {
                 availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
             
-            if (availabilityTable !== expectedArrivalTable) {
 
-                // Находим строки в таблице ожидаемого поступления
-                const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
 
-                // Итерируем по строкам таблицы ожидаемого поступления
-                expectedArrivalRows.each((index, row) => {
-                // Находим ячейки в текущей строке
-                const cells = $$(row).find('td');
+            // Находим строки в таблице ожидаемого поступления
+            const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+
+            // Итерируем по строкам таблицы ожидаемого поступления
+            expectedArrivalRows.each((index, row) => {
+
+            // Находим ячейки в текущей строке
+            const cells = $$(row).find('td');
   
-                // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
-                expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
-                expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
-                expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
-                expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
-                });
-            }
+            // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
+            expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
+            expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
+            expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
+            expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
+            });
+            
 
             // Отправляем информацию пользователю
-            bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
-            console.log('информация успешно отправленна');
-            return delMsg(chatId);
+            if (availabilityTable === expectedArrivalTable) {
+                bot.sendMessage(chatId, `${availabilityContent}`);
+                console.log('информация успешно отправленна');
+                return delMsg(chatId);
+            } else {
+                bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
+                console.log('информация успешно отправленна');
+                return delMsg(chatId);
+            }
 
         } else {
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
