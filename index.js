@@ -418,6 +418,12 @@ bot.on('callback_query', async msg => {
         await bot.sendMessage(chatId, `Введите название бренда:`);
         return delMsg(chatId);
     }
+
+    if(data === '/enterVC') {
+        lc = '/enterVC';
+        await bot.sendMessage(chatId, `Введите артикул:`);
+        return delMsg(chatId);
+    }
     
     //наличие, сроки, резерв           
     if(data === '/work1') {
