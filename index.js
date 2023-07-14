@@ -47,12 +47,18 @@ const editNickname = async (chatId) => {
 }
 
 const delMsg = async (chatId) => {
-    if (msg && msgId2) {
-        await bot.deleteMessage(chatId, msgId2);
+    
+    try {
+        if (msg && msgId2) {
+            await bot.deleteMessage(chatId, msgId2);
+        }
+        if (msg) {
+            return bot.deleteMessage(chatId, msgId1);
+        }
+    } catch(e) {
+        console.log('Ошибка при выполнении функции удаления', e);
     }
-    if (msg) {
-        return bot.deleteMessage(chatId, msgId1);
-    }
+
 }
 
 const startFind = async (chatId) => {
@@ -103,6 +109,8 @@ const startFind = async (chatId) => {
 
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
+            // Находим строки в таблице ожидаемого поступления
+            const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
 
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
@@ -117,10 +125,6 @@ const startFind = async (chatId) => {
                 availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
             
-
-
-            // Находим строки в таблице ожидаемого поступления
-            const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
 
             // Итерируем по строкам таблицы ожидаемого поступления
             expectedArrivalRows.each((index, row) => {
@@ -137,13 +141,13 @@ const startFind = async (chatId) => {
             
 
             // Отправляем информацию пользователю
-            if (availabilityTable == expectedArrivalTable) {
+            if (availabilityRows === expectedArrivalRows) {
                 bot.sendMessage(chatId, `${availabilityContent}`);
-                console.log('информация успешно отправленна');
+                console.log('информация о наличии успешно отправленна');
                 return delMsg(chatId);
             } else {
                 bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
-                console.log('информация успешно отправленна');
+                console.log('информация о наличии и поставках успешно отправленна');
                 return delMsg(chatId);
             }
 
