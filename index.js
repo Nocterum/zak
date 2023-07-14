@@ -46,12 +46,19 @@ const editNickname = async (chatId) => {
 
 const delMsg = async (chatId) => {
     bot.on('message', async msg => {
-    const text = msg.text; 
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
+    const msgdataId2 = (msg.message.message_id -= 2);
+    const msgdataId1 = (msg.message.message_id -= 1);
 
     
     try {
+        if (msg && msgdataId2) {
+            await bot.deleteMessage(chatId, msgId2);
+        }
+        if (msg && msgdataId1) {
+            await bot.deleteMessage(chatId, msgId2);
+        }
         if (msg && msgId2) {
             await bot.deleteMessage(chatId, msgId2);
         }
@@ -115,10 +122,8 @@ const startFind = async (chatId) => {
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
             // Находим заголовок наличия
-            const h3Наличие = expectedArrivalTable.find('modal-body h3');
-            // Находим заголовок наличия
-            const h3поступление = expectedArrivalTable.find('modal-body h3');
-            console.log(h3Наличие, h3поступление);
+
+            console.log(availabilityRows, expectedArrivalRows);
 
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
