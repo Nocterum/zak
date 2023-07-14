@@ -43,12 +43,12 @@ const editNickname = async (chatId) => {
     lc = '/editNickname'
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
-/*
+
 const delMsg = async (chatId) => {
     bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
-    })
+    
     
     try {
         if (msg && msgId2) {
@@ -57,6 +57,7 @@ const delMsg = async (chatId) => {
         if (msg) {
             return bot.deleteMessage(chatId, msgId1);
         }
+    
     } catch(e) {
 
         bot.on('callback_query', async msg => {
@@ -75,8 +76,9 @@ const delMsg = async (chatId) => {
             }
         })
     }
+})
 }
-*/
+
 const startFind = async (chatId) => {
     lc = '/enterVC';
 
@@ -112,10 +114,13 @@ const startFind = async (chatId) => {
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = '';
 
+            // Проверяем наличие таблицы наличия на складе
+            const availabilityTablex = expectedArrivalTable.prev('table');
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').first();
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').last();
+            
 
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
@@ -162,7 +167,7 @@ const startFind = async (chatId) => {
                 return delMsg(chatId);
             }
 
-            if (availabilityTable.length === 0) {
+            if (availabilityTablex.length === 0) {
               // Отправляем информацию о поставках товара
               bot.sendMessage(chatId, expectedArrivalContent);
               console.log('информация о поставках успешно отправлена');
@@ -385,24 +390,6 @@ bot.on('message', async msg => {
 
 }) 
 
-//параллельный слушатель с функцией удаления каждого 4го сообщения====================================================================================
-bot.on('message', async msg => {
-    const msgId2 = (msg.message_id -= 2);
-    const msgId1 = (msg.message_id -= 1);
-    
-    
-    try {
-        if (msg && msgId2) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
-        if (msg) {
-            return bot.deleteMessage(chatId, msgId1);
-        }
-    } catch(e) {
-        console.log('Ошибка при выполнении функции удаления', e);
-    }
-})
-
 //слушатель колбэков==========================================================================================================================================
 
 bot.on('callback_query', async msg => {
@@ -535,24 +522,6 @@ bot.on('callback_query', async msg => {
         return delMsg(chatId);
     }
 
-})
-
-//параллельный слушатель с функцией удаления каждого 4го сообщения====================================================================================
-bot.on('callback_query', async msg => {
-    const msgId2 = (msg.message.message_id -= 2);
-    const msgId1 = (msg.message.message_id -= 1);
-    
-    
-    try {
-        if (msg && msgId2) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
-        if (msg) {
-            return bot.deleteMessage(chatId, msgId1);
-        }
-    } catch(e) {
-        console.log('Ошибка при выполнении функции удаления', e);
-    }
 })
 
 }
