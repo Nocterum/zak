@@ -46,6 +46,15 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+const delMsg = async (chatId) => {
+    if (msg && msgId2) {
+        await bot.deleteMessage(chatId, msgId2);
+    }
+    if (msg) {
+        return bot.deleteMessage(chatId, msgId1);
+    }
+}
+
 const startFind = async (chatId) => {
     lc = null;
 
@@ -54,7 +63,6 @@ const startFind = async (chatId) => {
             chatId: chatId
         }
     });
-
 
     try {
 
