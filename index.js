@@ -43,7 +43,7 @@ const editNickname = async (chatId) => {
     lc = '/editNickname'
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
-
+/*
 const delMsg = async (chatId) => {
     bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
@@ -76,7 +76,7 @@ const delMsg = async (chatId) => {
         })
     }
 }
-
+*/
 const startFind = async (chatId) => {
     lc = '/enterVC';
 
@@ -155,17 +155,31 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
             
-
-            // Отправляем информацию пользователю
-            if (expectedArrivalRows.length === 1) {
-                bot.sendMessage(chatId, `${availabilityContent}`);
-                console.log('информация о наличии успешно отправленна');
-                return delMsg(chatId);
-            } else {
-                bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
-                console.log('информация о наличии и поставках успешно отправленна');
+            if (expectedArrivalTable.length === 0) {
+                // Отправляем информацию о наличии товара
+                bot.sendMessage(chatId, availabilityContent);
+                console.log('информация о наличии успешно отправлена');
                 return delMsg(chatId);
             }
+
+            if (availabilityTable.length === 0) {
+              // Отправляем информацию о поставках товара
+              bot.sendMessage(chatId, expectedArrivalContent);
+              console.log('информация о поставках успешно отправлена');
+              return delMsg(chatId);
+            }
+
+            if (expectedArrivalRows.length === 1) {
+              // Отправляем информацию о наличии товара
+              bot.sendMessage(chatId, availabilityContent);
+              console.log('информация о наличии успешно отправлена');
+              return delMsg(chatId);
+            }
+            
+            bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
+            console.log('информация о наличии и поставках успешно отправленна');
+            return delMsg(chatId);
+            
 
         } else {
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
@@ -369,6 +383,24 @@ bot.on('message', async msg => {
         return delMsg(chatId);
     }
 
+}) 
+
+//параллельный слушатель с функцией удаления каждого 4го сообщения====================================================================================
+bot.on('message', async msg => {
+    const msgId2 = (msg.message_id -= 2);
+    const msgId1 = (msg.message_id -= 1);
+    
+    
+    try {
+        if (msg && msgId2) {
+            await bot.deleteMessage(chatId, msgId2);
+        }
+        if (msg) {
+            return bot.deleteMessage(chatId, msgId1);
+        }
+    } catch(e) {
+        console.log('Ошибка при выполнении функции удаления', e);
+    }
 })
 
 //слушатель колбэков==========================================================================================================================================
@@ -503,6 +535,24 @@ bot.on('callback_query', async msg => {
         return delMsg(chatId);
     }
 
+})
+
+//параллельный слушатель с функцией удаления каждого 4го сообщения====================================================================================
+bot.on('callback_query', async msg => {
+    const msgId2 = (msg.message.message_id -= 2);
+    const msgId1 = (msg.message.message_id -= 1);
+    
+    
+    try {
+        if (msg && msgId2) {
+            await bot.deleteMessage(chatId, msgId2);
+        }
+        if (msg) {
+            return bot.deleteMessage(chatId, msgId1);
+        }
+    } catch(e) {
+        console.log('Ошибка при выполнении функции удаления', e);
+    }
 })
 
 }
