@@ -457,14 +457,14 @@ bot.on('callback_query', async msg => {
     }
         
     if(data === '/enterVC') {
-        lc = '/enterVC';
+        lc = data;
         await bot.sendMessage(chatId, `Введите артикул:`);
         return; delMsg(chatId);
     }
 
     //начало поиска остатков
-    if(data === '/work1') {
-        lc = '/enterBrand';
+    if(data === '/enterBrand') {
+        lc = data;
         await bot.sendMessage(chatId, `Введите название бренда:`);
         return; delMsg(chatId);
     }

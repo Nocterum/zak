@@ -49,7 +49,7 @@ module.exports = {
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Остатки/сроки/резерв', callback_data: '/work1'}],
+                [{text: 'Остатки/сроки/резерв', callback_data: '/enterBrand'}],
                 [{text: 'Превью изображений', callback_data: '/work2'}],
                 [{text: 'Добавить в заказ', callback_data: '/work3'}],
             ]
@@ -59,7 +59,7 @@ module.exports = {
     startFindOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Искать другой бренд', callback_data: '/beginwork'}],
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
