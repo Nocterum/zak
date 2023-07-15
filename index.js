@@ -110,12 +110,12 @@ const startFind = async (chatId) => {
             console.log('успешно зашёл на страницу товара');
             
             //находим артикул искомого объекта
-            const objName = $$('#characteristics .breadcrumb-item active').text(); //product__info-char-list
+            //const objName = $$('#characteristics .breadcrumb-item active').text(); //product__info-char-list
 
             // Создаем пустую строку для хранения текстового содержимого таблицы
-            let availabilityContent = `${objName}\n`;
+            let availabilityContent = ``;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
-            let expectedArrivalContent = `${objName}\n`;
+            let expectedArrivalContent = ``;
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
@@ -159,6 +159,13 @@ const startFind = async (chatId) => {
                 // Отправляем сообщение о отсутствии товара
                 bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
                 console.log('информация об отсутствии товара отправленна');
+                return delMsg(chatId);
+            }
+
+            if (availabilityTable.length === 0 && expectedArrivalTable.length === 1) {
+                // Отправляем сообщение о поставках, при отсутсвии наличия
+                bot.sendMessage(chatId, expectedArrivalContent);
+                console.log('информация о поставках, при отсутсвии наличия, успешно отправлена');
                 return delMsg(chatId);
             }
                 
