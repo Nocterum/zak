@@ -196,7 +196,7 @@ const startFind = async (chatId) => {
                 
             if (expectedArrivalTable.length === 0) {
                 // Отправляем информацию о наличии товара
-                bot.sendMessage(chatId, `${AVRContent}`, startFindOptions);
+                bot.sendMessage(chatId, `${availabilityContent}`, startFindOptions);
                 console.log('информация о наличии успешно отправлена');
                 return; delMsg(chatId);
             }
