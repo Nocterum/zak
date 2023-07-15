@@ -118,6 +118,7 @@ const startFind = async (chatId) => {
             let availabilityContent = ``;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = ``;
+            let AVRContent = '';
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
@@ -126,26 +127,28 @@ const startFind = async (chatId) => {
             
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
-            // Находим наименования строк в таблице наличия товара
-            const availabilityRowsNames = availabilityTable.find('thead tr');
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
-            // Находим наименования строк в таблице ожидаемого поступления
-            const expectedArrivalRowsNames = expectedArrivalTable.find('thead tr');
 
-/*            // Итерируем по строкам таблицы наличия товара
-            availabilityRowsNames.each((index, row) => {
+
+            //===============ЭКСПЕРИМЕНТ
+            availabilityTable.each((index, row) => {
             // Находим ячейки в текущей строке
 
-                const words = $$(row).find('th');
+                
+                const AVRows = $$(row).find('tbody tr');
+                const AVRowsNames = $$(row).find('thead tr');
+                const cells = $$(AVRows).find('td');
+                const names = $$(AVRowsNames).find('th scope="col"');
               
                 // Присваиваим переменным соответствующие наименования
-                let word1 = `${$$(words[0]).text}: `;
-                let word2 = `${$$(words[1]).text}: `;
-                let word3 = `${$$(words[2]).text}: `;
-                let word4 = `${$$(words[3]).text}: `;
+                AVRContent = `${$$(names[0]).text} :${$$(cells[0]).text}`;
+                AVRContent = `${$$(names[1]).text}: ${$$(cells[1]).text}`;
+                AVRContent = `${$$(names[2]).text}: ${$$(cells[2]).text}`;
+                AVRContent = `${$$(names[3]).text}: ${$$(cells[3]).text}`;
             });
-*/
+            //===============ЭКСПЕРИМЕНТ
+
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
 
@@ -193,7 +196,7 @@ const startFind = async (chatId) => {
                 
             if (expectedArrivalTable.length === 0) {
                 // Отправляем информацию о наличии товара
-                bot.sendMessage(chatId, `${availabilityContent}`, startFindOptions);
+                bot.sendMessage(chatId, `${AVRContent}`, startFindOptions);
                 console.log('информация о наличии успешно отправлена');
                 return; delMsg(chatId);
             }
