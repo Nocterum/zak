@@ -118,6 +118,8 @@ const startFind = async (chatId) => {
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').eq(1);
+            const objName = $$('#characteristics .product__info-char-list').eq(0);
+            console.log(objName);
             
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
@@ -172,13 +174,6 @@ const startFind = async (chatId) => {
               console.log('информация о поставках успешно отправлена');
               return delMsg(chatId);
             }
-
-//            if (expectedArrivalRows.length === 1) {
-              // Отправляем информацию о наличии товара
-//              bot.sendMessage(chatId, availabilityContent);
-//              console.log('информация о наличии успешно отправлена');
-//              return delMsg(chatId);
-//            }
             
             if (availabilityTable !== expectedArrivalTable) {
             bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
