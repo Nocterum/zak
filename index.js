@@ -124,9 +124,26 @@ const startFind = async (chatId) => {
             
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
+            // Находим наименования строк в таблице наличия товара
+            const availabilityRowsNames = availabilityTable.find('thead tr');
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+            // Находим наименования строк в таблице ожидаемого поступления
+            const expectedArrivalRowsNames = expectedArrivalTable.find('thead tr');
 
+/*            // Итерируем по строкам таблицы наличия товара
+            availabilityRowsNames.each((index, row) => {
+            // Находим ячейки в текущей строке
+
+                const words = $$(row).find('th');
+              
+                // Присваиваим переменным соответствующие наименования
+                let word1 = `${$$(words[0]).text}: `;
+                let word2 = `${$$(words[1]).text}: `;
+                let word3 = `${$$(words[2]).text}: `;
+                let word4 = `${$$(words[3]).text}: `;
+            });
+*/
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
 
@@ -146,10 +163,10 @@ const startFind = async (chatId) => {
 
             // Находим ячейки в текущей строке
             const cells = $$(row).find('td');
-            const words = $$(row).find('th');
+
   
             // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
-            expectedArrivalContent += `${$$(words[0]).text}: ${$$(cells[0]).text().trim()}\n`;
+            expectedArrivalContent += `Дата поставки: ${$$(cells[0]).text().trim()}\n`;
             expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
             expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
@@ -163,7 +180,7 @@ const startFind = async (chatId) => {
                 return delMsg(chatId);
             }
 
-            if (availabilityTable.length === 0 && expectedArrivalTable.length === 1) {
+            if (availabilityTable.length === 0) {
                 // Отправляем сообщение о поставках, при отсутсвии наличия
                 bot.sendMessage(chatId, expectedArrivalContent);
                 console.log('информация о поставках, при отсутсвии наличия, успешно отправлена');
