@@ -139,7 +139,7 @@ const startFind = async (chatId) => {
                 const AVRows = $$(row).find('tbody tr');
                 const AVRowsNames = $$(row).find('thead tr');
                 const cells = $$(AVRows).find('td');
-                const names = $$(AVRowsNames).find('th scope="col"');
+                const names = $$(AVRowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
                 AVRContent = `${$$(names[0]).text} :${$$(cells[0]).text}`;
