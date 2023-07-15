@@ -146,9 +146,10 @@ const startFind = async (chatId) => {
 
             // Находим ячейки в текущей строке
             const cells = $$(row).find('td');
+            const words = $$(row).find('th').html()
   
             // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
-            expectedArrivalContent += `Дата следующего поступления: ${$$(cells[0]).text().trim()}\n`;
+            expectedArrivalContent += `${$$(words[0]).text}: ${$$(cells[0]).text().trim()}\n`;
             expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
             expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
