@@ -109,17 +109,18 @@ const startFind = async (chatId) => {
             const $$ = cheerio.load(productResponse.data);
             console.log('успешно зашёл на страницу товара');
             
+            //находим артикул искомого объекта
+            const objName = $$('#characteristics .breadcrumb-item active').text(); //product__info-char-list
+
             // Создаем пустую строку для хранения текстового содержимого таблицы
-            let availabilityContent = '';
+            let availabilityContent = `${objName}\n`;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
-            let expectedArrivalContent = '';
+            let expectedArrivalContent = `${objName}\n`;
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').eq(1);
-            const objName = $$('#characteristics .product__info-char-list').eq(0);
-            console.log(objName);
             
             // Находим строки в таблице наличия товара
             const availabilityRows = availabilityTable.find('tbody tr');
