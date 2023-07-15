@@ -36,7 +36,7 @@ module.exports = {
         })
     },
 
-    begintWorkOptions: {
+    beginWorkOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
@@ -56,20 +56,11 @@ module.exports = {
         })
     },
 
-    work1Options: {
+    startFindOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Ткань', callback_data: 'Ткань'}],
-                [{text: 'Обои', callback_data: 'Обои'}],
-            ]
-        })
-    },
-
-    brandOptions: {
-        parse_mode: 'HTML',
-        reply_markup: JSON.stringify( {
-            inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/enterBrand'}],
+                [{text: 'Искать другой бренд', callback_data: '/beginwork'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -82,15 +73,5 @@ module.exports = {
             ]
         })
     },
-
-    startFindOptions: {
-        parse_mode: 'HTML',
-        reply_markup: JSON.stringify( {
-            inline_keyboard: [
-                [{text: 'Начать поиск', callback_data: '/startFind'}],
-            ]
-        })
-    },
-
 
 }

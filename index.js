@@ -13,7 +13,7 @@ const bot = new TelegramApi(token, {
 });
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, work1Options, VCOptions, brandOptions, startFindOptions, begintWorkOptions, mainMenuOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 
@@ -44,6 +44,7 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+/* Функция удаления 7-8 сообщения
 const delMsg = async (chatId) => {
     bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
@@ -78,6 +79,7 @@ const delMsg = async (chatId) => {
     }
 })
 }
+*/
 
 const startFind = async (chatId) => {
     lc = '/enterVC';
@@ -164,7 +166,6 @@ const startFind = async (chatId) => {
             // Находим ячейки в текущей строке
             const cells = $$(row).find('td');
 
-  
             // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
             expectedArrivalContent += `Дата поставки: ${$$(cells[0]).text().trim()}\n`;
             expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
@@ -174,48 +175,44 @@ const startFind = async (chatId) => {
 
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
-                // Отправляем сообщение о отсутствии товара
-                bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика');
-                console.log('информация об отсутствии товара отправленна');
-                return delMsg(chatId);
-            }
 
-            if (availabilityTable.length === 0) {
-                // Отправляем сообщение о поставках, при отсутсвии наличия
-                bot.sendMessage(chatId, expectedArrivalContent);
-                console.log('информация о поставках, при отсутсвии наличия, успешно отправлена');
-                return delMsg(chatId);
+                if (expectedArrivalTable.length === 1) {
+                    // Отправляем информацию о поставках товара
+                    bot.sendMessage(chatId, `${expectedArrivalContent}`, startFindOptions);
+                    console.log('информация о поставках при отсутсвии наличия, успешно отправлена');
+                    return; delMsg(chatId);
+
+                } else {
+
+                    // Отправляем сообщение о отсутствии товара
+                    bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика', startFindOptions);
+                    console.log('информация об отсутствии товара отправленна');
+                    return; delMsg(chatId);
+                }
             }
                 
             if (expectedArrivalTable.length === 0) {
                 // Отправляем информацию о наличии товара
-                bot.sendMessage(chatId, availabilityContent);
+                bot.sendMessage(chatId, `${availabilityContent}`, startFindOptions);
                 console.log('информация о наличии успешно отправлена');
-                return delMsg(chatId);
-            }
-
-            if (availabilityTable.length === 0) {
-              // Отправляем информацию о поставках товара
-              bot.sendMessage(chatId, expectedArrivalContent);
-              console.log('информация о поставках успешно отправлена');
-              return delMsg(chatId);
+                return; delMsg(chatId);
             }
             
             if (availabilityTable !== expectedArrivalTable) {
-            bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`);
+            bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`, startFindOptions);
             console.log('информация о наличии и поставках успешно отправленна');
-            return delMsg(chatId);
+            return; delMsg(chatId);
             }
 
         } else {
-            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.');
-            return delMsg(chatId);
+            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFindOptions);
+            return; delMsg(chatId);
         }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
-        bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.');
-        return delMsg(chatId);
+        bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
+        return; delMsg(chatId);
     }
    
 }
@@ -294,7 +291,7 @@ bot.on('message', async msg => {
     const msgId2 = (msg.message_id -= 2);
     const msgId1 = (msg.message_id -= 1);
 
-    //функция удаления последних сообщений
+    //функция удаления 4-5 сообщения
 /*    const delMsg = async (chatId) => {
     
         try {
@@ -327,7 +324,7 @@ bot.on('message', async msg => {
             lc = null;
             await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
-        return delMsg(chatId);
+        return; delMsg(chatId);
         }
 
     //начало работы
@@ -336,77 +333,76 @@ bot.on('message', async msg => {
         if (!user.email) {
             await editEmail(chatId);
         } else {
-            lc = '/enterBrand';
-            await bot.sendMessage(chatId, `Введите название бренда:`);
+            await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions)
         } 
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     //изменить e-mail
     if (text === '/editEmail') {
         await editEmail(chatId);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     //Записываем e-mail в ячейку БД
     if (lc === '/editEmail') {
         await user.update({email: text});
-        await bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, begintWorkOptions)
-        return delMsg(chatId);
+        await bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
+        return; delMsg(chatId);
     }            
 
     //изменить Nickname
     if (text === '/editNickname') {
         await editNickname(chatId);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
     
     //Записываем Nickname в ячейку БД
     if (lc === '/editNickname') {
         await user.update({nickname: text});
         await bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     //Записываем название бренда в ячейку БД
     if (lc === '/enterBrand') {
         await user.update({brand: text});
         await bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
     
-    //Записываем артикул в ячейку БД
+    //Записываем артикул в ячейку БД и начинаем поиск на сайте
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
-        return startFind(chatId);
+        return; startFind(chatId);
     }
     
     //вывод информации
     if (text === '/infowork') {
         await bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     if (text === 'recreatetable' && chatId === '356339062') {
         await UserModel.sync({ force: true })
         await bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     if (text.toLowerCase() === 'привет' + '') {
         await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     if (text === '/infogame') {
         lc = null;
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }   
 
     if (text !== '/game' && text !== '/start') {
         await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
 }) 
@@ -420,7 +416,7 @@ bot.on('callback_query', async msg => {
     const msgId2 = (msg.message.message_id -= 2);
     const msgId1 = (msg.message.message_id -= 1);
 
-    //удаление последних сообщений
+    //функция удаления 4-5 сообщения
 /*    const delMsg = async (chatId) => {
     
         try {
@@ -457,41 +453,34 @@ bot.on('callback_query', async msg => {
     if (data === '/mainmenu') {
         lc = null;
         await bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
         
-    //начало работы
-    if(data === '/beginwork') {
-        lc = '/enterBrand';
-        await bot.sendMessage(chatId, `Введите название бренда:`);
-        return delMsg(chatId);
-    }
-
     if(data === '/enterVC') {
         lc = '/enterVC';
         await bot.sendMessage(chatId, `Введите артикул:`);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
-    
-    //наличие, сроки, резерв           
+
+    //начало поиска остатков
     if(data === '/work1') {
-        lc = data;
-        await bot.sendMessage(chatId, 'Хорошо, что мы ищем?', work1Options);
-        return delMsg(chatId);
+        lc = '/enterBrand';
+        await bot.sendMessage(chatId, `Введите название бренда:`);
+        return; delMsg(chatId);
     }
  
     //превью фото
     if(data === '/work2') {
         lc = null;
         await bot.sendMessage(chatId, sorry, mainMenuOptions);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
     //добавить в заказ
     if(data === '/work3') {
         lc = null;
         await bot.sendMessage(chatId, sorry, mainMenuOptions);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
 
@@ -526,13 +515,11 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save();
-            //await delMsg(chatId);
             await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            //await delMsg(chatId);
             await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
@@ -540,7 +527,7 @@ bot.on('callback_query', async msg => {
 
     } catch (err) {      
         await bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
-        return delMsg(chatId);
+        return; delMsg(chatId);
     }
 
 })
