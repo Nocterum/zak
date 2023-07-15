@@ -374,7 +374,7 @@ bot.on('message', async msg => {
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
-        return; startFind(chatId);
+        return startFind(chatId);
     }
     
     //вывод информации
