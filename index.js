@@ -152,7 +152,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
 
-            await bot.deleteMessage(chatId, botMsgIdx);
+            //await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
 
@@ -191,7 +191,6 @@ const startFind = async (chatId) => {
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
-        await bot.deleteMessage(chatId, botMsgIdx);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
         return; delMsg(chatId);
     }
