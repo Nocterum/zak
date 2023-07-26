@@ -177,7 +177,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
 
-            await bot.deleteMessage(chatId, (msg.message.message_id += 3));
+            await bot.deleteMessage(chatId, (msg.message.message_id += 2));
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
 
