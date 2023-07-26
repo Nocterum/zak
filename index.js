@@ -19,7 +19,6 @@ const UserModel = require('./models');
 const BrandModel = require('./models');
 
 //глобальные переменные
-chatId = {};
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
@@ -69,8 +68,8 @@ const startFind = async (chatId) => {
     try {
 
         //формируем URL для поиска
-        const searchUrl = `${brand.link}${user.brand}+${user.vendorCode}`;
-        //const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.vendorCode}`;
+        //const searchUrl = `${brand.link}${user.brand}+${user.vendorCode}`;
+        const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.vendorCode}`;
         console.log('сформированна ссылка');
 
         //Отправляем запрос на сайт
@@ -216,7 +215,7 @@ const start = async () => {
 
 //старт
 bot.onText(/\/start/, async msg => {
-    chatId = msg.chat.id;
+    const chatId = msg.chat.id;
 
     try {
 
