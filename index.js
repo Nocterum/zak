@@ -59,9 +59,9 @@ const startFind = async (chatId) => {
     
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
-        where: {
+/*        where: {
             brand: user.dataValues.brand
-        }
+        }   */
     });
     console.log(`найденно совпадение в таблице брендов ${brand.link}`);
 
@@ -191,6 +191,7 @@ const startFind = async (chatId) => {
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
+        await bot.deleteMessage(chatId, botMsgIdx);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
         return; delMsg(chatId);
     }
