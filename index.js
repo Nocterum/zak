@@ -16,7 +16,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-const BrandModel = require('./models');
+//const BrandModel = require('./models');
 
 //глобальные переменные
 chats = {};
