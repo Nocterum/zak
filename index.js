@@ -185,12 +185,14 @@ const startFind = async (chatId) => {
             }
 
         } else {
+            await bot.deleteMessage(chatId, botMsgIdx);
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFindOptions);
             return; delMsg(chatId);
         }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
+        await bot.deleteMessage(chatId, botMsgIdx);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
         return; delMsg(chatId);
     }
