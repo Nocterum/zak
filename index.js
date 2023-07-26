@@ -35,53 +35,19 @@ bot.setMyCommands([
 
 //функции=========================================================================================
 
+//функция ввода емейла
 const editEmail = async (chatId) => {
     lc = '/editEmail'
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
 }
 
+//функция ввода никнейма
 const editNickname = async (chatId) => {
     lc = '/editNickname'
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
-/* Функция удаления 7-8 сообщения
-const delMsg = async (chatId) => {
-    bot.on('message', async msg => {
-    const msgId2 = (msg.message_id -= 2);
-    const msgId1 = (msg.message_id -= 1);
-    
-    
-    try {
-        if (msg && msgId2) {
-            await bot.deleteMessage(chatId, msgId2);
-        }
-        if (msg) {
-            return bot.deleteMessage(chatId, msgId1);
-        }
-    
-    } catch(e) {
-
-        bot.on('callback_query', async msg => {
-            const msgdataId2 = (msg.message.message_id -= 2);
-            const msgdataId1 = (msg.message.message_id -= 1);
-
-            try {
-                if (msg && msgdataId2) {
-                    await bot.deleteMessage(chatId, msgdataId2);
-                }
-                if (msg) {
-                    return bot.deleteMessage(chatId, msgdataId1);
-                }
-            } catch(err) {
-                console.log('Ошибка при выполнении функции удаления', err);
-            }
-        })
-    }
-})
-}
-*/
-
+//функция html запроса по данным из БД
 const startFind = async (chatId) => {
     lc = '/enterVC';
 
@@ -261,13 +227,6 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
-            user = await BrandModel.create({chatId});
-            console.log(`База данных создана`);
-             await brand.update({
-                brand: user.dataValues.brand, 
-                provider: opus, 
-                link: 'https://opusdeco.ru/search/?type=catalog&q=',
-            });
             return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
@@ -309,25 +268,7 @@ bot.onText(/\/infogame/, async msg => {
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
-    const msgId2 = (msg.message_id -= 2);
-    const msgId1 = (msg.message_id -= 1);
 
-    //функция удаления 4-5 сообщения
-/*    const delMsg = async (chatId) => {
-    
-        try {
-            if (msg && msgId2) {
-                await bot.deleteMessage(chatId, msgId2);
-            }
-            if (msg) {
-                return bot.deleteMessage(chatId, msgId1);
-            }
-        } catch(e) {
-            console.log('Ошибка при выполнении функции удаления', e);
-        }
-    
-    }
-*/    
     console.log(msg)
 
     const user = await UserModel.findOne({
@@ -436,25 +377,7 @@ bot.on('callback_query', async msg => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
     const sorry = 'Извините, эта функция ещё в разработке 😅';
-    const msgId2 = (msg.message.message_id -= 2);
-    const msgId1 = (msg.message.message_id -= 1);
 
-    //функция удаления 4-5 сообщения
-/*    const delMsg = async (chatId) => {
-    
-        try {
-            if (msg && msgId2) {
-                await bot.deleteMessage(chatId, msgId2);
-            }
-            if (msg) {
-                return bot.deleteMessage(chatId, msgId1);
-            }
-        } catch(e) {
-            console.log('Ошибка при выполнении функции удаления', e);
-        }
-    
-    }
-*/    
     console.log(msg)
 
     //функция перезапуска игры
