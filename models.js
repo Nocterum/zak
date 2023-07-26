@@ -24,4 +24,4 @@ const BrandModel = sequelize.define( 'brand', {
 })
 */
 module.exports = UserModel;
-module.exports = BrandModel;
+//module.exports = BrandModel;
