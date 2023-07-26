@@ -152,7 +152,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
 
-            //await bot.deleteMessage(chatId, botMsgIdx);
+            await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
 
@@ -337,7 +337,7 @@ bot.on('message', async msg => {
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
         await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
-        botMsgIdx = msg.message_id += 4; 
+        botMsgIdx = msg.message_id += 1; 
         return startFind(chatId);
     }
     
