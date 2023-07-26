@@ -379,7 +379,7 @@ bot.on('message', async msg => {
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
         await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
-        botMsgIdx = msg.message_id +=3; 
+        botMsgIdx = msg.message_id += 4; 
         return startFind(chatId);
     }
     
