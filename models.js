@@ -17,7 +17,7 @@ const UserModel = sequelize.define( 'user', {
 
 const BrandModel = sequelize.define( 'brand', {
 
-    brand: {type: DataTypes.TEXT, primaryKey: true, unique: true},
+    brand: {type: DataTypes.TEXT('tiny'), primaryKey: true, unique: true},
     provider: {type: DataTypes.TEXT},
     link: {type: DataTypes.TEXT},
 

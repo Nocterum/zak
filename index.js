@@ -19,6 +19,7 @@ const UserModel = require('./models');
 const BrandModel = require('./models');
 
 //глобальные переменные
+chatId = {};
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
@@ -59,9 +60,9 @@ const startFind = async (chatId) => {
     
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
-/*        where: {
+        where: {
             brand: user.dataValues.brand
-        }   */
+        }
     });
     console.log(`найденно совпадение в таблице брендов ${brand.link}`);
 
@@ -215,7 +216,7 @@ const start = async () => {
 
 //старт
 bot.onText(/\/start/, async msg => {
-    const chatId = msg.chat.id;
+    chatId = msg.chat.id;
 
     try {
 
