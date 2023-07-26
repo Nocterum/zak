@@ -55,7 +55,7 @@ const startFind = async (chatId) => {
         where: {
             chatId: chatId
         }
-    });
+    }); 
     
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
@@ -308,7 +308,7 @@ bot.on('message', async msg => {
 
     //Записываем e-mail в ячейку БД
     if (lc === '/editEmail') {
-        await user.update({email: text});
+        await user.update({email: text.toLowerCase()});
         await bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
         return; delMsg(chatId);
     }            
@@ -328,7 +328,7 @@ bot.on('message', async msg => {
 
     //Записываем название бренда в ячейку БД
     if (lc === '/enterBrand') {
-        await user.update({brand: text});
+        await user.update({brand: text.toLowerCase()});
         await bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
         return; delMsg(chatId);
     }
