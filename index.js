@@ -15,7 +15,8 @@ const bot = new TelegramApi(token, {
 //импорты
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
-const {UserModel, BrandModel} = require('./models');
+const UserModel = require('./models');
+const BrandModel = require('./models');
 
 //глобальные переменные
 chats = {};
@@ -93,7 +94,7 @@ const startFind = async (chatId) => {
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
         where: {
-            brand: `${user.brand}`
+            brand: user.dataValues.brand
         }
     });
     console.log('найденно совпадение в таблице брендов');
