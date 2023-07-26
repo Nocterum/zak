@@ -56,7 +56,7 @@ const startFind = async (chatId) => {
             chatId: chatId
         }
     }); 
-    
+/*    
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
         where: {
@@ -64,7 +64,7 @@ const startFind = async (chatId) => {
         }
     });
     console.log(`найденно совпадение в таблице брендов ${brand.link}`);
-
+*/
     try {
 
         //формируем URL для поиска
