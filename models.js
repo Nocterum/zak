@@ -15,4 +15,13 @@ const UserModel = sequelize.define( 'user', {
     typeFind: {type: DataTypes.TEXT('tiny')},
 })
 
+const BrandModel = sequelize.define( 'brand', {
+
+    brand: {type: DataTypes.TEXT},
+    provider: {type: DataTypes.TEXT},
+    link: {type: DataTypes.TEXT},
+
+})
+
 module.exports = UserModel;
+module.exports = BrandModel;
