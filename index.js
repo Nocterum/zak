@@ -97,7 +97,7 @@ const startFind = async (chatId) => {
             brand: user.dataValues.brand
         }
     });
-    console.log('найденно совпадение в таблице брендов');
+    console.log(`найденно совпадение в таблице брендов ${brand.link}`);
 
     try {
 
