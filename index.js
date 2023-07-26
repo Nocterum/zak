@@ -90,7 +90,7 @@ const startFind = async (chatId) => {
             chatId: chatId
         }
     });
-
+    
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
         where: {
@@ -261,6 +261,13 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
+            user = await BrandModel.create({chatId});
+            console.log(`База данных создана`);
+             await brand.update({
+                brand: user.dataValues.brand, 
+                provider: opus, 
+                link: 'https://opusdeco.ru/search/?type=catalog&q=',
+            });
             return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
