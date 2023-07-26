@@ -92,6 +92,7 @@ const startFind = async (chatId) => {
 
     try {
 
+        await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .')
         //формируем URL для поиска
         const searchUrl = `https://opusdeco.ru/search/?type=catalog&q=${user.brand}+${user.vendorCode}`;
         console.log('сформированна ссылка');
@@ -176,6 +177,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
 
+            await bot.deleteMessage(chatId, (msg.message.message_id += 3));
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
 
