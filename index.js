@@ -220,7 +220,6 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
-            console.log(`${brand.link}\n${brand.provider}\n${brand.brand}`)
             return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
