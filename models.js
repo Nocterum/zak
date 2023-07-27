@@ -15,7 +15,7 @@ const UserModel = sequelize.define( 'user', {
     typeFind: {type: DataTypes.TEXT('tiny')},
 })
 
-
+/*
 const BrandModel = sequelize.define( 'brand', {
     id: {type: DataTypes.SMALLINT, primaryKey: true, unique: true, autoIncrement: true},
     brand: {type: DataTypes.TEXT('tiny')},
@@ -23,7 +23,7 @@ const BrandModel = sequelize.define( 'brand', {
     link: {type: DataTypes.TEXT},
 
 })
-
+*/
 
 module.exports = UserModel;
-module.exports = BrandModel;
+//module.exports = BrandModel;
