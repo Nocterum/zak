@@ -16,7 +16,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-//const BrandModel = require('./models');
+const BrandModel = require('./models');
 
 //глобальные переменные
 chats = {};
@@ -56,7 +56,7 @@ const startFind = async (chatId) => {
             chatId: chatId
         }
     }); 
-/*    
+    
     //поиск в таблице брендов строки по бренду
     const brand = await BrandModel.findOne({
         where: {
@@ -64,7 +64,7 @@ const startFind = async (chatId) => {
         }
     });
     console.log(`найденно совпадение в таблице брендов ${brand.link}`);
-*/
+
     try {
 
         //формируем URL для поиска
@@ -226,9 +226,20 @@ bot.onText(/\/start/, async msg => {
             }
         });
 
+        let brand = await BrandModel.findOne();
+
         //главное меню
         if (user) {
             lc = null;
+
+            brand = await BrandModel.create();
+            console.log(`БД брендов создана`);
+            await brand.update({
+                brand: user.brand, 
+                provider: 'opus', 
+                link: 'https://opusdeco.ru/search/?type=catalog&q=',
+            });
+
             return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
