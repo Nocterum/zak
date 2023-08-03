@@ -85,7 +85,10 @@ const startFind = async (chatId) => {
             let availabilityContent = ``;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = ``;
+            // Создаем пустую строку для хранения текстового содержимого таблицы
             let AVRContent = '';
+            // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
+            let EXRContent = ''
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
@@ -97,25 +100,38 @@ const startFind = async (chatId) => {
             // Находим строки в таблице ожидаемого поступления
             const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
 
-
             //===============ЭКСПЕРИМЕНТ
+            //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
-            // Находим ячейки в текущей строке
 
-                
                 const AVRows = $$(row).find('tbody tr');
                 const AVRowsNames = $$(row).find('thead tr');
                 const cells = $$(AVRows).find('td');
                 const names = $$(AVRowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                AVRContent = `${$$(names[0]).text} :${$$(cells[0]).text}`;
-                AVRContent = `${$$(names[1]).text}: ${$$(cells[1]).text}`;
-                AVRContent = `${$$(names[2]).text}: ${$$(cells[2]).text}`;
-                AVRContent = `${$$(names[3]).text}: ${$$(cells[3]).text}`;
+                availabilityContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}`;
+                availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}`;
+                availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}`;
+                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}`;
+            });
+
+            //Итерируем по строкам таблицу 
+            expectedArrivalTable.each((index, row) => {
+
+                const AVRows = $$(row).find('tbody tr');
+                const AVRowsNames = $$(row).find('thead tr');
+                const cells = $$(AVRows).find('td');
+                const names = $$(AVRowsNames).find('th[scope=col]');
+              
+                // Присваиваим переменным соответствующие наименования
+                expectedArrivalContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}`;
+                expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}`;
+                expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}`;
+                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}`;
             });
             //===============ЭКСПЕРИМЕНТ
-
+/*
             // Итерируем по строкам таблицы наличия товара
             availabilityRows.each((index, row) => {
 
@@ -142,7 +158,7 @@ const startFind = async (chatId) => {
             expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
             expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
             });
-
+*/
             await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
@@ -151,14 +167,14 @@ const startFind = async (chatId) => {
                     // Отправляем информацию о поставках товара
                     bot.sendMessage(chatId, `${expectedArrivalContent}`, startFindOptions);
                     console.log('информация о поставках при отсутсвии наличия, успешно отправлена');
-                    return; delMsg(chatId);
+                    return;
 
                 } else {
 
                     // Отправляем сообщение о отсутствии товара
                     bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика', startFindOptions);
                     console.log('информация об отсутствии товара отправленна');
-                    return; delMsg(chatId);
+                    return;
                 }
             }
                 
@@ -166,26 +182,26 @@ const startFind = async (chatId) => {
                 // Отправляем информацию о наличии товара
                 bot.sendMessage(chatId, `${availabilityContent}`, startFindOptions);
                 console.log('информация о наличии успешно отправлена');
-                return; delMsg(chatId);
+                return;
             }
             
             if (availabilityTable !== expectedArrivalTable) {
             bot.sendMessage(chatId, `${availabilityContent}${expectedArrivalContent}`, startFindOptions);
             console.log('информация о наличии и поставках успешно отправленна');
-            return; delMsg(chatId);
+            return;
             }
 
         } else {
             await bot.deleteMessage(chatId, botMsgIdx);
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFindOptions);
-            return; delMsg(chatId);
+            return;
         }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
-        await bot.deleteMessage(chatId, botMsgIdx);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
-        return; delMsg(chatId);
+        await bot.deleteMessage(chatId, botMsgIdx);
+        return;
     }
    
 }
@@ -198,7 +214,7 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
-        await console.log('Подключение к базе данных установленно');
+        console.log('Подключение к базе данных установленно');
     } catch(err) {
         console.log('Подключение к базе данных сломалось', err);
     }
@@ -269,8 +285,6 @@ bot.on('message', async msg => {
             chatId: chatId
         }
     });
-
-
 
     //главное меню
     if (text === '/mainmenu') {
