@@ -98,7 +98,7 @@ const startFind = async (chatId) => {
                 const rowsNames = $$(row).find('thead tr');
                 const names = $$(rowsNames).find('th[scope=col]');
                 const rowsValue = $$(row).find('tbody tr');
-                rowsValue.each((rowValue) => {
+                rowsValue.each((index, rowValue) => {
                     const cells = $$(rowValue).find('td');
                 
                 // Присваиваим переменным соответствующие наименования
