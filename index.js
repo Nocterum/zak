@@ -98,13 +98,11 @@ const startFind = async (chatId) => {
 
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
-            // Итерируем по строкам таблицы, начиная со второй строки (первая строка - заголовки столбцов)
-            for (let i = 1; i < row.length; i++) {
-                const RowsHeading = $$(row).find('h3');
-                const RowsValue = $$(row).find('tbody tr');
+
+                const RowsValue = $$(row).find.each('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
-                const cells = $$(RowsValue[i]).find('td');
-                const names = $$(RowsNames[i]).find('th[scope=col]');
+                const cells = $$(RowsValue).find('td');
+                const names = $$(RowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
@@ -112,25 +110,23 @@ const startFind = async (chatId) => {
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
-        }});
+        });
 
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
-            // Итерируем по строкам таблицы, начиная со второй строки (первая строка - заголовки столбцов)
-            for (let i = 1; i < row.length; i++) {
-                const RowsHeading = $$(row).find('h3');
-                const RowsValue = $$(row).find('tbody tr');
+                
+                const RowsValue = $$(row).find.each('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
-                const names = $$(RowsNames[i]).find('th[scope=col]');
-                const cells = $$(RowsValue[i]).find('td');
-              
+                const names = $$(RowsNames).find('th[scope=col]');
+                const cells = $$(RowsValue).find('td');
+                
                 // Присваиваим переменным соответствующие наименования
                 expectedArrivalContent += `Ожидаемое поступление:\n`;
                 expectedArrivalContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
-        }});
+        });
 
             await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
