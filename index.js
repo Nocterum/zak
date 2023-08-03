@@ -91,13 +91,14 @@ const startFind = async (chatId) => {
             const availabilityTable = modalBody.find('table').eq(0);
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = modalBody.find('table').eq(1);
+            // Находим строки с данными о наличии товара
+            const rowsValue = availabilityTable.find('tbody tr');
 
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
 
                 const rowsNames = $$(row).find('thead tr');
                 const names = $$(rowsNames).find('th[scope=col]');
-                const rowsValue = availabilityTable.find('tbody tr');
                 rowsValue.each((index, rowValue) => {
                     const cells = $$(rowValue).find('td');
                 
