@@ -92,15 +92,14 @@ const startFind = async (chatId) => {
             const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').eq(1);
             
             // Находим строки в таблице наличия товара
-            const availabilityRows = availabilityTable.find('tbody tr');
+            //const availabilityRows = availabilityTable.find('tbody tr');
             // Находим строки в таблице ожидаемого поступления
-            const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+            //const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
 
-            //===============ЭКСПЕРИМЕНТ
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
 
-                const RowsHeading = $$(row).find('tbody h3');
+                const RowsHeading = $$(row).find('h3');
                 const RowsValue = $$(row).find('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
                 const cells = $$(RowsValue).find('td');
@@ -117,11 +116,11 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
 
-                const RowsHeading = $$(row).find('tbody h3');
+                const RowsHeading = $$(row).find('h3');
                 const RowsValue = $$(row).find('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
-                const cells = $$(RowsValue).find('td');
                 const names = $$(RowsNames).find('th[scope=col]');
+                const cells = $$(RowsValue).find('td');
               
                 // Присваиваим переменным соответствующие наименования
                 expectedArrivalContent += `${$$(RowsHeading).text()}\n`;
@@ -172,8 +171,7 @@ const startFind = async (chatId) => {
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
         bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
-        await bot.deleteMessage(chatId, botMsgIdx);
-        return;
+        return bot.deleteMessage(chatId, botMsgIdx);
     }
    
 }
