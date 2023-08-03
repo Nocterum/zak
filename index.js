@@ -91,8 +91,10 @@ const startFind = async (chatId) => {
             const availabilityTable = modalBody.find('table').eq(0);
             // Находим таблицу ожидаемого поступления
             const expectedArrivalTable = modalBody.find('table').eq(1);
-            // Находим строки с наличием товара
-            const rowsValue = availabilityTable.find('tbody tr');
+            // Находим строки с данными о наличии товара
+            const rowsValueAV = availabilityTable.find('tbody tr');
+            // Находим строки с данными о поступлении товара
+            const rowsValueEX = expectedArrivalTable.find('tbody tr');
 
 
             //Итерируем по строкам таблицы наличия товара
@@ -101,8 +103,8 @@ const startFind = async (chatId) => {
                 const rowsNames = $$(row).find('thead tr');
                 const names = $$(rowsNames).find('th[scope=col]');
                 
-                rowsValue.each((index, rowValue) => {
-                const cells = $$(rowValue).find('td');
+                rowsValueAV.each((index, rowValue) => {
+                    const cells = $$(rowValue).find('td');
                 
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
@@ -118,8 +120,9 @@ const startFind = async (chatId) => {
                 
                 const rowsNames = $$(row).find('thead tr');
                 const names = $$(rowsNames).find('th[scope=col]');
-                const rowsValue = $$(row).find('tbody tr');
-                const cells = $$(rowsValue).find('td');
+
+                rowsValueEX.each((index, rowValue) => {
+                    const cells = $$(rowValue).find('td');
                 
                 // Присваиваим переменным соответствующие наименования
                 expectedArrivalContent += `Ожидаемое поступление:\n`;
@@ -127,6 +130,7 @@ const startFind = async (chatId) => {
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
+            });
         });
 
             await bot.deleteMessage(chatId, botMsgIdx);
