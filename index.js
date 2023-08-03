@@ -86,15 +86,11 @@ const startFind = async (chatId) => {
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = ``;
 
+            const modalBody = $$('#stockAvailabilityModal .modal-body');
             // Находим таблицу с наличием товара
-            const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
+            const availabilityTable = modalBody.find('table').eq(0);
             // Находим таблицу ожидаемого поступления
-            const expectedArrivalTable = $$('#stockAvailabilityModal .modal-content table').eq(1);
-            
-            // Находим строки в таблице наличия товара
-            //const availabilityRows = availabilityTable.find('tbody tr');
-            // Находим строки в таблице ожидаемого поступления
-            //const expectedArrivalRows = expectedArrivalTable.find('tbody tr');
+            const expectedArrivalTable = modalBody.find('table').eq(1);
 
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
@@ -106,7 +102,7 @@ const startFind = async (chatId) => {
               
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
-                availabilityContent += `${$$(names[index]).text()}: ${$$(cells[index]).text()}\n`;
+                availabilityContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
