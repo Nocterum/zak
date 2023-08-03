@@ -99,7 +99,7 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
 
-                const RowsValue = $$(row).find.each('tbody tr');
+                const RowsValue = $$(row).find('tbody tr').each(row);
                 const RowsNames = $$(row).find('thead tr');
                 const cells = $$(RowsValue).find('td');
                 const names = $$(RowsNames).find('th[scope=col]');
@@ -115,7 +115,7 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
                 
-                const RowsValue = $$(row).find.each('tbody tr');
+                const RowsValue = $$(row).find('tbody tr').each();
                 const RowsNames = $$(row).find('thead tr');
                 const names = $$(RowsNames).find('th[scope=col]');
                 const cells = $$(RowsValue).find('td');
