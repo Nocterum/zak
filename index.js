@@ -85,10 +85,6 @@ const startFind = async (chatId) => {
             let availabilityContent = ``;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
             let expectedArrivalContent = ``;
-            // Создаем пустую строку для хранения текстового содержимого таблицы
-            let AVRContent = '';
-            // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
-            let EXRContent = ''
 
             // Находим таблицу с наличием товара
             const availabilityTable = $$('#stockAvailabilityModal .modal-content table').eq(0);
@@ -104,61 +100,37 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
 
-                const AVRows = $$(row).find('tbody tr');
-                const AVRowsNames = $$(row).find('thead tr');
-                const cells = $$(AVRows).find('td');
-                const names = $$(AVRowsNames).find('th[scope=col]');
+                const RowsHeading = $$(row).find('tbody h3');
+                const RowsValue = $$(row).find('tbody tr');
+                const RowsNames = $$(row).find('thead tr');
+                const cells = $$(RowsValue).find('td');
+                const names = $$(RowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                availabilityContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}\n`;
+                availabilityContent += `${$$(RowsHeading).text()}\n`;
+                availabilityContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
-                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n`;
+                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
             });
 
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
 
-                const AVRows = $$(row).find('tbody tr');
-                const AVRowsNames = $$(row).find('thead tr');
-                const cells = $$(AVRows).find('td');
-                const names = $$(AVRowsNames).find('th[scope=col]');
+                const RowsHeading = $$(row).find('tbody h3');
+                const RowsValue = $$(row).find('tbody tr');
+                const RowsNames = $$(row).find('thead tr');
+                const cells = $$(RowsValue).find('td');
+                const names = $$(RowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                expectedArrivalContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}\n`;
+                expectedArrivalContent += `${$$(RowsHeading).text()}\n`;
+                expectedArrivalContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
-                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n`;
+                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
             });
-            //===============ЭКСПЕРИМЕНТ
-/*
-            // Итерируем по строкам таблицы наличия товара
-            availabilityRows.each((index, row) => {
 
-                // Находим ячейки в текущей строке
-                const cells = $$(row).find('td');
-  
-                // Получаем текст из ячеек и добавляем его к строке availabilityContent
-                availabilityContent += `Партия: ${$$(cells[0]).text().trim()}\n`;
-                availabilityContent += `Остаток: ${$$(cells[1]).text().trim()}\n`;
-                availabilityContent += `Резерв: ${$$(cells[2]).text().trim()}\n`;
-                availabilityContent += `Свободно: ${$$(cells[3]).text().trim()}\n\n`;
-            });
-            
-
-            // Итерируем по строкам таблицы ожидаемого поступления
-            expectedArrivalRows.each((index, row) => {
-
-            // Находим ячейки в текущей строке
-            const cells = $$(row).find('td');
-
-            // Получаем текст из ячеек и добавляем его к строке expectedArrivalContent
-            expectedArrivalContent += `Дата поставки: ${$$(cells[0]).text().trim()}\n`;
-            expectedArrivalContent += `Всего в пути: ${$$(cells[1]).text().trim()}\n`;
-            expectedArrivalContent += `Из них в резерве: ${$$(cells[2]).text().trim()}\n`;
-            expectedArrivalContent += `Из них свободно: ${$$(cells[3]).text().trim()}\n\n`;
-            });
-*/
             await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
