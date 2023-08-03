@@ -112,7 +112,7 @@ const startFind = async (chatId) => {
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
-            });
+        }});
 
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
@@ -130,7 +130,7 @@ const startFind = async (chatId) => {
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
-            });
+        }});
 
             await bot.deleteMessage(chatId, botMsgIdx);
             // Проверяем наличие таблицы
