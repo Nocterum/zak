@@ -106,7 +106,7 @@ const startFind = async (chatId) => {
                 const names = $$(RowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                availabilityContent += 'Наличие на складе';
+                availabilityContent += 'Наличие на складе:\n';
                 availabilityContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
@@ -123,7 +123,7 @@ const startFind = async (chatId) => {
                 const cells = $$(RowsValue).find('td');
               
                 // Присваиваим переменным соответствующие наименования
-                expectedArrivalContent += `Ожидаемое поступление`;
+                expectedArrivalContent += `Ожидаемое поступление:\n`;
                 expectedArrivalContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
