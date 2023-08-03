@@ -99,14 +99,14 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицы наличия товара
             availabilityTable.each((index, row) => {
 
-                const RowsValue = $$(row).find('tbody tr').each(row);
+                const RowsValue = $$(row).find('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
                 const cells = $$(RowsValue).find('td');
                 const names = $$(RowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
-                availabilityContent += `${$$(names[0]).text()}: ${$$(cells[0]).text()}\n`;
+                availabilityContent += `${$$(names[index]).text()}: ${$$(cells[index]).text()}\n`;
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
@@ -115,7 +115,7 @@ const startFind = async (chatId) => {
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
                 
-                const RowsValue = $$(row).find('tbody tr').each();
+                const RowsValue = $$(row).find('tbody tr');
                 const RowsNames = $$(row).find('thead tr');
                 const names = $$(RowsNames).find('th[scope=col]');
                 const cells = $$(RowsValue).find('td');
