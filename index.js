@@ -110,10 +110,10 @@ const startFind = async (chatId) => {
                 const names = $$(AVRowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                availabilityContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}`;
-                availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}`;
-                availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}`;
-                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}`;
+                availabilityContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}\n`;
+                availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n`;
             });
 
             //Итерируем по строкам таблицу 
@@ -125,10 +125,10 @@ const startFind = async (chatId) => {
                 const names = $$(AVRowsNames).find('th[scope=col]');
               
                 // Присваиваим переменным соответствующие наименования
-                expectedArrivalContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}`;
-                expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}`;
-                expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}`;
-                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}`;
+                expectedArrivalContent += `${$$(names[0]).text()} :${$$(cells[0]).text()}\n`;
+                expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n`;
             });
             //===============ЭКСПЕРИМЕНТ
 /*
