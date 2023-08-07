@@ -177,7 +177,8 @@ const startFind = async (chatId) => {
 }
 
 //функция отправки емейла с запросом на резервирование
-const sendReserveEmail = async (chatId) => {
+const sendReserveEmail = async (chatId, user) => {
+
     const login = 'Manders\\n_kharitonov';
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
@@ -192,20 +193,20 @@ const sendReserveEmail = async (chatId) => {
           password
         });
         
-        await response.data;
+        const responseData = await response.data;
         console.log('аутентификация прошла успешно');
 
 
-        if (response.success) {
+        if (response.status === 200) {
             await axios.post('https://post.manders.ru/send', {
               recipient,
               copy,
               subject,
               text
-            })
+            });
         }
         
-        return bot.sendMessage(chatId, 'емейл успешно отправлен', mainMenuOptions);
+        return bot.sendMessage(chatId, 'Емейл успешно отправлен', mainMenuOptions);
 
       } catch (error) {
         console.error(error);
