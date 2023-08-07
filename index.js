@@ -13,7 +13,7 @@ const bot = new TelegramApi(token, {
 });
 
 //импорты
-const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, mainMenuOptions, enterReserveNumberOptions, sendReserveOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 //const BrandModel = require('./models');
@@ -179,6 +179,45 @@ const startFind = async (chatId) => {
    
 }
 
+//функция отправки емейла с запросом на резервирование
+const sendReserveEmail = async (chatId) => {
+    const login = 'Manders\\n_kharitonov';
+    const password = '1929qweR';
+    const recipient = 'nick.of.darkwood@gmail.com';
+    const copy = 'from90s@gmail.com';
+    const subject = `Резерв ${user.vendorCode} ${user.reserveNumber}`;
+    const text = `\nЗдравствуйте!\n Просьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`;
+    console.log('Информация сформированна');
+
+    try {
+        const response = await axios.post('https://post.manders.ru', {
+          login,
+          password
+        });
+        
+        await response.data;
+        console.log('аутентификация прошла успешно');
+
+
+        if (response.success) {
+            await axios.post('https://post.manders.ru/send', {
+              recipient,
+              copy,
+              subject,
+              text
+            })
+        }
+        
+        return bot.sendMessage(chatId, 'емейл успешно отправлен', mainMenuOptions);
+
+      } catch (error) {
+        console.error(error);
+        throw new Error('Ошибка при отправке запроса на сервер');
+      }
+
+
+}
+
 //=============================================================================================================
 
 const start = async () => {
@@ -266,7 +305,7 @@ bot.on('message', async msg => {
             lc = null;
             await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
-        return; delMsg(chatId);
+        return;
         }
 
     //начало работы
@@ -277,42 +316,43 @@ bot.on('message', async msg => {
         } else {
             await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions)
         } 
-        return; delMsg(chatId);
+        return; 
     }
 
     //изменить e-mail
     if (text === '/editEmail') {
-        await editEmail(chatId);
-        return; delMsg(chatId);
+        return editEmail(chatId);
     }
 
     //Записываем e-mail в ячейку БД
     if (lc === '/editEmail') {
         await user.update({email: text.toLowerCase()});
-        await bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
     }            
 
     //изменить Nickname
     if (text === '/editNickname') {
-        await editNickname(chatId);
-        return; delMsg(chatId);
+        return editNickname(chatId);
     }
     
     //Записываем Nickname в ячейку БД
     if (lc === '/editNickname') {
         await user.update({nickname: text});
-        await bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
     }
 
     //Записываем название бренда в ячейку БД
     if (lc === '/enterBrand') {
         await user.update({brand: text.toLowerCase()});
-        await bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
     }
     
+    //Записываем название бренда в ячейку БД
+    if (lc === '/enterReserveNumber') {
+        await user.update({reserveNumber: text});
+        return bot.sendMessage(chatId, `Вы желаете зарезервировать<b>${text}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+    }
+
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
@@ -323,30 +363,25 @@ bot.on('message', async msg => {
     
     //вывод информации
     if (text === '/infowork') {
-        await bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
     }
 
     if (text === 'recreatetable' && chatId === '356339062') {
         await UserModel.sync({ force: true })
-        await bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
     }
 
     if (text.toLowerCase() === 'привет' + '') {
-        await bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
-        return; delMsg(chatId);
+        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
     }
 
     if (text === '/infogame') {
         lc = null;
-        await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
     }   
 
     if (text !== '/game' && text !== '/start') {
-        await bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
-        return; delMsg(chatId);
+        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
     }
 
 }) 
@@ -378,35 +413,49 @@ bot.on('callback_query', async msg => {
     //главное меню
     if (data === '/mainmenu') {
         lc = null;
-        await bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`) 
     }
-        
-    if(data === '/enterVC') {
-        lc = data;
-        await bot.sendMessage(chatId, `Введите артикул:`);
-        return; delMsg(chatId);
-    }
-
+    
     //начало поиска остатков
     if(data === '/enterBrand') {
         lc = data;
-        await bot.sendMessage(chatId, `Введите название бренда:`);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, `Введите название бренда:`);
     }
- 
+
+    //ввод артикула для поиска остатков
+    if(data === '/enterVC') {
+        lc = data;
+        return bot.sendMessage(chatId, `Введите артикул:`);
+    }
+    
+    //начало резервирования
+    if (data === '/enterReserveNumber') {
+        lc = data;
+        return bot.sendMessage(chatId, `Введите колличество которое желаете зарезервировать:`)
+    }
+
+    //подтверждение резервирования
+    if (data === '/preSendEmail') {
+        lc = data;
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\n Просьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
+    }
+
+    //отправка сообщения с запросом резервирования
+       if (data === '/SendEmail') {
+        lc = data;
+        return sendReserveEmail(chatId);
+    }
+
     //превью фото
     if(data === '/work2') {
         lc = null;
-        await bot.sendMessage(chatId, sorry, mainMenuOptions);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, sorry, mainMenuOptions);
     }
 
     //добавить в заказ
     if(data === '/work3') {
         lc = null;
-        await bot.sendMessage(chatId, sorry, mainMenuOptions);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, sorry, mainMenuOptions);
     }
 
 
@@ -452,8 +501,7 @@ bot.on('callback_query', async msg => {
     }
 
     } catch (err) {      
-        await bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
-        return; delMsg(chatId);
+        return bot.sendMessage(chatId, 'Ошибка в исполнении кода прослушивателя колбэков', err);
     }
 
 })

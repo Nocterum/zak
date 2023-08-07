@@ -60,6 +60,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'Зарезервировать', callback_data: '/enterNumber'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
@@ -73,5 +74,25 @@ module.exports = {
             ]
         })
     },
+
+    enterReserveNumberOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Сохранить и продолжить', callback_data: '/preSendEmail'}],
+            ]
+        })
+    }, 
+
+    sendReserveOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Отправить е-мейл', callback_data: '/SendEmail'}],
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+            ]
+        })
+    }
 
 }
