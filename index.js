@@ -177,9 +177,9 @@ const startFind = async (chatId) => {
 }
 
 //функция отправки емейла с запросом на резервирование
-const sendReserveEmail = async (chatId, user) => {
+const sendReserveEmail = async (chatId) => {
 
-    let user = await UserModel.findOne({
+    const user = await UserModel.findOne({
         where: {
             chatId: chatId
         }
