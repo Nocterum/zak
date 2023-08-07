@@ -350,7 +350,7 @@ bot.on('message', async msg => {
     //Записываем название бренда в ячейку БД
     if (lc === '/enterReserveNumber') {
         await user.update({reserveNumber: text});
-        return bot.sendMessage(chatId, `Вы желаете зарезервировать<b>${text}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+        return bot.sendMessage(chatId, `Вы желаете зарезервировать <b>${text}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
     }
 
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
@@ -437,7 +437,7 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\n Просьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования

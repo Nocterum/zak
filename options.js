@@ -88,7 +88,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Отправить е-мейл', callback_data: '/SendEmail'}],
+                [{text: 'Отправить е-мейл', callback_data: '/sendReserveEmail'}],
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
