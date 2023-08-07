@@ -78,9 +78,6 @@ const startFind = async (chatId) => {
             const $$ = cheerio.load(productResponse.data);
             console.log('успешно зашёл на страницу товара');
             
-            //находим артикул искомого объекта
-            //const objName = $$('#characteristics .breadcrumb-item active').text(); //product__info-char-list
-
             // Создаем пустую строку для хранения текстового содержимого таблицы
             let availabilityContent = ``;
             // Создаем пустую строку для хранения текстового содержимого таблицы ожидаемого поступления
@@ -437,11 +434,11 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nДанное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
-       if (data === '/SendEmail') {
+       if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
     }
