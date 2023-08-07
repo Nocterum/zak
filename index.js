@@ -179,6 +179,12 @@ const startFind = async (chatId) => {
 //функция отправки емейла с запросом на резервирование
 const sendReserveEmail = async (chatId, user) => {
 
+    let user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+
     const login = 'Manders\\n_kharitonov';
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
