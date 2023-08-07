@@ -190,10 +190,11 @@ const sendReserveEmail = async (chatId) => {
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
     const subject = `Резерв ${user.vendorCode} ${user.reserveNumber}`;
-    const text = `\nЗдравствуйте!\n Просьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\n Данное сообщение сформированно автоматически и на него не нужно отвечать`;
+    const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nДанное сообщение сформированно автоматически и на него не нужно отвечать.`;
     console.log('Информация сформированна');
 
     try {
+
         const response = await axios.post('https://post.manders.ru', {
           login,
           password
@@ -441,7 +442,7 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nДанное сообщение сформированно автоматически и на него не нужно отвечать`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\n\n"Здравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nДанное сообщение сформированно автоматически и на него не нужно отвечать."`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
