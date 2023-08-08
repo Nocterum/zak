@@ -200,7 +200,7 @@ const sendReserveEmail = async (chatId) => {
         console.log('сформированна ссылка для авторизации');
 
         //Отправляем запрос на почтовый сервис
-        const logIn = await axios.post(postUrl, {
+        await axios.post(postUrl, {
             login,
             password
         });
@@ -226,13 +226,10 @@ const sendReserveEmail = async (chatId) => {
             throw new Error('Ошибка при отправке емейла');
         }
  
-
-    
-
-      } catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Ошибка при отправке запроса на сервер');
-      }
+    }
 
 
 }
