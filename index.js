@@ -195,7 +195,7 @@ const sendReserveEmail = async (chatId) => {
 
     try {
 
-        const response = await axios.post('https://post.manders.ru', {
+        const response = await axios.post('https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f', {
           login,
           password
         });
@@ -205,7 +205,7 @@ const sendReserveEmail = async (chatId) => {
 
 
         if (response.status === 200) {
-            await axios.post('https://post.manders.ru/send', {
+            await axios.post('https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f', {
               recipient,
               copy,
               subject,
