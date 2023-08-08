@@ -198,25 +198,11 @@ const sendReserveEmail = async (chatId) => {
         const postUrl = `https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f`;
         console.log('сформированна ссылка для авторизации');
 
-        //Отправляем запрос на почтовый сервис
-        const logIn = await axios.post(postUrl, {
-            login,
-            password,
-            timeout: 5000
-        })
-        .then(function (response) {
-        console.log(response.data)
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-        console.log('аутентификация прошла успешно');
 
         try {
 
             let mail = require('mail').Mail({
-                host: 'https://post.manders.ru/',
+                host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
                 username: `${login}`,
                 password: `${password}`,
             });
@@ -229,14 +215,14 @@ const sendReserveEmail = async (chatId) => {
               .body(`${text}`)
               .send(function(err) {
                 if (err) throw err;
-                console.log('Емейл отправлен!');
+                console.log('Е-мейл отправлен!');
               });
 
         
     
         } catch (e) {
             console.error(e);
-            throw new Error('Ошибка при отправке емейла');
+            throw new Error('Ошибка при отправке е-мейла');
         }
  
     } catch (error) {
