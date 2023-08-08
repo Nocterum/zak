@@ -192,40 +192,27 @@ const sendReserveEmail = async (chatId) => {
     const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом для purchasing_internal@manders.ru`;
     console.log('Информация сформированна');
 
+
     try {
-
-        //формируем URL
-        const postUrl = `https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f`;
-        console.log('сформированна ссылка для авторизации');
-
-
-        try {
-
-            const mail = require('mail').Mail({
-                host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
-                username: `${login}`,
-                password: `${password}`,
-            });
-            
-            mail.message({
-                from: 'n_kharitonov@manders.ru',
-                to: [`${recipient}`, `${copy}`],
-                subject: `${subject}`
-              })
-              .body(`${text}`)
-              .send(function(err) {
-                if (err) throw err;
-                console.log('Е-мейл отправлен!');
-              });
-
-        } catch (e) {
-            console.error(e);
-            throw new Error('Ошибка при отправке е-мейла');
-        }
- 
-    } catch (error) {
-        console.error(error);
-        throw new Error('Ошибка при отправке запроса на сервер');
+        const mail = require('mail').Mail({
+          host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
+          username: login,
+          password: password,
+        });
+      
+        mail.message({
+          from: 'n_kharitonov@manders.ru',
+          to: [recipient, copy],
+          subject: subject
+        })
+        .body(text)
+        .send(function(err) {
+          if (err) throw err;
+          console.log('Е-мейл отправлен!');
+        });
+      } catch (e) {
+        console.error(e);
+        throw new Error('Ошибка при отправке е-мейла');
     }
 
 
