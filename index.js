@@ -205,7 +205,7 @@ const sendReserveEmail = async (chatId) => {
 
 
 
-        await axios.post('https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f', {
+        await axios.post('https://post.manders.ru/owa/#path=/mail', {
           recipient,
           copy,
           subject,
