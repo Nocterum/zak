@@ -204,14 +204,14 @@ const sendReserveEmail = async (chatId) => {
         console.log('аутентификация прошла успешно');
 
 
-        if (response.status === 200) {
-            await axios.post('https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f', {
-              recipient,
-              copy,
-              subject,
-              text
-            });
-        }
+
+        await axios.post('https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f', {
+          recipient,
+          copy,
+          subject,
+          text
+        });
+    
         
         return bot.sendMessage(chatId, 'Емейл успешно отправлен', mainMenuOptions);
 
