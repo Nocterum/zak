@@ -1,6 +1,7 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const mail = require('mail');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -194,22 +195,24 @@ const sendReserveEmail = async (chatId) => {
 
 
     try {
-        const mail = require('mail').Mail({
+        const mail = new Mail({
           host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
           username: login,
           password: password,
         });
       
-        mail.message({
+        const message = {
           from: 'n_kharitonov@manders.ru',
           to: [recipient, copy],
-          subject: subject
-        })
-        .body(text)
-        .send(function(err) {
+          subject: subject,
+          body: text
+        };
+
+        mail.send(message, function(err) {
           if (err) throw err;
           console.log('Е-мейл отправлен!');
         });
+
       } catch (e) {
         console.error(e);
         throw new Error('Ошибка при отправке е-мейла');
