@@ -205,13 +205,16 @@ const sendReserveEmail = async (chatId) => {
           password: password,
         });
  */     
-        mail.message({
+        const message = {
           from: 'n_kharitonov@manders.ru',
           to: [recipient, copy],
-          subject: subject
-        })
-        .body(text)
-        .send(function(err) {});
+          subject: subject,
+          body: text
+        }
+        
+        mail.send(message, function(err) {
+            if (err) throw err;
+        });
         bot.sendMessage(chatId, `Е-мейл успешно отправлен!\n тема письма: ${subject}`)
 
       } catch (e) {
