@@ -1,11 +1,7 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const mail = require('mail').Mail({
-    host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
-    username: 'Manders\\n_kharitonov',
-    password: '1929qweR',
-  });
+const nodemailer = require('nodemailer');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -60,7 +56,7 @@ const startFind = async (chatId) => {
         where: {
             chatId: chatId
         }
-    }); 
+    });
 
     try {
 
@@ -193,29 +189,32 @@ const sendReserveEmail = async (chatId) => {
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
-    const subject = `Резерв ${user.vendorCode} ${user.reserveNumber} ${user.email}`;
+    const subject = `Резерв ${user.vendorCode} ${user.reserveNumber} по запросу "${user.email}"`;
     const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nбренд ${user.brand}, артикул ${user.vendorCode} в колличестве ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом для purchasing_internal@manders.ru`;
     console.log('Информация сформированна');
-
+    
+    let emailAccount = await nodemailer.createTestAccount();
+    
+    let transporter = nodemailer.createTransport({
+        host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
+        port: 587,
+        secure: false,
+        auth: {
+            user: login,
+            pass: password,
+        },
+    });
 
     try {
-/*        const mail = new Mail({
-          host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
-          username: login,
-          password: password,
+
+        let result = await transporter.sendMail({
+            from: 'n_kharitonov@manders.ru',
+            to: `${recipient}, ${copy}`,
+            subject: subject,
+            text: text,
         });
- */     
-        const message = {
-          from: 'n_kharitonov@manders.ru',
-          to: [recipient, copy],
-          subject: subject,
-          body: text
-        }
         
-        mail.send(message, function(err) {
-            if (err) throw err;
-        });
-        bot.sendMessage(chatId, `Е-мейл успешно отправлен!\n тема письма: ${subject}`)
+        console.log(result);
 
       } catch (e) {
         console.error(e);
