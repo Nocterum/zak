@@ -201,7 +201,7 @@ const sendReserveEmail = async (chatId) => {
 
         try {
 
-            let mail = require('mail').Mail({
+            const mail = require('mail').Mail({
                 host: 'https://post.manders.ru/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fpost.manders.ru%2fowa%2f',
                 username: `${login}`,
                 password: `${password}`,
@@ -218,8 +218,6 @@ const sendReserveEmail = async (chatId) => {
                 console.log('Е-мейл отправлен!');
               });
 
-        
-    
         } catch (e) {
             console.error(e);
             throw new Error('Ошибка при отправке е-мейла');
