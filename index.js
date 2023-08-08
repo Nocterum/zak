@@ -68,9 +68,8 @@ const startFind = async (chatId) => {
         const $ = cheerio.load(response.data);
         console.log('запрос на сайт отправлен');
 
-        // Находим ссылку на первый товар в результате поиска
+        //Создаём переменную с ссылкой на первый товар из поиска 
         const firstProductLink = $('h3.item__card__title.card-product-general__title.mb-2 a').attr('href');
-        console.log('искомая ссылка открыта');
 
         if (firstProductLink) {
             // Переходим на страницу товара
@@ -200,26 +199,40 @@ const sendReserveEmail = async (chatId) => {
         console.log('сформированна ссылка для авторизации');
 
         //Отправляем запрос на почтовый сервис
-        await axios.post(postUrl, {
+        const logIn = await axios.post(postUrl, {
             login,
-            password
+            password,
+            timeout: 5000
+        })
+        .then(function (response) {
+        console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log(error);
         });
+
         console.log('аутентификация прошла успешно');
 
         try {
-        //===============================РАЗРАБОТКА=====================================================
-        await axios.post('https://post.manders.ru/owa/#path=/mail', {
-            recipient,
-            copy,
-            subject,
-            text
-        });
-  
-        // Отправка сообщения с помощью сочетания клавиш ctrl+enter
-        await axios.post('https://post.manders.ru/owa/sendmessage.aspx', {
-        send: 'true',
-        });
-        return bot.sendMessage(chatId, 'Емейл успешно отправлен', mainMenuOptions)
+
+            let mail = require('mail').Mail({
+                host: 'https://post.manders.ru/',
+                username: `${login}`,
+                password: `${password}`,
+            });
+            
+            mail.message({
+                from: 'n_kharitonov@manders.ru',
+                to: [`${recipient}`, `${copy}`],
+                subject: `${subject}`
+              })
+              .body(`${text}`)
+              .send(function(err) {
+                if (err) throw err;
+                console.log('Емейл отправлен!');
+              });
+
+        
     
         } catch (e) {
             console.error(e);
