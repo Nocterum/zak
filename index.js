@@ -216,7 +216,7 @@ const sendReserveEmail = async (chatId) => {
         });
         
         console.log(result);
-        bot.sendMessage(chatId, `Сообщение с темой: \n"<b><pre>${subject}</pre></b>" успешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
+        bot.sendMessage(chatId, `Сообщение с темой: \n<pre>${subject}</pre> \nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
 
       } catch (e) {
         console.error(e);
