@@ -438,7 +438,7 @@ bot.on('callback_query', async msg => {
     //начало резервирования
     if (data === '/enterReserveNumber') {
         lc = data;
-        return bot.sendMessage(chatId, `Введите колличество которое желаете зарезервировать:`)
+        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n(например: 268А 6`)
     }
 
     //подтверждение резервирования
