@@ -196,9 +196,7 @@ const sendReserveEmail = async (chatId) => {
     let emailAccount = await nodemailer.createTestAccount();
     
     let transporter = nodemailer.createTransport({
-        host: 'https://post.manders.ru',
-        port: 587,
-        secure: false,
+        host: 'post.manders.ru',
         auth: {
             user: login,
             pass: password,
