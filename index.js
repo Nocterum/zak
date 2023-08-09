@@ -24,6 +24,8 @@ chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
 botMsgIdx = {};    //айди последнего сообщения от бота
+let subject = {};   //тема письма
+let text = {};  //текст письма
 
 
 //меню команд
@@ -189,20 +191,16 @@ const sendReserveEmail = async (chatId) => {
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
-    let subject = {};
-    let text = {};
-    //const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
-    //const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     console.log('Информация сформированна');
 
-    if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
+/*    if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
         subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
         text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     } else {
         subject = `Резерв ${user.vendorCode},  ${user.reserveNumber.split(" ")[0]} шт, по запросу ${(user.email).split("@")[0]}`;
         text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber.split(" ")[0]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     }
-
+*/
     let emailAccount = await nodemailer.createTestAccount();
     
     let transporter = nodemailer.createTransport({
@@ -454,7 +452,14 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\n\n"Здравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru."`, sendReserveOptions)
+        if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
+            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
+            text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        } else {
+            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber.split(" ")[0]} шт, по запросу ${(user.email).split("@")[0]}`;
+            text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber.split(" ")[0]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        }
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:"${text}"`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
