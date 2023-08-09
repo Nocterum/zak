@@ -358,10 +358,10 @@ bot.on('message', async msg => {
     if (lc === '/enterReserveNumber') {
         await user.update({reserveNumber: text});
 
-        if (((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1]))&&((user.reserveNumber.split(" ")[1]) !== null)) {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+        if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         } else {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         }
     }
 
@@ -449,7 +449,7 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        if (((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1]))&&(((user.reserveNumber.split(" ")[1]) !== null))) {
+        if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
             subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
             text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         } else {
