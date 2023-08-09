@@ -47,6 +47,7 @@ module.exports = {
     },
 
     beginWork2Options: {
+        parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
@@ -66,6 +67,7 @@ module.exports = {
     },
 
     startFindOptions: {
+        parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],

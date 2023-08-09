@@ -190,7 +190,7 @@ const sendReserveEmail = async (chatId) => {
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
     const subject = `Резерв ${user.vendorCode} ${user.reserveNumber} по запросу "${(user.email).split("@")[0]}"`;
-    const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: <b>${user.vendorCode}</b>, бренд: <b>${user.brand}</b>, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+    const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партии ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     console.log('Информация сформированна');
 
     let emailAccount = await nodemailer.createTestAccount();
@@ -216,7 +216,7 @@ const sendReserveEmail = async (chatId) => {
         });
         
         console.log(result);
-        bot.sendMessage(chatId, `Сообщение с темой: "<b>${subject}</b>" успешно отправленно поставщику и в отдел закупок.\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомнутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
+        bot.sendMessage(chatId, `Сообщение с темой: "<b>${subject}</b>" успешно отправлено поставщику и в отдел закупок.\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
 
       } catch (e) {
         console.error(e);
@@ -444,7 +444,7 @@ bot.on('callback_query', async msg => {
     //подтверждение резервирования
     if (data === '/preSendEmail') {
         lc = data;
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: <b>${user.vendorCode}</b>, бренд: <b>${user.brand}</b>, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru."`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:\n\n"Здравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партии ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru."`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
