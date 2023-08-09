@@ -46,6 +46,15 @@ module.exports = {
         })
     },
 
+    beginWork2Options: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+            ]
+        })
+    },
+
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
