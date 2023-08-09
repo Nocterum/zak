@@ -190,17 +190,9 @@ const sendReserveEmail = async (chatId) => {
     const login = 'Manders\\n_kharitonov';
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
-    const copy = 'from90s@gmail.com';
+    const copy = 'kochnev_m@manders.ru';
     console.log('Информация сформированна');
 
-/*    if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
-        subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
-        text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
-    } else {
-        subject = `Резерв ${user.vendorCode},  ${user.reserveNumber.split(" ")[0]} шт, по запросу ${(user.email).split("@")[0]}`;
-        text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber.split(" ")[0]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
-    }
-*/
     let emailAccount = await nodemailer.createTestAccount();
     
     let transporter = nodemailer.createTransport({
