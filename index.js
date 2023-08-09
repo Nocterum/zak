@@ -106,9 +106,9 @@ const startFind = async (chatId) => {
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
                 availabilityContent += `${$$(names[0]).text()}: <pre>${$$(cells[0]).text()}</pre>\n`;
-                availabilityContent += `${$$(names[1]).text()}: <pre>${$$(cells[1]).text()}</pre>\n`;
-                availabilityContent += `${$$(names[2]).text()}: <pre>${$$(cells[2]).text()}</pre>\n`;
-                availabilityContent += `${$$(names[3]).text()}: <pre>${$$(cells[3]).text()}</pre>\n\n`;
+                availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
             });
         });
 
@@ -124,9 +124,9 @@ const startFind = async (chatId) => {
                 // Присваиваим переменным соответствующие наименования
                 expectedArrivalContent += `Ожидаемое поступление:\n`;
                 expectedArrivalContent += `${$$(names[0]).text()}: <pre>${$$(cells[0]).text()}</pre>\n`;
-                expectedArrivalContent += `${$$(names[1]).text()}: <pre>${$$(cells[1]).text()}</pre>\n`;
-                expectedArrivalContent += `${$$(names[2]).text()}: <pre>${$$(cells[2]).text()}</pre>\n`;
-                expectedArrivalContent += `${$$(names[3]).text()}: <pre>${$$(cells[3]).text()}</pre>\n\n`;
+                expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
             });
         });
 
@@ -189,9 +189,19 @@ const sendReserveEmail = async (chatId) => {
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
-    const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу "${(user.email).split("@")[0]}`;
-    const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+    const subject = '';
+    const text = '';
+    //const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
+    //const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     console.log('Информация сформированна');
+
+    if (user.reserveNumber.split(" ")[0] !== user.reserveNumber.split(" ")[1]) {
+        subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
+        text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+    } else {
+        subject = `Резерв ${user.vendorCode},  ${user.reserveNumber.split(" ")[0]} шт, по запросу ${(user.email).split("@")[0]}`;
+        text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber.split(" ")[0]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+    }
 
     let emailAccount = await nodemailer.createTestAccount();
     
@@ -216,7 +226,7 @@ const sendReserveEmail = async (chatId) => {
         });
         
         console.log(result);
-        bot.sendMessage(chatId, `Сообщение с темой: \n<pre>${subject}</pre> \nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
+        bot.sendMessage(chatId, `Сообщение с темой: \n<pre>"${subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
 
       } catch (e) {
         console.error(e);
