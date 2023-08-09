@@ -195,7 +195,7 @@ const sendReserveEmail = async (chatId) => {
     //const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     console.log('Информация сформированна');
 
-    if (user.reserveNumber.split(" ")[0] !== user.reserveNumber.split(" ")[1]) {
+    if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
         subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
         text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     } else {
