@@ -24,6 +24,7 @@ chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
 botMsgIdx = {};    //айди последнего сообщения от бота
+sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к purchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let text = {};  //текст письма
 
@@ -190,7 +191,7 @@ const sendReserveEmail = async (chatId) => {
     const login = 'Manders\\n_kharitonov';
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
-    const copy = 'kochnev_m@manders.ru';
+    const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
     console.log('Информация сформированна');
 
     let emailAccount = await nodemailer.createTestAccount();
@@ -403,7 +404,6 @@ bot.on('message', async msg => {
 bot.on('callback_query', async msg => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
-    const sorry = 'Извините, эта функция ещё в разработке 😅';
 
     console.log(msg)
 
@@ -443,7 +443,7 @@ bot.on('callback_query', async msg => {
     //начало резервирования
     if (data === '/enterReserveNumber') {
         lc = data;
-        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n<i>(например: 268А 3)\nесли партия отсутствует, то введите только колличество</i>`, { parse_mode: "HTML" })
+        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n<i>например: 268А 3\nесли партия отсутствует, то введите только колличество</i>`, { parse_mode: "HTML" })
     }
 
     //подтверждение резервирования
