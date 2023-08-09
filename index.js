@@ -189,8 +189,8 @@ const sendReserveEmail = async (chatId) => {
     const password = '1929qweR';
     const recipient = 'nick.of.darkwood@gmail.com';
     const copy = 'from90s@gmail.com';
-    const subject = {};
-    const text = {};
+    let subject = {};
+    let text = {};
     //const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, по запросу ${(user.email).split("@")[0]}`;
     //const text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
     console.log('Информация сформированна');
