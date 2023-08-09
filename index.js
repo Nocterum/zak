@@ -366,9 +366,9 @@ bot.on('message', async msg => {
     if (lc === '/enterReserveNumber') {
         await user.update({reserveNumber: text});
         if ((user.reserveNumber.split(" ")[0]) !== (user.reserveNumber.split(" ")[1])) {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${text.split(" ")[0]}</b> в колличестве <b>${text.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
         } else {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${uset.vendorCode}</b> в колличестве <b>${text.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${uset.vendorCode}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
         }
     }
 
