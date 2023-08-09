@@ -201,6 +201,9 @@ const sendReserveEmail = async (chatId) => {
             user: login,
             pass: password,
         },
+        tls: {
+            rejectUnauthorized: false
+        }
     });
 
     try {
