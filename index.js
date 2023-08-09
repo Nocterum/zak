@@ -357,7 +357,7 @@ bot.on('message', async msg => {
     //Записываем название бренда в ячейку БД
     if (lc === '/enterReserveNumber') {
         await user.update({reserveNumber: text});
-        return bot.sendMessage(chatId, `Вы желаете зарезервировать <b>${text}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
+        return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${text.split(" ")[0]}</b> в колличестве <b>${text.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите число повторно)</pre>`, enterReserveNumberOptions);
     }
 
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
@@ -438,7 +438,7 @@ bot.on('callback_query', async msg => {
     //начало резервирования
     if (data === '/enterReserveNumber') {
         lc = data;
-        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n(например: 268А 6`)
+        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n<i>(например: 268А 3)</i>`, { parse_mode: "HTML" })
     }
 
     //подтверждение резервирования
