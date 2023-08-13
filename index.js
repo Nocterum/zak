@@ -249,7 +249,7 @@ async function authorize() {
       console.error('Ошибка авторизации:', error.message);
       throw error;
     }
-  };
+ 
   
     try {
 
@@ -284,15 +284,17 @@ async function authorize() {
       bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
     }
 
-    // Закрытие соединения с RDP сервером
-    await client.disconnect();
-   
-  } catch (err) {
-    console.log(err);
-    bot.sendMessage(chatId, 'Ошибка поиска информации в таблице');
-  }
-  
+    
+    } catch (err) {
+        console.log(err);
+        bot.sendMessage(chatId, 'Ошибка поиска информации в таблице');
 
+    }
+
+    // Закрытие соединения с RDP сервером
+    return client.disconnect();
+
+};
 
 
 //=============================================================================================================
