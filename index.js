@@ -342,7 +342,7 @@ bot.onText(/\/infogame/, async msg => {
         return bot.deleteMessage(chatId, (msg.message_id -= 1));
     }),
 
-bot.onText(/\/findExcelCatalog/, async msg => {
+bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null;
 
