@@ -244,14 +244,13 @@ async function authorize() {
       
     //авторизация на сервере
     try {
-    const client = await rdp.connect({
+    await rdp.connect({
         address: '185.159.81.174:55505',
         username: 'MANDERS\n_kharitonov',
         password: '1929qweR'
-      }).then(function() {
-        console.log('Соединение с удалённым рабочим столом не состоялось');
-      });;
-
+    });
+    console.log('Соединение с удалённым рабочим столом успешно состоялось');
+    
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
       throw error;
