@@ -1,4 +1,4 @@
-const rdp = require('node-rdp');
+const rdp = require('rdpjs');
 
 rdp({
     address: '185.159.81.174:55505',

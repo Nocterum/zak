@@ -2,7 +2,7 @@ const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
-const rdp = require('node-rdp');
+const RDP = require('rdpjs');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -29,6 +29,8 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к purchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let text = {};  //текст письма
+// Создание экземпляра класса RDP
+const client = new RDP();
 
 
 //меню команд
@@ -230,17 +232,15 @@ const sendReserveEmail = async (chatId) => {
   
   // Функция для получения информации из эксель файла
   async function getExcelData( chatId ) {
-    // Создание экземпляра класса RDP
-    const client = rdp.createClient();
 
     //авторизация на сервере
     try {
-    await client.connect({
-        address: '185.159.81.174:55505',
-        username: 'MANDERS\n_kharitonov',
-        password: '1929qweR'
-    });
-    console.log('Соединение с удалённым рабочим столом успешно состоялось');
+        await client.connect({
+            address: '185.159.81.174:55505',
+            username: 'MANDERS\n_kharitonov',
+            password: '1929qweR'
+        });
+         console.log('Соединение с удалённым рабочим столом успешно состоялось');
     
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
