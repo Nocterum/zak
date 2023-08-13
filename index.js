@@ -17,6 +17,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, beginWork2Options, mainMenuOptions, enterReserveNumberOptions, sendReserveOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
+const rdp = require('./rdp');
 //const BrandModel = require('./models');
 
 //глобальные переменные
@@ -228,21 +229,9 @@ const sendReserveEmail = async (chatId) => {
 
 // Функция для авторизации на сервере
 async function authorize() {
-    const loginRemote = 'n_kharitonov';
-    const passwordRemote = '1929qweR';
-  
     try {
-      // Отправляем POST запрос для авторизации
-      const response = await axios.post('http://185.159.81.174:55505/login', {
-        loginRemote,
-        passwordRemote
-      });
-  
-      // Получаем токен авторизации из ответа сервера
-      const token = response.data.token;
-  
-      // Возвращаем токен для дальнейшего использования
-      return token;
+    const client = await rdp.connect();
+
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
       throw error;
@@ -250,31 +239,60 @@ async function authorize() {
   }
   
   // Функция для получения информации из эксель файла
-  async function getExcelData(token, vendorCode) {
-    const excelFilePath = '\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги распределение в салоны.xlsx';
-  
+  async function getExcelData( chatId ) {
+      
+    //авторизация на сервере
     try {
-      // Устанавливаем заголовок авторизации в запросе
-      const headers = {
-        Authorization: `Bearer ${token}`
-      };
-  
-      // Отправляем GET запрос для получения информации из эксель файла
-      const response = await axios.get(`http://185.159.81.174:55505/excel?file=${encodeURIComponent(excelFilePath)}`, {
-        headers
-      });
-  
-      // Ищем совпадение по колонке "B" (Артикул)
-      const excelData = response.data;
-      const matchingRows = excelData.filter(row => row['Артикул'] === user.vendorCode);
-  
-      // Возвращаем найденные строки с совпадениями
-      return matchingRows;
+    const client = await rdp.connect();
+
     } catch (error) {
-      console.error('Ошибка получения данных из эксель файла:', error.message);
+      console.error('Ошибка авторизации:', error.message);
       throw error;
     }
+  };
+  
+    try {
+
+    // Отправляем GET запрос для получения информации из эксель файла
+    const response = await axios.get('file://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги распределение в салоны.xlsx'
+    );
+    
+    // Поиск строки с нужным артикулом
+    const sheetData = response.data;
+    let foundRow = null;
+    for (let i = 0; i < sheetData.length; i++) {
+      const row = sheetData[i];
+      if (row['Артикул'] === user.vendorCode) {
+        foundRow = row;
+        break;
+      }
+    }
+
+    // Проверка значений в колонках I, J, K, L, N, O
+    if (foundRow) {
+      const columnsToCheck = ['I', 'J', 'K', 'L', 'N', 'O'];
+      const allNull = columnsToCheck.every((column) => foundRow[column] === null);
+      if (allNull) {
+        console.log('Нет каталогов');
+        bot.sendMessage(chatId, 'Каталога с данным артикулом нет в наличии, обратитесь к Юлии Скрибник для уточнения информации о возможности поставки данного артикула.');
+      } else {
+        console.log('Есть каталоги');
+        bot.sendMessage(chatId, 'Отлично! Каталог с данным артикулом есть в наличии!');
+      }
+    } else {
+      console.log('Артикул не найден');
+      bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
+    }
+
+    // Закрытие соединения с RDP сервером
+    await client.disconnect();
+   
+  } catch (err) {
+    console.log(err);
+    bot.sendMessage(chatId, 'Ошибка поиска информации в таблице');
   }
+  
+
 
 
 //=============================================================================================================
@@ -346,24 +364,8 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null;
 
-    try {
-      // Авторизуемся на сервере
-      const token = await authorize();
-      console.log('Авторизация на удалённом сервере прошла успешно')
-  
-      // Задаем артикул для поиска
-      const vendorCode = 'ABC123';
-  
-      // Получаем информацию из эксель файла
-      const matchingRows = await getExcelData(token, user.vendorCode);
-      console.log('Совпадения в таблице найдены')
-  
-      // Выводим найденные строки
-      console.log('Найденные строки:', matchingRows);
-    } catch (error) {
-      console.error('Произошла ошибка:', error.message);
-    }
-  
+    getExcelData(chatId);
+
     }),
 );
 
