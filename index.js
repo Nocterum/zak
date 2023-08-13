@@ -227,24 +227,15 @@ const sendReserveEmail = async (chatId) => {
     }
 
 }
-
-// Функция для авторизации на сервере
-async function authorize() {
-    try {
-    const client = await rdp.connect();
-
-    } catch (error) {
-      console.error('Ошибка авторизации:', error.message);
-      throw error;
-    }
-  }
   
   // Функция для получения информации из эксель файла
   async function getExcelData( chatId ) {
-      
+    // Создание экземпляра класса RDP
+    const client = new rdp.RDP();
+
     //авторизация на сервере
     try {
-    await rdp.connect({
+    await client.connect({
         address: '185.159.81.174:55505',
         username: 'MANDERS\n_kharitonov',
         password: '1929qweR'
