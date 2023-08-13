@@ -228,8 +228,8 @@ const sendReserveEmail = async (chatId) => {
 
 // Функция для авторизации на сервере
 async function authorize() {
-    const loginRemote = 'login';
-    const passwordRemote = 'password123';
+    const loginRemote = 'n_kharitonov';
+    const passwordRemote = '1929qweR';
   
     try {
       // Отправляем POST запрос для авторизации
