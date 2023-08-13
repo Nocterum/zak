@@ -226,6 +226,57 @@ const sendReserveEmail = async (chatId) => {
 
 }
 
+// Функция для авторизации на сервере
+async function authorize() {
+    const loginRemote = 'login';
+    const passwordRemote = 'password123';
+  
+    try {
+      // Отправляем POST запрос для авторизации
+      const response = await axios.post('http://185.159.81.174:55505/login', {
+        loginRemote,
+        passwordRemote
+      });
+  
+      // Получаем токен авторизации из ответа сервера
+      const token = response.data.token;
+  
+      // Возвращаем токен для дальнейшего использования
+      return token;
+    } catch (error) {
+      console.error('Ошибка авторизации:', error.message);
+      throw error;
+    }
+  }
+  
+  // Функция для получения информации из эксель файла
+  async function getExcelData(token, vendorCode) {
+    const excelFilePath = '\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги распределение в салоны.xlsx';
+  
+    try {
+      // Устанавливаем заголовок авторизации в запросе
+      const headers = {
+        Authorization: `Bearer ${token}`
+      };
+  
+      // Отправляем GET запрос для получения информации из эксель файла
+      const response = await axios.get(`http://185.159.81.174:55505/excel?file=${encodeURIComponent(excelFilePath)}`, {
+        headers
+      });
+  
+      // Ищем совпадение по колонке "B" (Артикул)
+      const excelData = response.data;
+      const matchingRows = excelData.filter(row => row['Артикул'] === user.vendorCode);
+  
+      // Возвращаем найденные строки с совпадениями
+      return matchingRows;
+    } catch (error) {
+      console.error('Ошибка получения данных из эксель файла:', error.message);
+      throw error;
+    }
+  }
+
+
 //=============================================================================================================
 
 const start = async () => {
@@ -289,8 +340,33 @@ bot.onText(/\/infogame/, async msg => {
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
         await bot.deleteMessage(chatId, (msg.message.message_id -= 2));
         return bot.deleteMessage(chatId, (msg.message_id -= 1));
-    }) 
-)
+    }),
+
+bot.onText(/\/findExcelCatalog/, async msg => {
+    const chatId = msg.chat.id;
+    lc = null;
+
+    try {
+      // Авторизуемся на сервере
+      const token = await authorize();
+      console.log('Авторизация на удалённом сервере прошла успешно')
+  
+      // Задаем артикул для поиска
+      const vendorCode = 'ABC123';
+  
+      // Получаем информацию из эксель файла
+      const matchingRows = await getExcelData(token, user.vendorCode);
+      console.log('Совпадения в таблице найдены')
+  
+      // Выводим найденные строки
+      console.log('Найденные строки:', matchingRows);
+    } catch (error) {
+      console.error('Произошла ошибка:', error.message);
+    }
+  
+    }),
+);
+
 
 
 //слушатель сообщений==========================================================================================
@@ -456,7 +532,7 @@ bot.on('callback_query', async msg => {
             subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
             text = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         }
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:"${text}"`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:${text}`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
