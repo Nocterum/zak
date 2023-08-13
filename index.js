@@ -215,15 +215,20 @@ const sendReserveEmail = async (chatId) => {
 // Функция для получения информации из эксель файла
 async function getExcelData( chatId ) {
 
-    //авторизация на сервере
-    clientRDP.connect(optionsRDP, (error) => {
-
+    try {
+        //авторизация на сервере
+        clientRDP.connect((error) => {
+            
         if (error) {
             console.error('Ошибка подключения к удалённому рабочему столу:', err);
             return;
         }
 
     });
+    } catch (e) {
+        console.error('Ошибка авторизации', e);
+    }
+
   
     try {
 
