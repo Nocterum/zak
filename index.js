@@ -215,7 +215,7 @@ const sendReserveEmail = async (chatId) => {
 // Функция для получения информации из эксель файла
 async function getExcelData( chatId ) {
 
-    if (!clientRDP.isConnected()) {
+    if (clientRDP.connect() == false) {
         //Если подключение отсутсвует - выполняем подключение
         try {
             //авторизация на сервере
