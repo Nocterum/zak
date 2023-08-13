@@ -34,7 +34,6 @@ bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
     {command: '/beginwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
-    {command: '/findExcelCatalog', description:'Проверка введенных параметров'},
 ])
 
 
