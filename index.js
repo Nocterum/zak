@@ -2,6 +2,7 @@ const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
+const rdp = require('node-rdp');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -17,7 +18,7 @@ const bot = new TelegramApi(token, {
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, beginWork2Options, mainMenuOptions, enterReserveNumberOptions, sendReserveOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-const rdp = require('./rdp');
+//const rdp = require('./rdp');
 //const BrandModel = require('./models');
 
 //глобальные переменные
@@ -243,7 +244,13 @@ async function authorize() {
       
     //авторизация на сервере
     try {
-    const client = await rdp.connect();
+    const client = await rdp.connect({
+        address: '185.159.81.174:55505',
+        username: 'MANDERS\n_kharitonov',
+        password: '1929qweR'
+      }).then(function() {
+        console.log('Соединение с удалённым рабочим столом не состоялось');
+      });;
 
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
