@@ -217,7 +217,7 @@ async function getExcelData( chatId ) {
 
     try {
         //авторизация на сервере
-        clientRDP.connect((error) => {
+        clientRDP((error) => {
             
         if (error) {
             console.error('Ошибка подключения к удалённому рабочему столу:', err);
