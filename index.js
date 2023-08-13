@@ -231,7 +231,7 @@ const sendReserveEmail = async (chatId) => {
   // Функция для получения информации из эксель файла
   async function getExcelData( chatId ) {
     // Создание экземпляра класса RDP
-    const client = new rdp.RDP();
+    const client = rdp.createClient();
 
     //авторизация на сервере
     try {
