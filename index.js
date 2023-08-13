@@ -230,8 +230,8 @@ const sendReserveEmail = async (chatId) => {
 
 }
   
-  // Функция для получения информации из эксель файла
-  async function getExcelData( chatId ) {
+// Функция для получения информации из эксель файла
+async function getExcelData( chatId ) {
 
     //авторизация на сервере
     try {
@@ -251,8 +251,7 @@ const sendReserveEmail = async (chatId) => {
     try {
 
     // Отправляем GET запрос для получения информации из эксель файла
-    const response = await axios.get('file://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги распределение в салоны.xlsx'
-    );
+    const response = await axios.get('http://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги распределение в салоны.xlsx');
     
     // Поиск строки с нужным артикулом
     const sheetData = response.data;
