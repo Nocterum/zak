@@ -1,6 +1,7 @@
 const {Sequelize} = require('sequelize');
 
 module.exports = new Sequelize(
+    
     'tgbotdb',
     'root',
     'root',

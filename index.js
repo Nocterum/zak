@@ -1,8 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const nodemailer = require('nodemailer');
-const RDP = require('rdpjs');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -14,14 +12,15 @@ const bot = new TelegramApi(token, {
     }
 });
 
-//импорты
+//ИМПОРТЫ
 const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, beginWork2Options, mainMenuOptions, enterReserveNumberOptions, sendReserveOptions} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-//const rdp = require('./rdp');
+const {transporter, recipient} = require('./nodemailer');
+const {clientRDP, optionsRDP} = require('./rdp');
 //const BrandModel = require('./models');
 
-//глобальные переменные
+//ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
@@ -29,11 +28,11 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к purchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let text = {};  //текст письма
-// Создание экземпляра класса RDP
-const client = RDP.createClient();
 
 
-//меню команд
+
+
+//МЕНЮ КОМАНД
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
     {command: '/beginwork', description:'Начало работы'},
@@ -41,7 +40,7 @@ bot.setMyCommands([
 ])
 
 
-//функции=========================================================================================
+//ФУНКЦИИ=========================================================================================
 
 //функция ввода емейла
 const editEmail = async (chatId) => {
@@ -191,30 +190,13 @@ const sendReserveEmail = async (chatId) => {
             chatId: chatId
         }
     });
-
-    const login = 'Manders\\n_kharitonov';
-    const password = '1929qweR';
-    const recipient = 'nick.of.darkwood@gmail.com';
+    //
     const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
-    console.log('Информация сформированна');
-
-    let emailAccount = await nodemailer.createTestAccount();
-    
-    let transporter = nodemailer.createTransport({
-        host: 'post.manders.ru',
-        auth: {
-            user: login,
-            pass: password,
-        },
-        tls: {
-            rejectUnauthorized: false
-        }
-    });
 
     try {
 
-        let result = await transporter.sendMail({
-            from: 'n_kharitonov@manders.ru',
+        let result = transporter.sendMail({
+            from: 'manders_bot_zakupki@manders.ru',
             to: `${recipient}, ${copy}`,
             subject: subject,
             text: text,
@@ -234,20 +216,14 @@ const sendReserveEmail = async (chatId) => {
 async function getExcelData( chatId ) {
 
     //авторизация на сервере
-    try {
-        await client.connect({
-            address: '185.159.81.174',
-            port: 55505,
-            username: 'MANDERS\\n_kharitonov',
-            password: '1929qweR'
-        });
-         console.log('Соединение с удалённым рабочим столом успешно состоялось');
-    
-    } catch (error) {
-      console.error('Ошибка авторизации:', error.message);
-      throw error;
-    }
- 
+    clientRDP.connect(optionsRDP, (error) => {
+
+        if (error) {
+            console.error('Ошибка подключения к удалённому рабочему столу:', err);
+            return;
+        }
+
+    });
   
     try {
 
