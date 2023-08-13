@@ -227,35 +227,35 @@ async function getExcelData( chatId ) {
   
     try {
 
-    // Отправляем GET запрос для получения информации из эксель файла
-    const response = await axios.get('http:\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги  распределение в салоны.xlsx');
+        // Отправляем GET запрос для получения информации из эксель файла
+        const response = await axios.get('http:\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги  распределение в салоны.xlsx');
     
-    // Поиск строки с нужным артикулом
-    const sheetData = response.data;
-    let foundRow = null;
-    for (let i = 0; i < sheetData.length; i++) {
-      const row = sheetData[i];
-      if (row['Артикул'] === user.vendorCode) {
-        foundRow = row;
-        break;
-      }
-    }
+        // Поиск строки с нужным артикулом
+        const sheetData = response.data;
+        let foundRow = null;
+            for (let i = 0; i < sheetData.length; i++) {
+              const row = sheetData[i];
+              if (row['Артикул'] === user.vendorCode) {
+                foundRow = row;
+                break;
+              }
+            }
 
-    // Проверка значений в колонках I, J, K, L, N, O
-    if (foundRow) {
-      const columnsToCheck = ['I', 'J', 'K', 'L', 'N', 'O'];
-      const allNull = columnsToCheck.every((column) => foundRow[column] === null);
-      if (allNull) {
-        console.log('Нет каталогов');
-        bot.sendMessage(chatId, 'Каталога с данным артикулом нет в наличии, обратитесь к Юлии Скрибник для уточнения информации о возможности поставки данного артикула.');
-      } else {
-        console.log('Есть каталоги');
-        bot.sendMessage(chatId, 'Отлично! Каталог с данным артикулом есть в наличии!');
-      }
-    } else {
-      console.log('Артикул не найден');
-      bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
-    }
+        // Проверка значений в колонках I, J, K, L, N, O
+        if (foundRow) {
+            const columnsToCheck = ['I', 'J', 'K', 'L', 'N', 'O'];
+            const allNull = columnsToCheck.every((column) => foundRow[column] === null);
+                if (allNull) {
+                    console.log('Нет каталогов');
+                    bot.sendMessage(chatId, 'Каталога с данным артикулом нет в наличии, обратитесь к Юлии Скрибник для уточнения информации о возможности поставки данного артикула.');
+                } else {
+                    console.log('Есть каталоги');
+                    bot.sendMessage(chatId, 'Отлично! Каталог с данным артикулом есть в наличии!');
+                }
+        } else {
+            console.log('Артикул не найден');
+            bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
+        }
 
     
     } catch (err) {
