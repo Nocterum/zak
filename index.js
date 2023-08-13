@@ -216,23 +216,9 @@ const sendReserveEmail = async (chatId) => {
 async function getExcelData( chatId ) {
 
     try {
-        //авторизация на сервере
-        clientRDP((error) => {
-            
-        if (error) {
-            console.error('Ошибка подключения к удалённому рабочему столу:', err);
-            return;
-        }
-
-    });
-    } catch (e) {
-        console.error('Ошибка авторизации', e);
-    }
-
-    try {
 
         // Отправляем GET запрос для получения информации из эксель файла
-        const response = await axios.get('http://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги  распределение в салоны.xlsx');
+        const response = await axios.get('E:\Users\n_kharitonov\DesktopТекстиль Каталоги  распределение в салоны.xlsx');
     
         // Поиск строки с нужным артикулом
         const sheetData = response.data['2017-22'];
