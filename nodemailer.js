@@ -15,8 +15,6 @@ module.exports = {
 
     recipient: 'nick.of.darkwood@gmail.com',
 
-    //emailAccount: await nodemailer.createTestAccount(),
-
 }
 
     

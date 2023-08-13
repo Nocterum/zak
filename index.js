@@ -228,7 +228,7 @@ async function getExcelData( chatId ) {
     try {
 
     // Отправляем GET запрос для получения информации из эксель файла
-    const response = await axios.get('http://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги распределение в салоны.xlsx');
+    const response = await axios.get('http:\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги  распределение в салоны.xlsx');
     
     // Поиск строки с нужным артикулом
     const sheetData = response.data;
