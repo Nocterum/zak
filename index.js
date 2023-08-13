@@ -236,8 +236,9 @@ async function getExcelData( chatId ) {
     //авторизация на сервере
     try {
         await client.connect({
-            address: '185.159.81.174:55505',
-            username: 'MANDERS\n_kharitonov',
+            address: '185.159.81.174',
+            port: 55505,
+            username: 'MANDERS\\n_kharitonov',
             password: '1929qweR'
         });
          console.log('Соединение с удалённым рабочим столом успешно состоялось');
