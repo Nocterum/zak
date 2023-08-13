@@ -2,7 +2,6 @@ const RDP = require('rdpjs');
 
 // Создание экземпляра класса RDP
 
-
     const clientRDP = RDP.createClient({
         domain: 'MANDERS',
         userName: 'n_kharitonov',
