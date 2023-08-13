@@ -17,7 +17,7 @@ const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFin
 const sequelize = require('./db');
 const UserModel = require('./models');
 const {transporter, recipient} = require('./nodemailer');
-const {clientRDP, optionsRDP} = require('./rdp');
+const clientRDP = require('./rdp');
 //const BrandModel = require('./models');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
@@ -270,7 +270,7 @@ async function getExcelData( chatId ) {
     }
 
     // Закрытие соединения с RDP сервером
-    return client.disconnect();
+    return clientRDP.disconnect();
 
 };
 
