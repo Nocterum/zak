@@ -215,40 +215,47 @@ const sendReserveEmail = async (chatId) => {
 // Функция для получения информации из эксель файла
 async function getExcelData( chatId ) {
 
-    try {
-        //авторизация на сервере
-        clientRDP.connect((error) => {
-            
-        if (error) {
-            console.error('Ошибка подключения к удалённому рабочему столу:', err);
-            return;
+    if (!clientRDP.isConnected()) {
+        //Если подключение отсутсвует - выполняем подключение
+        try {
+            //авторизация на сервере
+            clientRDP.connect((error) => {
+                
+            if (error) {
+                console.error('Ошибка подключения к удалённому рабочему столу:', err);
+                return;
+            }
+    
+        });
+        } catch (e) {
+            console.error('Ошибка авторизации', e);
         }
 
-    });
-    } catch (e) {
-        console.error('Ошибка авторизации', e);
+    } else {
+        console.log('Уже есть активное подключение к удалённому рабочему столу');
     }
 
-  
     try {
 
         // Отправляем GET запрос для получения информации из эксель файла
-        const response = await axios.get('http:\\\\sourcesrv.manders.local\\all\\РАЗНОЕ\\ТЕКСТИЛЬ\\Текстиль Каталоги  распределение в салоны.xlsx');
+        const response = await axios.get('http://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги  распределение в салоны.xlsx');
     
         // Поиск строки с нужным артикулом
-        const sheetData = response.data;
+        const sheetData = response.data['2017-22'];
         let foundRow = null;
+
             for (let i = 0; i < sheetData.length; i++) {
               const row = sheetData[i];
-              if (row['Артикул'] === user.vendorCode) {
+              if (row['C2'] === user.vendorCode) {
                 foundRow = row;
                 break;
               }
             }
 
-        // Проверка значений в колонках I, J, K, L, N, O
+        // Проверка значений в колонках C9, C10, C11, C12, C14, C15
         if (foundRow) {
-            const columnsToCheck = ['I', 'J', 'K', 'L', 'N', 'O'];
+
+            const columnsToCheck = ['C9', 'C10', 'C11', 'C12', 'C14', 'C15'];
             const allNull = columnsToCheck.every((column) => foundRow[column] === null);
                 if (allNull) {
                     console.log('Нет каталогов');
@@ -257,25 +264,38 @@ async function getExcelData( chatId ) {
                     console.log('Есть каталоги');
                     bot.sendMessage(chatId, 'Отлично! Каталог с данным артикулом есть в наличии!');
                 }
+
         } else {
+
             console.log('Артикул не найден');
             bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
+
         }
 
-    
     } catch (err) {
+
         console.log(err);
         bot.sendMessage(chatId, 'Ошибка поиска информации в таблице');
 
     }
 
-    // Закрытие соединения с RDP сервером
-    return clientRDP.disconnect();
+    // Устанавливаем таймер для отключения в 22:00
+    const disconnectTime = new Date();
+    disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
+    const currentTime = new Date();
+    const timeToDisconnect = disconnectTime - currentTime;
+    
+    setTimeout(() => {
+      // Код для отключения от удаленного рабочего стола
+      clientRDP.disconnect();
+      console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
+    }, timeToDisconnect);
 
+    return;
 };
 
 
-//=============================================================================================================
+//СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
 const start = async () => {
     console.log('Бот запщуен...')
