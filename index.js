@@ -219,7 +219,7 @@ async function getExcelData( chatId ) {
 
     try {
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'E:/Users/n_kharitonov/Desktop/xlsx';
+        const folderPath = 'E:/Users/n_kharitonov/Desktop/test';
         
         function findExcelFile(folderPath) {
           return new Promise((resolve, reject) => {
