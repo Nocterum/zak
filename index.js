@@ -218,85 +218,93 @@ const sendReserveEmail = async (chatId) => {
 async function getExcelData( chatId ) {
 
     try {
-
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'E:/Users/n_kharitonov/Desktop/x.xlsx';
-
-        // Функция для поиска эксель файла в папке
+        const folderPath = 'E:/Users/n_kharitonov/Desktop';
+        
         function findExcelFile(folderPath) {
-        const files = fs.readdir(folderPath);
-
-        for (const file of files) {
-            if (file.endsWith('.xlsx')) {
-              return file;
-            }
+          return new Promise((resolve, reject) => {
+            fs.readdir(folderPath, (err, files) => {
+              if (err) {
+                reject(err);
+              } else {
+                for (const file of files) {
+                  if (file.endsWith('.xlsx')) {
+                    resolve(file);
+                  }
+                }
+                resolve(null);
+              }
+            });
+          });
+        }
+    
+        async function processExcelFile() {
+          const excelFile = await findExcelFile(folderPath);
+          if (!excelFile) {
+            console.log('Не удалось найти эксель файл');
+            return;
           }
           
-          return null;
-        }
-
-        // Функция для выполнения задачи по поиску и анализу эксель файла
-        function processExcelFile() {
-        const excelFile = findExcelFile(folderPath);
-        
-        if (!excelFile) {
-          console.log('Не удалось найти эксель файл');
-          return;
+          const workbook = new ExcelJS.Workbook();
+          workbook.xlsx.readFile(`${folderPath}/${excelFile}`)
+            .then(() => {
+              const worksheet = workbook.getWorksheet('2017-22');
+              let user = UserModel.findOne({
+                where: {
+                  chatId: chatId
+                }
+              });
+              let foundMatch = false;
+              worksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('C').value;
+                if (cellValue === user.vendorCode) {
+                  foundMatch = true;
+                  const c9Value = row.getCell('C9').value;
+                  const c10Value = row.getCell('C10').value;
+                  const c11Value = row.getCell('C11').value;
+                  const c12Value = row.getCell('C12').value;
+                  const c14Value = row.getCell('C14').value;
+                  const c15Value = row.getCell('C15').value;
+                  if (
+                    c9Value === null &&
+                    c10Value === null &&
+                    c11Value === null &&
+                    c12Value === null &&
+                    c14Value === null &&
+                    c15Value === null
+                  ) {
+                    console.log('Каталогов в салонах нет');
+                  }
+                }
+              });
+              if (!foundMatch) {
+                console.log('Совпадение не найдено');
+              }
+            })
+            .catch(err => {
+              console.log('Ошибка при чтении эксель файла:', err);
+            });
         }
     
-        const workbook = new ExcelJS.Workbook();
-    
-        workbook.xlsx.readFile(`${folderPath}/${excelFile}`)
-        .then(() => {
-        const worksheet = workbook.getWorksheet('2017-22');
-        
-        let user = UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-        });
-
-        let foundMatch = false;
-        
-        worksheet.eachRow((row, rowNumber) => {
-          const cellValue = row.getCell('C').value;
-          
-          if (cellValue === `${user.vendorCode}`) {
-            foundMatch = true;
-            
-            // Проверяем значения в столбцах C9, C10, C11, C12, C14, C15
-            const c9Value = row.getCell('C9').value;
-            const c10Value = row.getCell('C10').value;
-            const c11Value = row.getCell('C11').value;
-            const c12Value = row.getCell('C12').value;
-            const c14Value = row.getCell('C14').value;
-            const c15Value = row.getCell('C15').value;
-            
-            if (
-              c9Value === null &&
-              c10Value === null &&
-              c11Value === null &&
-              c12Value === null &&
-              c14Value === null &&
-              c15Value === null
-            ) {
-              console.log('Каталогов в салонах нет');
-            }
-          }
-        });
-        
-        if (!foundMatch) {
-          console.log('Совпадение не найдено');
-        }
-      })
-      .catch(err => {
-        console.log('Ошибка при чтении эксель файла:', err);
-      });
-  }
-  
-  // Запускаем выполнение задачи
-  processExcelFile();
-    
+        await processExcelFile();
+      } catch (error) {
+        console.log('Ошибка:', error);
+      }
+      
+      // Устанавливаем таймер для отключения в 22:00
+      const disconnectTime = new Date();
+      disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
+      const currentTime = new Date();
+      const timeToDisconnect = disconnectTime - currentTime;
+      
+      setTimeout(() => {
+        // Код для отключения от удаленного рабочего стола
+        clientRDP.disconnect();
+        console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
+      }, timeToDisconnect);
+      
+      return;
+  }    
 /*        // Поиск строки с нужным артикулом
         const sheetData = response.data['2017-22'];
         let foundRow = null;
@@ -330,26 +338,8 @@ async function getExcelData( chatId ) {
         }
 
 */
-    } catch (err) {
 
-        console.log(err);
-        bot.sendMessage(chatId, 'Ошибка поиска информации в таблице');
-    }
 
-    // Устанавливаем таймер для отключения в 22:00
-    const disconnectTime = new Date();
-    disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
-    const currentTime = new Date();
-    const timeToDisconnect = disconnectTime - currentTime;
-    
-    setTimeout(() => {
-      // Код для отключения от удаленного рабочего стола
-      clientRDP.disconnect();
-      console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
-    }, timeToDisconnect);
-
-    return;
-};
 
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
