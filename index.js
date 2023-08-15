@@ -220,7 +220,7 @@ async function getExcelData( chatId ) {
     try {
 
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'file://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль%20Каталоги%20%20распределение%20в%20салоны.xlsx';
+        const folderPath = 'file://sourcesrv.manders.local/all/РАЗНОЕ/ТЕКСТИЛЬ/Текстиль Каталоги  распределение в салоны.xlsx';
 
         // Функция для поиска эксель файла в папке
         function findExcelFile(folderPath) {
