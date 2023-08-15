@@ -219,7 +219,7 @@ async function getExcelData( chatId ) {
 
     try {
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'E:/Users/n_kharitonov/Desktop';
+        const folderPath = 'E:/Users/n_kharitonov/Desktop/xlsx';
         
         function findExcelFile(folderPath) {
           return new Promise((resolve, reject) => {
@@ -290,7 +290,7 @@ async function getExcelData( chatId ) {
       } catch (error) {
         console.log('Ошибка:', error);
       }
-      
+
       // Устанавливаем таймер для отключения в 22:00
       const disconnectTime = new Date();
       disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
