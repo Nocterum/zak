@@ -220,11 +220,11 @@ async function getExcelData( chatId ) {
     try {
 
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'file:E:/Users/n_kharitonov/Desktop/x.xlsx';
+        const folderPath = 'E:/Users/n_kharitonov/Desktop/x.xlsx';
 
         // Функция для поиска эксель файла в папке
         function findExcelFile(folderPath) {
-        const files = fs.readdirSync(folderPath);
+        const files = fs.readdir(folderPath);
 
         for (const file of files) {
             if (file.endsWith('.xlsx')) {
