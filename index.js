@@ -27,7 +27,7 @@ chats = {};
 lc = {};    //последняя команда
 plc = {};   //предпоследняя команда
 botMsgIdx = {};    //айди последнего сообщения от бота
-sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к purchasing_internal@manders.ru';
+sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let text = {};  //текст письма
 
@@ -213,13 +213,33 @@ const sendReserveEmail = async (chatId) => {
     }
 
 }
-  
+
+// Функция для поиска эксель файла на удалённом рабочем столе
+async function findExcelFileOnRemoteDesktop() {
+
+    const folderPath = 'E:/Users/n_kharitonov/Desktop/test/текстиль.xlsx';
+    return new Promise((resolve, reject) => {
+      clientRDP.requestFileList(folderPath, (err, fileList) => {
+        if (err) {
+          reject(err);
+        } else {
+          for (const file of fileList) {
+            if (file.name.endsWith('.xlsx')) {
+              resolve(file.name);
+            }
+          }
+          resolve(null);
+        }
+      });
+    });
+
+  }
+
 // Функция для получения информации из эксель файла
 async function getExcelData( chatId ) {
 
     try {
         // Путь к папке, где находятся эксель файлы
-        const folderPath = 'E:/Users/n_kharitonov/Desktop/test/текстиль.xlsx';
         
         function findExcelFile(folderPath) {
           return new Promise((resolve, reject) => {
@@ -530,12 +550,6 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
     }
 
-    async function deleteLastMessage(chatId) {
-        const chat = await bot.getChat(chatId);
-        const lastMessageId = chat.msg.message_id;
-        await bot.deleteMessage(chatId, (lastMessageId += 1));
-    }
-
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
@@ -544,8 +558,11 @@ bot.on('callback_query', async msg => {
 
     try {
 
-    //главное меню
+    //главное меню 
     if (data === '/mainmenu') {
+        if (lc === '/game' || lc === '/again') {
+            await bot.deleteMessage(chatId, msg.message.message_id);
+        }
         lc = null;
         return bot.sendMessage(chatId, `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`) 
     }
@@ -609,13 +626,14 @@ bot.on('callback_query', async msg => {
 
     //рестарт игры
     if (data === '/infogame') {
-        lc = null;
+        lc = data;
         await bot.deleteMessage(chatId, msg.message.message_id);
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
     }
 
     //сброс результатов игры
     if(data === '/reset') {
+        lc = data;
         await bot.deleteMessage(chatId, msg.message.message_id);
         if (user) {
             await user.update ({
