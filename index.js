@@ -532,7 +532,7 @@ bot.on('callback_query', async msg => {
 
     async function deleteLastMessage(chatId) {
         const chat = await bot.getChat(chatId);
-        const lastMessageId = chat.lastMessage.message_id;
+        const lastMessageId = chat.msg.message.message_id;
         await bot.deleteMessage(chatId, lastMessageId);
     }
 
@@ -603,14 +603,12 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
-        deleteLastMessage(chatId);
         return startGame(chatId);
     }
 
     //рестарт игры
     if (data === '/infogame') {
         lc = null;
-        deleteLastMessage(chatId);
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
     }
 
@@ -622,7 +620,7 @@ bot.on('callback_query', async msg => {
                 wrong: 0,
             });
         }
-        deleteLastMessage(chatId);
+
         return bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
     }
 
@@ -631,7 +629,7 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save(chatId);
-            deleteLastMessage;
+            deleteLastMessage(chatId);
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
