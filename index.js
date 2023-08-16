@@ -560,7 +560,7 @@ bot.on('callback_query', async msg => {
 
     //главное меню 
     if (data === '/mainmenu') {
-        if (lc === '/game' || lc === '/again') {
+        if (lc === '/game' || lc === '/again' || lc === 'reset') {
             await bot.deleteMessage(chatId, msg.message.message_id);
         }
         lc = null;
