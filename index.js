@@ -217,94 +217,91 @@ const sendReserveEmail = async (chatId) => {
 
 
 // Функция для поиска эксель файла на удалённом рабочем столе
-async function getExcelData() {
-        
+async function findExcelFile() {
     try {
-
-        // Путь к папке, где находятся эксель файлы
-        const folderPath = 'E:/Users/n_kharitonov/Desktop/bot/текстиль.xlsx';
-        return new Promise((resolve, reject) => {
-          clientRDP.requestFileList(folderPath, (err, fileList) => {
-            if (err) {
-              reject(err);
-            } else {
-              for (const file of fileList) {
-                if (file.name.endsWith('.xlsx')) {
-                  resolve(file.name);
-                }
+      // Путь к папке, где находятся эксель файлы на удалённом рабочем столе
+      const folderPath = 'E:/Users/n_kharitonov/Desktop/bot/';
+      
+      return new Promise((resolve, reject) => {
+        clientRDP.requestFileList(folderPath, (err, fileList) => {
+          if (err) {
+            reject(err);
+          } else {
+            for (const file of fileList) {
+              if (file.name.endsWith('.xlsx')) {
+                resolve(file.name);
+                return; // Добавляем return, чтобы прекратить выполнение цикла после нахождения первого файла
               }
-              resolve(null);
             }
-          });
+            resolve(null);
+          }
         });
-
-        async function findExcelFile(fileName) {
-            const fileName = await findExcelFileOnRemoteDesktop();
-            if (fileName) {
-              // Файл найден, продолжаем работу с ним
-              const filePath = `E:/Users/n_kharitonov/Desktop/bot/${fileName}`;
-
-              const workbook = new ExcelJS.Workbook();
-
-              workbook.xlsx.readFile(`${filePath}`)
-                .then(() => {
-
-                  const worksheet = workbook.getWorksheet('2017-22');
-
-                  let user = UserModel.findOne({
-                    where: {
-                      chatId: chatId
-                    }
-                  });
-
-                  let foundMatch = false;
-
-                  worksheet.eachRow((row, rowNumber) => {
-
-                    const cellValue = row.getCell('C').value;
-
-                    if (cellValue === user.vendorCode) {
-                        
-                      foundMatch = true;
-                      const c9Value = row.getCell('C9').value;
-                      const c10Value = row.getCell('C10').value;
-                      const c11Value = row.getCell('C11').value;
-                      const c12Value = row.getCell('C12').value;
-                      const c14Value = row.getCell('C14').value;
-                      const c15Value = row.getCell('C15').value;
-
-                      if (
-
-                        c9Value === null &&
-                        c10Value === null &&
-                        c11Value === null &&
-                        c12Value === null &&
-                        c14Value === null &&
-                        c15Value === null
-                      ) {
-                        bot.sendMessage(chatId, 'Каталогов в салоне нет.')
-                      }
-                    }
-                  });
-                  if (!foundMatch) {
-                    console.log('Совпадение не найдено');
-                  }
-                })
-                .catch(err => {
-                  console.log('Ошибка при чтении эксель файла:', err);
-                });
-
-            } else {
-              // Файл не найден
-              console.log('"Эксель файл не найден на удалёнке"');
-            }
-
-        }
-    } catch (e) {
-        console.log('Ошибка выполнения функции работы с эксель файлом');
+      });
+    } catch (error) {
+      console.error('Error finding Excel file on remote desktop:', error);
     }
-    
-}    
+  }
+  
+  // Функция для получения информации из эксель файла
+  async function getExcelData(chatId) {
+    try {
+      const fileName = await findExcelFile();
+      
+      if (fileName) {
+        // Файл найден, продолжаем работу с ним
+        const filePath = `E:/Users/n_kharitonov/Desktop/bot/${fileName}`;
+        
+        const workbook = new ExcelJS.Workbook();
+        
+        await workbook.xlsx.readFile(filePath);
+        
+        const worksheet = workbook.getWorksheet('2017-22');
+        
+        let user = await UserModel.findOne({
+          where: {
+            chatId: chatId
+          }
+        });
+        
+        let foundMatch = false;
+        
+        worksheet.eachRow((row, rowNumber) => {
+          const cellValue = row.getCell('C').value;
+          
+          if (cellValue === user.vendorCode) {
+            foundMatch = true;
+            
+            const c9Value = row.getCell('C9').value;
+            const c10Value = row.getCell('C10').value;
+            const c11Value = row.getCell('C11').value;
+            const c12Value = row.getCell('C12').value;
+            const c14Value = row.getCell('C14').value;
+            const c15Value = row.getCell('C15').value;
+            
+            if (
+              c9Value === null &&
+              c10Value === null &&
+              c11Value === null &&
+              c12Value === null &&
+              c14Value === null &&
+              c15Value === null
+            ) {
+              bot.sendMessage(chatId, 'Каталогов в салоне нет.');
+            }
+          }
+        });
+        
+        if (!foundMatch) {
+          console.log('Совпадение не найдено');
+        }
+      } else {
+        // Файл не найден
+        console.log('Excel file not found on remote desktop');
+      }
+    } catch (error) {
+      console.error('Error getting Excel data:', error);
+    }
+  }
     // // Устанавливаем таймер для отключения в 22:00
     //   const disconnectTime = new Date();
     //   disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
@@ -414,9 +411,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null;
-
-    getExcelData(chatId);
-
+    findExcelFile(chatId);
     }),
 );
 
