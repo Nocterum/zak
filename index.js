@@ -519,7 +519,7 @@ bot.on('message', async msg => {
 
 bot.on('callback_query', async msg => {
     const data = msg.data;
-    const lastMsgId = msg.message.message_id += 3;
+    const lastMsgId = msg.message.message_id;
     const chatId = msg.message.chat.id;
 
     console.log(msg)
@@ -529,6 +529,12 @@ bot.on('callback_query', async msg => {
         const randomNumber = Math.floor(Math.random() * 10)
         chats[chatId] = randomNumber;
         return bot.sendMessage(chatId, `Отгадывай:`, gameOptions)
+    }
+
+    async function deleteLastMessage(chatId) {
+        const chat = await bot.getChat(chatId);
+        const lastMessageId = chat.lastMessage.message_id;
+        await bot.deleteMessage(chatId, lastMessageId);
     }
 
     const user = await UserModel.findOne({
@@ -626,12 +632,12 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save();
-            await bot.deleteMessage(chatId, lastMsgId);
+            deleteLastMessage;
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            await bot.deleteMessage(chatId, lastMsgId);
+            deleteLastMessage;
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
