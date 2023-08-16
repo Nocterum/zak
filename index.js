@@ -533,7 +533,7 @@ bot.on('callback_query', async msg => {
     async function deleteLastMessage(chatId) {
         const chat = await bot.getChat(chatId);
         const lastMessageId = chat.msg.message.message_id;
-        await bot.deleteMessage(chatId, lastMessageId);
+        await bot.deleteMessage(chatId, (lastMessageId += 1));
     }
 
     const user = await UserModel.findOne({
