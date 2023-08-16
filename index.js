@@ -409,7 +409,6 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    хуйц ывфыв ф ц
     findExcelFile(chatId);
     }),
 );
