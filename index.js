@@ -214,117 +214,110 @@ const sendReserveEmail = async (chatId) => {
 
 }
 
+
+
 // Функция для поиска эксель файла на удалённом рабочем столе
-async function findExcelFileOnRemoteDesktop() {
-
-    const folderPath = 'E:/Users/n_kharitonov/Desktop/test/текстиль.xlsx';
-    return new Promise((resolve, reject) => {
-      clientRDP.requestFileList(folderPath, (err, fileList) => {
-        if (err) {
-          reject(err);
-        } else {
-          for (const file of fileList) {
-            if (file.name.endsWith('.xlsx')) {
-              resolve(file.name);
-            }
-          }
-          resolve(null);
-        }
-      });
-    });
-
-  }
-
-// Функция для получения информации из эксель файла
-async function getExcelData( chatId ) {
-
-    try {
-        // Путь к папке, где находятся эксель файлы
+async function getExcelData() {
         
-        function findExcelFile(folderPath) {
-          return new Promise((resolve, reject) => {
-            fs.readdir(folderPath, (err, files) => {
-              if (err) {
-                reject(err);
-              } else {
-                for (const file of files) {
-                  if (file.endsWith('.xlsx')) {
-                    resolve(file);
-                  }
-                }
-                resolve(null);
-              }
-            });
-          });
-        }
-    
-        async function processExcelFile() {
-          const excelFile = await findExcelFile(folderPath);
-          if (!excelFile) {
-            console.log('Не удалось найти эксель файл');
-            return;
-          }
-          
-          const workbook = new ExcelJS.Workbook();
-          workbook.xlsx.readFile(`${folderPath}/${excelFile}`)
-            .then(() => {
-              const worksheet = workbook.getWorksheet('2017-22');
-              let user = UserModel.findOne({
-                where: {
-                  chatId: chatId
-                }
-              });
-              let foundMatch = false;
-              worksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('C').value;
-                if (cellValue === user.vendorCode) {
-                  foundMatch = true;
-                  const c9Value = row.getCell('C9').value;
-                  const c10Value = row.getCell('C10').value;
-                  const c11Value = row.getCell('C11').value;
-                  const c12Value = row.getCell('C12').value;
-                  const c14Value = row.getCell('C14').value;
-                  const c15Value = row.getCell('C15').value;
-                  if (
-                    c9Value === null &&
-                    c10Value === null &&
-                    c11Value === null &&
-                    c12Value === null &&
-                    c14Value === null &&
-                    c15Value === null
-                  ) {
-                    console.log('Каталогов в салонах нет');
-                  }
-                }
-              });
-              if (!foundMatch) {
-                console.log('Совпадение не найдено');
-              }
-            })
-            .catch(err => {
-              console.log('Ошибка при чтении эксель файла:', err);
-            });
-        }
-    
-        await processExcelFile();
-      } catch (error) {
-        console.log('Ошибка:', error);
-      }
+    try {
 
-      // Устанавливаем таймер для отключения в 22:00
-      const disconnectTime = new Date();
-      disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
-      const currentTime = new Date();
-      const timeToDisconnect = disconnectTime - currentTime;
+        // Путь к папке, где находятся эксель файлы
+        const folderPath = 'E:/Users/n_kharitonov/Desktop/bot/текстиль.xlsx';
+        return new Promise((resolve, reject) => {
+          clientRDP.requestFileList(folderPath, (err, fileList) => {
+            if (err) {
+              reject(err);
+            } else {
+              for (const file of fileList) {
+                if (file.name.endsWith('.xlsx')) {
+                  resolve(file.name);
+                }
+              }
+              resolve(null);
+            }
+          });
+        });
+
+        async function findExcelFile(fileName) {
+            const fileName = await findExcelFileOnRemoteDesktop();
+            if (fileName) {
+              // Файл найден, продолжаем работу с ним
+              const filePath = `E:/Users/n_kharitonov/Desktop/bot/${fileName}`;
+
+              const workbook = new ExcelJS.Workbook();
+
+              workbook.xlsx.readFile(`${filePath}`)
+                .then(() => {
+
+                  const worksheet = workbook.getWorksheet('2017-22');
+
+                  let user = UserModel.findOne({
+                    where: {
+                      chatId: chatId
+                    }
+                  });
+
+                  let foundMatch = false;
+
+                  worksheet.eachRow((row, rowNumber) => {
+
+                    const cellValue = row.getCell('C').value;
+
+                    if (cellValue === user.vendorCode) {
+                        
+                      foundMatch = true;
+                      const c9Value = row.getCell('C9').value;
+                      const c10Value = row.getCell('C10').value;
+                      const c11Value = row.getCell('C11').value;
+                      const c12Value = row.getCell('C12').value;
+                      const c14Value = row.getCell('C14').value;
+                      const c15Value = row.getCell('C15').value;
+
+                      if (
+
+                        c9Value === null &&
+                        c10Value === null &&
+                        c11Value === null &&
+                        c12Value === null &&
+                        c14Value === null &&
+                        c15Value === null
+                      ) {
+                        bot.sendMessage(chatId, 'Каталогов в салоне нет.')
+                      }
+                    }
+                  });
+                  if (!foundMatch) {
+                    console.log('Совпадение не найдено');
+                  }
+                })
+                .catch(err => {
+                  console.log('Ошибка при чтении эксель файла:', err);
+                });
+
+            } else {
+              // Файл не найден
+              console.log('"Эксель файл не найден на удалёнке"');
+            }
+
+        }
+    } catch (e) {
+        console.log('Ошибка выполнения функции работы с эксель файлом');
+    }
+    
+}    
+    // // Устанавливаем таймер для отключения в 22:00
+    //   const disconnectTime = new Date();
+    //   disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
+    //   const currentTime = new Date();
+    //   const timeToDisconnect = disconnectTime - currentTime;
       
-      setTimeout(() => {
-        // Код для отключения от удаленного рабочего стола
-        clientRDP.disconnect();
-        console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
-      }, timeToDisconnect);
+    //   setTimeout(() => {
+    //     // Код для отключения от удаленного рабочего стола
+    //     clientRDP.disconnect();
+    //     console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
+    //   }, timeToDisconnect);
       
-      return;
-  }    
+    //   return;
 /*        // Поиск строки с нужным артикулом
         const sheetData = response.data['2017-22'];
         let foundRow = null;
@@ -560,7 +553,7 @@ bot.on('callback_query', async msg => {
 
     //главное меню 
     if (data === '/mainmenu') {
-        if (lc === '/game' || lc === '/again' || lc === 'reset') {
+        if (lc === '/game' || lc === '/again' || lc === '/reset') {
             await bot.deleteMessage(chatId, msg.message.message_id);
         }
         lc = null;
