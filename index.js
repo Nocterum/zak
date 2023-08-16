@@ -603,17 +603,20 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/again') {
         lc = data;
+        await bot.deleteMessage(chatId, msg.message.message_id);
         return startGame(chatId);
     }
 
     //рестарт игры
     if (data === '/infogame') {
         lc = null;
+        await bot.deleteMessage(chatId, msg.message.message_id);
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
     }
 
     //сброс результатов игры
     if(data === '/reset') {
+        await bot.deleteMessage(chatId, msg.message.message_id);
         if (user) {
             await user.update ({
                 right: 0,
@@ -629,12 +632,12 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save(chatId);
-            await bot.sendMessage(chatId, msg.message.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            await bot.sendMessage(chatId, msg.message.message_id);
+            await bot.deleteMessage(chatId, msg.message.message_id);
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
