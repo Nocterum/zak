@@ -390,17 +390,6 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    try {
-        const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
-        const response = await axios.get(filePath, {
-          responseType: 'arraybuffer'
-        });
-        const data = Buffer.from(response.data, 'binary');
-        fs.writeFileSync('текстиль.xlsx', data);
-        console.log('Файл успешно сохранен');
-      } catch (error) {
-        console.error('Ошибка при выполнении GET-запроса:', error);
-      }
     }),
 );
 
@@ -494,20 +483,31 @@ bot.on('message', async msg => {
 
     if (text === 'recreatetable' && chatId === '356339062') {
         await UserModel.sync({ force: true })
-        return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!')
+        return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!');
     }
 
     if (text.toLowerCase() === 'привет' + '') {
-        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp')
+        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
 
     if (text === '/infogame') {
         lc = null;
-        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
+        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
 
     if (text !== '/game' && text !== '/start') {
-        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp')
+        try {
+            const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
+            const response = await axios.get(filePath, {
+              responseType: 'arraybuffer'
+            });
+            const data = Buffer.from(response.data, 'binary');
+            fs.writeFileSync('текстиль.xlsx', data);
+            console.log('Файл успешно сохранен');
+          } catch (error) {
+            console.error('Ошибка при выполнении GET-запроса:', error);
+          }
+        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
 
 }) 
