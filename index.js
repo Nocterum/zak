@@ -213,12 +213,27 @@ const sendReserveEmail = async (chatId) => {
     }
 
 }
+// Функция для копирования файла
+  async function copyFile(filePath, destinationPath) {
+    try {
+      const response = await axios.get(filePath, { responseType: 'stream' });
+      const writer = fs.createWriteStream(destinationPath);
+      response.data.pipe(writer);
+      return new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+      });
+    } catch (error) {
+      console.error('Ошибка при копировании файла:', error);
+      throw error;
+    }
+  }
 
 // Функция для поиска эксель файла на удалённом рабочем столе
 async function findExcelFile() {
     try {
       // Путь к папке, где находятся эксель файлы на удалённом рабочем столе
-      const folderPath = 'E:/Users/n_kharitonov/Desktop/bot/';
+      const folderPath = '//185.159.81.174:55505/Desktop/bot/';
       
       return new Promise((resolve, reject) => {
         clientRDP.on(folderPath, (err, fileList) => {
@@ -247,7 +262,7 @@ async function findExcelFile() {
       
       if (fileName) {
         // Файл найден, продолжаем работу с ним
-        const filePath = `E:/Users/n_kharitonov/Desktop/bot/${fileName}`;
+        const filePath = `//185.159.81.174:55505/Desktop/bot/${fileName}`;
         
         const workbook = new ExcelJS.Workbook();
         
@@ -360,7 +375,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    findExcelFile(chatId);
+    getExcelData(chatId);
     }),
 );
 
