@@ -630,13 +630,11 @@ bot.on('callback_query', async msg => {
             user.right += 1;
             await user.save(chatId);
             await bot.sendMessage(chatId, msg.message.message_id);
-            await bot.sendMessage(chatId, chat.message_id);
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
             await bot.sendMessage(chatId, msg.message.message_id);
-            await bot.sendMessage(chatId, chat.message_id);
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
