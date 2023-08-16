@@ -635,12 +635,12 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save();
-            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+            // await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+            // await bot.deleteMessage(chatId, (msg.message.message_id += 3))
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
