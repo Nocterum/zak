@@ -396,7 +396,8 @@ bot.onText(/\/game/, async msg => {
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
     return bot.sendMessage(chatId, `Отгадай число😏`, gameOptions)
-    }),
+}),
+
 
 bot.onText(/\/infogame/, async msg => {
     const chatId = msg.chat.id;
@@ -405,7 +406,7 @@ bot.onText(/\/infogame/, async msg => {
         await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
         await bot.deleteMessage(chatId, (msg.message.message_id -= 2));
         return bot.deleteMessage(chatId, (msg.message_id -= 1));
-    }),
+}),
 
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
