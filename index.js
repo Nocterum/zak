@@ -214,8 +214,6 @@ const sendReserveEmail = async (chatId) => {
 
 }
 
-
-
 // Функция для поиска эксель файла на удалённом рабочем столе
 async function findExcelFile() {
     try {
@@ -410,7 +408,8 @@ bot.onText(/\/game/, async msg => {
 
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
-    lc = null;
+    lc = null; 
+    хуйц ывфыв ф ц
     findExcelFile(chatId);
     }),
 );
