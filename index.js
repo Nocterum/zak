@@ -221,14 +221,14 @@ async function findExcelFile() {
       const folderPath = 'E:/Users/n_kharitonov/Desktop/bot/';
       
       return new Promise((resolve, reject) => {
-        clientRDP.requestFileList(folderPath, (err, fileList) => {
+        clientRDP.on(folderPath, (err, fileList) => {
           if (err) {
             reject(err);
           } else {
             for (const file of fileList) {
               if (file.name.endsWith('.xlsx')) {
                 resolve(file.name);
-                return; // Добавляем return, чтобы прекратить выполнение цикла после нахождения первого файла
+                return; 
               }
             }
             resolve(null);
@@ -300,55 +300,6 @@ async function findExcelFile() {
       console.error('Error getting Excel data:', error);
     }
   }
-    // // Устанавливаем таймер для отключения в 22:00
-    //   const disconnectTime = new Date();
-    //   disconnectTime.setHours(22, 0, 0); // Устанавливаем время отключения на 22:00
-    //   const currentTime = new Date();
-    //   const timeToDisconnect = disconnectTime - currentTime;
-      
-    //   setTimeout(() => {
-    //     // Код для отключения от удаленного рабочего стола
-    //     clientRDP.disconnect();
-    //     console.log('Чат-бот отключен от удаленного рабочего стола в 22:00');
-    //   }, timeToDisconnect);
-      
-    //   return;
-/*        // Поиск строки с нужным артикулом
-        const sheetData = response.data['2017-22'];
-        let foundRow = null;
-
-            for (let i = 0; i < sheetData.length; i++) {
-              const row = sheetData[i];
-              if (row['C2'] === user.vendorCode) {
-                foundRow = row;
-                break;
-              }
-            }
-
-        // Проверка значений в колонках C9, C10, C11, C12, C14, C15
-        if (foundRow) {
-
-            const columnsToCheck = ['C9', 'C10', 'C11', 'C12', 'C14', 'C15'];
-            const allNull = columnsToCheck.every((column) => foundRow[column] === null);
-                if (allNull) {
-                    console.log('Нет каталогов');
-                    bot.sendMessage(chatId, 'Каталога с данным артикулом нет в наличии, обратитесь к Юлии Скрибник для уточнения информации о возможности поставки данного артикула.');
-                } else {
-                    console.log('Есть каталоги');
-                    bot.sendMessage(chatId, 'Отлично! Каталог с данным артикулом есть в наличии!');
-                }
-
-        } else {
-
-            console.log('Артикул не найден');
-            bot.sendMessage(chatId, 'Введённый вами артикул не найден в таблице каталогов.');
-
-        }
-
-*/
-
-
-
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
