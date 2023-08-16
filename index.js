@@ -532,7 +532,7 @@ bot.on('callback_query', async msg => {
 
     async function deleteLastMessage(chatId) {
         const chat = await bot.getChat(chatId);
-        const lastMessageId = chat.msg.message.message_id;
+        const lastMessageId = chat.msg.message_id;
         await bot.deleteMessage(chatId, (lastMessageId += 1));
     }
 
