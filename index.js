@@ -256,23 +256,19 @@ const sendReserveEmail = async (chatId) => {
 //   }
 
 // функция запроса файла и его копирования
-async function getAxiosFile(chatId) {
-    
-const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
-
-axios.get(filePath, {
-  responseType: 'arraybuffer'
-})
-  .then(response => {
-    const data = Buffer.from(response.data, 'binary');
-    fs.writeFileSync('текстиль.xlsx', data);
-    console.log('Файл успешно сохранен');
-  })
-  .catch(error => {
-    console.error('Ошибка при выполнении GET-запроса:', error);
-  });
-}
-
+async function getAxiosFile() {
+    try {
+      const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
+      const response = await axios.get(filePath, {
+        responseType: 'arraybuffer'
+      });
+      const data = Buffer.from(response.data, 'binary');
+      fs.writeFileSync('текстиль.xlsx', data);
+      console.log('Файл успешно сохранен');
+    } catch (error) {
+      console.error('Ошибка при выполнении GET-запроса:', error);
+    }
+  }
 
   // Функция для получения информации из эксель файла
   async function getExcelData(chatId) {
