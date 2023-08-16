@@ -230,31 +230,50 @@ const sendReserveEmail = async (chatId) => {
   }
 
 // Функция для поиска эксель файла на удалённом рабочем столе
-async function findExcelFile() {
-    try {
-      // Путь к папке, где находятся эксель файлы на удалённом рабочем столе
-      const folderPath = '//185.159.81.174:55505/Desktop/bot/';
+// async function findExcelFile() {
+//     try {
+//       // Путь к папке, где находятся эксель файлы на удалённом рабочем столе
+//       const folderPath = '//185.159.81.174:55505/Desktop/bot/';
       
-      return new Promise((resolve, reject) => {
-        clientRDP.on(folderPath, (err, fileList) => {
-          if (err) {
-            reject(err);
-          } else {
-            for (const file of fileList) {
-              if (file.name.endsWith('.xlsx')) {
-                resolve(file.name);
-                return; 
-              }
-            }
-            resolve(null);
-          }
-        });
-      });
-    } catch (error) {
-      console.error('Error finding Excel file on remote desktop:', error);
-    }
-  }
-  
+//       return new Promise((resolve, reject) => {
+//         clientRDP.on(folderPath, (err, fileList) => {
+//           if (err) {
+//             reject(err);
+//           } else {
+//             for (const file of fileList) {
+//               if (file.name.endsWith('.xlsx')) {
+//                 resolve(file.name);
+//                 return; 
+//               }
+//             }
+//             resolve(null);
+//           }
+//         });
+//       });
+//     } catch (error) {
+//       console.error('Error finding Excel file on remote desktop:', error);
+//     }
+//   }
+
+// функция запроса файла и его копирования
+async function getAxiosFile(chatId) {
+    
+const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
+
+axios.get(filePath, {
+  responseType: 'arraybuffer'
+})
+  .then(response => {
+    const data = Buffer.from(response.data, 'binary');
+    fs.writeFileSync('текстиль.xlsx', data);
+    console.log('Файл успешно сохранен');
+  })
+  .catch(error => {
+    console.error('Ошибка при выполнении GET-запроса:', error);
+  });
+}
+
+
   // Функция для получения информации из эксель файла
   async function getExcelData(chatId) {
     try {
@@ -262,7 +281,7 @@ async function findExcelFile() {
       
       if (fileName) {
         // Файл найден, продолжаем работу с ним
-        const filePath = `//185.159.81.174:55505/Desktop/bot/${fileName}`;
+        const filePath = `//185.159.81.174:55505/Desktop/bot/текстиль.xlsx `;
         
         const workbook = new ExcelJS.Workbook();
         
@@ -314,7 +333,7 @@ async function findExcelFile() {
     } catch (error) {
       console.error('Error getting Excel data:', error);
     }
-  }
+}
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -375,7 +394,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    getExcelData(chatId);
+    getAxiosFile(chatId);
     }),
 );
 
