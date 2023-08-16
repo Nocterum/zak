@@ -390,7 +390,17 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    getAxiosFile(chatId);
+    try {
+        const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
+        const response = await axios.get(filePath, {
+          responseType: 'arraybuffer'
+        });
+        const data = Buffer.from(response.data, 'binary');
+        fs.writeFileSync('текстиль.xlsx', data);
+        console.log('Файл успешно сохранен');
+      } catch (error) {
+        console.error('Ошибка при выполнении GET-запроса:', error);
+      }
     }),
 );
 
