@@ -398,16 +398,6 @@ bot.onText(/\/game/, async msg => {
     return bot.sendMessage(chatId, `Отгадай число😏`, gameOptions)
 }),
 
-
-bot.onText(/\/infogame/, async msg => {
-    const chatId = msg.chat.id;
-
-        lc = null;
-        await bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions)
-        await bot.deleteMessage(chatId, (msg.message.message_id -= 2));
-        return bot.deleteMessage(chatId, (msg.message_id -= 1));
-}),
-
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null;
@@ -529,6 +519,7 @@ bot.on('message', async msg => {
 
 bot.on('callback_query', async msg => {
     const data = msg.data;
+    const lastMsgId = msg.message.message_id += 3;
     const chatId = msg.message.chat.id;
 
     console.log(msg)
@@ -614,7 +605,7 @@ bot.on('callback_query', async msg => {
     //рестарт игры
     if (data === '/infogame') {
         lc = null;
-        await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+        await bot.deleteMessage(chatId, lastMsgId);
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions) 
     }
 
@@ -626,7 +617,7 @@ bot.on('callback_query', async msg => {
                 wrong: 0,
             });
         }
-        await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+        await bot.deleteMessage(chatId, lastMsgId);
         return bot.sendMessage(chatId, `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, againOptions)
     }
 
@@ -635,12 +626,12 @@ bot.on('callback_query', async msg => {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save();
-            // await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+            await bot.deleteMessage(chatId, lastMsgId);
             return bot.sendMessage(chatId, `Ты отгадал цифру "${chats[chatId]}"`, againOptions);
         } else {
             user.wrong += 1;
             await user.save();
-            // await bot.deleteMessage(chatId, (msg.message.message_id += 3))
+            await bot.deleteMessage(chatId, lastMsgId);
             return bot.sendMessage(chatId, `Нет, я загадал цифру "${chats[chatId]}"`, againOptions);  
         }
     }
