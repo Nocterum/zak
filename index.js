@@ -367,7 +367,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
     }
 
-    if (text.toLowerCase() === 'привет' + '') {
+    if (text.toLowerCase().includes('привет')) {
         return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
 
