@@ -214,18 +214,29 @@ const sendReserveEmail = async (chatId) => {
 
 }
 
-const connectToYaDisk = async (emailYa, passwordYa) => {
-    const baseURL = 'https://passport.yandex.ru/auth/list'
+// функция авторизаации на Ядиске
+async function loginToYandex(login, password) {
+    const url = 'https://passport.yandex.ru/auth/add?retpath=https%3A%2F%2Fpassport.yandex.ru%2F&noreturn=1';
+    const loginElement = 'passp-field-login';
+    const passwordElement = 'passp-field-passwd';
+    
     try {
-        const response = await axios.post(`${baseURL}`, {
-            emailYa,
-            passwordYa,
-        });
-        console.log(response.data);
-    } catch (error){
-        console.error(error);
+      // Отправляем POST-запрос для ввода логина
+      await axios.post(url, { [loginElement]: login });
+      
+      // Отправляем POST-запрос для ввода пароля
+      await axios.post(url, { [passwordElement]: password });
+      
+      // Отправляем POST-запрос для нажатия кнопки "Войти"
+      await axios.post(url, { 'button:action:passp:sign-in': true });
+      
+      console.log('Авторизация выполнена успешно!');
+    } catch (error) {
+      console.error('Ошибка авторизации:', error);
     }
 }
+    
+
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -286,9 +297,9 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    const emailYa = 'master.of.colours@yandex.ru';
-    const passwordYa = 'qSHWyoP6sgns1929&';
-    connectToYaDisk(emailYa, passwordYa);
+    const email = 'master.of.colours@yandex.ru';
+    const password = 'qSHWyoP6sgns1929&';
+    loginToYandex(email, password);
     }),
 );
 
