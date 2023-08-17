@@ -310,18 +310,18 @@ bot.onText(/\/x/, async msg => {
           let foundMatch = false;
         
           worksheet.eachRow((row, rowNumber) => {
-            const cellValue = row.getCell('B').value;
+            const cellValue = row.getCell('B1').value;
         
             if (cellValue === testVC) {
               foundMatch = true;
         
-              const iValue = row.getCell('I').value;
-              const jValue = row.getCell('J').value;
-              const kValue = row.getCell('K').value;
-              const lValue = row.getCell('L').value;
-              const nValue = row.getCell('N').value;
-              const oValue = row.getCell('O').value;
-              const pValue = row.getCell('P').value;
+              const iValue = row.getCell('I1').value;
+              const jValue = row.getCell('J1').value;
+              const kValue = row.getCell('K1').value;
+              const lValue = row.getCell('L1').value;
+              const nValue = row.getCell('N1').value;
+              const oValue = row.getCell('O1').value;
+              const pValue = row.getCell('P1').value;
         
               if (
                 iValue === null &&
