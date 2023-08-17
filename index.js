@@ -1,8 +1,9 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const ExcelJS = require('exceljs');
+const path = require('path');
 const fs = require('fs');
+const ExcelJS = require('exceljs');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -30,6 +31,8 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let textMail = {};  //текст письма
+const filePath_T = `/root/zak/xl/текстиль`;
+const filePath_O = `/root/zak/xl/обои`;
 
 
 
@@ -211,8 +214,28 @@ const sendReserveEmail = async (chatId) => {
         console.error(e);
         throw new Error('Ошибка при отправке е-мейла');
     }
-
 }
+
+// Функция для поиска эксель файла в указанной папке и ее подпапках
+function findExcelFile(folderPath) {
+    const files = fs.readdirSync(folderPath);
+    
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const stat = fs.statSync(filePath);
+      
+      if (stat.isDirectory()) {
+        const result = findExcelFile(filePath);
+        if (result) {
+          return result;
+        }
+      } else if (path.extname(file) === '.xlsx') {
+        return filePath;
+      }
+    }
+    
+    return null;
+  }
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -275,12 +298,9 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
         try {
 
-
-            const filePath = `/root/текстиль`;
-          
             const workbook = new ExcelJS.Workbook();
           
-            await workbook.xlsx.readFile(filePath);
+            const wb = workbook.xlsx.readFile(filePath_T);
           
             const worksheet = workbook.getWorksheet('2017-22');
           
@@ -451,7 +471,6 @@ bot.on('message', async msg => {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
                     const fileName = msg.document.file_name;
-                    const filePath = file.file_path;
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
