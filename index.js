@@ -31,7 +31,6 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let textMail = {};  //текст письма
-const folderPath = `/root/zak/xl`;
 
 
 
@@ -216,16 +215,14 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла в указанной папке и ее подпапках
-function findExcelFile() {
-    const folderPath = `/root/zak/xl`;
-    const files = fs.readdir(folderPath);
-    
+async function findExcelFile() {
+    const folderPath = '/root/zak/xl';
+    const files = await fs.promises.readdir(folderPath);
     for (const file of files) {
       const filePath = path.join(folderPath, file);
-      const stat = fs.statSync(filePath);
-      
+      const stat = await fs.promises.stat(filePath);
       if (stat.isDirectory()) {
-        const result = findExcelFile(filePath);
+        const result = await findExcelFile(filePath);
         if (result) {
           return result;
         }
@@ -233,7 +230,6 @@ function findExcelFile() {
         return filePath;
       }
     }
-    
     return null;
   }
 
