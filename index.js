@@ -276,7 +276,7 @@ bot.onText(/\/x/, async msg => {
         try {
 
 
-            const filePath = `/root/xl/текстиль.xlsx `;
+            const filePath = `/root/текстиль.xlsx `;
           
             const workbook = new ExcelJS.Workbook();
           
