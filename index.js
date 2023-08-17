@@ -29,7 +29,7 @@ plc = {};   //предпоследняя команда
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
-let text = {};  //текст письма
+let textMail = {};  //текст письма
 
 
 
@@ -201,7 +201,7 @@ const sendReserveEmail = async (chatId) => {
             from: 'n_kharitonov@manders.ru',
             to: `${recipient}, ${copy}`,
             subject: subject,
-            text: text,
+            text: textMail,
         });
         
         console.log(result);
@@ -368,7 +368,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
     }
 
-    
+
     if (text === '/infogame') {
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
