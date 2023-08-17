@@ -284,7 +284,6 @@ bot.onText(/\/x/, async msg => {
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
-    const file_name = msg.document.file_name;
     const chatId = msg.chat.id;
 
     console.log(msg)
@@ -374,6 +373,21 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
     
+    if (text.toLowerCase().includes('привет')) {
+        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
+    }
+
+    if (text !== '/game' && text !== '/start') {
+        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
+    }
+
+}) 
+//СЛУШАТЕЛЬ ДОКУМЕНТОВ========================================================================================================================================
+
+bot.on('message', async msg => {
+    const file_name = msg.document.file_name;
+    const chatId = msg.chat.id;
+    
     if (msg.document) {
         if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
         
@@ -393,18 +407,7 @@ bot.on('message', async msg => {
             return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru"`);
         }
     }
-    
-
-    
-    if (text.toLowerCase().includes('привет')) {
-        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
-    }
-
-    if (text !== '/game' && text !== '/start') {
-        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
-    }
-
-}) 
+});
 
 //слушатель колбэков==========================================================================================================================================
 
@@ -537,31 +540,8 @@ bot.on('callback_query', async msg => {
 
 })
 
-//СЛУШАТЕЛЬ ДОКУМЕНТОВ===================================================================================
-// bot.on('document', async (ctx) => {
-//     const document = ctx.message.document;
-//     const fileName = document.file_name;
-  
-//     // Проверяем, что файл имеет нужное имя
-//     if (fileName === 'текстиль' || fileName === 'обои') {
-//       try {
-//         // Получаем информацию о файле
-//         const file = await ctx.telegram.getFile(document.file_id);
-//         const filePath = file.file_path;
-  
-//         // Сохраняем файл на сервере
-//         const fileStream = fs.createWriteStream(`/root/${fileName}.xlsx`);
-//         await ctx.telegram.downloadFile(filePath, fileStream);
-  
-//         ctx.reply('Файл успешно сохранен.');
-//       } catch (err) {
-//         console.error(err);
-//         ctx.reply('Произошла ошибка при сохранении файла.');
-//       }
-//     } else {
-//       ctx.reply('Неверное имя файла. Поддерживаются только файлы с именем "текстиль" и "обои".');
-//     }
-//   });
+
+
 }
 
 start();
