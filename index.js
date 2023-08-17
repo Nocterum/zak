@@ -294,24 +294,25 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
     try {
         const fileName = await findExcelFile();
-      
+        const testVC = 'REST_K';
+
         if (fileName) {
             const workbook = new ExcelJS.Workbook();
             const wb = await workbook.xlsx.readFile(fileName);
             const worksheet = wb.worksheets[0];
         
-          let user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-          });
+        //   let user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     }
+        //   });
         
           let foundMatch = false;
         
           worksheet.eachRow((row, rowNumber) => {
             const cellValue = row.getCell('B').value;
         
-            if (cellValue === user.vendorCode) {
+            if (cellValue === testVC) {
               foundMatch = true;
         
               const iValue = row.getCell('I').value;
