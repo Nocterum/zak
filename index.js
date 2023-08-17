@@ -273,9 +273,65 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    const email = 'master.of.colours@yandex.ru';
-    const password = 'qSHWyoP6sgns1929&';
-    loginToYandex(email, password);
+    try {
+        const fileName = await findExcelFile();
+        
+        if (fileName) {
+            // Файл найден, продолжаем работу с ним
+            const filePath = `/root/xl/текстиль.xlsx `;
+          
+            const workbook = new ExcelJS.Workbook();
+          
+            await workbook.xlsx.readFile(filePath);
+          
+            const worksheet = workbook.getWorksheet('2017-22');
+          
+            let user = await UserModel.findOne({
+              where: {
+                chatId: chatId
+              }
+            });
+          
+            let foundMatch = false;
+          
+            worksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('C').value;
+            
+                if (cellValue === user.vendorCode) {
+                    foundMatch = true;
+              
+                    const c9Value = row.getCell('C9').value;
+                    const c10Value = row.getCell('C10').value;
+                    const c11Value = row.getCell('C11').value;
+                    const c12Value = row.getCell('C12').value;
+                    const c14Value = row.getCell('C14').value;
+                    const c15Value = row.getCell('C15').value;
+              
+                if (
+                    c9Value === null &&
+                    c10Value === null &&
+                    c11Value === null &&
+                    c12Value === null &&
+                    c14Value === null &&
+                    c15Value === null
+              ) {
+                    return bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
+              } else {
+                return bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в налии в одном из салонов.');
+              }
+            }
+          });
+          
+          if (!foundMatch) {
+            return bot.sendMessage(chatId, 'Совпадений не найдено.');
+          }
+        } else {
+          // Файл не найден
+          console.log('Эксель файл не найден.');
+        }
+      } catch (error) {
+        console.error('Чтение файла не состоялось:', error);
+      }
     }),
 );
 
@@ -390,7 +446,7 @@ bot.on('message', async msg => {
 //СЛУШАТЕЛЬ ДОКУМЕНТОВ========================================================================================================================================
 
 bot.on('message', async msg => {
-    
+
     try {
         const file_name = msg.document.file_name;
         const chatId = msg.chat.id;
