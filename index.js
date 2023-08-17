@@ -284,6 +284,7 @@ bot.onText(/\/x/, async msg => {
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
+    const file_name = msg.document.file_name;
     const chatId = msg.chat.id;
 
     console.log(msg)
@@ -367,29 +368,30 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
     }
 
-    if (text.toLowerCase().includes('привет')) {
-        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
-    }
-
+    
     if (text === '/infogame') {
         lc = null;
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
-
-    if ((msg.document.file_name === 'текстиль.xlsx' || msg.document.file_name === 'обои.xlsx')) {
-
+    
+    if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
+        
         await bot.getFile(msg.document.file_id).then((file) => {
             const fileName = msg.document.file_name;
             const filePath = file.file_path;
             const fileStream = bot.getFileStream(file.file_id);
-    
+            
             fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
-    
+            
             fileStream.on('end', () => {
                 bot.sendMessage(chatId, Файл `"${fileName}" успешно сохранен.`);
-          });
+            });
         });
-      }
+    }
+    
+    if (text.toLowerCase().includes('привет')) {
+        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
+    }
 
     if (text !== '/game' && text !== '/start') {
         return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
