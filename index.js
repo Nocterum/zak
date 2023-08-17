@@ -390,10 +390,11 @@ bot.on('message', async msg => {
 //СЛУШАТЕЛЬ ДОКУМЕНТОВ========================================================================================================================================
 
 bot.on('message', async msg => {
-    const file_name = msg.document.file_name;
-    const chatId = msg.chat.id;
-
+    
     try {
+        const file_name = msg.document.file_name;
+        const chatId = msg.chat.id;
+
         if (msg.document) {
             if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
             
@@ -410,7 +411,7 @@ bot.on('message', async msg => {
                 });
                 return;
             } else {
-                return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru"`);
+                return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru`);
             }
         }
     } catch {
