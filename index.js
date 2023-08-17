@@ -376,6 +376,21 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
 
+    if (msg.document && (msg.document.file_name === 'текстиль' || msg.document.file_name === 'обои')) {
+
+        await bot.getFile(msg.document.file_id).then((file) => {
+            const fileName = msg.document.file_name;
+            const filePath = file.file_path;
+            const fileStream = bot.getFileStream(file.file_id);
+    
+            fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
+    
+            fileStream.on('end', () => {
+                bot.sendMessage(chatId, Файл `"${fileName}" успешно сохранен.`);
+          });
+        });
+      }
+
     if (text !== '/game' && text !== '/start') {
         return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
@@ -512,33 +527,34 @@ bot.on('callback_query', async msg => {
     }
 
 })
+
 //СЛУШАТЕЛЬ ДОКУМЕНТОВ===================================================================================
-bot.on('document', async (ctx) => {
-    const document = ctx.message.document;
-    const fileName = document.file_name;
+// bot.on('document', async (ctx) => {
+//     const document = ctx.message.document;
+//     const fileName = document.file_name;
   
-    // Проверяем, что файл имеет нужное имя
-    if (fileName === 'текстиль' || fileName === 'обои') {
-      try {
-        // Получаем информацию о файле
-        const file = await ctx.telegram.getFile(document.file_id);
-        const filePath = file.file_path;
+//     // Проверяем, что файл имеет нужное имя
+//     if (fileName === 'текстиль' || fileName === 'обои') {
+//       try {
+//         // Получаем информацию о файле
+//         const file = await ctx.telegram.getFile(document.file_id);
+//         const filePath = file.file_path;
   
-        // Сохраняем файл на сервере
-        const fileStream = fs.createWriteStream(`/root/${fileName}.xlsx`);
-        await ctx.telegram.downloadFile(filePath, fileStream);
+//         // Сохраняем файл на сервере
+//         const fileStream = fs.createWriteStream(`/root/${fileName}.xlsx`);
+//         await ctx.telegram.downloadFile(filePath, fileStream);
   
-        ctx.reply('Файл успешно сохранен.');
-      } catch (err) {
-        console.error(err);
-        ctx.reply('Произошла ошибка при сохранении файла.');
-      }
-    } else {
-      ctx.reply('Неверное имя файла. Поддерживаются только файлы с именем "текстиль" и "обои".');
-    }
-  });
+//         ctx.reply('Файл успешно сохранен.');
+//       } catch (err) {
+//         console.error(err);
+//         ctx.reply('Произошла ошибка при сохранении файла.');
+//       }
+//     } else {
+//       ctx.reply('Неверное имя файла. Поддерживаются только файлы с именем "текстиль" и "обои".');
+//     }
+//   });
 }
 
-start()
+start();
 
     
