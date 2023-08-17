@@ -376,7 +376,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
 
-    if (msg.document && (msg.document.file_name === 'текстиль.xlsx' || msg.document.file_name === 'обои.xlsx')) {
+    if ((msg.document.file_name === 'текстиль.xlsx' || msg.document.file_name === 'обои.xlsx')) {
 
         await bot.getFile(msg.document.file_id).then((file) => {
             const fileName = msg.document.file_name;
