@@ -374,20 +374,27 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
     
-    if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
+    if (msg.document) {
+        if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
         
-        await bot.getFile(msg.document.file_id).then((file) => {
-            const fileName = msg.document.file_name;
-            const filePath = file.file_path;
-            const fileStream = bot.getFileStream(file.file_id);
-            
-            fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
-            
-            fileStream.on('end', () => {
-                bot.sendMessage(chatId, Файл `"${fileName}" успешно сохранен.`);
+            await bot.getFile(msg.document.file_id).then((file) => {
+                const fileName = msg.document.file_name;
+                const filePath = file.file_path;
+                const fileStream = bot.getFileStream(file.file_id);
+                
+                fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
+                
+                fileStream.on('end', () => {
+                    bot.sendMessage(chatId, `"${fileName}" успешно сохранен.`);
+                });
             });
-        });
+            return;
+        } else {
+            return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru"`);
+        }
     }
+    
+
     
     if (text.toLowerCase().includes('привет')) {
         return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
