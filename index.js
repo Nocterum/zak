@@ -31,8 +31,7 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
 let textMail = {};  //текст письма
-const filePath_T = `/root/zak/xl/текстиль`;
-const filePath_O = `/root/zak/xl/обои`;
+const folderPath = `/root/zak/xl`;
 
 
 
@@ -217,8 +216,9 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла в указанной папке и ее подпапках
-function findExcelFile(folderPath) {
-    const files = fs.readdirSync(folderPath);
+function findExcelFile() {
+    const folderPath = `/root/zak/xl`;
+    const files = fs.readdir(folderPath);
     
     for (const file of files) {
       const filePath = path.join(folderPath, file);
@@ -297,57 +297,62 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
         try {
+            const fileName = await findExcelFile();
 
-            const workbook = new ExcelJS.Workbook();
+            if (fileName) {
+                const workbook = new ExcelJS.Workbook();
           
-            const wb = workbook.xlsx.readFile(filePath_T);
-          
-            const worksheet = workbook.getWorksheet('2017-22');
-          
-            let user = await UserModel.findOne({
-              where: {
-                chatId: chatId
+                const wb = workbook.xlsx.readFile(filePath);
+              
+                const worksheet = workbook.getWorksheet('2017-22');
+              
+                let user = await UserModel.findOne({
+                  where: {
+                    chatId: chatId
+                  }
+                });
+              
+                let foundMatch = false;
+              
+                worksheet.eachRowAsync((row, rowNumber) => {
+                    const cellValue = row.getCell('C').value;
+                
+                    if (cellValue === user.vendorCode) {
+                        foundMatch = true;
+                  
+                        const c9Value = row.getCell('C9').value;
+                        const c10Value = row.getCell('C10').value;
+                        const c11Value = row.getCell('C11').value;
+                        const c12Value = row.getCell('C12').value;
+                        const c14Value = row.getCell('C14').value;
+                        const c15Value = row.getCell('C15').value;
+                  
+                        if (
+                            c9Value === null &&
+                            c10Value === null &&
+                            c11Value === null &&
+                            c12Value === null &&
+                            c14Value === null &&
+                            c15Value === null
+                            ) {
+                                bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
+                        } else {
+                            bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в наличии в одном из салонов.');
+                        }   
+                    }
+                });
+              
+              if (!foundMatch) {
+                return bot.sendMessage(chatId, 'Совпадений не найдено.');
               }
-            });
-          
-            let foundMatch = false;
-          
-            worksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('C').value;
-            
-                if (cellValue === user.vendorCode) {
-                    foundMatch = true;
-              
-                    const c9Value = row.getCell('C9').value;
-                    const c10Value = row.getCell('C10').value;
-                    const c11Value = row.getCell('C11').value;
-                    const c12Value = row.getCell('C12').value;
-                    const c14Value = row.getCell('C14').value;
-                    const c15Value = row.getCell('C15').value;
-              
-                    if (
-                        c9Value === null &&
-                        c10Value === null &&
-                        c11Value === null &&
-                        c12Value === null &&
-                        c14Value === null &&
-                        c15Value === null
-                        ) {
-                            return bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
-                    } else {
-                        return bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в налии в одном из салонов.');
-                    }   
-                }
-            });
-          
-          if (!foundMatch) {
-            return bot.sendMessage(chatId, 'Совпадений не найдено.');
-          }
+            } else {
+                return bot.sendMessage(chatId, 'Эксель файл не найден.');
+            }
 
         } catch (error) {
             console.error('Чтение файла не состоялось:', error);
       }
-    }),
+    })
 );
 
 
