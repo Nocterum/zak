@@ -213,121 +213,17 @@ const sendReserveEmail = async (chatId) => {
     }
 
 }
-// Функция для копирования файла
-  async function copyFile(filePath, destinationPath) {
-    try {
-      const response = await axios.get(filePath, { responseType: 'stream' });
-      const writer = fs.createWriteStream(destinationPath);
-      response.data.pipe(writer);
-      return new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-      });
-    } catch (error) {
-      console.error('Ошибка при копировании файла:', error);
-      throw error;
-    }
-  }
 
-// Функция для поиска эксель файла на удалённом рабочем столе
-// async function findExcelFile() {
-//     try {
-//       // Путь к папке, где находятся эксель файлы на удалённом рабочем столе
-//       const folderPath = '//185.159.81.174:55505/Desktop/bot/';
-      
-//       return new Promise((resolve, reject) => {
-//         clientRDP.on(folderPath, (err, fileList) => {
-//           if (err) {
-//             reject(err);
-//           } else {
-//             for (const file of fileList) {
-//               if (file.name.endsWith('.xlsx')) {
-//                 resolve(file.name);
-//                 return; 
-//               }
-//             }
-//             resolve(null);
-//           }
-//         });
-//       });
-//     } catch (error) {
-//       console.error('Error finding Excel file on remote desktop:', error);
-//     }
-//   }
-
-// функция запроса файла и его копирования
-async function getAxiosFile() {
+const connectToYaDisk = async (emailYa, passwordYa) => {
+    const baseURL = 'https://passport.yandex.ru/auth/list'
     try {
-      const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
-      const response = await axios.get(filePath, {
-        responseType: 'arraybuffer'
-      });
-      const data = Buffer.from(response.data, 'binary');
-      fs.writeFileSync('текстиль.xlsx', data);
-      console.log('Файл успешно сохранен');
-    } catch (error) {
-      console.error('Ошибка при выполнении GET-запроса:', error);
-    }
-  }
-
-  // Функция для получения информации из эксель файла
-  async function getExcelData(chatId) {
-    try {
-      const fileName = await findExcelFile();
-      
-      if (fileName) {
-        // Файл найден, продолжаем работу с ним
-        const filePath = `//185.159.81.174:55505/Desktop/bot/текстиль.xlsx `;
-        
-        const workbook = new ExcelJS.Workbook();
-        
-        await workbook.xlsx.readFile(filePath);
-        
-        const worksheet = workbook.getWorksheet('2017-22');
-        
-        let user = await UserModel.findOne({
-          where: {
-            chatId: chatId
-          }
+        const response = await axios.post(`${baseURL}`, {
+            emailYa,
+            passwordYa,
         });
-        
-        let foundMatch = false;
-        
-        worksheet.eachRow((row, rowNumber) => {
-          const cellValue = row.getCell('C').value;
-          
-          if (cellValue === user.vendorCode) {
-            foundMatch = true;
-            
-            const c9Value = row.getCell('C9').value;
-            const c10Value = row.getCell('C10').value;
-            const c11Value = row.getCell('C11').value;
-            const c12Value = row.getCell('C12').value;
-            const c14Value = row.getCell('C14').value;
-            const c15Value = row.getCell('C15').value;
-            
-            if (
-              c9Value === null &&
-              c10Value === null &&
-              c11Value === null &&
-              c12Value === null &&
-              c14Value === null &&
-              c15Value === null
-            ) {
-              bot.sendMessage(chatId, 'Каталогов в салоне нет.');
-            }
-          }
-        });
-        
-        if (!foundMatch) {
-          console.log('Совпадение не найдено');
-        }
-      } else {
-        // Файл не найден
-        console.log('Excel file not found on remote desktop');
-      }
-    } catch (error) {
-      console.error('Error getting Excel data:', error);
+        console.log(response.data);
+    } catch (error){
+        console.error(error);
     }
 }
 
@@ -390,6 +286,9 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
+    const emailYa = 'master.of.colours@yandex.ru';
+    const passwordYa = 'qSHWyoP6sgns1929&';
+    connectToYaDisk(emailYa, passwordYa);
     }),
 );
 
@@ -496,17 +395,6 @@ bot.on('message', async msg => {
     }   
 
     if (text !== '/game' && text !== '/start') {
-        try {
-            const filePath = "//185.159.81.174:55505/Desktop/bot/текстиль.xlsx";
-            const response = await axios.get(filePath, {
-              responseType: 'arraybuffer'
-            });
-            const data = Buffer.from(response.data, 'binary');
-            fs.writeFileSync('текстиль.xlsx', data);
-            console.log('Файл успешно сохранен');
-          } catch (error) {
-            console.error('Ошибка при выполнении GET-запроса:', error);
-          }
         return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
 
