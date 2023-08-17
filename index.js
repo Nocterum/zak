@@ -214,30 +214,6 @@ const sendReserveEmail = async (chatId) => {
 
 }
 
-// функция авторизаации на Ядиске
-async function loginToYandex(login, password) {
-    const url = 'https://passport.yandex.ru/auth/add?retpath=https%3A%2F%2Fpassport.yandex.ru%2F&noreturn=1';
-    const loginElement = 'passp-field-login';
-    const passwordElement = 'passp-field-passwd';
-    
-    try {
-      // Отправляем POST-запрос для ввода логина
-      await axios.post(url, { [loginElement]: login });
-      
-      // Отправляем POST-запрос для ввода пароля
-      await axios.post(url, { [passwordElement]: password });
-      
-      // Отправляем POST-запрос для нажатия кнопки "Войти"
-      await axios.post(url, { 'button:action:passp:sign-in': true });
-      
-      console.log('Авторизация выполнена успешно!');
-    } catch (error) {
-      console.error('Ошибка авторизации:', error);
-    }
-}
-    
-
-
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
 const start = async () => {
@@ -391,11 +367,6 @@ bot.on('message', async msg => {
         return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
     }
 
-    if (text === 'recreatetable' && chatId === '356339062') {
-        await UserModel.sync({ force: true })
-        return bot.sendMessage(chatId, 'Таблица для модели `User` только что была создана заново!');
-    }
-
     if (text.toLowerCase() === 'привет' + '') {
         return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
@@ -541,7 +512,31 @@ bot.on('callback_query', async msg => {
     }
 
 })
-
+//СЛУШАТЕЛЬ ДОКУМЕНТОВ===================================================================================
+bot.on('document', async (ctx) => {
+    const document = ctx.message.document;
+    const fileName = document.file_name;
+  
+    // Проверяем, что файл имеет нужное имя
+    if (fileName === 'текстиль' || fileName === 'обои') {
+      try {
+        // Получаем информацию о файле
+        const file = await ctx.telegram.getFile(document.file_id);
+        const filePath = file.file_path;
+  
+        // Сохраняем файл на сервере
+        const fileStream = fs.createWriteStream(`/root/${fileName}.xlsx`);
+        await ctx.telegram.downloadFile(filePath, fileStream);
+  
+        ctx.reply('Файл успешно сохранен.');
+      } catch (err) {
+        console.error(err);
+        ctx.reply('Произошла ошибка при сохранении файла.');
+      }
+    } else {
+      ctx.reply('Неверное имя файла. Поддерживаются только файлы с именем "текстиль" и "обои".');
+    }
+  });
 }
 
 start()

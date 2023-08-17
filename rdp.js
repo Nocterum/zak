@@ -1,16 +1,16 @@
-const RDP = require('rdpjs');
+// const RDP = require('rdpjs');
 
-// Создание экземпляра класса RDP
+// // Создание экземпляра класса RDP
 
-    const clientRDP = RDP.createClient({
-        domain: 'MANDERS',
-        userName: 'n_kharitonov',
-        password: '1929qweR',
-        autoLogin : true,
-    }).on('connect', function () {
-    }).on('close', function() {
-    }).on('bitmap', function(bitmap) {
-    }).on('error', function(err) {
-    }).connect('185.159.81.174', 55505);;
+//     const clientRDP = RDP.createClient({
+//         domain: 'MANDERS',
+//         userName: 'n_kharitonov',
+//         password: '1929qweR',
+//         autoLogin : true,
+//     }).on('connect', function () { searchFiles('E:/Users/n_kharitonov/Desktop/bot')
+//     }).on('close', function() {
+//     }).on('bitmap', function(bitmap) {
+//     }).on('error', function(err) {
+//     }).connect('185.159.81.174', 55505);
 
-module.exports = clientRDP;
+// module.exports = clientRDP;
