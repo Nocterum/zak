@@ -297,9 +297,7 @@ bot.onText(/\/x/, async msg => {
 
             if (fileName) {
                 const workbook = new ExcelJS.Workbook();
-          
-                const wb = workbook.xlsx.readFile(filePath);
-              
+                const wb = await workbook.xlsx.readFile(fileName);
                 const worksheet = workbook.getWorksheet('2017-22');
               
                 let user = await UserModel.findOne({
