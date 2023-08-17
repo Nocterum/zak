@@ -294,7 +294,7 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
     try {
         const fileName = await findExcelFile();
-        const testVC = 'REST_K';
+        const testVC = 'Individuals';
 
         if (fileName) {
             const workbook = new ExcelJS.Workbook();
