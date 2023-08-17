@@ -276,7 +276,7 @@ bot.onText(/\/x/, async msg => {
         try {
 
 
-            const filePath = `/root/текстиль.xlsx `;
+            const filePath = `/xl/текстиль.xlsx `;
           
             const workbook = new ExcelJS.Workbook();
           
@@ -454,7 +454,7 @@ bot.on('message', async msg => {
                     const filePath = file.file_path;
                     const fileStream = bot.getFileStream(file.file_id);
                     
-                    fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
+                    fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
                     
                     fileStream.on('end', () => {
                         bot.sendMessage(chatId, `"${fileName}" успешно сохранен.`);
