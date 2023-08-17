@@ -273,10 +273,9 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    try {
-        
-        if (fileName) {
-            // Файл найден, продолжаем работу с ним
+        try {
+
+
             const filePath = `/root/xl/текстиль.xlsx `;
           
             const workbook = new ExcelJS.Workbook();
@@ -306,30 +305,27 @@ bot.onText(/\/x/, async msg => {
                     const c14Value = row.getCell('C14').value;
                     const c15Value = row.getCell('C15').value;
               
-                if (
-                    c9Value === null &&
-                    c10Value === null &&
-                    c11Value === null &&
-                    c12Value === null &&
-                    c14Value === null &&
-                    c15Value === null
-              ) {
-                    return bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
-              } else {
-                return bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в налии в одном из салонов.');
-              }
-            }
-          });
+                    if (
+                        c9Value === null &&
+                        c10Value === null &&
+                        c11Value === null &&
+                        c12Value === null &&
+                        c14Value === null &&
+                        c15Value === null
+                        ) {
+                            return bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
+                    } else {
+                        return bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в налии в одном из салонов.');
+                    }   
+                }
+            });
           
           if (!foundMatch) {
             return bot.sendMessage(chatId, 'Совпадений не найдено.');
           }
-        } else {
-          // Файл не найден
-          console.log('Эксель файл не найден.');
-        }
-      } catch (error) {
-        console.error('Чтение файла не состоялось:', error);
+
+        } catch (error) {
+            console.error('Чтение файла не состоялось:', error);
       }
     }),
 );
