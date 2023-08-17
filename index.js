@@ -294,6 +294,7 @@ bot.on('message', async msg => {
         }
     });
 
+    try {
     //главное меню
     if (text === '/mainmenu') {
         
@@ -302,7 +303,7 @@ bot.on('message', async msg => {
             await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
         }
         return;
-        }
+    }
 
     //начало работы
     if (text === '/beginwork') {
@@ -380,6 +381,10 @@ bot.on('message', async msg => {
     if (text !== '/game' && text !== '/start') {
         return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
+    } catch {
+        console.log('Сработал слушатель документов.')
+    }
+
 
 }) 
 //СЛУШАТЕЛЬ ДОКУМЕНТОВ========================================================================================================================================
@@ -387,26 +392,31 @@ bot.on('message', async msg => {
 bot.on('message', async msg => {
     const file_name = msg.document.file_name;
     const chatId = msg.chat.id;
-    
-    if (msg.document) {
-        if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
-        
-            await bot.getFile(msg.document.file_id).then((file) => {
-                const fileName = msg.document.file_name;
-                const filePath = file.file_path;
-                const fileStream = bot.getFileStream(file.file_id);
-                
-                fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
-                
-                fileStream.on('end', () => {
-                    bot.sendMessage(chatId, `"${fileName}" успешно сохранен.`);
+
+    try {
+        if (msg.document) {
+            if ((file_name === 'текстиль.xlsx' || file_name === 'обои.xlsx')) {
+            
+                await bot.getFile(msg.document.file_id).then((file) => {
+                    const fileName = msg.document.file_name;
+                    const filePath = file.file_path;
+                    const fileStream = bot.getFileStream(file.file_id);
+                    
+                    fileStream.pipe(fs.createWriteStream(`/root/xl/${fileName}`));
+                    
+                    fileStream.on('end', () => {
+                        bot.sendMessage(chatId, `"${fileName}" успешно сохранен.`);
+                    });
                 });
-            });
-            return;
-        } else {
-            return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru"`);
+                return;
+            } else {
+                return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь эксель файлы с именем "обои.xlsx" и "текстиль.xlsx.\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru"`);
+            }
         }
+    } catch {
+        console.log('Cработал слушатель сообщений.')
     }
+
 });
 
 //слушатель колбэков==========================================================================================================================================
