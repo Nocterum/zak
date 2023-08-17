@@ -308,7 +308,7 @@ bot.onText(/\/x/, async msg => {
               
                 let foundMatch = false;
               
-                worksheet.eachRowAsync((row, rowNumber) => {
+                worksheet.eachRow((row, rowNumber) => {
                     const cellValue = row.getCell('C').value;
                 
                     if (cellValue === user.vendorCode) {
