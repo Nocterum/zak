@@ -292,59 +292,61 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-        try {
-            const fileName = await findExcelFile();
-
-            if (fileName) {
-                const workbook = new ExcelJS.Workbook();
-                const wb = await workbook.xlsx.readFile(fileName);
-                const worksheet = workbook.getWorksheet('2017-22');
-              
-                let user = await UserModel.findOne({
-                  where: {
-                    chatId: chatId
-                  }
-                });
-              
-                let foundMatch = false;
-              
-                worksheet.eachRow((row, rowNumber) => {
-                    const cellValue = row.getCell('C').value;
-                
-                    if (cellValue === user.vendorCode) {
-                        foundMatch = true;
-                  
-                        const c9Value = row.getCell('C9').value;
-                        const c10Value = row.getCell('C10').value;
-                        const c11Value = row.getCell('C11').value;
-                        const c12Value = row.getCell('C12').value;
-                        const c14Value = row.getCell('C14').value;
-                        const c15Value = row.getCell('C15').value;
-                  
-                        if (
-                            c9Value === null &&
-                            c10Value === null &&
-                            c11Value === null &&
-                            c12Value === null &&
-                            c14Value === null &&
-                            c15Value === null
-                            ) {
-                                bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
-                        } else {
-                            bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в наличии в одном из салонов.');
-                        }   
-                    }
-                });
-              
-              if (!foundMatch) {
-                return bot.sendMessage(chatId, 'Совпадений не найдено.');
-              }
-            } else {
-                return bot.sendMessage(chatId, 'Эксель файл не найден.');
+    try {
+        const fileName = await findExcelFile();
+      
+        if (fileName) {
+            const workbook = new ExcelJS.Workbook();
+            const wb = await workbook.xlsx.readFile(fileName);
+            const worksheet = wb.worksheets[0];
+        
+          let user = await UserModel.findOne({
+            where: {
+                chatId: chatId
             }
-
-        } catch (error) {
-            console.error('Чтение файла не состоялось:', error);
+          });
+        
+          let foundMatch = false;
+        
+          worksheet.eachRow((row, rowNumber) => {
+            const cellValue = row.getCell('B').value;
+        
+            if (cellValue === user.vendorCode) {
+              foundMatch = true;
+        
+              const iValue = row.getCell('I').value;
+              const jValue = row.getCell('J').value;
+              const kValue = row.getCell('K').value;
+              const lValue = row.getCell('L').value;
+              const nValue = row.getCell('N').value;
+              const oValue = row.getCell('O').value;
+              const pValue = row.getCell('P').value;
+        
+              if (
+                iValue === null &&
+                jValue === null &&
+                kValue === null &&
+                lValue === null &&
+                nValue === null &&
+                oValue === null &&
+                pValue === null
+              ) {
+                bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
+              } else {
+                bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в наличии в одном из салонов.');
+              }
+            }
+          });
+        
+          if (!foundMatch) {
+            bot.sendMessage(chatId, 'Совпадений не найдено.');
+          }
+        } else {
+          bot.sendMessage(chatId, 'Эксель файл не найден.');
+        }
+      
+      } catch (error) {
+        console.error('Чтение файла не состоялось:', error);
       }
     })
 );
