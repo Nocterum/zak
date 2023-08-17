@@ -274,7 +274,6 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
     try {
-        const fileName = await findExcelFile();
         
         if (fileName) {
             // Файл найден, продолжаем работу с ним
