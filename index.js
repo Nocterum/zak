@@ -218,7 +218,7 @@ const sendReserveEmail = async (chatId) => {
 }
 
 //Функция поиска каталога в эксель файлах
-async function findCatalog() {
+async function findCatalog(chatId) {
 
     try {
       const fileNameWallpaper = await findExcelFile();
@@ -376,25 +376,11 @@ async function findCatalog() {
             bot.sendMessage(chatId, 'Совпадений не найдено.');
           }
         } else {
-
-            let user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                }
-            });
-
           await bot.deleteMessage(user.chatId, botMsgIdx);
           bot.sendMessage(chatId, 'Эксель файл не найден.');
         }
       }
     } catch (error) {
-    
-        let user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-        });
-
       await bot.deleteMessage(user.chatId, botMsgIdx);
       bot.sendMessage(
         chatId,
@@ -593,7 +579,7 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalog();
+        return findCatalog(chatId);
     }
     
     //вывод информации
