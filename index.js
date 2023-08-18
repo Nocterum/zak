@@ -376,11 +376,25 @@ async function findCatalog() {
             bot.sendMessage(chatId, 'Совпадений не найдено.');
           }
         } else {
+
+            let user = await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
+
           await bot.deleteMessage(user.chatId, botMsgIdx);
           bot.sendMessage(chatId, 'Эксель файл не найден.');
         }
       }
     } catch (error) {
+    
+        let user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
       await bot.deleteMessage(user.chatId, botMsgIdx);
       bot.sendMessage(
         chatId,
