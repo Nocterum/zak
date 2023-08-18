@@ -219,7 +219,7 @@ const sendReserveEmail = async (chatId) => {
 
 //Функция поиска каталога в эксель файлах
 async function findCatalog() {
-    const chatId = msg.chat.id;
+
     try {
       const fileNameWallpaper = await findExcelFile();
       if (fileNameWallpaper) {
@@ -372,16 +372,16 @@ async function findCatalog() {
           });
 
           if (!foundMatchTextile) {
-            await bot.deleteMessage(chatId, botMsgIdx);
+            await bot.deleteMessage(user.chatId, botMsgIdx);
             bot.sendMessage(chatId, 'Совпадений не найдено.');
           }
         } else {
-          await bot.deleteMessage(chatId, botMsgIdx);
+          await bot.deleteMessage(user.chatId, botMsgIdx);
           bot.sendMessage(chatId, 'Эксель файл не найден.');
         }
       }
     } catch (error) {
-      await bot.deleteMessage(chatId, botMsgIdx);
+      await bot.deleteMessage(user.chatId, botMsgIdx);
       bot.sendMessage(
         chatId,
         `Что-то пошло не так.
@@ -578,7 +578,7 @@ bot.on('message', async msg => {
         await bot.sendMessage(
             chatId, 
             'Идёт поиск каталога . . .');
-        botMsgIdx = msg.message_id; 
+        botMsgIdx = msg.message_id +=1 ; 
         return findCatalog();
     }
     
