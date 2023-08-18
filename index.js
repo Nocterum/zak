@@ -478,13 +478,18 @@ bot.on('message', async msg => {
         }
     });
 
-    try {
+    // try {
     //главное меню
     if (text === '/mainmenu') {
         
         if (user) {
             lc = null;
-            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            await bot.sendMessage(
+                chatId, 
+                `И снова здравствуйте, ${user.nickname}!
+                \n\nНачать работу: /beginwork,
+                \nПроверить введенные данные: /infowork,
+                \n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
         }
         return;
     }
@@ -495,7 +500,7 @@ bot.on('message', async msg => {
         if (!user.email) {
             await editEmail(chatId);
         } else {
-            await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions)
+            await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions);
         } 
         return; 
     }
@@ -511,7 +516,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(
             chatId, 
             `Ваш e-mail "<b>${user.email}</b>" успешно сохранён
-            \n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
+            \n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions);
     }            
 
     //изменить Nickname
@@ -607,9 +612,9 @@ bot.on('message', async msg => {
             chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
-    } catch {
-        console.log('Сработал слушатель документов.')
-    }
+    // } catch {
+    //     console.log('Сработал слушатель документов.')
+    // }
 
 
 }) 
