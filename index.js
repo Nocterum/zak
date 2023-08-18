@@ -365,7 +365,7 @@ async function findCatalog(chatId) {
                 bot.sendMessage(
                   chatId,
                   `Каталогов в салоне нет.
-                  \nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                  Обратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
                 );
               }
             }
@@ -382,10 +382,11 @@ async function findCatalog(chatId) {
       }
     } catch (error) {
       await bot.deleteMessage(chatId, botMsgIdx);
+      console.log (error);
       bot.sendMessage(
         chatId,
         `Что-то пошло не так.
-        \nСообщите о проблеме разработчику n_kharitonov@mander.ru`
+        Сообщите о проблеме разработчику n_kharitonov@mander.ru`
       );
     }
   }
@@ -488,7 +489,7 @@ bot.on('message', async msg => {
             await bot.sendMessage(
                 chatId, 
                 `И снова здравствуйте, ${user.nickname}!
-                \n\nНачать работу: /beginwork,
+                \nНачать работу: /beginwork,
                 \nПроверить введенные данные: /infowork,
                 \n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
         }
