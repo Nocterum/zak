@@ -238,6 +238,9 @@ async function findExcelFile() {
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper() {
+
+    const fileNameWallpaper = await findExcelFile('Каталоги  распределение в салоны 26.09.19.xlsx');
+    
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
         const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
@@ -315,6 +318,8 @@ async function findCatalogWallpaper() {
 //Функция поиска каталога текстиля
 async function findCatalogTextile() {
 
+    const fileNameTextile = await findExcelFile('Текстиль Каталоги  распределение в салоны.xlsx');
+
     if (fileNameTextile) {
         const workbookTextile = new ExcelJS.Workbook();
         const wbTextile = await workbookTextile.xlsx.readFile(fileNameTextile);
@@ -387,8 +392,6 @@ async function findCatalogTextile() {
 //Функция поиска каталога в эксель файлах
 async function findCatalog(chatId) {
     try {
-        const fileNameWallpaper = await findExcelFile('Каталоги  распределение в салоны 26.09.19.xlsx');
-        const fileNameTextile = await findExcelFile('Текстиль Каталоги  распределение в салоны.xlsx');
 
         await findCatalogWallpaper();
 
