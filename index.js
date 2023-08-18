@@ -243,7 +243,8 @@ async function findCatalogWallpaper(chatId) {
 
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
-        const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
+        const stream = fs.createReadStream(fileNameWallpaper);
+        const wbWallpaper = await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = wbWallpaper.worksheets[0];
 
         let user = await UserModel.findOne({
@@ -253,7 +254,7 @@ async function findCatalogWallpaper(chatId) {
         });
 
         let foundMatchWallpaper = false;
-        worksheetWallpaper.eachRow( async (row, rowNumber) => {
+        for (const row of worksheetWallpaper.iterRows()) {
 
             const cellValue = row.getCell('B').value;
 
@@ -270,12 +271,11 @@ async function findCatalogWallpaper(chatId) {
                 const pValue = row.getCell('P').value;
 
                 if (
-                    hValue !== null ||
-                    iValue !== null ||
-                    jValue !== null ||
-                    kValue !== null ||
-                    mValue !== null ||
-                    nValue !== null
+                    hValue !== null &&
+                    iValue !== null &&
+                    jValue !== null &&
+                    kValue !== null &&
+                    (mValue !== null || nValue !== null)
                 ) {
 
                 const h1Value = worksheetWallpaper.getCell(`H1`).value;
@@ -308,11 +308,15 @@ async function findCatalogWallpaper(chatId) {
 
                 }
             } else {
-                findCatalogTextile(chatId);
+
+                bot.deleteMessage(chatId, botMsgIdx);
+                return bot.sendMessage(
+                    chatId,
+                    `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                );
             }
-        });
-    }
-        
+        };
+    }      
 }
 
 //Функция поиска каталога текстиля
@@ -322,7 +326,7 @@ async function findCatalogTextile() {
 
     if (fileNameTextile) {
         const workbookTextile = new ExcelJS.Workbook();
-        const wbTextile = await workbookTextile.xlsx.readFile(fileNameTextile);
+        const wbTextile = await workbookTextile.xlsx.fileStream(fileNameTextile);
         const worksheetTextile = wbTextile.worksheets[0];
 
         let user = await UserModel.findOne({
