@@ -389,21 +389,6 @@ async function findCatalogTextile() {
     }
 }
 
-//Функция поиска каталога в эксель файлах
-async function findCatalog(chatId) {
-    try {
-
-        await findCatalogWallpaper(chatId);
-
-    } catch (error) {
-        await bot.deleteMessage(chatId, botMsgIdx);
-        console.log (error);
-        return bot.sendMessage(
-          chatId,
-          'Эксель файл не найден.'
-        );
-    }
-}  
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -592,7 +577,7 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalog(chatId);
+        return findCatalogWallpaper(chatId);
     }
     
     //вывод информации
@@ -800,8 +785,6 @@ bot.on('callback_query', async msg => {
     }
 
 })
-
-
 
 }
 
