@@ -241,7 +241,7 @@ async function findCatalog(chatId) {
 
     try {
       const fileNameWallpaper = await findExcelFile();
-      
+
       if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
         const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
@@ -270,14 +270,12 @@ async function findCatalog(chatId) {
             const pValue = row.getCell('P').value;
 
             if (
-              hValue !== null &&
-              iValue !== null &&
-              jValue !== null &&
-              kValue !== null &&
-              mValue !== null &&
-              nValue !== null &&
-              oValue !== null &&
-              pValue !== null
+              hValue !== null ||
+              iValue !== null ||
+              jValue !== null ||
+              kValue !== null ||
+              mValue !== null ||
+              nValue !== null
             ) {
 
               const h1Value = worksheetWallpaper.getCell(`H1`).value;
@@ -286,8 +284,6 @@ async function findCatalog(chatId) {
               const k1Value = worksheetWallpaper.getCell(`K1`).value;
               const m1Value = worksheetWallpaper.getCell(`M1`).value;
               const n1Value = worksheetWallpaper.getCell(`N1`).value;
-              const o1Value = worksheetWallpaper.getCell(`O1`).value;
-              const p1Value = worksheetWallpaper.getCell(`P1`).value;
   
               let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
               message += `${h1Value}: ${hValue}\n`;
@@ -296,11 +292,15 @@ async function findCatalog(chatId) {
               message += `${k1Value}: ${kValue}\n`;
               message += `${m1Value}: ${mValue}\n`;
               message += `${n1Value}: ${nValue}\n`;
-              message += `${o1Value}: ${oValue}\n`;
   
               if (pValue !== null) {
                 const p1Value = worksheetWallpaper.getCell(`P1`).value;
                 message += `${p1Value}: ${pValue}\n`;
+              }
+
+              if (oValue !== null) {
+                const o1Value = worksheetWallpaper.getCell(`O1`).value;
+                message += `${o1Value}: ${oValue}\n`;
               }
   
               bot.deleteMessage(chatId, botMsgIdx);
@@ -309,8 +309,7 @@ async function findCatalog(chatId) {
               bot.deleteMessage(chatId, botMsgIdx);
               bot.sendMessage(
                 chatId,
-                `Каталогов в салоне нет.
-                \nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
               );
             }
           }
@@ -350,13 +349,12 @@ async function findCatalog(chatId) {
               const oValue = row.getCell('O').value;
               const pValue = row.getCell('P').value;
 
-              if (iValue !== null &&
-                jValue !== null &&
-                kValue !== null &&
-                lValue !== null &&
-                nValue !== null &&
-                oValue !== null &&
-                pValue !== null
+              if (iValue !== null ||
+                jValue !== null ||
+                kValue !== null ||
+                lValue !== null ||
+                nValue !== null ||
+                oValue !== null
               ) {
                 const i1Value = worksheetTextile.getCell(`I1`).value;
                 const j1Value = worksheetTextile.getCell(`J1`).value;
@@ -375,9 +373,10 @@ async function findCatalog(chatId) {
                 message += `${o1Value}: ${oValue}\n`;
   
                 if (pValue !== null) {
+                    const p1Value = worksheetWallpaper.getCell(`P1`).value;
                   message += `${p1Value}: ${pValue}\n`;
                 }
-  
+
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(chatId, message, beginWork3Options);
               } else {
