@@ -217,11 +217,31 @@ const sendReserveEmail = async (chatId) => {
     }
 }
 
+// Функция для поиска эксель файла в указанной папке и ее подпапках
+async function findExcelFile() {
+    const folderPath = '/root/zak/xl';
+    const files = await fs.promises.readdir(folderPath);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const stat = await fs.promises.stat(filePath);
+      if (stat.isDirectory()) {
+        const result = await findExcelFile(filePath);
+        if (result) {
+          return result;
+        }
+      } else if (path.extname(file) === '.xlsx') {
+        return filePath;
+      }
+    }
+    return null;
+}
+
 //Функция поиска каталога в эксель файлах
 async function findCatalog(chatId) {
 
     try {
       const fileNameWallpaper = await findExcelFile();
+      
       if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
         const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
@@ -364,8 +384,7 @@ async function findCatalog(chatId) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(
                   chatId,
-                  `Каталогов в салоне нет.
-                  Обратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                  `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
                 );
               }
             }
@@ -385,8 +404,7 @@ async function findCatalog(chatId) {
       console.log (error);
       bot.sendMessage(
         chatId,
-        `Что-то пошло не так.
-        Сообщите о проблеме разработчику n_kharitonov@mander.ru`
+        `Что-то пошло не так.\nСообщите о проблеме разработчику n_kharitonov@mander.ru`
       );
     }
   }
