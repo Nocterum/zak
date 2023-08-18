@@ -219,6 +219,7 @@ const sendReserveEmail = async (chatId) => {
 
 //Функция поиска каталога в эксель файлах
 async function findCatalog() {
+    const chatId = msg.chat.id;
     try {
       const fileNameWallpaper = await findExcelFile();
       if (fileNameWallpaper) {
@@ -577,7 +578,7 @@ bot.on('message', async msg => {
         await bot.sendMessage(
             chatId, 
             'Идёт поиск каталога . . .');
-        botMsgIdx = msg.message_id += 1; 
+        botMsgIdx = msg.message_id; 
         return findCatalog();
     }
     
