@@ -237,7 +237,7 @@ async function findExcelFile() {
 }
 
 //Функция поиска каталога обоев
-async function findCatalogWallpaper() {
+async function findCatalogWallpaper(chatId) {
 
     const fileNameWallpaper = await findExcelFile('Каталоги  распределение в салоны 26.09.19.xlsx');
 
