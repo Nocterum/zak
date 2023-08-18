@@ -240,7 +240,7 @@ async function findExcelFile() {
 async function findCatalogWallpaper() {
 
     const fileNameWallpaper = await findExcelFile('Каталоги  распределение в салоны 26.09.19.xlsx');
-    
+
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
         const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
@@ -308,7 +308,7 @@ async function findCatalogWallpaper() {
 
                 }
             } else {
-                findCatalogTextile();
+                findCatalogTextile(chatId);
             }
         });
     }
@@ -393,7 +393,7 @@ async function findCatalogTextile() {
 async function findCatalog(chatId) {
     try {
 
-        await findCatalogWallpaper();
+        await findCatalogWallpaper(chatId);
 
     } catch (error) {
         await bot.deleteMessage(chatId, botMsgIdx);
