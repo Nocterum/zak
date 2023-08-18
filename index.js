@@ -16,7 +16,10 @@ const bot = new TelegramApi(token, {
 });
 
 //ИМПОРТЫ
-const {gameOptions, againOptions, resetOptions, workOptions, VCOptions, startFindOptions, beginWorkOptions, beginWork2Options, mainMenuOptions, enterReserveNumberOptions, sendReserveOptions} = require('./options');
+const {gameOptions, againOptions, resetOptions,
+     workOptions, VCOptions, startFindOptions, 
+     beginWorkOptions, beginWork2Options, mainMenuOptions, 
+     enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 const {transporter, recipient} = require('./nodemailer');
@@ -280,7 +283,7 @@ async function findCatalog() {
               }
   
               bot.deleteMessage(chatId, botMsgIdx);
-              bot.sendMessage(chatId, message);
+              bot.sendMessage(chatId, message, beginWork3Options);
             } else {
               bot.deleteMessage(chatId, botMsgIdx);
               bot.sendMessage(
@@ -355,7 +358,7 @@ async function findCatalog() {
                 }
   
                 bot.deleteMessage(chatId, botMsgIdx);
-                bot.sendMessage(chatId, message);
+                bot.sendMessage(chatId, message, beginWork3Options);
               } else {
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(
