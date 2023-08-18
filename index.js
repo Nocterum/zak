@@ -474,8 +474,6 @@ bot.onText(/\/x/, async msg => {
     })
 );
 
-
-
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
     const text = msg.text;
@@ -638,7 +636,7 @@ bot.on('message', async msg => {
         const chatId = msg.chat.id;
 
         if (msg.document) {
-            if ((file_name === 'Текстиль Каталоги  распределение в салоны.xlsx' || file_name === 'Каталоги  распределение в салоны 26.09.19.xlsx')) {
+            if ((file_name.includes('Каталоги'))) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
                     const fileName = msg.document.file_name;
