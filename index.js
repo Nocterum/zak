@@ -372,16 +372,16 @@ async function findCatalog(chatId) {
           });
 
           if (!foundMatchTextile) {
-            await bot.deleteMessage(user.chatId, botMsgIdx);
+            await bot.deleteMessage(chatId, botMsgIdx);
             bot.sendMessage(chatId, 'Совпадений не найдено.');
           }
         } else {
-          await bot.deleteMessage(user.chatId, botMsgIdx);
+          await bot.deleteMessage(chatId, botMsgIdx);
           bot.sendMessage(chatId, 'Эксель файл не найден.');
         }
       }
     } catch (error) {
-      await bot.deleteMessage(user.chatId, botMsgIdx);
+      await bot.deleteMessage(chatId, botMsgIdx);
       bot.sendMessage(
         chatId,
         `Что-то пошло не так.
