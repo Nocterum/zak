@@ -13,6 +13,7 @@ const UserModel = sequelize.define( 'user', {
     brand: {type: DataTypes.TEXT('tiny')},
     vendorCode: {type: DataTypes.TEXT('tiny')},
     reserveNumber: {type: DataTypes.SMALLINT},
+    catalog: {type: DataTypes.TEXT('tiny')},
 })
 
 /*

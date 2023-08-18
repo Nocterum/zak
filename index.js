@@ -214,23 +214,176 @@ const sendReserveEmail = async (chatId) => {
     }
 }
 
-// Функция для поиска эксель файла в указанной папке и ее подпапках
-async function findExcelFile() {
-    const folderPath = '/root/zak/xl';
-    const files = await fs.promises.readdir(folderPath);
-    for (const file of files) {
-      const filePath = path.join(folderPath, file);
-      const stat = await fs.promises.stat(filePath);
-      if (stat.isDirectory()) {
-        const result = await findExcelFile(filePath);
-        if (result) {
-          return result;
+//Функция поиска каталога в эксель файлах
+async function findCatalog() {
+    try {
+      const fileNameWallpaper = await findExcelFile();
+      if (fileNameWallpaper) {
+        const workbookWallpaper = new ExcelJS.Workbook();
+        const wbWallpaper = await workbookWallpaper.xlsx.readFile(fileNameWallpaper);
+        const worksheetWallpaper = wbWallpaper.worksheets[0];
+
+        let user = await UserModel.findOne({
+          where: {
+            chatId: chatId
+          }
+        });
+
+        let foundMatchWallpaper = false;
+        worksheetWallpaper.eachRow((row, rowNumber) => {
+
+          const cellValue = row.getCell('B').value;
+
+          if (cellValue == user.catalog) {
+            foundMatchWallpaper = true;
+            const hValue = row.getCell('H').value;
+            const iValue = row.getCell('I').value;
+            const jValue = row.getCell('J').value;
+            const kValue = row.getCell('K').value;
+            const mValue = row.getCell('M').value;
+            const nValue = row.getCell('N').value;
+            const oValue = row.getCell('O').value;
+            const pValue = row.getCell('P').value;
+
+            if (
+              hValue !== null &&
+              iValue !== null &&
+              jValue !== null &&
+              kValue !== null &&
+              mValue !== null &&
+              nValue !== null &&
+              oValue !== null &&
+              pValue !== null
+            ) {
+
+              const h1Value = worksheetWallpaper.getCell(`H1`).value;
+              const i1Value = worksheetWallpaper.getCell(`I1`).value;
+              const j1Value = worksheetWallpaper.getCell(`J1`).value;
+              const k1Value = worksheetWallpaper.getCell(`K1`).value;
+              const m1Value = worksheetWallpaper.getCell(`M1`).value;
+              const n1Value = worksheetWallpaper.getCell(`N1`).value;
+              const o1Value = worksheetWallpaper.getCell(`O1`).value;
+              const p1Value = worksheetWallpaper.getCell(`P1`).value;
+  
+              let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+              message += `${h1Value}: ${hValue}\n`;
+              message += `${i1Value}: ${iValue}\n`;
+              message += `${j1Value}: ${jValue}\n`;
+              message += `${k1Value}: ${kValue}\n`;
+              message += `${m1Value}: ${mValue}\n`;
+              message += `${n1Value}: ${nValue}\n`;
+              message += `${o1Value}: ${oValue}\n`;
+  
+              if (pValue !== null) {
+                const p1Value = worksheetWallpaper.getCell(`P1`).value;
+                message += `${p1Value}: ${pValue}\n`;
+              }
+  
+              bot.deleteMessage(chatId, botMsgIdx);
+              bot.sendMessage(chatId, message);
+            } else {
+              bot.deleteMessage(chatId, botMsgIdx);
+              bot.sendMessage(
+                chatId,
+                `Каталогов в салоне нет.
+                \nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+              );
+            }
+          }
+        });
+
+        if (!foundMatchWallpaper) {
+          await bot.deleteMessage(chatId, botMsgIdx);
+          bot.sendMessage(chatId, 'Совпадений не найдено.');
         }
-      } else if (path.extname(file) === '.xlsx') {
-        return filePath;
+
+      } else {
+        const fileNameTextile = await findExcelFile();
+
+        if (fileNameTextile) {
+          const workbookTextile = new ExcelJS.Workbook();
+          const wbTextile = await workbookTextile.xlsx.readFile(fileNameTextile);
+          const worksheetTextile = wbTextile.worksheets[0];
+
+          let user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+          });
+
+          let foundMatchTextile = false;
+          worksheetTextile.eachRow((row, rowNumber) => {
+
+            const cellValue = row.getCell('B').value;
+
+            if (cellValue == user.catalog) {
+              foundMatchTextile = true;
+              const iValue = row.getCell('I').value;
+              const jValue = row.getCell('J').value;
+              const kValue = row.getCell('K').value;
+              const lValue = row.getCell('L').value;
+              const nValue = row.getCell('N').value;
+              const oValue = row.getCell('O').value;
+              const pValue = row.getCell('P').value;
+
+              if (iValue !== null &&
+                jValue !== null &&
+                kValue !== null &&
+                lValue !== null &&
+                nValue !== null &&
+                oValue !== null &&
+                pValue !== null
+              ) {
+                const i1Value = worksheetTextile.getCell(`I1`).value;
+                const j1Value = worksheetTextile.getCell(`J1`).value;
+                const k1Value = worksheetTextile.getCell(`K1`).value;
+                const l1Value = worksheetTextile.getCell(`L1`).value;
+                const n1Value = worksheetTextile.getCell(`N1`).value;
+                const o1Value = worksheetTextile.getCell(`O1`).value;
+                const p1Value = worksheetTextile.getCell(`P1`).value;
+  
+                let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+                message += `${i1Value}: ${iValue}\n`;
+                message += `${j1Value}: ${jValue}\n`;
+                message += `${k1Value}: ${kValue}\n`;
+                message += `${l1Value}: ${lValue}\n`;
+                message += `${n1Value}: ${nValue}\n`;
+                message += `${o1Value}: ${oValue}\n`;
+  
+                if (pValue !== null) {
+                  message += `${p1Value}: ${pValue}\n`;
+                }
+  
+                bot.deleteMessage(chatId, botMsgIdx);
+                bot.sendMessage(chatId, message);
+              } else {
+                bot.deleteMessage(chatId, botMsgIdx);
+                bot.sendMessage(
+                  chatId,
+                  `Каталогов в салоне нет.
+                  \nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                );
+              }
+            }
+          });
+
+          if (!foundMatchTextile) {
+            await bot.deleteMessage(chatId, botMsgIdx);
+            bot.sendMessage(chatId, 'Совпадений не найдено.');
+          }
+        } else {
+          await bot.deleteMessage(chatId, botMsgIdx);
+          bot.sendMessage(chatId, 'Эксель файл не найден.');
+        }
       }
+    } catch (error) {
+      await bot.deleteMessage(chatId, botMsgIdx);
+      bot.sendMessage(
+        chatId,
+        `Что-то пошло не так.
+        \nСообщите о проблеме разработчику n_kharitonov@mander.ru`
+      );
     }
-    return null;
   }
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -263,7 +416,13 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
-            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`)
+            return bot.sendMessage(
+                chatId, 
+                `И снова здравствуйте, ${user.nickname}!
+                \n\nНачать работу: /beginwork,
+                \nПроверить введенные данные: /infowork,
+                \n\nИзменить e-mail: /editEmail,
+                \nИзменить обращение /editNickname`)
         } else {
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -272,7 +431,12 @@ bot.onText(/\/start/, async msg => {
                 lastName: msg.from.last_name, 
             });
             lc = '/editNickname';
-            return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
+            return bot.sendMessage(
+                chatId, 
+                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.
+                \nПриятно познакомиться!
+                \nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.
+                \nКак я могу к вам обращаться?`);
         }  
      } catch (e) {
     console.log('Ошибка при создании нового пользователя', e);
@@ -292,63 +456,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-    try {
-        const fileName = await findExcelFile();
-        const testVC = 'Individuals';
 
-        if (fileName) {
-            const workbook = new ExcelJS.Workbook();
-            const wb = await workbook.xlsx.readFile(fileName);
-            const worksheet = wb.worksheets[0];
-        
-        //   let user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     }
-        //   });
-        
-          let foundMatch = false;
-        
-          worksheet.eachRow((row, rowNumber) => {
-            const cellValue = row.getCell('B').value;
-        
-            if (cellValue == testVC) {
-              foundMatch = true;
-        
-              const iValue = row.getCell('I').value;
-              const jValue = row.getCell('J').value;
-              const kValue = row.getCell('K').value;
-              const lValue = row.getCell('L').value;
-              const nValue = row.getCell('N').value;
-              const oValue = row.getCell('O').value;
-              const pValue = row.getCell('P').value;
-        
-              if (
-                iValue === null &&
-                jValue === null &&
-                kValue === null &&
-                lValue === null &&
-                nValue === null &&
-                oValue === null &&
-                pValue === null
-              ) {
-                bot.sendMessage(chatId, 'Каталогов в салоне нет. За уточнением о возможности заказа данного артикула обратитесь к Юлии Скрибник.');
-              } else {
-                bot.sendMessage(chatId, 'Каталог с данным артикулом имеется в наличии в одном из салонов.');
-              }
-            }
-          });
-        
-          if (!foundMatch) {
-            bot.sendMessage(chatId, 'Совпадений не найдено.');
-          }
-        } else {
-          bot.sendMessage(chatId, 'Эксель файл не найден.');
-        }
-      
-      } catch (error) {
-        console.error('Чтение файла не состоялось:', error);
-      }
     })
 );
 
@@ -397,7 +505,10 @@ bot.on('message', async msg => {
     //Записываем e-mail в ячейку БД
     if (lc === '/editEmail') {
         await user.update({email: text.toLowerCase()});
-        return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
+        return bot.sendMessage(
+            chatId, 
+            `Ваш e-mail "<b>${user.email}</b>" успешно сохранён
+            \n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions)
     }            
 
     //изменить Nickname
@@ -408,13 +519,19 @@ bot.on('message', async msg => {
     //Записываем Nickname в ячейку БД
     if (lc === '/editNickname') {
         await user.update({nickname: text});
-        return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
+        return bot.sendMessage(
+            chatId, 
+            `Хорошо, "<b>${user.nickname}</b>", я запомню.
+            \n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
     }
 
     //Записываем название бренда в ячейку БД
     if (lc === '/enterBrand') {
         await user.update({brand: text.toLowerCase()});
-        return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
+        return bot.sendMessage(
+            chatId, 
+            `Название бренда "<b>${text}</b>" успешно сохранено
+            \n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
     }
 
     //Записываем название бренда в ячейку БД
@@ -422,37 +539,70 @@ bot.on('message', async msg => {
         await user.update({reserveNumber: text});
 
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт? \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(
+                chatId, 
+                `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
+                \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         } else {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт? \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(
+                chatId, 
+                `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
+                \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         }
     }
 
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
     if (lc === '/enterVC') {
         await user.update({vendorCode: text});
-        await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
+        await bot.sendMessage(
+            chatId, 
+            'Идёт обработка вашего запроса . . .');
         botMsgIdx = msg.message_id += 1; 
         return startFind(chatId);
+    }
+
+    //Записываем артикул каталога
+    if(data === '/catalogСheck') {
+        await user.update(
+            {catalog: text}
+            );
+        await bot.sendMessage(
+            chatId, 
+            'Идёт поиск каталога . . .');
+        botMsgIdx = msg.message_id += 1; 
+        return findCatalog();
     }
     
     //вывод информации
     if (text === '/infowork') {
-        return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+        return bot.sendMessage(
+            chatId, 
+            `${user.nickname} вот, что вы искали:
+            \n\n${user.typeFind}
+            \nБренд: ${user.brand}
+            \nАртикул: ${user.vendorCode}
+            \n\nВаш email: ${user.email}`);
     }
 
 
     if (text === '/infogame') {
         lc = null;
-        return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
+        return bot.sendMessage(
+            chatId, 
+            `Правильных ответов: "${user.right}"
+            \nНеправильных ответов: "${user.wrong}"`, resetOptions);
     }   
     
     if (text.toLowerCase().includes('привет')) {
-        return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
+        return bot.sendSticker(
+            chatId, 
+            'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
 
     if (text !== '/game' && text !== '/start') {
-        return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
+        return bot.sendSticker(
+            chatId, 
+            'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
     } catch {
         console.log('Сработал слушатель документов.')
@@ -559,6 +709,12 @@ bot.on('callback_query', async msg => {
        if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
+    }
+
+    //проверка каталога в наличии в салоне
+    if(data === '/catalogСheck') {
+        lc = data;
+        return bot.sendMessage(chatId, 'Введите артикул каталога содержащего искомый вами товар:');
     }
 
     //превью фото

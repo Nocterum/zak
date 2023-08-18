@@ -1,5 +1,5 @@
 module.exports = {
-    
+//ИГРОВЫЕ КНОПКИ=============================================================================================================================================
     gameOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
@@ -27,7 +27,7 @@ module.exports = {
             ]
         })
     },
-
+//НАВИГАЦИОННЫЕ КНОПКИ=============================================================================================================================================
     mainMenuOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
@@ -36,7 +36,7 @@ module.exports = {
             ]
         })
     },
-
+//РАБОЧИЕ КНОПКИ=============================================================================================================================================
     beginWorkOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
@@ -57,10 +57,20 @@ module.exports = {
         })
     },
 
+    beginWork2Options: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+            ]
+        })
+    },
+
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Остатки/сроки/резерв', callback_data: '/enterBrand'}],
+                [{text: 'Остатки/сроки/резерв', callback_data: '/catalogСheck'}],
                 [{text: 'Превью изображений', callback_data: '/work2'}],
                 [{text: 'Добавить в заказ', callback_data: '/work3'}],
             ]
