@@ -276,6 +276,7 @@ async function findExcelFile(fileNameWallpaper, fileNameTextile) {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
 
+    let fileNameWallpaper;
     const result = await findExcelFile(fileNameWallpaper);
     fileNameWallpaper = result.fileNameWallpaper;
 
@@ -285,6 +286,7 @@ async function findCatalogWallpaper(chatId) {
           chatId: chatId
         }
       });
+
       const workbookWallpaper = new ExcelJS.Workbook();
       const stream = fs.createReadStream(fileNameWallpaper);
       const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
