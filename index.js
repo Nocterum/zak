@@ -238,7 +238,7 @@ async function findExcelFile(fileNameWallpaper, fileNameTextile) {
         }
       } else if (path.extname(file) === '.xlsx') {
 
-        if (file.includes('26')) { 
+        if (file.includes('26_09')) { 
           fileNameWallpaper = filePath;
 
         } else if (file.includes('Текстиль')) {
