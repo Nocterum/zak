@@ -278,24 +278,25 @@ async function findCatalogWallpaper(chatId) {
 
     const fileNameWallpaper = 'WP.xlsx';
     const result = await findExcelFile(fileNameWallpaper);
-    filePath = result.fileNameWallpaper;
+    const filePath = result.fileNameWallpaper;
 
     if (filePath) {
+
         const user = await UserModel.findOne({
             where: {
               chatId: chatId
             }
         });
 
-        const workbookWallpaper = new ExcelJS.Workbook();
+        const workbook = new ExcelJS.Workbook();
         const stream = fs.createReadStream(filePath);
-        const firstWorksheet = workbookWallpaper.getWorksheet(0);
-        const worksheetWallpaper = await firstWorksheet.xlsx.read(stream)
+        const worksheet = await workbook.xlsx.read(stream);
+        const firstWorksheet = worksheet.getWorksheet(0);
   
         let foundMatchWallpaper = false;
         let message = '';
   
-        worksheetWallpaper.eachRow((row, rowNumber) => {
+        firstWorksheet.eachRow((row, rowNumber) => {
             const cellValue = row.getCell('B').value;
             if (cellValue == user.catalog) {
                 foundMatchWallpaper = true;
@@ -315,14 +316,14 @@ async function findCatalogWallpaper(chatId) {
                     kValue !== null &&
                     (mValue !== null || nValue !== null)
                 ) {
-                    const h1Value = worksheetWallpaper.getCell('H1').value;
-                    const i1Value = worksheetWallpaper.getCell('I1').value;
-                    const j1Value = worksheetWallpaper.getCell('J1').value;
-                    const k1Value = worksheetWallpaper.getCell('K1').value;
-                    const m1Value = worksheetWallpaper.getCell('M1').value;
-                    const n1Value = worksheetWallpaper.getCell('N1').value;
-                    const p1Value = worksheetWallpaper.getCell('P1').value;
-                    const o1Value = worksheetWallpaper.getCell('O1').value;
+                    const h1Value = firstWorksheet.getCell('H1').value;
+                    const i1Value = firstWorksheet.getCell('I1').value;
+                    const j1Value = firstWorksheet.getCell('J1').value;
+                    const k1Value = firstWorksheet.getCell('K1').value;
+                    const m1Value = firstWorksheet.getCell('M1').value;
+                    const n1Value = firstWorksheet.getCell('N1').value;
+                    const p1Value = firstWorksheet.getCell('P1').value;
+                    const o1Value = firstWorksheet.getCell('O1').value;
   
                     message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
                     message += `${h1Value}: ${hValue}\n`;
