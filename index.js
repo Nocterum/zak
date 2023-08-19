@@ -221,25 +221,41 @@ const sendReserveEmail = async (chatId) => {
 async function findExcelFile() {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
+    let fileNameWallpaper = null;
+    let fileNameTextile = null;
+    
     for (const file of files) {
       const filePath = path.join(folderPath, file);
       const stat = await fs.promises.stat(filePath);
+      
       if (stat.isDirectory()) {
-        const result = await findExcelFile(filePath);
-        if (result) {
-          return result;
+        const result = await findExcelFiles(filePath);
+        
+        if (result.fileNameWallpaper) {
+          fileNameWallpaper = result.fileNameWallpaper;
+        }
+        
+        if (result.fileNameTextile) {
+          fileNameTextile = result.fileNameTextile;
         }
       } else if (path.extname(file) === '.xlsx') {
-        return filePath;
+        if (file === 'Каталоги  распределение в салоны 26.09.19.xlsx') {
+          fileNameWallpaper = filePath;
+        } else if (file === 'Текстиль Каталоги  распределение в салоны.xlsx') {
+          fileNameTextile = filePath;
+        }
+      }
+      
+      if (fileNameWallpaper && fileNameTextile) {
+        break;
       }
     }
-    return null;
-}
+    
+    return { fileNameWallpaper, fileNameTextile };
+  }
 
 //Функция поиска каталога обоев
-async function findCatalogWallpaper(chatId) {
-
-    const fileNameWallpaper = await findExcelFile('Каталоги  распределение в салоны 26.09.19.xlsx');
+async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
@@ -320,7 +336,7 @@ async function findCatalogWallpaper(chatId) {
 }
 
 //Функция поиска каталога текстиля
-async function findCatalogTextile() {
+async function findCatalogTextile(chatId, fileNameTextile) {
 
     const fileNameTextile = await findExcelFile('Текстиль Каталоги  распределение в салоны.xlsx');
 
