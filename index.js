@@ -275,7 +275,7 @@ const sendReserveEmail = async (chatId) => {
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
-
+try {
     // const result = await findExcelFile(fileNameWallpaper);
     fileNameWallpaper = '/root/zak/xl/Каталоги_обои.xlsx';  
 
@@ -291,7 +291,6 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
             return workbookWallpaper.getWorksheet(0);
           });
-
 
         let foundMatchWallpaper = false;
         let message = '';
@@ -359,8 +358,10 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
           );
         }
       }
+    } catch (e) {
+        console.log(e)
     }
-
+    }
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
 
