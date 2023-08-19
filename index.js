@@ -218,60 +218,60 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла
-async function findExcelFile(fileNameWallpaper, fileNameTextile) {
-    const folderPath = '/root/zak/xl';
-    const files = await fs.promises.readdir(folderPath);
-    
-    for (const file of files) {
-      const filePath = path.join(folderPath, file);
-      const stat = await fs.promises.stat(filePath);
-      
-      if (stat.isDirectory()) {
-        const result = await findExcelFile(filePath);
-        
-        if (result.fileNameWallpaper) {
-          fileNameWallpaper = result.fileNameWallpaper;
-        }
-        
-        if (result.fileNameTextile) {
-          fileNameTextile = result.fileNameTextile;
-        }
-      } else if (path.extname(file) === '.xlsx') {
-
-        if (file.includes('26_09')) { 
-          fileNameWallpaper = filePath;
-
-        } else if (file.includes('Текстиль')) {
-          fileNameTextile = filePath;
-        }
-      }
-      
-      if (fileNameWallpaper && fileNameTextile) {
-        break;
-      }
-    }
-    
-    return { fileNameWallpaper, fileNameTextile };
-  }
-
-// Функция для поиска эксель файла в указанной папке и ее подпапках
-// async function findExcelFile() {
+// async function findExcelFile(fileNameWallpaper, fileNameTextile) {
 //     const folderPath = '/root/zak/xl';
 //     const files = await fs.promises.readdir(folderPath);
+    
 //     for (const file of files) {
 //       const filePath = path.join(folderPath, file);
 //       const stat = await fs.promises.stat(filePath);
+      
 //       if (stat.isDirectory()) {
 //         const result = await findExcelFile(filePath);
-//         if (result) {
-//           return result;
+        
+//         if (result.fileNameWallpaper) {
+//           fileNameWallpaper = result.fileNameWallpaper;
+//         }
+        
+//         if (result.fileNameTextile) {
+//           fileNameTextile = result.fileNameTextile;
 //         }
 //       } else if (path.extname(file) === '.xlsx') {
-//         return filePath;
+
+//         if (file.includes('26_09')) { 
+//           fileNameWallpaper = filePath;
+
+//         } else if (file.includes('Текстиль')) {
+//           fileNameTextile = filePath;
+//         }
+//       }
+      
+//       if (fileNameWallpaper && fileNameTextile) {
+//         break;
 //       }
 //     }
-//     return null;
-// }
+    
+//     return { fileNameWallpaper, fileNameTextile };
+//   }
+
+// Функция для поиска эксель файла в указанной папке и ее подпапках
+async function findExcelFile() {
+    const folderPath = '/root/zak/xl';
+    const files = await fs.promises.readdir(folderPath);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const stat = await fs.promises.stat(filePath);
+      if (stat.isDirectory()) {
+        const result = await findExcelFile(filePath);
+        if (result) {
+          return result;
+        }
+      } else if (path.extname(file) === '.xlsx') {
+        return filePath;
+      }
+    }
+    return null;
+}
 
 //Функция поиска каталога обоев
 // async function findCatalogWallpaper(chatId, fileNameWallpaper) {
@@ -364,7 +364,7 @@ async function findExcelFile(fileNameWallpaper, fileNameTextile) {
 
 async function findCatalogWallpaper(chatId) {
 
-    const result = await findExcelFile(fileNameWallpaper);
+    const result = await findExcelFile();
     fileNameWallpaper = result.fileNameWallpaper;
 	
     if (fileNameWallpaper) {
