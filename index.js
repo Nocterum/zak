@@ -281,7 +281,7 @@ async function findCatalogWallpaper(chatId) {
     const filePath = result.fileNameWallpaper;
 
     if (filePath) {
-        await bot.sendMessage(`${filePath}`);
+        await bot.sendMessage(`1${filePath}`);
         const user = await UserModel.findOne({
             where: {
               chatId: chatId
