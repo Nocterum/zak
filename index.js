@@ -296,21 +296,20 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
         let foundMatchWallpaper = false;
         let message = '';
 
-        worksheetWallpaper.eachRow( async (row, rowNumber) => {
-
-            const cellValue = row.getCell('B').value;
+        for (const row of worksheetWallpaper.iterRows()) {
+            const cellValue = row.getCell(`B`).value;
 
             if (cellValue == user.catalog) {
                 foundMatchWallpaper = true;
 
-                const hValue = row.getCell('H').value;
-                const iValue = row.getCell('I').value;
-                const jValue = row.getCell('J').value;
-                const kValue = row.getCell('K').value;
-                const mValue = row.getCell('M').value;
-                const nValue = row.getCell('N').value;
-                const oValue = row.getCell('O').value;
-                const pValue = row.getCell('P').value;
+                const hValue = row.getCell(`H`).value;
+                const iValue = row.getCell(`I`).value;
+                const jValue = row.getCell(`J`).value;
+                const kValue = row.getCell(`K`).value;
+                const mValue = row.getCell(`M`).value;
+                const nValue = row.getCell(`N`).value;
+                const oValue = row.getCell(`O`).value;
+                const pValue = row.getCell(`P`).value;
 
                 if (
                     hValue !== null &&
@@ -320,12 +319,14 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                     (mValue !== null || nValue !== null)
                 ) {
 
-                const h1Value = worksheetWallpaper.getCell('H1').value;
-                const i1Value = worksheetWallpaper.getCell('I1').value;
-                const j1Value = worksheetWallpaper.getCell('J1').value;
-                const k1Value = worksheetWallpaper.getCell('K1').value;
-                const m1Value = worksheetWallpaper.getCell('M1').value;
-                const n1Value = worksheetWallpaper.getCell('N1').value;
+                const h1Value = worksheetWallpaper.getCell(`H1`).value;
+                const i1Value = worksheetWallpaper.getCell(`I1`).value;
+                const j1Value = worksheetWallpaper.getCell(`J1`).value;
+                const k1Value = worksheetWallpaper.getCell(`K1`).value;
+                const m1Value = worksheetWallpaper.getCell(`M1`).value;
+                const n1Value = worksheetWallpaper.getCell(`N1`).value;
+                const o1Value = worksheetWallpaper.getCell(`O1`).value;
+                const p1Value = worksheetWallpaper.getCell(`P1`).value;
     
                 message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                 message += `${h1Value}: ${hValue}\n`;
@@ -336,12 +337,10 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                 message += `${n1Value}: ${nValue}\n`;
     
                 if (pValue !== null) {
-                    const p1Value = worksheetWallpaper.getCell(`P1`).value;
                     message += `${p1Value}: ${pValue}\n`;
                 }
 
                 if (oValue !== null) {
-                    const o1Value = worksheetWallpaper.getCell(`O1`).value;
                     message += `${o1Value}: ${oValue}\n`;
                 }
     
@@ -350,7 +349,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
                 }
             }
-        });
+        };
     
         if (!foundMatchWallpaper) {
           bot.deleteMessage(chatId, botMsgIdx);
