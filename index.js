@@ -218,41 +218,41 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла
-// async function findExcelFile(fileNameWallpaper, fileNameTextile) {
-//     const folderPath = '/root/zak/xl';
-//     const files = await fs.promises.readdir(folderPath);
+async function findExcelFile(fileNameWallpaper, fileNameTextile) {
+    const folderPath = '/root/zak/xl';
+    const files = await fs.promises.readdir(folderPath);
     
-//     for (const file of files) {
-//       const filePath = path.join(folderPath, file);
-//       const stat = await fs.promises.stat(filePath);
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      const stat = await fs.promises.stat(filePath);
       
-//       if (stat.isDirectory()) {
-//         const result = await findExcelFile(filePath);
+      if (stat.isDirectory()) {
+        const result = await findExcelFile(filePath);
         
-//         if (result.fileNameWallpaper) {
-//           fileNameWallpaper = result.fileNameWallpaper;
-//         }
+        if (result.fileNameWallpaper) {
+          fileNameWallpaper = result.fileNameWallpaper;
+        }
         
-//         if (result.fileNameTextile) {
-//           fileNameTextile = result.fileNameTextile;
-//         }
-//       } else if (path.extname(file) === '.xlsx') {
+        if (result.fileNameTextile) {
+          fileNameTextile = result.fileNameTextile;
+        }
+      } else if (path.extname(file) === '.xlsx') {
 
-//         if (file.includes('26_09')) { 
-//           fileNameWallpaper = filePath;
+        if (file.includes('26')) { 
+          fileNameWallpaper = filePath;
 
-//         } else if (file.includes('Текстиль')) {
-//           fileNameTextile = filePath;
-//         }
-//       }
+        } else if (file.includes('Текстиль')) {
+          fileNameTextile = filePath;
+        }
+      }
       
-//       if (fileNameWallpaper && fileNameTextile) {
-//         break;
-//       }
-//     }
+      if (fileNameWallpaper && fileNameTextile) {
+        break;
+      }
+    }
     
-//     return { fileNameWallpaper, fileNameTextile };
-//   }
+    return { fileNameWallpaper, fileNameTextile };
+  }
 
 // Функция для поиска эксель файла в указанной папке и ее подпапках
 // async function findExcelFile() {
@@ -274,12 +274,12 @@ const sendReserveEmail = async (chatId) => {
 // }
 
 //Функция поиска каталога обоев
-async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 try {
-    // const result = await findExcelFile(fileNameWallpaper);
-    // fileNameWallpaper = '/root/zak/xl/WP.xlsx';  
+    async function findCatalogWallpaper(chatId) {
+    const result = await findExcelFile(fileNameWallpaper);
+    fileNameWallpaper = result.fileNameWallpaper;  
 
-    // if (fileNameWallpaper) {
+    if (fileNameWallpaper) {
         let user = await UserModel.findOne({
           where: {
             chatId: chatId
@@ -287,7 +287,7 @@ try {
         });
 
         const workbookWallpaper = new ExcelJS.Workbook();
-        const stream = fs.createReadStream('/root/zak/xl/WP.xlsx');
+        const stream = fs.createReadStream(fileNameWallpaper);
         await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
             return workbookWallpaper.getWorksheet(14);
@@ -358,11 +358,11 @@ try {
             'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
           );
         }
-    } catch (e) {
-        console.log(e)
     }
-      }
-    // }
+}
+} catch (e) {
+    console.log(e)
+}
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
