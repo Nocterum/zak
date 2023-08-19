@@ -613,7 +613,7 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        await findCatalogWallpaper(chatId);
+        // await findCatalogWallpaper(chatId);
         return findCatalogTextile(chatId);
     }
     
