@@ -291,8 +291,8 @@ async function findCatalogWallpaper(chatId) {
         try { 
 
             const workbook = new ExcelJS.Workbook();
-            // const stream = fs.createReadStream(filePath);
-            const worksheet = await workbook.xlsx.readFile(filePath);
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
             const firstWorksheet = worksheet.worksheets[0];
 
             let foundMatchWallpaper = false;
