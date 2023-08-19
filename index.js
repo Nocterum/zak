@@ -285,18 +285,19 @@ try {
             chatId: chatId
           }
         });
+
         const workbookWallpaper = new ExcelJS.Workbook();
         const stream = fs.createReadStream('/root/zak/xl/WP.xlsx');
         await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
-            return workbookWallpaper.getWorksheet(0);
+            return workbookWallpaper.getWorksheet(14);
           });
 
         let foundMatchWallpaper = false;
         let message = '';
 
-        for (const row of worksheetWallpaper.eachRow()) {
-            const cellValue = row.getCell(`B`).value;
+        worksheetWallpaper.eachRow((row, rowNumber) => {
+            const cellValue = row.getCell('B').value;
 
             if (cellValue == user.catalog) {
                 foundMatchWallpaper = true;
@@ -348,7 +349,7 @@ try {
 
                 }
             }
-        };
+        });
     
         if (!foundMatchWallpaper) {
           bot.deleteMessage(chatId, botMsgIdx);
