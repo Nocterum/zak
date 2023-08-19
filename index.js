@@ -218,85 +218,167 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла
-// async function findExcelFile(fileNameWallpaper, fileNameTextile) {
-//     const folderPath = '/root/zak/xl';
-//     const files = await fs.promises.readdir(folderPath);
-    
-//     for (const file of files) {
-//       const filePath = path.join(folderPath, file);
-//       const stat = await fs.promises.stat(filePath);
-      
-//       if (stat.isDirectory()) {
-//         const result = await findExcelFile(filePath);
-        
-//         if (result.fileNameWallpaper) {
-//           fileNameWallpaper = result.fileNameWallpaper;
-//         }
-        
-//         if (result.fileNameTextile) {
-//           fileNameTextile = result.fileNameTextile;
-//         }
-//       } else if (path.extname(file) === '.xlsx') {
-
-//         if (file.includes('26_09')) { 
-//           fileNameWallpaper = filePath;
-
-//         } else if (file.includes('Текстиль')) {
-//           fileNameTextile = filePath;
-//         }
-//       }
-      
-//       if (fileNameWallpaper && fileNameTextile) {
-//         break;
-//       }
-//     }
-    
-//     return { fileNameWallpaper, fileNameTextile };
-//   }
-
-// Функция для поиска эксель файла в указанной папке и ее подпапках
-async function findExcelFile() {
+async function findExcelFile(fileNameWallpaper, fileNameTextile) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
+    
     for (const file of files) {
       const filePath = path.join(folderPath, file);
       const stat = await fs.promises.stat(filePath);
+      
       if (stat.isDirectory()) {
         const result = await findExcelFile(filePath);
-        if (result) {
-          return result;
+        
+        if (result.fileNameWallpaper) {
+          fileNameWallpaper = result.fileNameWallpaper;
+        }
+        
+        if (result.fileNameTextile) {
+          fileNameTextile = result.fileNameTextile;
         }
       } else if (path.extname(file) === '.xlsx') {
-        return filePath;
+
+        if (file.includes('26_09')) { 
+          fileNameWallpaper = filePath;
+
+        } else if (file.includes('Текстиль')) {
+          fileNameTextile = filePath;
+        }
+      }
+      
+      if (fileNameWallpaper && fileNameTextile) {
+        break;
       }
     }
-    return null;
-}
+    
+    return { fileNameWallpaper, fileNameTextile };
+  }
+
+// Функция для поиска эксель файла в указанной папке и ее подпапках
+// async function findExcelFile() {
+//     const folderPath = '/root/zak/xl';
+//     const files = await fs.promises.readdir(folderPath);
+//     for (const file of files) {
+//       const filePath = path.join(folderPath, file);
+//       const stat = await fs.promises.stat(filePath);
+//       if (stat.isDirectory()) {
+//         const result = await findExcelFile(filePath);
+//         if (result) {
+//           return result;
+//         }
+//       } else if (path.extname(file) === '.xlsx') {
+//         return filePath;
+//       }
+//     }
+//     return null;
+// }
 
 //Функция поиска каталога обоев
-async function findCatalogWallpaper(chatId, fileNameWallpaper) {
+// async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
-    // const result = await findExcelFile(fileNameWallpaper);
-    // fileNameWallpaper = result.fileNameWallpaper;  
-    const fileName = await findExcelFile();
+//     const result = await findExcelFile(fileNameWallpaper);
+//     fileNameWallpaper = result.fileNameWallpaper;  
 
+//     if (fileNameWallpaper) {
+//         let user = await UserModel.findOne({
+//           where: {
+//             chatId: chatId
+//           }
+//         });
+//         const workbookWallpaper = new ExcelJS.Workbook();
+//         const stream = fs.createReadStream(fileNameWallpaper);
+//         await workbookWallpaper.xlsx.read(stream);
+//         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
+//             return workbookWallpaper.getWorksheet(0);
+//           });
+
+
+//         let foundMatchWallpaper = false;
+//         let message = '';
+
+//         worksheetWallpaper.eachRow( async (row, rowNumber) => {
+
+//             const cellValue = row.getCell('B').value;
+
+//             if (cellValue == user.catalog) {
+//                 foundMatchWallpaper = true;
+
+//                 const hValue = row.getCell('H').value;
+//                 const iValue = row.getCell('I').value;
+//                 const jValue = row.getCell('J').value;
+//                 const kValue = row.getCell('K').value;
+//                 const mValue = row.getCell('M').value;
+//                 const nValue = row.getCell('N').value;
+//                 const oValue = row.getCell('O').value;
+//                 const pValue = row.getCell('P').value;
+
+//                 if (
+//                     hValue !== null &&
+//                     iValue !== null &&
+//                     jValue !== null &&
+//                     kValue !== null &&
+//                     (mValue !== null || nValue !== null)
+//                 ) {
+
+//                 const h1Value = worksheetWallpaper.getCell('H1').value;
+//                 const i1Value = worksheetWallpaper.getCell('I1').value;
+//                 const j1Value = worksheetWallpaper.getCell('J1').value;
+//                 const k1Value = worksheetWallpaper.getCell('K1').value;
+//                 const m1Value = worksheetWallpaper.getCell('M1').value;
+//                 const n1Value = worksheetWallpaper.getCell('N1').value;
+    
+//                 message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+//                 message += `${h1Value}: ${hValue}\n`;
+//                 message += `${i1Value}: ${iValue}\n`;
+//                 message += `${j1Value}: ${jValue}\n`;
+//                 message += `${k1Value}: ${kValue}\n`;
+//                 message += `${m1Value}: ${mValue}\n`;
+//                 message += `${n1Value}: ${nValue}\n`;
+    
+//                 if (pValue !== null) {
+//                     const p1Value = worksheetWallpaper.getCell(`P1`).value;
+//                     message += `${p1Value}: ${pValue}\n`;
+//                 }
+
+//                 if (oValue !== null) {
+//                     const o1Value = worksheetWallpaper.getCell(`O1`).value;
+//                     message += `${o1Value}: ${oValue}\n`;
+//                 }
+    
+//                 bot.deleteMessage(chatId, botMsgIdx);
+//                 bot.sendMessage(chatId, message, beginWork3Options);
+
+//                 }
+//             }
+//         });
+    
+//         if (!foundMatchWallpaper) {
+//           bot.deleteMessage(chatId, botMsgIdx);
+//           bot.sendMessage(
+//             chatId,
+//             'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
+//           );
+//         }
+//       }
+//     }
+
+async function findCatalogWallpaper(chatId) {
+
+    const result = await findExcelFile(fileNameWallpaper);
+    fileNameWallpaper = result.fileNameWallpaper;
+	
     if (fileNameWallpaper) {
+        const workbookWallpaper = new ExcelJS.Workbook();
+        const wbWallpaper = await workbookWallpaper.xlsx.fileStream(fileNameWallpaper);
+        const worksheetWallpaper = wbWallpaper.worksheets[0];
+
         let user = await UserModel.findOne({
           where: {
             chatId: chatId
           }
         });
-        const workbookWallpaper = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileName); // fileName заменить на fileNameWallpaper
-        await workbookWallpaper.xlsx.read(stream);
-        const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
-            return workbookWallpaper.getWorksheet(0);
-          });
-
 
         let foundMatchWallpaper = false;
-        let message = '';
-
         worksheetWallpaper.eachRow( async (row, rowNumber) => {
 
             const cellValue = row.getCell('B').value;
@@ -321,14 +403,14 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                     (mValue !== null || nValue !== null)
                 ) {
 
-                const h1Value = worksheetWallpaper.getCell('H1').value;
-                const i1Value = worksheetWallpaper.getCell('I1').value;
-                const j1Value = worksheetWallpaper.getCell('J1').value;
-                const k1Value = worksheetWallpaper.getCell('K1').value;
-                const m1Value = worksheetWallpaper.getCell('M1').value;
-                const n1Value = worksheetWallpaper.getCell('N1').value;
+                const h1Value = worksheetWallpaper.getCell(`H1`).value;
+                const i1Value = worksheetWallpaper.getCell(`I1`).value;
+                const j1Value = worksheetWallpaper.getCell(`J1`).value;
+                const k1Value = worksheetWallpaper.getCell(`K1`).value;
+                const m1Value = worksheetWallpaper.getCell(`M1`).value;
+                const n1Value = worksheetWallpaper.getCell(`N1`).value;
     
-                message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+                let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                 message += `${h1Value}: ${hValue}\n`;
                 message += `${i1Value}: ${iValue}\n`;
                 message += `${j1Value}: ${jValue}\n`;
@@ -350,18 +432,17 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                 bot.sendMessage(chatId, message, beginWork3Options);
 
                 }
+            } else {
+
+                bot.deleteMessage(chatId, botMsgIdx);
+                return bot.sendMessage(
+                    chatId,
+                    `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
+                );
             }
         });
-    
-        if (!foundMatchWallpaper) {
-          bot.deleteMessage(chatId, botMsgIdx);
-          bot.sendMessage(
-            chatId,
-            'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
-          );
-        }
-      }
-    }
+    }      
+}
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
