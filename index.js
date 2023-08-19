@@ -277,7 +277,7 @@ const sendReserveEmail = async (chatId) => {
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
     // const result = await findExcelFile(fileNameWallpaper);
-    fileNameWallpaper = '/root/zak/xl/Каталоги_распределение_в_салоны_26_09_19.xlsx';  
+    fileNameWallpaper = '/root/zak/xl/Каталоги_обои.xlsx';  
 
     if (fileNameWallpaper) {
         let user = await UserModel.findOne({
@@ -366,7 +366,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 async function findCatalogTextile(chatId, fileNameTextile) {
 
     // const result = await findExcelFile(fileNameTextile);
-    fileNameTextile = '/root/zak/xl/Текстиль_Каталоги_распределение_в_салоны.xlsx';
+    fileNameTextile = '/root/zak/xl/Каталоги_Текстиль.xlsx';
 
     if (fileNameTextile) {
         let user = await UserModel.findOne({
