@@ -633,8 +633,8 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalogWallpaper(chatId);
-        findCatalogTextile(chatId);
+        return findCatalogWallpaper();
+        findCatalogTextile();
     }
     
     //вывод информации
