@@ -358,13 +358,19 @@ async function findCatalogTextile(chatId, fileNameTextile) {
         });
 
         const workbookTextile = new ExcelJS.Workbook();
-        const wbTextile = await workbookTextile.xlsx.fileStream(fileNameTextile);
-        const worksheetTextile = wbTextile.worksheets[0];
+        const stream = fs.createReadStream(fileNameTextile);
+        await workbookTextile.xlsx.read(stream);
+        const worksheetTextile = await workbookTextile.xlsx.read(stream).then(() => {
+            return workbookTextile.getWorksheet(0);
+        });
 
         let foundMatchTextile = false;
-        worksheetTextile.eachRow((row, rowNumber) => {
+        let message = '';
+
+        worksheetTextile.eachRow( async (row, rowNumber) => {
 
             const cellValue = row.getCell('B').value;
+
 
             if (cellValue == user.catalog) {
                 foundMatchTextile = true;
@@ -388,9 +394,8 @@ async function findCatalogTextile(chatId, fileNameTextile) {
                     const l1Value = worksheetTextile.getCell('L1').value;
                     const n1Value = worksheetTextile.getCell('N1').value;
                     const o1Value = worksheetTextile.getCell('O1').value;
-                    const p1Value = worksheetTextile.getCell('P1').value;
 
-                    let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+                    message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                     message += `${i1Value}: ${iValue}\n`;
                     message += `${j1Value}: ${jValue}\n`;
                     message += `${k1Value}: ${kValue}\n`;
@@ -399,25 +404,26 @@ async function findCatalogTextile(chatId, fileNameTextile) {
                     message += `${o1Value}: ${oValue}\n`;
 
                     if (pValue !== null) {
-                        const p1Value = worksheetWallpaper.getCell(`P1`).value;
+                        const p1Value = worksheetTextile.getCell(`P1`).value;
                         message += `${p1Value}: ${pValue}\n`;
                     }
 
                     bot.deleteMessage(chatId, botMsgIdx);
                     bot.sendMessage(chatId, message, beginWork3Options);
 
-                } else {
-
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    return bot.sendMessage(
-                        chatId,
-                        `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
-                    );
                 }
             }
         });
+    
+        if (!foundMatchWallpaper) {
+          bot.deleteMessage(chatId, botMsgIdx);
+          bot.sendMessage(
+            chatId,
+            'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
+          );
+        }
+      }
     }
-}
 
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -607,7 +613,8 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalogWallpaper(chatId);
+        await findCatalogWallpaper(chatId);
+        return findCatalogTextile(chatId);
     }
     
     //вывод информации
