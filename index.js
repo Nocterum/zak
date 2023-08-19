@@ -229,7 +229,7 @@ async function findExcelFile() {
       const stat = await fs.promises.stat(filePath);
       
       if (stat.isDirectory()) {
-        const result = await findExcelFiles(filePath);
+        const result = await findExcelFile(filePath);
         
         if (result.fileNameWallpaper) {
           fileNameWallpaper = result.fileNameWallpaper;
@@ -258,6 +258,8 @@ async function findExcelFile() {
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
+
+    const fileNameWallpaper = await findExcelFile();
 
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
