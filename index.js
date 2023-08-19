@@ -277,16 +277,16 @@ const sendReserveEmail = async (chatId) => {
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 try {
     // const result = await findExcelFile(fileNameWallpaper);
-    fileNameWallpaper = '/root/zak/xl/WP.xlsx';  
+    // fileNameWallpaper = '/root/zak/xl/WP.xlsx';  
 
-    if (fileNameWallpaper) {
+    // if (fileNameWallpaper) {
         let user = await UserModel.findOne({
           where: {
             chatId: chatId
           }
         });
         const workbookWallpaper = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileNameWallpaper);
+        const stream = fs.createReadStream('/root/zak/xl/WP.xlsx');
         await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
             return workbookWallpaper.getWorksheet(0);
@@ -357,11 +357,12 @@ try {
             'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
           );
         }
-      }
     } catch (e) {
         console.log(e)
     }
-    }
+      }
+    // }
+
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
 
