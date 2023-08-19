@@ -259,7 +259,7 @@ async function findExcelFile() {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
-    const fileNameWallpaper = await findExcelFile();
+    await findExcelFile();
 
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
