@@ -291,7 +291,7 @@ try {
         const stream = fs.createReadStream(fileNameWallpaper);
         await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
-            return workbookWallpaper.getWorksheet(14);
+            return workbookWallpaper.getWorksheet(0);
           });
 
         let foundMatchWallpaper = false;
