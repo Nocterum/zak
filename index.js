@@ -287,77 +287,76 @@ async function findCatalogWallpaper(chatId) {
               chatId: chatId
             }
         });
-        try {    
-        const workbook = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(filePath);
-        const worksheet = await workbook.xlsx.read(stream);
-        const firstWorksheet = worksheet.getWorksheet(1);
 
-        let foundMatchWallpaper = false;
-        let message = '';
+        try { 
 
-        // firstWorksheet.eachRow( async (row, rowNumber) => {
-        //     const cellValue = row.getCell('B').value;
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.getWorksheet('2017-2022');
 
-        firstWorksheet.eachRow((row, rowNumber) => {
-            const cellValue = row.getCell('B').value;    
+            let foundMatchWallpaper = false;
+            let message = '';
 
-            if (cellValue == user.catalog) {
-                foundMatchWallpaper = true;
-                const hValue = row.getCell('H').value;
-                const iValue = row.getCell('I').value;
-                const jValue = row.getCell('J').value;
-                const kValue = row.getCell('K').value;
-                const mValue = row.getCell('M').value;
-                const nValue = row.getCell('N').value;
-                const oValue = row.getCell('O').value;
-                const pValue = row.getCell('P').value;
+            firstWorksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('B').value;    
 
-                if (
-                    hValue !== null &&
-                    iValue !== null &&
-                    jValue !== null &&
-                    kValue !== null &&
-                    (mValue !== null || nValue !== null)
-                ) {
-                    const h1Value = firstWorksheet.getCell('H1').value;
-                    const i1Value = firstWorksheet.getCell('I1').value;
-                    const j1Value = firstWorksheet.getCell('J1').value;
-                    const k1Value = firstWorksheet.getCell('K1').value;
-                    const m1Value = firstWorksheet.getCell('M1').value;
-                    const n1Value = firstWorksheet.getCell('N1').value;
-                    const p1Value = firstWorksheet.getCell('P1').value;
-                    const o1Value = firstWorksheet.getCell('O1').value;
+                if (cellValue == user.catalog) {
+                    foundMatchWallpaper = true;
+                    const hValue = row.getCell('H').value;
+                    const iValue = row.getCell('I').value;
+                    const jValue = row.getCell('J').value;
+                    const kValue = row.getCell('K').value;
+                    const mValue = row.getCell('M').value;
+                    const nValue = row.getCell('N').value;
+                    const oValue = row.getCell('O').value;
+                    const pValue = row.getCell('P').value;
 
-                    message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
-                    message += `${h1Value}: ${hValue}\n`;
-                    message += `${i1Value}: ${iValue}\n`;
-                    message += `${j1Value}: ${jValue}\n`;
-                    message += `${k1Value}: ${kValue}\n`;
-                    message += `${m1Value}: ${mValue}\n`;
-                    message += `${n1Value}: ${nValue}\n`;
+                    if (
+                        hValue !== null &&
+                        iValue !== null &&
+                        jValue !== null &&
+                        kValue !== null &&
+                        (mValue !== null || nValue !== null)
+                    ) {
+                        const h1Value = firstWorksheet.getCell('H1').value;
+                        const i1Value = firstWorksheet.getCell('I1').value;
+                        const j1Value = firstWorksheet.getCell('J1').value;
+                        const k1Value = firstWorksheet.getCell('K1').value;
+                        const m1Value = firstWorksheet.getCell('M1').value;
+                        const n1Value = firstWorksheet.getCell('N1').value;
+                        const p1Value = firstWorksheet.getCell('P1').value;
+                        const o1Value = firstWorksheet.getCell('O1').value;
 
-                    if (pValue !== null) {
-                      message += `${p1Value}: ${pValue}\n`;
+                        message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
+                        message += `${h1Value}: ${hValue}\n`;
+                        message += `${i1Value}: ${iValue}\n`;
+                        message += `${j1Value}: ${jValue}\n`;
+                        message += `${k1Value}: ${kValue}\n`;
+                        message += `${m1Value}: ${mValue}\n`;
+                        message += `${n1Value}: ${nValue}\n`;
+
+                        if (pValue !== null) {
+                          message += `${p1Value}: ${pValue}\n`;
+                        }
+
+                        if (oValue !== null) {
+                          message += `${o1Value}: ${oValue}\n`;
+                        }
+
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        bot.sendMessage(chatId, message, beginWork3Options);
                     }
-
-                    if (oValue !== null) {
-                      message += `${o1Value}: ${oValue}\n`;
-                    }
-
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    bot.sendMessage(chatId, message, beginWork3Options);
                 }
-            }
-        });
+            });
 
-        if (!foundMatchWallpaper) {
-            bot.deleteMessage(chatId, botMsgIdx);
-            bot.sendMessage(
-              chatId,
-              'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
-            );
-        }
+            if (!foundMatchWallpaper) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                bot.sendMessage(
+                  chatId,
+                  'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
+                );
+            }
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
