@@ -278,7 +278,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
     // const result = await findExcelFile(fileNameWallpaper);
     // fileNameWallpaper = result.fileNameWallpaper;  
-    const fileNameWallpaper = await findExcelFile();
+    const fileName = await findExcelFile();
 
     if (fileNameWallpaper) {
         let user = await UserModel.findOne({
@@ -287,7 +287,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
           }
         });
         const workbookWallpaper = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileNameWallpaper);
+        const stream = fs.createReadStream(fileName); // fileName заменить на fileNameWallpaper
         await workbookWallpaper.xlsx.read(stream);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
             return workbookWallpaper.getWorksheet(0);
