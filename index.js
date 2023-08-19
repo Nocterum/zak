@@ -276,6 +276,7 @@ async function findExcelFile(fileNameWallpaper, fileNameTextile) {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
 try {
+    const fileNameWallpaper = 'WP.xlsx'
     const result = await findExcelFile(fileNameWallpaper);
     fileNameWallpaper = result.fileNameWallpaper;  
 
