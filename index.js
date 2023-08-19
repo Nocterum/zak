@@ -276,7 +276,7 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '')  {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
 
-    const fileNameWallpaper = 'WP.xlsx';
+    const fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
     const result = await findExcelFile(fileNameWallpaper);
     const filePath = result.fileNameWallpaper;
 
@@ -287,16 +287,16 @@ async function findCatalogWallpaper(chatId) {
               chatId: chatId
             }
         });
-
+        try {    
         const workbook = new ExcelJS.Workbook();
         const stream = fs.createReadStream(filePath);
         const worksheet = await workbook.xlsx.read(stream);
-        const firstWorksheet = worksheet.getWorksheet[0];
+        const firstWorksheet = worksheet.getWorksheet(0);
 
         let foundMatchWallpaper = false;
         let message = '';
 
-        firstWorksheet.rowValue( async (row, rowNumber) => {
+        firstWorksheet.eachRow( async (row, rowNumber) => {
             const cellValue = row.getCell('B').value;
             if (cellValue == user.catalog) {
                 foundMatchWallpaper = true;
@@ -353,9 +353,12 @@ async function findCatalogWallpaper(chatId) {
               chatId,
               'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
             );
-      }
+        }
+        } catch (error) {
+            console.error('Ошибка при чтении файла Excel:', error);
+        }
     }
-  }
+}
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
