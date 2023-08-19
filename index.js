@@ -299,7 +299,7 @@ async function findCatalogWallpaper(chatId) {
         // firstWorksheet.eachRow( async (row, rowNumber) => {
         //     const cellValue = row.getCell('B').value;
 
-        for (const row of firstWorksheet.eachRow(row, rowNumber)) {
+        firstWorksheet.eachRow((row, rowNumber) => {
             const cellValue = row.getCell('B').value;    
 
             if (cellValue == user.catalog) {
@@ -349,7 +349,7 @@ async function findCatalogWallpaper(chatId) {
                     bot.sendMessage(chatId, message, beginWork3Options);
                 }
             }
-        };
+        });
 
         if (!foundMatchWallpaper) {
             bot.deleteMessage(chatId, botMsgIdx);
