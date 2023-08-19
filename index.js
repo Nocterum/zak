@@ -262,19 +262,22 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
 
     if (fileNameWallpaper) {
-        const workbookWallpaper = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileNameWallpaper);
-        const wbWallpaper = await workbookWallpaper.xlsx.read(stream);
-        const worksheetWallpaper = wbWallpaper.worksheets[0];
-
         let user = await UserModel.findOne({
           where: {
             chatId: chatId
           }
         });
+        const workbookWallpaper = new ExcelJS.Workbook();
+        const stream = fs.createReadStream(fileNameWallpaper);
+        const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
+            return workbookWallpaper.getWorksheet(1);
+          });
+
 
         let foundMatchWallpaper = false;
-        for (const row of worksheetWallpaper.eachRow()) {
+        let message = '';
+
+        worksheetWallpaper.eachRow((row, rowNumber) => {
 
             const cellValue = row.getCell('B').value;
 
@@ -305,7 +308,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                 const m1Value = worksheetWallpaper.getCell(`M1`).value;
                 const n1Value = worksheetWallpaper.getCell(`N1`).value;
     
-                let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+                message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                 message += `${h1Value}: ${hValue}\n`;
                 message += `${i1Value}: ${iValue}\n`;
                 message += `${j1Value}: ${jValue}\n`;
@@ -327,17 +330,18 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                 bot.sendMessage(chatId, message, beginWork3Options);
 
                 }
-            } else {
-
-                bot.deleteMessage(chatId, botMsgIdx);
-                return bot.sendMessage(
-                    chatId,
-                    `Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.`
-                );
             }
-        };
-    }      
-}
+        });
+    
+        if (!foundMatchWallpaper) {
+          bot.deleteMessage(chatId, botMsgIdx);
+          bot.sendMessage(
+            chatId,
+            'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
+          );
+        }
+      }
+    }
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
