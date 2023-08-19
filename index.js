@@ -270,7 +270,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
         const stream = fs.createReadStream(fileNameWallpaper);
         const worksheetWallpaper = await workbookWallpaper.xlsx.read(stream).then(() => {
-            return workbookWallpaper.getWorksheet(0);
+            return workbookWallpaper.getWorksheet(1);
           });
 
 
@@ -301,12 +301,12 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
                     (mValue !== null || nValue !== null)
                 ) {
 
-                const h1Value = worksheetWallpaper.getCell(`H1`).value;
-                const i1Value = worksheetWallpaper.getCell(`I1`).value;
-                const j1Value = worksheetWallpaper.getCell(`J1`).value;
-                const k1Value = worksheetWallpaper.getCell(`K1`).value;
-                const m1Value = worksheetWallpaper.getCell(`M1`).value;
-                const n1Value = worksheetWallpaper.getCell(`N1`).value;
+                const h1Value = worksheetWallpaper.getCell('H1').value;
+                const i1Value = worksheetWallpaper.getCell('I1').value;
+                const j1Value = worksheetWallpaper.getCell('J1').value;
+                const k1Value = worksheetWallpaper.getCell('K1').value;
+                const m1Value = worksheetWallpaper.getCell('M1').value;
+                const n1Value = worksheetWallpaper.getCell('N1').value;
     
                 message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                 message += `${h1Value}: ${hValue}\n`;
@@ -350,15 +350,15 @@ async function findCatalogTextile(chatId, fileNameTextile) {
     fileNameTextile = result.fileNameTextile; // Обновляем fileNameTextile
 
     if (fileNameTextile) {
-        const workbookTextile = new ExcelJS.Workbook();
-        const wbTextile = await workbookTextile.xlsx.fileStream(fileNameTextile);
-        const worksheetTextile = wbTextile.worksheets[0];
-
         let user = await UserModel.findOne({
         where: {
             chatId: chatId
         }
         });
+
+        const workbookTextile = new ExcelJS.Workbook();
+        const wbTextile = await workbookTextile.xlsx.fileStream(fileNameTextile);
+        const worksheetTextile = wbTextile.worksheets[0];
 
         let foundMatchTextile = false;
         worksheetTextile.eachRow((row, rowNumber) => {
@@ -375,19 +375,19 @@ async function findCatalogTextile(chatId, fileNameTextile) {
                 const oValue = row.getCell('O').value;
                 const pValue = row.getCell('P').value;
 
-                if (iValue !== null ||
-                    jValue !== null ||
-                    kValue !== null ||
-                    lValue !== null ||
-                    nValue !== null ||
-                    oValue !== null) {
-                    const i1Value = worksheetTextile.getCell(`I1`).value;
-                    const j1Value = worksheetTextile.getCell(`J1`).value;
-                    const k1Value = worksheetTextile.getCell(`K1`).value;
-                    const l1Value = worksheetTextile.getCell(`L1`).value;
-                    const n1Value = worksheetTextile.getCell(`N1`).value;
-                    const o1Value = worksheetTextile.getCell(`O1`).value;
-                    const p1Value = worksheetTextile.getCell(`P1`).value;
+                if (iValue !== null &&
+                    jValue !== null &&
+                    kValue !== null &&
+                    lValue !== null &&
+                    (nValue !== null || oValue !== null)) {
+
+                    const i1Value = worksheetTextile.getCell('I1').value;
+                    const j1Value = worksheetTextile.getCell('J1').value;
+                    const k1Value = worksheetTextile.getCell('K1').value;
+                    const l1Value = worksheetTextile.getCell('L1').value;
+                    const n1Value = worksheetTextile.getCell('N1').value;
+                    const o1Value = worksheetTextile.getCell('O1').value;
+                    const p1Value = worksheetTextile.getCell('P1').value;
 
                     let message = `Каталог с данным артикулом имеется в следующих магазинах:\n`;
                     message += `${i1Value}: ${iValue}\n`;
