@@ -281,7 +281,7 @@ async function findCatalogWallpaper(chatId) {
     const filePath = result.fileNameWallpaper;
 
     if (filePath) {
-
+        await bot.sendMessage(`${filePath}`);
         const user = await UserModel.findOne({
             where: {
               chatId: chatId
@@ -291,11 +291,11 @@ async function findCatalogWallpaper(chatId) {
         const workbook = new ExcelJS.Workbook();
         const stream = fs.createReadStream(filePath);
         const worksheet = await workbook.xlsx.read(stream);
-        const firstWorksheet = worksheet.getWorksheet(0);
-  
+        const firstWorksheet = worksheet.getWorksheet[0];
+
         let foundMatchWallpaper = false;
         let message = '';
-  
+
         firstWorksheet.eachRow((row, rowNumber) => {
             const cellValue = row.getCell('B').value;
             if (cellValue == user.catalog) {
@@ -308,7 +308,7 @@ async function findCatalogWallpaper(chatId) {
                 const nValue = row.getCell('N').value;
                 const oValue = row.getCell('O').value;
                 const pValue = row.getCell('P').value;
-  
+
                 if (
                     hValue !== null &&
                     iValue !== null &&
@@ -324,7 +324,7 @@ async function findCatalogWallpaper(chatId) {
                     const n1Value = firstWorksheet.getCell('N1').value;
                     const p1Value = firstWorksheet.getCell('P1').value;
                     const o1Value = firstWorksheet.getCell('O1').value;
-  
+
                     message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
                     message += `${h1Value}: ${hValue}\n`;
                     message += `${i1Value}: ${iValue}\n`;
@@ -332,21 +332,21 @@ async function findCatalogWallpaper(chatId) {
                     message += `${k1Value}: ${kValue}\n`;
                     message += `${m1Value}: ${mValue}\n`;
                     message += `${n1Value}: ${nValue}\n`;
-  
+
                     if (pValue !== null) {
                       message += `${p1Value}: ${pValue}\n`;
                     }
-                
+
                     if (oValue !== null) {
                       message += `${o1Value}: ${oValue}\n`;
                     }
-  
+
                     bot.deleteMessage(chatId, botMsgIdx);
                     bot.sendMessage(chatId, message, beginWork3Options);
                 }
             }
         });
-  
+
         if (!foundMatchWallpaper) {
             bot.deleteMessage(chatId, botMsgIdx);
             bot.sendMessage(
