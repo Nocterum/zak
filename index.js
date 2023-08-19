@@ -277,7 +277,7 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
         let foundMatchWallpaper = false;
         let message = '';
 
-        worksheetWallpaper.eachRow((row, rowNumber) => {
+        worksheetWallpaper.eachRow( async (row, rowNumber) => {
 
             const cellValue = row.getCell('B').value;
 
