@@ -296,8 +296,12 @@ async function findCatalogWallpaper(chatId) {
         let foundMatchWallpaper = false;
         let message = '';
 
-        firstWorksheet.eachRow( async (row, rowNumber) => {
-            const cellValue = row.getCell('B').value;
+        // firstWorksheet.eachRow( async (row, rowNumber) => {
+        //     const cellValue = row.getCell('B').value;
+
+        for (const row of firstWorksheet.iterRows()) {
+            const cellValue = row.getCell('B').value;    
+
             if (cellValue == user.catalog) {
                 foundMatchWallpaper = true;
                 const hValue = row.getCell('H').value;
@@ -345,7 +349,7 @@ async function findCatalogWallpaper(chatId) {
                     bot.sendMessage(chatId, message, beginWork3Options);
                 }
             }
-        });
+        };
 
         if (!foundMatchWallpaper) {
             bot.deleteMessage(chatId, botMsgIdx);
