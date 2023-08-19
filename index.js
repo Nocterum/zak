@@ -295,7 +295,7 @@ try {
         let foundMatchWallpaper = false;
         let message = '';
 
-        for (const row of worksheetWallpaper.iterRows()) {
+        for (const row of worksheetWallpaper.eachRow()) {
             const cellValue = row.getCell(`B`).value;
 
             if (cellValue == user.catalog) {
