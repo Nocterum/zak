@@ -338,8 +338,6 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
 
-    const fileNameTextile = await findExcelFile('Текстиль Каталоги  распределение в салоны.xlsx');
-
     if (fileNameTextile) {
         const workbookTextile = new ExcelJS.Workbook();
         const wbTextile = await workbookTextile.xlsx.fileStream(fileNameTextile);
