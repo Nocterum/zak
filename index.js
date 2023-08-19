@@ -217,12 +217,10 @@ const sendReserveEmail = async (chatId) => {
     }
 }
 
-// Функция для поиска эксель файла в указанной папке и ее подпапках
-async function findExcelFile() {
+// Функция для поиска эксель файла
+async function findExcelFile(fileNameWallpaper, fileNameTextile) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
-    let fileNameWallpaper = null;
-    let fileNameTextile = null;
     
     for (const file of files) {
       const filePath = path.join(folderPath, file);
@@ -259,7 +257,9 @@ async function findExcelFile() {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
-    await findExcelFile(fileNameWallpaper);
+    const result = await findExcelFile(fileNameWallpaper);
+    fileNameWallpaper = result.fileNameWallpaper; // Обновляем fileNameWallpaper
+
 
     if (fileNameWallpaper) {
         const workbookWallpaper = new ExcelJS.Workbook();
@@ -341,6 +341,9 @@ async function findCatalogWallpaper(chatId, fileNameWallpaper) {
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId, fileNameTextile) {
+
+    const result = await findExcelFile(fileNameTextile);
+    fileNameTextile = result.fileNameTextile; // Обновляем fileNameTextile
 
     if (fileNameTextile) {
         const workbookTextile = new ExcelJS.Workbook();
