@@ -218,7 +218,7 @@ const sendReserveEmail = async (chatId) => {
 }
 
 // Функция для поиска эксель файла
-async function findExcelFile(fileNameWallpaper, fileNameTextile) {
+async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '')  {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
     
@@ -227,7 +227,7 @@ async function findExcelFile(fileNameWallpaper, fileNameTextile) {
       const stat = await fs.promises.stat(filePath);
       
       if (stat.isDirectory()) {
-        const result = await findExcelFile(filePath);
+        const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile);   
         
         if (result.fileNameWallpaper) {
           fileNameWallpaper = result.fileNameWallpaper;
@@ -322,6 +322,8 @@ async function findCatalogWallpaper(chatId) {
             const k1Value = worksheetWallpaper.getCell('K1').value;
             const m1Value = worksheetWallpaper.getCell('M1').value;
             const n1Value = worksheetWallpaper.getCell('N1').value;
+            const p1Value = worksheetWallpaper.getCell('P1').value;
+            const o1Value = worksheetWallpaper.getCell('O1').value;
   
             message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
             message += `${h1Value}: ${hValue}\n`;
@@ -332,12 +334,10 @@ async function findCatalogWallpaper(chatId) {
             message += `${n1Value}: ${nValue}\n`;
   
             if (pValue !== null) {
-              const p1Value = worksheetWallpaper.getCell('P1').value;
               message += `${p1Value}: ${pValue}\n`;
             }
   
             if (oValue !== null) {
-              const o1Value = worksheetWallpaper.getCell('O1').value;
               message += `${o1Value}: ${oValue}\n`;
             }
   
