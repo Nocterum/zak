@@ -239,9 +239,11 @@ async function findExcelFile() {
           fileNameTextile = result.fileNameTextile;
         }
       } else if (path.extname(file) === '.xlsx') {
-        if (file === 'Каталоги  распределение в салоны 26.09.19.xlsx') {
+
+        if (file.includes('26')) { 
           fileNameWallpaper = filePath;
-        } else if (file === 'Текстиль Каталоги  распределение в салоны.xlsx') {
+
+        } else if (file.includes('Текстиль')) {
           fileNameTextile = filePath;
         }
       }
