@@ -423,6 +423,7 @@ async function findCatalogTextile(chatId) {
                         if (botMsgIdx) {
                             bot.deleteMessage(chatId, botMsgIdx);
                         }
+                        findCatalogIndex = null;
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
@@ -430,8 +431,8 @@ async function findCatalogTextile(chatId) {
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
-                bot.sendMessage(chatId, 'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08'
-                );
+                findCatalogIndex = null;
+                bot.sendMessage(chatId, 'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
             }
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
