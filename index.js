@@ -29,7 +29,7 @@ const clientRDP = require('./rdp');
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
 lc = {};    //последняя команда
-plc = {};   //предпоследняя команда
+findCatalogIndex = {};   //состояние: нужно ли зайдествовать функцию поиска каталога текстиля.
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 let subject = {};   //тема письма
@@ -336,7 +336,7 @@ async function findCatalogWallpaper(chatId) {
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
-                return findCatalogTextile(chatId);
+                findCatalogIndex = 'findCatalogTextile';
             });
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -622,12 +622,13 @@ bot.on('message', async msg => {
     if(lc === '/catalogСheck') {
         await user.update(
             {catalog: text}
-            );
-        await bot.sendMessage(
-            chatId, 
-            'Идёт поиск каталога . . .');
+        );
+        await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalogWallpaper(chatId);
+        await findCatalogWallpaper(chatId);
+        if (findCatalogIndex === 'findCatalogTextile') {
+            return findCatalogTextile(chatId);
+        }
     }
     
     //вывод информации
