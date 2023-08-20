@@ -313,11 +313,12 @@ async function findCatalogWallpaper(chatId) {
                     const pValue = row.getCell('P').value;
 
                     if (
-                        hValue !== null &&
-                        iValue !== null &&
-                        jValue !== null &&
-                        kValue !== null &&
-                        (mValue !== null || nValue !== null)
+                        hValue !== null ||
+                        iValue !== null ||
+                        jValue !== null ||
+                        kValue !== null ||
+                        mValue !== null || 
+                        nValue !== null
                     ) {
                         const h1Value = firstWorksheet.getCell('H1').value;
                         const i1Value = firstWorksheet.getCell('I1').value;
