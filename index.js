@@ -333,6 +333,7 @@ async function findCatalogWallpaper(chatId) {
                           message += `${o1Value}: ${oValue}\n`;
                         }
                         bot.deleteMessage(chatId, botMsgIdx);
+                        findCatalogIndex = null;
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
