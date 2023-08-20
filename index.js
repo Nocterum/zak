@@ -278,7 +278,7 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue == user.catalog) {
+                if (cellValue.toLowerCase == user.catalog.toLowerCase) {
                     foundMatchWallpaper = true;
                     const hValue = row.getCell('H').value;
                     const iValue = row.getCell('I').value;
@@ -336,6 +336,7 @@ async function findCatalogWallpaper(chatId) {
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
+                return findCatalogTextile(chatId);
             });
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -365,14 +366,14 @@ async function findCatalogTextile(chatId) {
             const worksheet = await workbook.xlsx.read(stream);
             const firstWorksheet = worksheet.worksheets[0];
 
-            let foundMatchWallpaper = false;
+            let foundMatchTextile = false;
             let message = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue == user.catalog) {
-                    foundMatchWallpaper = true;
+                if (cellValue.toLowerCase == user.catalog.toLowerCase) {
+                    foundMatchTextile = true;
                     const iValue = row.getCell('I').value;
                     const jValue = row.getCell('J').value;
                     const kValue = row.getCell('K').value;
@@ -427,13 +428,9 @@ async function findCatalogTextile(chatId) {
                 }
             });
 
-            if (!foundMatchWallpaper) {
-                if (botMsgIdx) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                }
-                bot.sendMessage(
-                  chatId,
-                  'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08'
+            if (!foundMatchTextile) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                bot.sendMessage(chatId, 'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08'
                 );
             }
         } catch (error) {
@@ -630,8 +627,7 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        await findCatalogWallpaper(chatId);
-        return findCatalogTextile(chatId);
+        return findCatalogWallpaper(chatId);
     }
     
     //вывод информации
