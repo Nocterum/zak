@@ -249,7 +249,7 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
             }
         }
 
-        if (fileNameWallpaper && fileNameTextilea && fileNamePricelist) {
+        if (fileNameWallpaper && fileNameTextile && fileNamePricelist) {
             break;
         }
     }
