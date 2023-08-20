@@ -766,7 +766,7 @@ bot.on('callback_query', async msg => {
             subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         }
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:${text}`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформированно следующее сообщение:${textMail}`, sendReserveOptions)
     }
 
     //отправка сообщения с запросом резервирования
