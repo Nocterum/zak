@@ -252,26 +252,8 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '')  {
     }
     
     return { fileNameWallpaper, fileNameTextile };
-  }
+}
 
-// // Функция для поиска эксель файла в указанной папке и ее подпапках
-// async function findExcelFile() {
-//     const folderPath = '/root/zak/xl';
-//     const files = await fs.promises.readdir(folderPath);
-//     for (const file of files) {
-//       const filePath = path.join(folderPath, file);
-//       const stat = await fs.promises.stat(filePath);
-//       if (stat.isDirectory()) {
-//         const result = await findExcelFile(filePath);
-//         if (result) {
-//           return result;
-//         }
-//       } else if (path.extname(file) === '.xlsx') {
-//         return filePath;
-//       }
-//     }
-//     return null;
-// }
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
@@ -330,21 +312,128 @@ async function findCatalogWallpaper(chatId) {
                         const o1Value = firstWorksheet.getCell('O1').value;
 
                         message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
-                        message += `${h1Value}: ${hValue}\n`;
-                        message += `${i1Value}: ${iValue}\n`;
-                        message += `${j1Value}: ${jValue}\n`;
-                        message += `${k1Value}: ${kValue}\n`;
-                        message += `${m1Value}: ${mValue}\n`;
-                        message += `${n1Value}: ${nValue}\n`;
 
+                        if (hValue !== null) {
+                            message += `${h1Value}: ${hValue}\n`;
+                        }
+                        if (iValue !== null) {
+                            message += `${i1Value}: ${iValue}\n`;
+                        }
+                        if (jValue !== null) {
+                            message += `${j1Value}: ${jValue}\n`;
+                        }
+                        if (kValue !== null) {
+                            message += `${k1Value}: ${kValue}\n`;
+                        }
+                        if (mValue !== null) {
+                            message += `${m1Value}: ${mValue}\n`;
+                        }
+                        if (nValue !== null) {
+                            message += `${n1Value}: ${nValue}\n`;
+                        }
                         if (pValue !== null) {
                           message += `${p1Value}: ${pValue}\n`;
                         }
-
                         if (oValue !== null) {
                           message += `${o1Value}: ${oValue}\n`;
                         }
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        bot.sendMessage(chatId, message, beginWork3Options);
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Ошибка при чтении файла Excel:', error);
+        }
+    }
+}
 
+//Функция поиска каталога текстиля
+async function findCatalogTextile(chatId) {
+
+    const fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны.xlsx';
+    const result = await findExcelFile(fileNameTextile);
+    const filePath = result.fileNameTextile;
+
+    if (filePath) {
+        await bot.sendMessage(chatId, `${filePath}`);
+        const user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+        });
+
+        const workbookTextile = new ExcelJS.Workbook();
+        const stream = fs.createReadStream(fileNameTextile);
+        await workbookTextile.xlsx.read(stream);
+        const worksheetTextile = await workbookTextile.xlsx.read(stream).then(() => {
+            return workbookTextile.getWorksheet(0);
+        });
+
+        let foundMatchTextile = false;
+        let message = '';
+
+        try { 
+
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
+
+            let foundMatchWallpaper = false;
+            let message = '';
+
+            firstWorksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('B').value;    
+
+                if (cellValue == user.catalog) {
+                    foundMatchWallpaper = true;
+                    const iValue = row.getCell('I').value;
+                    const jValue = row.getCell('J').value;
+                    const kValue = row.getCell('K').value;
+                    const lValue = row.getCell('L').value;
+                    const nValue = row.getCell('N').value;
+                    const oValue = row.getCell('O').value;
+                    const pValue = row.getCell('P').value;
+
+                    if (iValue !== null ||
+                        jValue !== null ||
+                        kValue !== null ||
+                        lValue !== null ||
+                        nValue !== null || 
+                        oValue !== null
+                        ) {
+
+                            const i1Value = firstWorksheet.getCell('I1').value;
+                            const j1Value = firstWorksheet.getCell('J1').value;
+                            const k1Value = firstWorksheet.getCell('K1').value;
+                            const l1Value = firstWorksheet.getCell('L1').value;
+                            const n1Value = firstWorksheet.getCell('N1').value;
+                            const o1Value = firstWorksheet.getCell('O1').value;
+                            const p1Value = firstWorksheet.getCell(`P1`).value;
+
+                        message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
+                        if (iValue !== null) {
+                            message += `${i1Value}: ${iValue}\n`;
+                        }
+                        if (jValue !== null) {
+                            message += `${j1Value}: ${jValue}\n`;
+                        }
+                        if (kValue !== null) {
+                            message += `${k1Value}: ${kValue}\n`;
+                        }
+                        if (mValue !== null) {
+                            message += `${l1Value}: ${mValue}\n`;
+                        }
+                        if (nValue !== null) {
+                            message += `${n1Value}: ${nValue}\n`;
+                        }
+                        if (oValue !== null) {
+                          message += `${o1Value}: ${oValue}\n`;
+                        }
+                        if (pValue !== null) {
+                            message += `${p1Value}: ${pValue}\n`;
+                        }
                         bot.deleteMessage(chatId, botMsgIdx);
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
@@ -363,87 +452,6 @@ async function findCatalogWallpaper(chatId) {
         }
     }
 }
-
-//Функция поиска каталога текстиля
-async function findCatalogTextile(chatId, fileNameTextile) {
-
-    // const result = await findExcelFile(fileNameTextile);
-    fileNameTextile = '/root/zak/xl/TX.xlsx';
-
-    if (fileNameTextile) {
-        let user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        }
-        });
-
-        const workbookTextile = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileNameTextile);
-        await workbookTextile.xlsx.read(stream);
-        const worksheetTextile = await workbookTextile.xlsx.read(stream).then(() => {
-            return workbookTextile.getWorksheet(0);
-        });
-
-        let foundMatchTextile = false;
-        let message = '';
-
-        worksheetTextile.eachRow( async (row, rowNumber) => {
-
-            const cellValue = row.getCell('B').value;
-
-
-            if (cellValue == user.catalog) {
-                foundMatchTextile = true;
-                const iValue = row.getCell('I').value;
-                const jValue = row.getCell('J').value;
-                const kValue = row.getCell('K').value;
-                const lValue = row.getCell('L').value;
-                const nValue = row.getCell('N').value;
-                const oValue = row.getCell('O').value;
-                const pValue = row.getCell('P').value;
-
-                if (iValue !== null &&
-                    jValue !== null &&
-                    kValue !== null &&
-                    lValue !== null &&
-                    (nValue !== null || oValue !== null)) {
-
-                    const i1Value = worksheetTextile.getCell('I1').value;
-                    const j1Value = worksheetTextile.getCell('J1').value;
-                    const k1Value = worksheetTextile.getCell('K1').value;
-                    const l1Value = worksheetTextile.getCell('L1').value;
-                    const n1Value = worksheetTextile.getCell('N1').value;
-                    const o1Value = worksheetTextile.getCell('O1').value;
-
-                    message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
-                    message += `${i1Value}: ${iValue}\n`;
-                    message += `${j1Value}: ${jValue}\n`;
-                    message += `${k1Value}: ${kValue}\n`;
-                    message += `${l1Value}: ${lValue}\n`;
-                    message += `${n1Value}: ${nValue}\n`;
-                    message += `${o1Value}: ${oValue}\n`;
-
-                    if (pValue !== null) {
-                        const p1Value = worksheetTextile.getCell(`P1`).value;
-                        message += `${p1Value}: ${pValue}\n`;
-                    }
-
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    bot.sendMessage(chatId, message, beginWork3Options);
-
-                }
-            }
-        });
-    
-        if (!foundMatchWallpaper) {
-          bot.deleteMessage(chatId, botMsgIdx);
-          bot.sendMessage(
-            chatId,
-            'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
-          );
-        }
-      }
-    }
 
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -633,8 +641,8 @@ bot.on('message', async msg => {
             chatId, 
             'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id +=1 ; 
-        return findCatalogWallpaper(chatId);
-        findCatalogTextile();
+        await findCatalogWallpaper(chatId);
+        return findCatalogTextile(chatId);
     }
     
     //вывод информации
