@@ -278,7 +278,7 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue.toLowerCase() === user.catalog.toLowerCase()) {
+                if (cellValue === user.catalog) {
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
@@ -289,7 +289,7 @@ async function findCatalogWallpaper(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
-                    user.update({brand: cValue.toLowerCase()});
+                    user.update({brand: cValue});
 
                     if (
                         hValue !== null ||
@@ -379,7 +379,7 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue.toLowerCase() === user.catalog.toLowerCase()) {
+                if (cellValue === user.catalog) {
                     foundMatchTextile = true;
                     const cValue = row.getCell('C').value;
                     const iValue = row.getCell('I').value;
@@ -389,7 +389,7 @@ async function findCatalogTextile(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
-                    user.update({brand: cValue.toLowerCase()});
+                    user.update({brand: cValue});
 
                     if (iValue !== null ||
                         jValue !== null ||
@@ -673,7 +673,7 @@ bot.on('message', async msg => {
         const chatId = msg.chat.id;
 
         if (msg.document) {
-            if ((file_name.toLowerCase().includes('каталоги' || 'прайслистов'))) {
+            if ((file_name.includes('Каталоги' || 'прайслистов'))) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
                     const fileName = msg.document.file_name;
