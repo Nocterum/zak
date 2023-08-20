@@ -278,7 +278,7 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue.toLowerCase == user.catalog.toLowerCase) {
+                if (cellValue.toLowerCase == (user.catalog).toLowerCase) {
                     foundMatchWallpaper = true;
                     const hValue = row.getCell('H').value;
                     const iValue = row.getCell('I').value;
@@ -372,7 +372,7 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue.toLowerCase == user.catalog.toLowerCase) {
+                if (cellValue.toLowerCase == (user.catalog).toLowerCase) {
                     foundMatchTextile = true;
                     const iValue = row.getCell('I').value;
                     const jValue = row.getCell('J').value;
@@ -408,8 +408,8 @@ async function findCatalogTextile(chatId) {
                         if (kValue !== null) {
                             message += `${k1Value}: ${kValue}\n`;
                         }
-                        if (mValue !== null) {
-                            message += `${l1Value}: ${mValue}\n`;
+                        if (lValue !== null) {
+                            message += `${l1Value}: ${lValue}\n`;
                         }
                         if (nValue !== null) {
                             message += `${n1Value}: ${nValue}\n`;
@@ -625,8 +625,10 @@ bot.on('message', async msg => {
             {catalog: text}
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
-        botMsgIdx = msg.message_id +=1 ; 
+        botMsgIdx = msg.message_id += 1; 
+        if (findCatalogIndex === null) {
         await findCatalogWallpaper(chatId);
+        }
         if (findCatalogIndex === 'findCatalogTextile') {
             return findCatalogTextile(chatId);
         }
