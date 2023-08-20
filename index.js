@@ -35,16 +35,12 @@ sorry = 'Извините, я этому пока ещё учусь😅\nПро�
 let subject = {};   //тема письма
 let textMail = {};  //текст письма
 
-
-
-
 //МЕНЮ КОМАНД
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
     {command: '/beginwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
 ])
-
 
 //ФУНКЦИИ=========================================================================================
 
@@ -217,40 +213,39 @@ const sendReserveEmail = async (chatId) => {
     }
 }
 
-// Функция для поиска эксель файла
+//Функция для поиска эксель файла
 async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '')  {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
     
     for (const file of files) {
-      const filePath = path.join(folderPath, file);
-      const stat = await fs.promises.stat(filePath);
-      
-      if (stat.isDirectory()) {
-        const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile);   
+        const filePath = path.join(folderPath, file);
+        const stat = await fs.promises.stat(filePath);
         
-        if (result.fileNameWallpaper) {
-          fileNameWallpaper = result.fileNameWallpaper;
-        }
-        
-        if (result.fileNameTextile) {
-          fileNameTextile = result.fileNameTextile;
-        }
-      } else if (path.extname(file) === '.xlsx') {
+        if (stat.isDirectory()) {
+            const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile);   
+            
+            if (result.fileNameWallpaper) {
+              fileNameWallpaper = result.fileNameWallpaper;
+            }
+            
+            if (result.fileNameTextile) {
+              fileNameTextile = result.fileNameTextile;
+            }
+        } else if (path.extname(file) === '.xlsx') {
 
-        if (file.includes('26')) { 
-          fileNameWallpaper = filePath;
+            if (file.includes('26')) { 
+              fileNameWallpaper = filePath;
 
-        } else if (file.includes('Текстиль')) {
-          fileNameTextile = filePath;
+            } else if (file.includes('Текстиль')) {
+              fileNameTextile = filePath;
+            }
         }
-      }
-      
-      if (fileNameWallpaper && fileNameTextile) {
-        break;
-      }
+
+        if (fileNameWallpaper && fileNameTextile) {
+            break;
+        }
     }
-    
     return { fileNameWallpaper, fileNameTextile };
 }
 
@@ -263,7 +258,7 @@ async function findCatalogWallpaper(chatId) {
     const filePath = result.fileNameWallpaper;
 
     if (filePath) {
-        await bot.sendMessage(chatId, `${filePath}`);
+
         const user = await UserModel.findOne({
             where: {
               chatId: chatId
@@ -356,22 +351,12 @@ async function findCatalogTextile(chatId) {
     const filePath = result.fileNameTextile;
 
     if (filePath) {
-        await bot.sendMessage(chatId, `${filePath}`);
+
         const user = await UserModel.findOne({
             where: {
               chatId: chatId
             }
         });
-
-        const workbookTextile = new ExcelJS.Workbook();
-        const stream = fs.createReadStream(fileNameTextile);
-        await workbookTextile.xlsx.read(stream);
-        const worksheetTextile = await workbookTextile.xlsx.read(stream).then(() => {
-            return workbookTextile.getWorksheet(0);
-        });
-
-        let foundMatchTextile = false;
-        let message = '';
 
         try { 
 
@@ -434,17 +419,21 @@ async function findCatalogTextile(chatId) {
                         if (pValue !== null) {
                             message += `${p1Value}: ${pValue}\n`;
                         }
-                        bot.deleteMessage(chatId, botMsgIdx);
+                        if (botMsgIdx) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                        }
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
             });
 
             if (!foundMatchWallpaper) {
-                bot.deleteMessage(chatId, botMsgIdx);
+                if (botMsgIdx) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                }
                 bot.sendMessage(
                   chatId,
-                  'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.'
+                  'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08'
                 );
             }
         } catch (error) {
@@ -786,7 +775,7 @@ bot.on('callback_query', async msg => {
     //проверка каталога в наличии в салоне
     if(data === '/catalogСheck') {
         lc = data;
-        return bot.sendMessage(chatId, 'Введите артикул каталога содержащего искомый вами товар:');
+        return bot.sendMessage(chatId, 'Введите <b>артикул каталога</b> содержащего искомый вами товар:', {parse_mode: 'HTML'});
     }
 
     //превью фото
