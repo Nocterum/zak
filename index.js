@@ -488,7 +488,7 @@ async function findPricelistLink(chatId) {
                     const cValue = row.getCell('C').value;
 
                     if (cValue !== null ) {
-                        const formattedCValue = cValue.replace(/\\/g, '\\\\');
+                        const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
                         message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
