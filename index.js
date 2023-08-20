@@ -278,8 +278,9 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue === user.catalog) {
+                if (cellValue.toLowerCase() === user.catalog.toLowerCase()) {
                     foundMatchWallpaper = true;
+                    const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
                     const iValue = row.getCell('I').value;
                     const jValue = row.getCell('J').value;
@@ -288,6 +289,7 @@ async function findCatalogWallpaper(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
+                    user.update({brand: cValue.toLowerCase()});
 
                     if (
                         hValue !== null ||
@@ -377,8 +379,9 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;    
 
-                if (cellValue == user.catalog) {
+                if (cellValue.toLowerCase() === user.catalog.toLowerCase()) {
                     foundMatchTextile = true;
+                    const cValue = row.getCell('C').value;
                     const iValue = row.getCell('I').value;
                     const jValue = row.getCell('J').value;
                     const kValue = row.getCell('K').value;
@@ -386,6 +389,7 @@ async function findCatalogTextile(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
+                    user.update({brand: cValue.toLowerCase()});
 
                     if (iValue !== null ||
                         jValue !== null ||
@@ -444,6 +448,13 @@ async function findCatalogTextile(chatId) {
     }
 }
 
+//Функция поиска ссылки на прайслист
+async function findPricelistLink(chatId) {
+
+    const fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
+    const result = await findExcelFile(fileNameWallpaper);
+    const filePath = result.fileNameWallpaper;
+}
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -642,7 +653,7 @@ bot.on('message', async msg => {
             'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
 
-    if ((text !== '/game' && text !== '/start') || (lc !=='/catalogСheck')) {
+    if ((text !== '/game' && text !== '/start') || (lc ==='/catalogСheck')) {
         return bot.sendSticker(
             chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
@@ -662,7 +673,7 @@ bot.on('message', async msg => {
         const chatId = msg.chat.id;
 
         if (msg.document) {
-            if ((file_name.includes('Каталоги'))) {
+            if ((file_name.toLowerCase().includes('каталоги' || 'прайслистов'))) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
                     const fileName = msg.document.file_name;
