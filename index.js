@@ -337,8 +337,12 @@ async function findCatalogWallpaper(chatId) {
                         bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
-                findCatalogIndex = 'findCatalogTextile';
             });
+
+            if (!foundMatchWallpaper) {
+                return findCatalogTextile(chatId);
+            }
+            
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -432,7 +436,6 @@ async function findCatalogTextile(chatId) {
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
-                findCatalogIndex = null;
                 bot.sendMessage(chatId, 'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
             }
         } catch (error) {
@@ -611,11 +614,6 @@ bot.on('message', async msg => {
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
         await findCatalogWallpaper(chatId);
-        
-        if (findCatalogIndex === 'findCatalogTextile') {
-            return findCatalogTextile(chatId);
-        }
-        return;
     }
     
     //вывод информации
