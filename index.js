@@ -471,13 +471,7 @@ bot.onText(/\/start/, async msg => {
         //главное меню
         if (user) {
             lc = null;
-            return bot.sendMessage(
-                chatId, 
-                `И снова здравствуйте, ${user.nickname}!
-                \n\nНачать работу: /beginwork,
-                \nПроверить введенные данные: /infowork,
-                \n\nИзменить e-mail: /editEmail,
-                \nИзменить обращение /editNickname`)
+            return bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
         } else {
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -486,12 +480,7 @@ bot.onText(/\/start/, async msg => {
                 lastName: msg.from.last_name, 
             });
             lc = '/editNickname';
-            return bot.sendMessage(
-                chatId, 
-                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.
-                \nПриятно познакомиться!
-                \nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.
-                \nКак я могу к вам обращаться?`);
+            return bot.sendMessage(chatId, `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие товара по поставщику ОПУС, а также узнать сроки поставки и запросить резервирование.\nКак я могу к вам обращаться?`);
         }  
      } catch (e) {
     console.log('Ошибка при создании нового пользователя', e);
@@ -597,15 +586,9 @@ bot.on('message', async msg => {
         await user.update({reserveNumber: text});
 
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-            return bot.sendMessage(
-                chatId, 
-                `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
-                \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         } else {
-            return bot.sendMessage(
-                chatId, 
-                `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
-                \n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
         }
     }
 
@@ -626,12 +609,12 @@ bot.on('message', async msg => {
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
-        if (findCatalogIndex === null) {
         await findCatalogWallpaper(chatId);
-        }
+        
         if (findCatalogIndex === 'findCatalogTextile') {
             return findCatalogTextile(chatId);
         }
+        return;
     }
     
     //вывод информации
