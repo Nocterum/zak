@@ -532,7 +532,7 @@ bot.on('message', async msg => {
         }
     });
 
-    // try {
+    try {
     //главное меню
     if (text === '/mainmenu') {
         
@@ -658,9 +658,9 @@ bot.on('message', async msg => {
             chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
     }
-    // } catch {
-    //     console.log('Сработал слушатель документов.')
-    // }
+    } catch {
+        console.log('Сработал слушатель документов.')
+    }
 
 
 }) 
@@ -673,7 +673,7 @@ bot.on('message', async msg => {
         const chatId = msg.chat.id;
 
         if (msg.document) {
-            if ((file_name.includes('Каталоги' || 'прайслистов'))) {
+            if (file_name.toLowerCase().includes('каталоги') || file_name.toLowerCase().includes('прайслистов')) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
                     const fileName = msg.document.file_name;
