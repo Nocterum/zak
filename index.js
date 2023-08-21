@@ -496,7 +496,7 @@ async function findPricelistLink(chatId) {
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`);
+                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
             }
 
         } catch (error) {
