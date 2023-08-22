@@ -283,10 +283,11 @@ async function findCatalogWallpaper(chatId) {
             let message = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('D').value.toLowerCase();
-                const formatedCellValue = cellValue.toString().split("/")[0];   
+                const cellValue = row.getCell('D').value;
+                const formatedCellValue = cellValue.toString().toLowerCase().split("/")[0];
 
-                if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
+
+                if (formatedCellValue === (user.catalog.toLowerCase())) {
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
