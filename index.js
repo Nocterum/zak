@@ -287,7 +287,7 @@ async function findCatalogWallpaper(chatId) {
                 const formatedCellValue = cellValue.toString().split("/")[0];   
                 bot.sendMessage (chatId, formatedCellValue);
 
-                if (formatedCellValue !=='каталог' && formatedCellValue.includes(user.catalog.toLowerCase())) {
+                if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
