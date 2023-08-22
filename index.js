@@ -283,7 +283,8 @@ async function findCatalogWallpaper(chatId) {
             let message = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('B').value;    
+                const cellValue = row.getCell('D').value.toString.split("/")[0];   
+                bot.sendMessage (chatId, cellValue);
 
                 if (cellValue === user.catalog) {
                     foundMatchWallpaper = true;
