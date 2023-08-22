@@ -386,8 +386,10 @@ async function findCatalogTextile(chatId) {
             let message = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('D').value;  
-                const formatedCellValue = cellValue.toString().split("/")[0];  
+                const cellValue = row.getCell('D').value;
+                if (cellValue !== null) {
+                    const formatedCellValue = cellValue.toString().split("/")[0];  
+                
 
                 if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
                     foundMatchTextile = true;
@@ -445,7 +447,7 @@ async function findCatalogTextile(chatId) {
                         bot.sendMessage(chatId, message);
                     }
                 }
-            });
+        }});
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
