@@ -285,7 +285,7 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
-                const formatedUserCatalog = user.catalog.toString;
+                const formatedUserCatalog = user.catalog.toString();
 
 
                 if (formatedCellValue.toLowerCase() === (formatedUserCatalog.toLowerCase())) {
