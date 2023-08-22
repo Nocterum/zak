@@ -284,10 +284,10 @@ async function findCatalogWallpaper(chatId) {
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
-                const formatedCellValue = cellValue.toString().toLowerCase().split("/")[0];
+                const formatedCellValue = cellValue.toString().split("/")[0];
 
 
-                if (formatedCellValue === (user.catalog.toLowerCase())) {
+                if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
@@ -385,9 +385,10 @@ async function findCatalogTextile(chatId) {
             let message = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('B').value;    
+                const cellValue = row.getCell('D').value;  
+                const formatedCellValue = cellValue.toString().split("/")[0];  
 
-                if (cellValue !=='Каталог' && cellValue.includes(user.catalog)) {
+                if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
                     foundMatchTextile = true;
                     const cValue = row.getCell('C').value;
                     const iValue = row.getCell('I').value;
