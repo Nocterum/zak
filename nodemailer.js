@@ -5,8 +5,8 @@ module.exports = {
     transporter: nodemailer.createTransport({
         host: 'post.manders.ru',
         auth: {
-            user: 'Manders\\zakupki_bot',
-            pass: '1234qWER',
+            user: 'Manders\\n_kharitonov',
+            pass: '1929qweR',
         },
         tls: {
             rejectUnauthorized: false
