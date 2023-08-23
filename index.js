@@ -198,7 +198,7 @@ const sendReserveEmail = async (chatId) => {
     try {
 
         let result = transporter.sendMail({
-            from: 'n_kharitonov@manders.ru',
+            from: 'zakupki_bot@manders.ru',
             to: `${recipient}, ${copy}`,
             subject: subject,
             text: textMail,
@@ -254,8 +254,59 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
         }
     }
     return { fileNameWallpaper, fileNameTextile, fileNamePricelist };
-}
+};
 
+//Функция поиска ссылки на прайслист
+async function findPricelistLink(chatId) {
+
+    const fileNamePricelist = 'Список прайслистов.xlsx';
+    const result = await findExcelFile(fileNamePricelist);
+    const filePath = result.fileNamePricelist;
+
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+        });
+
+        try { 
+
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
+
+            let foundMatchPricelist = false;
+            let message = '';
+
+            firstWorksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('B').value;    
+
+                if (cellValue === user.brand) {
+                    foundMatchPricelist = true;
+                    const aValue = row.getCell('A').value;
+                    const bValue = row.getCell('B').value;
+                    const cValue = row.getCell('C').value;
+
+                    if (cValue !== null ) {
+                        const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
+                        message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
+                        bot.sendMessage(chatId, message, beginWork3Options);
+                    }
+                }
+            });
+
+            if (!foundMatchPricelist) {
+                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
+            }
+
+        } catch (error) {
+            console.error('Ошибка при чтении файла Excel:', error);
+        }
+    }
+};
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
@@ -318,7 +369,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += `Каталог <b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
+                        message += `<b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
 
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -344,7 +395,7 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                           message += `${o1Value}: ${oValue}\n`;
                         }
-                        message += `\n`
+                        message += `\n\n`
                         bot.deleteMessage(chatId, botMsgIdx);
                         bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         return findPricelistLink(chatId);
@@ -360,7 +411,7 @@ async function findCatalogWallpaper(chatId) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
     }
-}
+};
 
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId) {
@@ -462,59 +513,7 @@ async function findCatalogTextile(chatId) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
     }
-}
-
-//Функция поиска ссылки на прайслист
-async function findPricelistLink(chatId) {
-
-    const fileNamePricelist = 'Список прайслистов.xlsx';
-    const result = await findExcelFile(fileNamePricelist);
-    const filePath = result.fileNamePricelist;
-
-    if (filePath) {
-
-        const user = await UserModel.findOne({
-            where: {
-              chatId: chatId
-            }
-        });
-
-        try { 
-
-            const workbook = new ExcelJS.Workbook();
-            const stream = fs.createReadStream(filePath);
-            const worksheet = await workbook.xlsx.read(stream);
-            const firstWorksheet = worksheet.worksheets[0];
-
-            let foundMatchPricelist = false;
-            let message = '';
-
-            firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('B').value;    
-
-                if (cellValue === user.brand) {
-                    foundMatchPricelist = true;
-                    const aValue = row.getCell('A').value;
-                    const bValue = row.getCell('B').value;
-                    const cValue = row.getCell('C').value;
-
-                    if (cValue !== null ) {
-                        const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
-                        message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
-                        bot.sendMessage(chatId, message, beginWork3Options);
-                    }
-                }
-            });
-
-            if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
-            }
-
-        } catch (error) {
-            console.error('Ошибка при чтении файла Excel:', error);
-        }
-    }
-}
+};
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
