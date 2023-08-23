@@ -293,13 +293,13 @@ async function findPricelistLink(chatId) {
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
                         message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
-                        bot.sendMessage(chatId, message, beginWork3Options);
+                        bot.sendMessage(chatId, message);
                     }
                 }
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
+                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`);
             }
 
         } catch (error) {
@@ -370,7 +370,7 @@ async function findCatalogWallpaper(chatId) {
                         const o1Value = firstWorksheet.getCell('O1').value;
 
                         message += `<b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
-
+                        
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
                         }
@@ -393,12 +393,12 @@ async function findCatalogWallpaper(chatId) {
                           message += `${p1Value}: ${pValue}\n`;
                         }
                         if (oValue !== null) {
-                          message += `${o1Value}: ${oValue}\n`;
+                            message += `${o1Value}: ${oValue}\n`;
                         }
-                        message += `\n\n`
+                        const priceLink = findPricelistLink(chatId);
+                        message += `${priceLink}\n`;
                         bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                        return findPricelistLink(chatId);
+                        bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
             });
@@ -497,10 +497,10 @@ async function findCatalogTextile(chatId) {
                             if (botMsgIdx) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
-                            message += `\n`
+                            const priceLink = findPricelistLink(chatId);
+                            message += `${priceLink}\n`;
                             bot.deleteMessage(chatId, botMsgIdx);
-                            bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                            return findPricelistLink(chatId);
+                            bot.sendMessage(chatId, message, beginWork3Options);
                         }
                 }
         }});
