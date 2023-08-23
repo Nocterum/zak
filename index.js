@@ -398,7 +398,7 @@ async function findCatalogWallpaper(chatId) {
                         // const priceLink = await findPricelistLink(chatId);
                         // message += `${priceLink}\n`;
                         bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message);
+                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         return findPricelistLink(chatId);
                     }
                 }
@@ -501,7 +501,7 @@ async function findCatalogTextile(chatId) {
                             // const priceLink = findPricelistLink(chatId);
                             // message += `${priceLink}\n`;
                             bot.deleteMessage(chatId, botMsgIdx);
-                            bot.sendMessage(chatId, message);
+                            bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             return findPricelistLink(chatId);
                         }
                 }
