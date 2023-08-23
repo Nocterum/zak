@@ -293,13 +293,13 @@ async function findPricelistLink(chatId) {
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
                         message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
-                        bot.sendMessage(chatId, message);
+                        bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`);
+                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
             }
 
         } catch (error) {
@@ -395,10 +395,11 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
-                        const priceLink = findPricelistLink(chatId);
-                        message += `${priceLink}\n`;
+                        // const priceLink = await findPricelistLink(chatId);
+                        // message += `${priceLink}\n`;
                         bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message, beginWork3Options);
+                        bot.sendMessage(chatId, message);
+                        return findPricelistLink(chatId);
                     }
                 }
             });
@@ -497,10 +498,11 @@ async function findCatalogTextile(chatId) {
                             if (botMsgIdx) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
-                            const priceLink = findPricelistLink(chatId);
-                            message += `${priceLink}\n`;
+                            // const priceLink = findPricelistLink(chatId);
+                            // message += `${priceLink}\n`;
                             bot.deleteMessage(chatId, botMsgIdx);
-                            bot.sendMessage(chatId, message, beginWork3Options);
+                            bot.sendMessage(chatId, message);
+                            return findPricelistLink(chatId);
                         }
                 }
         }});
