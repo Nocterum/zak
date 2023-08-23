@@ -285,11 +285,11 @@ async function findCatalogWallpaper(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
-                const formatedUserCatalog = user.catalog.toString();
+                const formatedUserCatalog = user.catalog.toString().trim();
                 console.log(formatedCellValue.toLowerCase(), formatedUserCatalog.toLowerCase());
 
-                if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
-                // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) {
+                if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) { //Поиск совпадений
+                // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) { //Точный поиск наименования
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
@@ -319,7 +319,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += 'Каталог с данным артикулом имеется в следующих магазинах:\n';
+                        message += `Каталог ${formatedCellValue.trim()} имеется в следующих магазинах:\n`;
 
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -345,6 +345,7 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                           message += `${o1Value}: ${oValue}\n`;
                         }
+                        message += `\n`
                         bot.deleteMessage(chatId, botMsgIdx);
                         bot.sendMessage(chatId, message);
                     }
