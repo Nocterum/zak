@@ -293,13 +293,13 @@ async function findPricelistLink(chatId) {
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
                         message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
-                        bot.sendMessage(chatId, messagePrice);
+                        bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
                 }
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`);
+                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
             }
 
         } catch (error) {
@@ -333,7 +333,7 @@ async function findCatalogWallpaper(chatId) {
             let foundMatchWallpaper = false;
             let message = '';
 
-            firstWorksheet.eachRow((row, rowNumber) => {
+            firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
                 const formatedUserCatalog = user.catalog.toString().trim();
@@ -397,8 +397,8 @@ async function findCatalogWallpaper(chatId) {
                         }
                         // const priceLink = await findPricelistLink(chatId);
                         // message += `${priceLink}\n`;
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        await bot.deleteMessage(chatId, botMsgIdx);
+                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         return findPricelistLink(chatId);
                     }
                 }
@@ -498,10 +498,8 @@ async function findCatalogTextile(chatId) {
                             if (botMsgIdx) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
-                            const priceLink = findPricelistLink(chatId);
-                            message += `${priceLink}\n`;
                             await bot.deleteMessage(chatId, botMsgIdx);
-                            await bot.sendMessage(chatId, message, beginWork3Options);
+                            await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             return findPricelistLink(chatId);
                         }
                 }
