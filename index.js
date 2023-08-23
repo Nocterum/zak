@@ -288,7 +288,8 @@ async function findCatalogWallpaper(chatId) {
                 const formatedUserCatalog = user.catalog.toString();
                 console.log(formatedCellValue.toLowerCase(), formatedUserCatalog.toLowerCase());
 
-                if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) {
+                if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
+                // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) {
                     foundMatchWallpaper = true;
                     const cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
@@ -826,7 +827,7 @@ bot.on('callback_query', async msg => {
     //проверка каталога в наличии в салоне
     if(data === '/catalogСheck') {
         lc = data;
-        return bot.sendMessage(chatId, 'Введите <b>артикул каталога</b> содержащего искомый вами товар:', {parse_mode: 'HTML'});
+        return bot.sendMessage(chatId, 'Введите <b>наименование каталога</b> содержащего искомый вами товар:', {parse_mode: 'HTML'});
     }
 
     //превью фото
