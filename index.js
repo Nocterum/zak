@@ -333,7 +333,7 @@ async function findCatalogWallpaper(chatId) {
             let foundMatchWallpaper = false;
             let message = '';
 
-            firstWorksheet.eachRow( async (row, rowNumber) => {
+            firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
                 const formatedUserCatalog = user.catalog.toString().trim();
@@ -398,7 +398,7 @@ async function findCatalogWallpaper(chatId) {
                         // const priceLink = await findPricelistLink(chatId);
                         // message += `${priceLink}\n`;
                         bot.deleteMessage(chatId, botMsgIdx);
-                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         return findPricelistLink(chatId);
                     }
                 }
@@ -439,7 +439,7 @@ async function findCatalogTextile(chatId) {
             let foundMatchTextile = false;
             let message = '';
 
-            firstWorksheet.eachRow(async (row, rowNumber) => {
+            firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
                     const formatedCellValue = cellValue.toString().split("/")[0];
@@ -499,7 +499,7 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
                             bot.deleteMessage(chatId, botMsgIdx);
-                            await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                            bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             return findPricelistLink(chatId);
                         }
                 }
