@@ -286,7 +286,6 @@ async function findCatalogWallpaper(chatId) {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
                 const formatedUserCatalog = user.catalog.toString().trim();
-                console.log(formatedCellValue.toLowerCase(), formatedUserCatalog.toLowerCase());
 
                 if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) { //Поиск совпадений
                 // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) { //Точный поиск наименования
@@ -319,7 +318,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += `Каталог ${formatedCellValue.trim()} имеется в следующих магазинах:\n`;
+                        message += `Каталог <b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
 
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -347,7 +346,8 @@ async function findCatalogWallpaper(chatId) {
                         }
                         message += `\n`
                         bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message);
+                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        return findPricelistLink(chatId);
                     }
                 }
             });
@@ -390,64 +390,67 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
-                    const formatedCellValue = cellValue.toString().split("/")[0];  
+                    const formatedCellValue = cellValue.toString().split("/")[0];
+                    const formatedUserCatalog = user.catalog.toString().trim();;  
                 
+                    if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
+                        foundMatchTextile = true;
+                        const cValue = row.getCell('C').value;
+                        const iValue = row.getCell('I').value;
+                        const jValue = row.getCell('J').value;
+                        const kValue = row.getCell('K').value;
+                        const lValue = row.getCell('L').value;
+                        const nValue = row.getCell('N').value;
+                        const oValue = row.getCell('O').value;
+                        const pValue = row.getCell('P').value;
+                        user.update({brand: cValue});
 
-                if (formatedCellValue.toLowerCase() === (user.catalog.toLowerCase())) {
-                    foundMatchTextile = true;
-                    const cValue = row.getCell('C').value;
-                    const iValue = row.getCell('I').value;
-                    const jValue = row.getCell('J').value;
-                    const kValue = row.getCell('K').value;
-                    const lValue = row.getCell('L').value;
-                    const nValue = row.getCell('N').value;
-                    const oValue = row.getCell('O').value;
-                    const pValue = row.getCell('P').value;
-                    user.update({brand: cValue});
+                        if (iValue !== null ||
+                            jValue !== null ||
+                            kValue !== null ||
+                            lValue !== null ||
+                            nValue !== null || 
+                            oValue !== null
+                            ) {
 
-                    if (iValue !== null ||
-                        jValue !== null ||
-                        kValue !== null ||
-                        lValue !== null ||
-                        nValue !== null || 
-                        oValue !== null
-                        ) {
+                                const i1Value = firstWorksheet.getCell('I1').value;
+                                const j1Value = firstWorksheet.getCell('J1').value;
+                                const k1Value = firstWorksheet.getCell('K1').value;
+                                const l1Value = firstWorksheet.getCell('L1').value;
+                                const n1Value = firstWorksheet.getCell('N1').value;
+                                const o1Value = firstWorksheet.getCell('O1').value;
+                                const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            const i1Value = firstWorksheet.getCell('I1').value;
-                            const j1Value = firstWorksheet.getCell('J1').value;
-                            const k1Value = firstWorksheet.getCell('K1').value;
-                            const l1Value = firstWorksheet.getCell('L1').value;
-                            const n1Value = firstWorksheet.getCell('N1').value;
-                            const o1Value = firstWorksheet.getCell('O1').value;
-                            const p1Value = firstWorksheet.getCell(`P1`).value;
-
-                        message += `Каталог с данным артикулом имеется в следующих магазинах:\n`;
-                        if (iValue !== null) {
-                            message += `${i1Value}: ${iValue}\n`;
-                        }
-                        if (jValue !== null) {
-                            message += `${j1Value}: ${jValue}\n`;
-                        }
-                        if (kValue !== null) {
-                            message += `${k1Value}: ${kValue}\n`;
-                        }
-                        if (lValue !== null) {
-                            message += `${l1Value}: ${lValue}\n`;
-                        }
-                        if (nValue !== null) {
-                            message += `${n1Value}: ${nValue}\n`;
-                        }
-                        if (oValue !== null) {
-                          message += `${o1Value}: ${oValue}\n`;
-                        }
-                        if (pValue !== null) {
-                            message += `${p1Value}: ${pValue}\n`;
-                        }
-                        if (botMsgIdx) {
+                            message += `Каталог <b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
+                            if (iValue !== null) {
+                                message += `${i1Value}: ${iValue}\n`;
+                            }
+                            if (jValue !== null) {
+                                message += `${j1Value}: ${jValue}\n`;
+                            }
+                            if (kValue !== null) {
+                                message += `${k1Value}: ${kValue}\n`;
+                            }
+                            if (lValue !== null) {
+                                message += `${l1Value}: ${lValue}\n`;
+                            }
+                            if (nValue !== null) {
+                                message += `${n1Value}: ${nValue}\n`;
+                            }
+                            if (oValue !== null) {
+                              message += `${o1Value}: ${oValue}\n`;
+                            }
+                            if (pValue !== null) {
+                                message += `${p1Value}: ${pValue}\n`;
+                            }
+                            if (botMsgIdx) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                            }
+                            message += `\n`
                             bot.deleteMessage(chatId, botMsgIdx);
+                            bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                            return findPricelistLink(chatId);
                         }
-                        bot.sendMessage(chatId, message);
-                    }
                 }
         }});
 
@@ -681,8 +684,8 @@ bot.on('message', async msg => {
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
-        await findCatalogWallpaper(chatId);
-        return findPricelistLink(chatId);
+        return findCatalogWallpaper(chatId);
+
     }
     
     //вывод информации
@@ -828,7 +831,7 @@ bot.on('callback_query', async msg => {
     //проверка каталога в наличии в салоне
     if(data === '/catalogСheck') {
         lc = data;
-        return bot.sendMessage(chatId, 'Введите <b>наименование каталога</b> содержащего искомый вами товар:', {parse_mode: 'HTML'});
+        return bot.sendMessage(chatId, 'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', {parse_mode: 'HTML'});
     }
 
     //превью фото
