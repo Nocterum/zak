@@ -292,7 +292,7 @@ async function findPricelistLink(chatId) {
 
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
-                        message += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
+                        messagePrice += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
                 }
@@ -333,7 +333,7 @@ async function findCatalogWallpaper(chatId) {
             let foundMatchWallpaper = false;
             let message = '';
 
-            firstWorksheet.eachRow((row, rowNumber) => {
+            firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 const formatedCellValue = cellValue.toString().split("/")[0];
                 const formatedUserCatalog = user.catalog.toString().trim();
@@ -395,10 +395,12 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
+                        if (botMsgIdx) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                        }
                         // const priceLink = await findPricelistLink(chatId);
                         // message += `${priceLink}\n`;
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         return findPricelistLink(chatId);
                     }
                 }
@@ -439,7 +441,7 @@ async function findCatalogTextile(chatId) {
             let foundMatchTextile = false;
             let message = '';
 
-            firstWorksheet.eachRow((row, rowNumber) => {
+            firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
                     const formatedCellValue = cellValue.toString().split("/")[0];
@@ -498,8 +500,7 @@ async function findCatalogTextile(chatId) {
                             if (botMsgIdx) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                            await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             return findPricelistLink(chatId);
                         }
                 }
@@ -597,12 +598,7 @@ bot.on('message', async msg => {
         
         if (user) {
             lc = null;
-            await bot.sendMessage(
-                chatId, 
-                `И снова здравствуйте, ${user.nickname}!
-                \nНачать работу: /beginwork,
-                \nПроверить введенные данные: /infowork,
-                \n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
+            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
         }
         return;
     }
