@@ -308,6 +308,56 @@ async function findPricelistLink(chatId) {
     }
 };
 
+//Функция поиска артикула ORAC
+async function findOracMsk(chatId) {
+
+    const fileNamePricelist = 'остатки МСК.xlsx';
+    const result = await findExcelFile(fileNamePricelist);
+    const filePath = result.fileNamePricelist;
+
+    if (filePath) {
+        const user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+        });
+
+        try {
+
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
+
+            let foundMatchOrac = false;
+            let messageOrac = '';
+
+            firstWorksheet.eachRow( async (row, rowNumber) => {
+                const cellValue = row.getCell('A').value; //Артикул
+                
+                if (cellValue === user.vendorCode) {
+                    foundMatchOrac = true;
+                    const bValue = row.getCell('B').value; //Еденицы измерения
+                    const cValue = row.getCell('C').value; //Колличество
+                    const a3Value = firstWorksheet.getCell('H1').value; //Название склада
+
+                    messageOrac += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
+                    
+                    if (botMsgIdx) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                    }
+                    await bot.sendMessage(chatId, messageOrac, { parse_mode: "HTML" });
+                    messageOrac = null;
+                }
+            });
+
+        } catch {
+            console.error('Ошибка при чтении файла Excel:', error); 
+        }
+    }
+
+}
+
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
 
@@ -690,7 +740,15 @@ bot.on('message', async msg => {
         return findCatalogWallpaper(chatId);
 
     }
-    
+
+    if(lc === '/oracСheck') {
+        await user.update(
+            {vendorCode: text}
+        );
+        await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
+        botMsgIdx = msg.message_id += 1; 
+        return findOracMsk(chatId);
+    }
     //вывод информации
     if (text === '/infowork') {
         return bot.sendMessage(
@@ -717,7 +775,7 @@ bot.on('message', async msg => {
             'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
     }
 
-    if ((text !== '/game' && text !== '/start') || (lc ==='/catalogСheck')) {
+    if ( (text !== '/game' && text !== '/start') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
         return bot.sendSticker(
             chatId, 
             'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
@@ -738,7 +796,8 @@ bot.on('message', async msg => {
 
         if (msg.document) {
             if (file_name.toLowerCase().includes('каталоги') ||
-                file_name.toLowerCase().includes('прайслистов')
+                file_name.toLowerCase().includes('прайслистов') ||
+                file_name.toLowerCase().includes('остатки')
                 ) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
@@ -835,6 +894,12 @@ bot.on('callback_query', async msg => {
     if(data === '/catalogСheck') {
         lc = data;
         return bot.sendMessage(chatId, 'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', {parse_mode: 'HTML'});
+    }
+
+    //проверка наличия артикула ORAC в салоне
+    if(data === '/oracСheck') {
+        lc = data;
+        return bot.sendMessage(chatId, 'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', {parse_mode: 'HTML'});
     }
 
     //превью фото
