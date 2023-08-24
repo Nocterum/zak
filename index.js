@@ -268,10 +268,10 @@ async function findExcelFile(
             } else if (file.includes('прайслистов')) {
                 fileNamePricelist = filePath;
 
-            } else if (file.toLowerCase().includes('остатки мск')) {
+            } else if (file.includes('МСК')) {
                 fileNameOracMSK = filePath;
 
-            } else if (file.toLowerCase().includes('остатки спб')) {
+            } else if (file.includes('СПБ')) {
                 fileNameOracSPB = filePath;
                 
             }
