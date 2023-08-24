@@ -375,8 +375,11 @@ async function findOrac(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
+                const formatedCellValue = cellValue.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim();
+
                 
-                if (cellValue === user.vendorCode) {
+                if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
@@ -411,8 +414,10 @@ async function findOrac(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
+                const formatedCellValue = cellValue.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim();
                 
-                if (cellValue === user.vendorCode) {
+                if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
