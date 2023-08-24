@@ -218,8 +218,7 @@ async function findExcelFile(
     fileNameWallpaper = '', 
     fileNameTextile = '', 
     fileNamePricelist = '',
-    fileNameOracMSK = '',
-    fileNameOracSPB = ''
+    fileNameOrac = ''
     )  {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -234,8 +233,7 @@ async function findExcelFile(
                     fileNameWallpaper, 
                     fileNameTextile, 
                     fileNamePricelist,
-                    fileNameOracMSK,
-                    fileNameOracSPB
+                    fileNameOrac
             );   
             
             if (result.fileNameWallpaper) {
@@ -250,13 +248,10 @@ async function findExcelFile(
                 fileNamePricelist = result.fileNamePricelist;
             }
 
-            if (result.fileNameOracMSK) {
-                fileNameOracMSK = result.fileNameOracMSK;
+            if (result.fileNameOrac) {
+                fileNameOrac = result.fileNameOrac;
             }
 
-            if (result.fileNameOracSPB) {
-                fileNameOracSPB = result.fileNameOracSPB;
-            }
         } else if (path.extname(file) === '.xlsx') {
 
             if (file.includes('26')) { 
@@ -269,18 +264,13 @@ async function findExcelFile(
                 fileNamePricelist = filePath;
 
             } else if (file.includes('МСК')) {
-                fileNameOracMSK = filePath;
-
-            } else if (file.includes('СПБ')) {
-                fileNameOracSPB = filePath;
-                
+                fileNameOrac = filePath;
             }
 
         if (fileNameWallpaper && 
             fileNameTextile && 
             fileNamePricelist && 
-            fileNameOracMSK && 
-            fileNameOracSPB
+            fileNameOrac
             ) {
             break;
         }
@@ -288,8 +278,7 @@ async function findExcelFile(
     return { fileNameWallpaper,
          fileNameTextile, 
          fileNamePricelist,
-         fileNameOracMSK,
-         fileNameOracSPB
+         fileNameOrac
         };
 }};
 
@@ -348,13 +337,10 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    const fileNameOracMSK = 'остатки МСК 08.08.2023.xlsx';
-    // const fileNameOracSPB = 'Остатки СПБ 08.08.xlsx';
-    const resultMSK = await findExcelFile(fileNameOracMSK);
-    // const resultSPB = await findExcelFile(fileNameOracSPB);
-    const filePath = resultMSK.fileNameOracMSK;
-    // const filePathSPB = resultSPB.fileNameOracSPB;
-    console.log (`${fileNameOracMSK}, ${filePath}`);
+    const fileNameOrac = 'остатки МСК 08.08.2023.xlsx';
+    const result = await findExcelFile(fileNameOrac);
+    const filePath = result.fileNameOrac;
+    console.log (`${fileNameOrac}, ${filePath}`);
 
     const user = await UserModel.findOne({
         where: {
