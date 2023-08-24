@@ -348,7 +348,7 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    const fileNameOracMSK = ''.includes('остатки МСК');
+    const fileNameOracMSK = 'остатки МСК 08.08.2023.xlsx';
     const fileNameOracSPB = 'Остатки СПБ 08.08.xlsx';
     const resultMSK = await findExcelFile(fileNameOracMSK);
     const resultSPB = await findExcelFile(fileNameOracSPB);
