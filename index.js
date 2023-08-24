@@ -349,12 +349,12 @@ async function findPricelistLink(chatId) {
 async function findOrac(chatId) {
 
     const fileNameOracMSK = 'остатки МСК 08.08.2023.xlsx';
-    const fileNameOracSPB = 'Остатки СПБ 08.08.xlsx';
+    // const fileNameOracSPB = 'Остатки СПБ 08.08.xlsx';
     const resultMSK = await findExcelFile(fileNameOracMSK);
-    const resultSPB = await findExcelFile(fileNameOracSPB);
+    // const resultSPB = await findExcelFile(fileNameOracSPB);
     const filePathMSK = resultMSK.fileNameOracMSK;
-    const filePathSPB = resultSPB.fileNameOracSPB;
-    console.log (`${fileNameOracMSK}, ${fileNameOracSPB}, ${filePathMSK}, ${filePathSPB}`);
+    // const filePathSPB = resultSPB.fileNameOracSPB;
+    console.log (`${fileNameOracMSK}, ${filePathMSK}`);
 
     const user = await UserModel.findOne({
         where: {
@@ -378,7 +378,6 @@ async function findOrac(chatId) {
                 const formatedCellValue = cellValue.toString().trim();
                 const formatedUserVC = user.vendorCode.toString().trim();
 
-                
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
@@ -401,43 +400,43 @@ async function findOrac(chatId) {
         }
     }
 
-    if (filePathSPB) {
-        try {
+    // if (filePathSPB) {
+    //     try {
 
-            const workbook = new ExcelJS.Workbook();
-            const stream = fs.createReadStream(filePath);
-            const worksheet = await workbook.xlsx.read(stream);
-            const firstWorksheet = worksheet.worksheets[0];
+    //         const workbook = new ExcelJS.Workbook();
+    //         const stream = fs.createReadStream(filePath);
+    //         const worksheet = await workbook.xlsx.read(stream);
+    //         const firstWorksheet = worksheet.worksheets[0];
 
-            let foundMatchOracSPB = false;
-            let messageOracSPB = '';
+    //         let foundMatchOracSPB = false;
+    //         let messageOracSPB = '';
 
-            firstWorksheet.eachRow( async (row, rowNumber) => {
-                const cellValue = row.getCell('A').value; //Артикул
-                const formatedCellValue = cellValue.toString().trim();
-                const formatedUserVC = user.vendorCode.toString().trim();
+    //         firstWorksheet.eachRow( async (row, rowNumber) => {
+    //             const cellValue = row.getCell('A').value; //Артикул
+    //             const formatedCellValue = cellValue.toString().trim();
+    //             const formatedUserVC = user.vendorCode.toString().trim();
                 
-                if (formatedCellValue === formatedUserVC) {
-                    foundMatchOracSPB = true;
-                    const bValue = row.getCell('B').value; //Еденицы измерения
-                    const cValue = row.getCell('C').value; //Колличество
-                    const a3Value = firstWorksheet.getCell('H1').value; //Название склада
+    //             if (formatedCellValue === formatedUserVC) {
+    //                 foundMatchOracSPB = true;
+    //                 const bValue = row.getCell('B').value; //Еденицы измерения
+    //                 const cValue = row.getCell('C').value; //Колличество
+    //                 const a3Value = firstWorksheet.getCell('H1').value; //Название склада
 
-                    messageOracSPB += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
+    //                 messageOracSPB += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
                     
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-                    await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
-                    messageOracSPB = null;
-                }
-            });
+    //                 if (botMsgIdx !== null) {
+    //                     bot.deleteMessage(chatId, botMsgIdx);
+    //                     botMsgIdx = null;
+    //                 }
+    //                 await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
+    //                 messageOracSPB = null;
+    //             }
+    //         });
 
-        } catch {
-            console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
-        }
-    }
+    //     } catch {
+    //         console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
+    //     }
+    // }
 
 };
 
