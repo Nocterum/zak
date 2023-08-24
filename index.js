@@ -384,8 +384,9 @@ async function findOrac(chatId) {
 
                     messageOracMSK += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
                     
-                    if (botMsgIdx) {
+                    if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
                     messageOracMSK = null;
@@ -419,8 +420,9 @@ async function findOrac(chatId) {
 
                     messageOracSPB += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
                     
-                    if (botMsgIdx) {
+                    if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
                     messageOracSPB = null;
@@ -522,8 +524,9 @@ async function findCatalogWallpaper(chatId) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
                         message += `\n`
-                        if (botMsgIdx) {
+                        if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
                         }
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         message = null;
@@ -627,8 +630,9 @@ async function findCatalogTextile(chatId) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
                             message += `\n`
-                            if (botMsgIdx) {
+                            if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
                             }
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             message = null;
