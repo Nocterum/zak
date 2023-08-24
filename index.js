@@ -362,7 +362,7 @@ async function findOrac(chatId) {
         }
     });
 
-    if (filePathMSK) {
+    if (filePath) {
         try {
 
             const workbook = new ExcelJS.Workbook();
