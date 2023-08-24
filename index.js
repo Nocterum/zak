@@ -299,7 +299,7 @@ async function findPricelistLink(chatId) {
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Прайс-листа по бренду <b>${bValue}</b> поставщика <b>${aValue}</b> у нас локальных файлах нет.\nЗапросите прайсы в отделе закупок.`, beginWork3Options);
+                return bot.sendMessage(chatId, `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`, beginWork3Options);
             }
 
         } catch (error) {
