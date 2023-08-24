@@ -291,7 +291,7 @@ async function findPricelistLink(chatId) {
                     const cValue = row.getCell('C').value;
 
                     if (cValue !== null ) {
-                        const formattedCValue = cValue.toString().replace(/\\/g, '\\\\');
+                        const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                         messagePrice += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
@@ -395,6 +395,7 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
+                        message += `\n`
                         if (botMsgIdx) {
                             bot.deleteMessage(chatId, botMsgIdx);
                         }
@@ -402,8 +403,8 @@ async function findCatalogWallpaper(chatId) {
                         // message += `${priceLink}\n`;
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         message = null;
-                        return findPricelistLink(chatId);
                     }
+                    return findPricelistLink(chatId);
                 }
             });
 
@@ -498,19 +499,20 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
+                            message += `\n`
                             if (botMsgIdx) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             message = null;
-                            return findPricelistLink(chatId);
                         }
+                        return findPricelistLink(chatId);
                 }
         }});
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
-                bot.sendMessage(chatId, 'Каталогов в салоне нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
+                bot.sendMessage(chatId, 'Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
             }
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
