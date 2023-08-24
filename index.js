@@ -292,14 +292,14 @@ async function findPricelistLink(chatId) {
 
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                        messagePrice += `Ссылка на папку с прайс-листом бренда ${bValue} поставщика ${aValue}:\n${formattedCValue}`;
+                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
                 }
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Такого прайс-листа нет. Уточните в отделе закупок`, beginWork3Options);
+                return bot.sendMessage(chatId, `Прайс-листа по бренду <b>${bValue}</b> поставщика <b>${aValue}</b> у нас локальных файлах нет.\nЗапросите прайсы в отделе закупок.`, beginWork3Options);
             }
 
         } catch (error) {
@@ -629,7 +629,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(
             chatId, 
             `Ваш e-mail "<b>${user.email}</b>" успешно сохранён
-            \n<pre>(для перезаписи введите e-mail повторно)</pre>`, beginWorkOptions);
+            \n<i>(для перезаписи введите e-mail повторно)</i>`, beginWorkOptions);
     }            
 
     //изменить Nickname
@@ -643,7 +643,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(
             chatId, 
             `Хорошо, "<b>${user.nickname}</b>", я запомню.
-            \n<pre>(для перезаписи введите никнейм повторно)</pre>`, mainMenuOptions)
+            \n<i>(для перезаписи введите никнейм повторно)</i>`, mainMenuOptions)
     }
 
     //Записываем название бренда в ячейку БД
@@ -652,7 +652,7 @@ bot.on('message', async msg => {
         return bot.sendMessage(
             chatId, 
             `Название бренда "<b>${text}</b>" успешно сохранено
-            \n<pre>(для перезаписи введите бренд повторно)</pre>`, VCOptions);
+            \n<i>(для перезаписи введите бренд повторно)</i>`, VCOptions);
     }
 
     //Записываем название бренда в ячейку БД
@@ -660,9 +660,9 @@ bot.on('message', async msg => {
         await user.update({reserveNumber: text});
 
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
         } else {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<pre>(для перезаписи введите информацию повторно)</pre>`, enterReserveNumberOptions);
+            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
         }
     }
 
