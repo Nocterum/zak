@@ -369,7 +369,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += `<b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
+                        message += `<b>${cellValue.trim()}</b> бренда <b>${cValue}</b> имеется в следующих магазинах:\n`;
                         
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -401,6 +401,7 @@ async function findCatalogWallpaper(chatId) {
                         // const priceLink = await findPricelistLink(chatId);
                         // message += `${priceLink}\n`;
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        message = null;
                         return findPricelistLink(chatId);
                     }
                 }
@@ -475,7 +476,7 @@ async function findCatalogTextile(chatId) {
                                 const o1Value = firstWorksheet.getCell('O1').value;
                                 const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            message += `Каталог <b>${cellValue.trim()}</b> имеется в следующих магазинах:\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue}</b> имеется в следующих магазинах:\n`;
                             if (iValue !== null) {
                                 message += `${i1Value}: ${iValue}\n`;
                             }
@@ -501,6 +502,7 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                             }
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                            message = null;
                             return findPricelistLink(chatId);
                         }
                 }
