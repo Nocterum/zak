@@ -214,7 +214,13 @@ const sendReserveEmail = async (chatId) => {
 }
 
 //Функция для поиска эксель файла
-async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileNamePricelist = '')  {
+async function findExcelFile(
+    fileNameWallpaper = '', 
+    fileNameTextile = '', 
+    fileNamePricelist = '',
+    fileNameOracMSK = '',
+    fileNameOracSPB = ''
+    )  {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
     
@@ -223,7 +229,14 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
         const stat = await fs.promises.stat(filePath);
         
         if (stat.isDirectory()) {
-            const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile, fileNamePricelist);   
+            const result = await findExcelFile(
+                filePath, 
+                    fileNameWallpaper, 
+                    fileNameTextile, 
+                    fileNamePricelist,
+                    fileNameOracMSK,
+                    fileNameOracSPB
+            );   
             
             if (result.fileNameWallpaper) {
               fileNameWallpaper = result.fileNameWallpaper;
@@ -235,7 +248,15 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
 
             if (result.fileNamePricelist) {
                 fileNamePricelist = result.fileNamePricelist;
-              }
+            }
+
+            if (result.fileNameOracMSK) {
+                fileNameOracMSK = result.fileNameOracMSK;
+            }
+
+            if (result.fileNameOracSPB) {
+                fileNameOracSPB = result.fileNameOracSPB;
+            }
         } else if (path.extname(file) === '.xlsx') {
 
             if (file.includes('26')) { 
@@ -246,15 +267,31 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
 
             } else if (file.includes('прайслистов')) {
                 fileNamePricelist = filePath;
-            }
-        }
 
-        if (fileNameWallpaper && fileNameTextile && fileNamePricelist) {
+            } else if (file.toLowerCase().includes('остатки мск')) {
+                fileNameOracMSK = filePath;
+
+            } else if (file.toLowerCase().includes('остатки спб')) {
+                fileNameOracSPB = filePath;
+                
+            }
+
+        if (fileNameWallpaper && 
+            fileNameTextile && 
+            fileNamePricelist && 
+            fileNameOracMSK && 
+            fileNameOracSPB
+            ) {
             break;
         }
     }
-    return { fileNameWallpaper, fileNameTextile, fileNamePricelist };
-};
+    return { fileNameWallpaper,
+         fileNameTextile, 
+         fileNamePricelist,
+         fileNameOracMSK,
+         fileNameOracSPB
+        };
+}};
 
 //Функция поиска ссылки на прайслист
 async function findPricelistLink(chatId) {
@@ -309,19 +346,22 @@ async function findPricelistLink(chatId) {
 };
 
 //Функция поиска артикула ORAC
-async function findOracMsk(chatId) {
+async function findOrac(chatId) {
 
-    const fileNamePricelist = 'остатки МСК.xlsx';
-    const result = await findExcelFile(fileNamePricelist);
-    const filePath = result.fileNamePricelist;
+    const fileNameOracMSK = 'остатки МСК.xlsx';
+    const fileNameOracSPB = 'остатки СПБ.xlsx';
+    const resultMSK = await findExcelFile(fileNameOracMSK);
+    const resultSPB = await findExcelFile(fileNameOracSPB);
+    const filePathMSK = resultMSK.fileNameOracMSK;
+    const filePathSPB = resultSPB.fileNameOracSPB;
 
-    if (filePath) {
-        const user = await UserModel.findOne({
-            where: {
-              chatId: chatId
-            }
-        });
+    const user = await UserModel.findOne({
+        where: {
+          chatId: chatId
+        }
+    });
 
+    if (filePathMSK) {
         try {
 
             const workbook = new ExcelJS.Workbook();
@@ -329,30 +369,65 @@ async function findOracMsk(chatId) {
             const worksheet = await workbook.xlsx.read(stream);
             const firstWorksheet = worksheet.worksheets[0];
 
-            let foundMatchOrac = false;
-            let messageOrac = '';
+            let foundMatchOracMSK = false;
+            let messageOracMSK = '';
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
                 
                 if (cellValue === user.vendorCode) {
-                    foundMatchOrac = true;
+                    foundMatchOracMSK = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
                     const a3Value = firstWorksheet.getCell('H1').value; //Название склада
 
-                    messageOrac += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
+                    messageOracMSK += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
                     
                     if (botMsgIdx) {
                         bot.deleteMessage(chatId, botMsgIdx);
                     }
-                    await bot.sendMessage(chatId, messageOrac, { parse_mode: "HTML" });
-                    messageOrac = null;
+                    await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
+                    messageOracMSK = null;
                 }
             });
 
         } catch {
-            console.error('Ошибка при чтении файла Excel:', error); 
+            console.error(`Ошибка при чтении файла ${filePathMSK}:`, error); 
+        }
+    }
+
+    if (filePathSPB) {
+        try {
+
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
+
+            let foundMatchOracSPB = false;
+            let messageOracSPB = '';
+
+            firstWorksheet.eachRow( async (row, rowNumber) => {
+                const cellValue = row.getCell('A').value; //Артикул
+                
+                if (cellValue === user.vendorCode) {
+                    foundMatchOracSPB = true;
+                    const bValue = row.getCell('B').value; //Еденицы измерения
+                    const cValue = row.getCell('C').value; //Колличество
+                    const a3Value = firstWorksheet.getCell('H1').value; //Название склада
+
+                    messageOracSPB += `Артикул <b>${cellValue.trim()}</b> имеется на складе <b>${a3Value.trim()}</b>\nв колличестве <b>${cValue.trim()}</b> <b>${bValue.trim()}</b>`;
+                    
+                    if (botMsgIdx) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                    }
+                    await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
+                    messageOracSPB = null;
+                }
+            });
+
+        } catch {
+            console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
         }
     }
 
@@ -747,7 +822,7 @@ bot.on('message', async msg => {
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
-        return findOracMsk(chatId);
+        return findOrac(chatId);
     }
     //вывод информации
     if (text === '/infowork') {
