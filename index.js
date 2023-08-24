@@ -404,9 +404,12 @@ async function findCatalogWallpaper(chatId) {
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         message = null;
                     }
-                    return findPricelistLink(chatId);
                 }
             });
+
+            if (foundMatchWallpaper) {
+                return findPricelistLink(chatId);
+            }
 
             if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
@@ -506,10 +509,13 @@ async function findCatalogTextile(chatId) {
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                             message = null;
                         }
-                        return findPricelistLink(chatId);
                 }
         }});
 
+            if (foundMatchWallpaper) {
+                return findPricelistLink(chatId);
+            }
+            
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(chatId, 'Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
