@@ -51,7 +51,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'},{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
@@ -61,7 +61,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'К следующей ступени поиска', callback_data: '/enterBrand'}],
+                [{text: 'К следующей ступени поиска', callback_data: '/enterVC'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
@@ -71,6 +71,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Остатки/сроки/резерв', callback_data: '/catalogСheck'}],
+                [{text: 'Остатки ORAC', callback_data: '/oracСheck'}],
                 [{text: 'Превью изображений', callback_data: '/work2'}],
                 [{text: 'Добавить в заказ', callback_data: '/work3'}],
             ]
@@ -82,8 +83,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Зарезервировать', callback_data: '/enterReserveNumber'}],
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
-                [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'},{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })

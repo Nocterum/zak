@@ -399,8 +399,6 @@ async function findCatalogWallpaper(chatId) {
                         if (botMsgIdx) {
                             bot.deleteMessage(chatId, botMsgIdx);
                         }
-                        // const priceLink = await findPricelistLink(chatId);
-                        // message += `${priceLink}\n`;
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         message = null;
                     }
@@ -512,10 +510,10 @@ async function findCatalogTextile(chatId) {
                 }
         }});
 
-            if (foundMatchWallpaper) {
+            if (foundMatchTextile) {
                 return findPricelistLink(chatId);
             }
-            
+
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(chatId, 'Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
@@ -608,7 +606,7 @@ bot.on('message', async msg => {
         
         if (user) {
             lc = null;
-            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
+            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
         }
         return;
     }
