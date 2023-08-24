@@ -352,9 +352,9 @@ async function findOrac(chatId) {
     // const fileNameOracSPB = 'Остатки СПБ 08.08.xlsx';
     const resultMSK = await findExcelFile(fileNameOracMSK);
     // const resultSPB = await findExcelFile(fileNameOracSPB);
-    const filePathMSK = resultMSK.fileNameOracMSK;
+    const filePath = resultMSK.fileNameOracMSK;
     // const filePathSPB = resultSPB.fileNameOracSPB;
-    console.log (`${fileNameOracMSK}, ${filePathMSK}`);
+    console.log (`${fileNameOracMSK}, ${filePath}`);
 
     const user = await UserModel.findOne({
         where: {
