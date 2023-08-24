@@ -354,6 +354,7 @@ async function findOrac(chatId) {
     const resultSPB = await findExcelFile(fileNameOracSPB);
     const filePathMSK = resultMSK.fileNameOracMSK;
     const filePathSPB = resultSPB.fileNameOracSPB;
+    Console.log (fileNameOracMSK, fileNameOracSPB, filePathMSK, filePathSPB);
 
     const user = await UserModel.findOne({
         where: {
@@ -431,7 +432,7 @@ async function findOrac(chatId) {
         }
     }
 
-}
+};
 
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
@@ -806,7 +807,7 @@ bot.on('message', async msg => {
     }
 
     //Записываем артикул каталога
-    if(lc === '/catalogСheck') {
+    if (lc === '/catalogСheck') {
         await user.update(
             {catalog: text}
         );
@@ -816,11 +817,11 @@ bot.on('message', async msg => {
 
     }
 
-    if(lc === '/oracСheck') {
+    if (lc === '/oracСheck') {
         await user.update(
             {vendorCode: text}
         );
-        await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
+        await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
         botMsgIdx = msg.message_id += 1; 
         return findOrac(chatId);
     }
