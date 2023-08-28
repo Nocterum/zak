@@ -235,8 +235,8 @@ async function findExcelFile(
                 fileNameWallpaper, 
                 fileNameTextile, 
                 fileNamePricelist, 
-                fileNameOracMSK = '', 
-                fileNameOracSPB = ''
+                fileNameOracMSK, 
+                fileNameOracSPB
                 );
 
             if (result.fileNameWallpaper) {
