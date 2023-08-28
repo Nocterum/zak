@@ -364,7 +364,7 @@ async function findOrac(chatId) {
 
             const workbookMSK = new ExcelJS.Workbook();
             const streamMSK = fs.createReadStream(filePathMSK);
-            const worksheetMSK = await workbook.xlsx.read(streamMSK);
+            const worksheetMSK = await workbookMSK.xlsx.read(streamMSK);
             const firstWorksheetMSK = worksheetMSK.worksheets[0];
 
             let foundMatchOracMSK = false;
@@ -402,7 +402,7 @@ async function findOrac(chatId) {
 
             const workbookSPB = new ExcelJS.Workbook();
             const streamSPB = fs.createReadStream(filePathSPB);
-            const worksheetSPB = await workbook.xlsx.read(streamSPB);
+            const worksheetSPB = await workbookSPB.xlsx.read(streamSPB);
             const firstWorksheetSPB = worksheetSPB.worksheets[0];
 
             let foundMatchOracSPB = false;
