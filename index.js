@@ -285,7 +285,7 @@ async function findExcelFile(
 //Функция поиска ссылки на прайслист
 async function findPricelistLink(chatId) {
 
-    const fileNamePricelist = 'прайслистов.xlsx';
+    const fileNamePricelist = 'Список_прайслистов.xlsx';
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
 
