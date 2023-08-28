@@ -267,9 +267,9 @@ async function findExcelFile(
                 fileNameOrac = filePath;
             }
 
-        if (fileNameWallpaper && 
-            fileNameTextile && 
-            fileNamePricelist && 
+        if (fileNameWallpaper || 
+            fileNameTextile || 
+            fileNamePricelist || 
             fileNameOrac
             ) {
             break;
