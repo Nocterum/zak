@@ -243,16 +243,16 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
 
         } else if (path.extname(file) === '.xlsx') {
 
-            if (file.includes('Каталоги_распределение_в_салоны_26_09_19.xlsx')) { 
+            if (file.includes('Каталоги_распределение_в_салоны_26_09_19')) { 
                 fileNameWallpaper = filePath;
 
-            } else if (file.includes('Текстиль_Каталоги_распределение_в_салоны.xlsx')) {
+            } else if (file.includes('Текстиль_Каталоги_распределение_в_салоны')) {
                 fileNameTextile = filePath;
 
-            } else if (file.includes('Список_прайслистов.xlsx')) {
+            } else if (file.includes('Список_прайслистов')) {
                 fileNamePricelist = filePath;
 
-            } else if (file.includes('Остатки_МСК_08.08.xlsx')) {
+            } else if (file.includes('Остатки_МСК_08.08')) {
                 fileNameOrac = filePath;
             }
 
@@ -266,7 +266,8 @@ async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileN
 //Функция поиска ссылки на прайслист
 async function findPricelistLink(chatId) {
 
-    const fileNamePricelist = 'Список_прайслистов.xlsx';
+    let fileNamePricelist = 'Список_прайслистов.xlsx';
+    fileNamePricelist = fileNamePricelist.toLowerCase();
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
 
@@ -318,7 +319,8 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    const fileNameOrac = 'Остатки_МСК_08.08.xlsx';
+    let fileNameOrac = 'Остатки_МСК_08.08.xlsx';
+    fileNameOrac = fileNameOrac.toLowerCase();
     const result = await findExcelFile(fileNameOrac);
     const filePath = result.fileNameOrac;
     console.log (`${fileNameOrac}, ${filePath}`);
@@ -410,7 +412,8 @@ async function findOrac(chatId) {
 //Функция поиска каталога обоев
 async function findCatalogWallpaper(chatId) {
 
-    const fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
+    let fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
+    fileNameWallpaper = fileNameWallpaper.toLowerCase();
     const result = await findExcelFile(fileNameWallpaper);
     const filePath = result.fileNameWallpaper;
 
@@ -522,7 +525,8 @@ async function findCatalogWallpaper(chatId) {
 //Функция поиска каталога текстиля
 async function findCatalogTextile(chatId) {
 
-    const fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны.xlsx';
+    let fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны.xlsx';
+    fileNameTextile = fileNameTextile.toLowerCase();
     const result = await findExcelFile(fileNameTextile);
     const filePath = result.fileNameTextile;
 
@@ -860,7 +864,7 @@ bot.on('message', async msg => {
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
                     
                     fileStream.on('end', () => {
-                        bot.sendMessage(chatId, `"${fileName}" успешно сохранен.`);
+                        bot.sendMessage(chatId, `"${fileName}"\nуспешно сохранен.`);
                     });
                 });
                 return;
