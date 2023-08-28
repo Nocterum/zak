@@ -276,7 +276,8 @@ async function findExcelFile(
             break;
         }
     }
-    return { fileNameWallpaper, 
+    return { 
+        fileNameWallpaper, 
         fileNameTextile, 
         fileNamePricelist, 
         fileNameOracMSK,
@@ -342,14 +343,15 @@ async function findOrac(chatId) {
 
     let fileNameOracMSK = 'Остатки_МСК_08.08.xlsx';
     fileNameOracMSK = fileNameOracMSK.toLowerCase();
+
     let fileNameOracSPB = 'Остатки_СПБ_08.08.xlsx';
     fileNameOracSPB = fileNameOracSPB.toLowerCase();
 
     const resultMSK = await findExcelFile(fileNameOracMSK);
     const resultSPB = await findExcelFile(fileNameOracSPB);
 
-    const filePathMSK = resultMSK.fileNameOrac;
-    const filePathSPB = resultSPB.fileNameOrac;
+    const filePathMSK = resultMSK.fileNameOracMSK;
+    const filePathSPB = resultSPB.fileNameOracSPB;
 
     const user = await UserModel.findOne({
         where: {
