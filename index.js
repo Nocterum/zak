@@ -362,7 +362,7 @@ async function findOrac(chatId) {
                     foundMatchOracMSK = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
-                    const a3Value = firstWorksheet.getCell('H1').value; //Название склада
+                    const a3Value = firstWorksheet.getCell('A3').value; //Название склада
 
                     messageOracMSK += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>`;
                     
