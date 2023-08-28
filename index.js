@@ -263,7 +263,7 @@ async function findExcelFile(
             } else if (file.includes('прайслистов')) {
                 fileNamePricelist = filePath;
 
-            } else if (file.includes('МСК') || file.includes('остатки')) {
+            } else if (file.includes('Остатки_МСК')) {
                 fileNameOrac = filePath;
             }
 
@@ -337,7 +337,7 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    const fileNameOrac = 'остатки МСК 08.08.2023.xlsx';
+    const fileNameOrac = 'Остатки_МСК_08.08.xlsx';
     const result = await findExcelFile(fileNameOrac);
     const filePath = result.fileNameOrac;
     console.log (`${fileNameOrac}, ${filePath}`);
