@@ -214,12 +214,7 @@ const sendReserveEmail = async (chatId) => {
 }
 
 //Функция для поиска эксель файла
-async function findExcelFile(
-    fileNameWallpaper = '', 
-    fileNameTextile = '', 
-    fileNamePricelist = '',
-    fileNameOrac = ''
-    )  {
+async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileNamePricelist = '',fileNameOrac = '')  {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
     
@@ -228,13 +223,7 @@ async function findExcelFile(
         const stat = await fs.promises.stat(filePath);
         
         if (stat.isDirectory()) {
-            const result = await findExcelFile(
-                filePath, 
-                    fileNameWallpaper, 
-                    fileNameTextile, 
-                    fileNamePricelist,
-                    fileNameOrac
-            );   
+            const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile, fileNamePricelist,fileNameOrac);   
             
             if (result.fileNameWallpaper) {
               fileNameWallpaper = result.fileNameWallpaper;
@@ -267,19 +256,11 @@ async function findExcelFile(
                 fileNameOrac = filePath;
             }
 
-        if (fileNameWallpaper || 
-            fileNameTextile || 
-            fileNamePricelist || 
-            fileNameOrac
-            ) {
+        if (fileNameWallpaper && fileNameTextile && fileNamePricelist && fileNameOrac) {
             break;
         }
     }
-    return { fileNameWallpaper,
-         fileNameTextile, 
-         fileNamePricelist,
-         fileNameOrac
-        };
+    return { fileNameWallpaper,fileNameTextile, fileNamePricelist,fileNameOrac};
 }};
 
 //Функция поиска ссылки на прайслист
