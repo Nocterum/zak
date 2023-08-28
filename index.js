@@ -871,7 +871,8 @@ bot.on('message', async msg => {
                 ) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
-                    const fileName = msg.document.file_name;
+                    let fileName = msg.document.file_name;
+                    fileName = fileName.replace(/\s/g, '_');
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
