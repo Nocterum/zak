@@ -354,14 +354,14 @@ async function findOrac(chatId) {
             let messageOracMSK = '';
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
-                const cellValue = row.getCell('C1').value; //Артикул
+                const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim();
                 const formatedUserVC = user.vendorCode.toString().trim();
 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
-                    const bValue = row.getCell('C2').value; //Еденицы измерения
-                    const cValue = row.getCell('C3').value; //Колличество
+                    const bValue = row.getCell('B').value; //Еденицы измерения
+                    const cValue = row.getCell('C').value; //Колличество
                     const a3Value = firstWorksheet.getCell('H1').value; //Название склада
 
                     messageOracMSK += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>`;
