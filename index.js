@@ -337,9 +337,10 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    const fileNameOrac = 'остатки МСК 08.08.2023.xlsx';
+    const fileNameOrac = 'МСК';
     const result = await findExcelFile(fileNameOrac);
     const filePath = result.fileNameOrac;
+    // const filePath = result.fileNameOrac;
     console.log (`${fileNameOrac}, ${filePath}`);
 
     const user = await UserModel.findOne({
