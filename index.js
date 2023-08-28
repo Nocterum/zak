@@ -254,16 +254,16 @@ async function findExcelFile(
 
         } else if (path.extname(file) === '.xlsx') {
 
-            if (file.includes('26')) { 
+            if (file.includes('Каталоги_распределение_в_салоны_26_09_19.xlsx')) { 
                 fileNameWallpaper = filePath;
 
-            } else if (file.includes('Текстиль')) {
+            } else if (file.includes('Текстиль_Каталоги_распределение_в_салоны.xlsx')) {
                 fileNameTextile = filePath;
 
-            } else if (file.includes('прайслистов')) {
+            } else if (file.includes('Список_прайслистов.xlsx')) {
                 fileNamePricelist = filePath;
 
-            } else if (file.includes('Остатки_МСК')) {
+            } else if (file.includes('Остатки_МСК_08.08.xlsx')) {
                 fileNameOrac = filePath;
             }
 
