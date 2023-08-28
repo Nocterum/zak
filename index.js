@@ -214,54 +214,65 @@ const sendReserveEmail = async (chatId) => {
 }
 
 //Функция для поиска эксель файла
-async function findExcelFile(fileNameWallpaper = '', fileNameTextile = '', fileNamePricelist = '',fileNameOrac = '')  {
+async function findExcelFile(
+    fileNameWallpaper = '', 
+    fileNameTextile = '', 
+    fileNamePricelist = '', 
+    fileNameOrac = ''
+    ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
-    
+
     for (const file of files) {
+
         const filePath = path.join(folderPath, file);
         const stat = await fs.promises.stat(filePath);
-        
-        if (stat.isDirectory()) {
-            const result = await findExcelFile(filePath, fileNameWallpaper, fileNameTextile, fileNamePricelist,fileNameOrac);   
-            
-            if (result.fileNameWallpaper) {
-              fileNameWallpaper = result.fileNameWallpaper;
-            }
-            
-            if (result.fileNameTextile) {
-              fileNameTextile = result.fileNameTextile;
-            }
 
+        if (stat.isDirectory()) {
+
+            const result = await findExcelFile(filePath, 
+                fileNameWallpaper, 
+                fileNameTextile, 
+                fileNamePricelist, 
+                fileNameOrac);
+
+            if (result.fileNameWallpaper) {
+                fileNameWallpaper = result.fileNameWallpaper;
+            }
+            if (result.fileNameTextile) {
+                fileNameTextile = result.fileNameTextile;
+            }
             if (result.fileNamePricelist) {
                 fileNamePricelist = result.fileNamePricelist;
             }
-
             if (result.fileNameOrac) {
                 fileNameOrac = result.fileNameOrac;
             }
-
         } else if (path.extname(file) === '.xlsx') {
-
-            if (file.includes('Каталоги_распределение_в_салоны_26_09_19')) { 
+            if (file.toLowerCase().includes('каталоги_распределение_в_салоны_26_09_19')) {
                 fileNameWallpaper = filePath;
-
-            } else if (file.includes('Текстиль_Каталоги_распределение_в_салоны')) {
+            } else if (file.toLowerCase().includes('текстиль_каталоги_распределение_в_салоны')) {
                 fileNameTextile = filePath;
-
-            } else if (file.includes('Список_прайслистов')) {
+            } else if (file.toLowerCase().includes('список_прайслистов')) {
                 fileNamePricelist = filePath;
-
-            } else if (file.includes('Остатки_МСК_08.08')) {
+            } else if (file.toLowerCase().includes('остатки_мск_08.08')) {
                 fileNameOrac = filePath;
             }
-
-        if (fileNameWallpaper && fileNameTextile && fileNamePricelist && fileNameOrac) {
+        }
+        if (fileNameWallpaper && 
+            fileNameTextile && 
+            fileNamePricelist && 
+            fileNameOrac
+            ) {
             break;
         }
     }
-    return { fileNameWallpaper,fileNameTextile, fileNamePricelist,fileNameOrac};
-}};
+    return { fileNameWallpaper, 
+        fileNameTextile, 
+        fileNamePricelist, 
+        fileNameOrac 
+    };
+}
 
 //Функция поиска ссылки на прайслист
 async function findPricelistLink(chatId) {
