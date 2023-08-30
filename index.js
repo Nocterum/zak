@@ -341,10 +341,10 @@ async function findPricelistLink(chatId) {
 //Функция поиска артикула ORAC
 async function findOrac(chatId) {
 
-    let fileNameOracMSK = 'Остатки_МСК_08.08.xlsx';
+    let fileNameOracMSK = 'остатки_мск.xlsx';
     fileNameOracMSK = fileNameOracMSK.toLowerCase();
 
-    let fileNameOracSPB = 'Остатки_СПБ_08.08.xlsx';
+    let fileNameOracSPB = 'остатки_спб.xlsx';
     fileNameOracSPB = fileNameOracSPB.toLowerCase();
 
     const resultMSK = await findExcelFile(fileNameOracMSK);
@@ -390,6 +390,16 @@ async function findOrac(chatId) {
                     await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
                     messageOracMSK = null;
                 }
+
+                if (!foundMatchOracMSK) {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+
+                    bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
+                }
             });
 
         } catch {
@@ -428,12 +438,24 @@ async function findOrac(chatId) {
                     await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
                     messageOracSPB = null;
                 }
+
+                if (!foundMatchOracSPB) {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+
+                    bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
+                }
             });
 
         } catch {
             console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
         }
     }
+
+    bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
 
 };
 
@@ -446,12 +468,6 @@ async function findCatalogWallpaper(chatId) {
     const filePath = result.fileNameWallpaper;
 
     if (filePath) {
-
-        const user = await UserModel.findOne({
-            where: {
-              chatId: chatId
-            }
-        });
 
         try { 
 
@@ -820,7 +836,7 @@ bot.on('message', async msg => {
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
-        return findCatalogWallpaper(chatId);
+        return findCatalogWallpaper(chatId, user);
 
     }
 

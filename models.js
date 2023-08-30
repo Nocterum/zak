@@ -14,6 +14,8 @@ const UserModel = sequelize.define( 'user', {
     vendorCode: {type: DataTypes.TEXT('tiny')},
     reserveNumber: {type: DataTypes.SMALLINT},
     catalog: {type: DataTypes.TEXT('tiny')},
+    vendor: {type: DataTypes.TEXT('tiny')},
+    vendorEmail: {type: DataTypes.TEXT('tiny')},
 })
 
 /*
