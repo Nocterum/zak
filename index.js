@@ -896,6 +896,23 @@ bot.on('message', async msg => {
                     });
                 });
                 return;
+
+            } else if (file_name.toLowerCase().includes('поставщиков')) {
+
+                await bot.getFile(msg.document.file_id).then((file) => {
+                    let fileName = msg.document.file_name;
+                    fileName = fileName.toLowerCase();
+                    fileName = fileName.replace(/\s\d+/g, '');
+                    const fileStream = bot.getFileStream(file.file_id);
+                    
+                    fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                    
+                    fileStream.on('end', () => {
+                        bot.sendMessage(chatId, `"${fileName}"\nуспешно сохранен.`);
+                    });
+                });
+                return;
+
             } else {
                 return bot.sendMessage(chatId, `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru`);
             }
