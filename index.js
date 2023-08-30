@@ -389,7 +389,7 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
-                    messageOracMSK = null;
+                    messageOracMSK = '';
                 }
 
             });
@@ -404,7 +404,7 @@ async function findOrac(chatId) {
                 return bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
             }
 
-        } catch {
+        } catch (error) {
             console.error(`Ошибка при чтении файла ${filePathMSK}:`, error); 
         }
     }
@@ -438,7 +438,7 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
-                    messageOracSPB = null;
+                    messageOracSPB = '';
                 }
 
             });
@@ -453,7 +453,7 @@ async function findOrac(chatId) {
                 return bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
             }
 
-        } catch {
+        } catch (error) {
             console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
         }
     }
