@@ -695,7 +695,8 @@ async function findPricelistLink(chatId) {
 async function findVendor(chatId) {
 
     let fileNameVendor = 'список_поставщиков.xlsx';
-    fileNameOracSPB = fileNameOracSPB.toLowerCase();
+    fileNameVendor = fileNameVendor.toLowerCase();
+    
     const result = await findExcelFile(fileNameVendor);
     const filePath = result.fileNameVendor;
 
