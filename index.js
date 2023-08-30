@@ -894,9 +894,6 @@ bot.on('message', async msg => {
     if (lc === '/enterVC') {
 
         await user.update({vendorCode: text.toUpperCase()});
-        // formatedVendor = user.vendor.toLowerCase();
-        console.log (formatedVendor);
-
         await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
         botMsgIdx = msg.message_id += 1; 
 
