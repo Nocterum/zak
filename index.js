@@ -391,16 +391,17 @@ async function findOrac(chatId) {
                     messageOracMSK = null;
                 }
 
-                if (!foundMatchOracMSK) {
-
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-
-                    return bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
-                }
             });
+
+            if (!foundMatchOracMSK) {
+
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+
+                return bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
+            }
 
         } catch {
             console.error(`Ошибка при чтении файла ${filePathMSK}:`, error); 
@@ -439,16 +440,17 @@ async function findOrac(chatId) {
                     messageOracSPB = null;
                 }
 
-                if (!foundMatchOracSPB) {
-
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-
-                    return bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
-                }
             });
+            
+            if (!foundMatchOracSPB) {
+
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+
+                return bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
+            }
 
         } catch {
             console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
