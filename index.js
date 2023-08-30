@@ -696,7 +696,7 @@ async function findVendor(chatId) {
 
     let fileNameVendor = 'список_поставщиков.xlsx';
     fileNameVendor = fileNameVendor.toLowerCase();
-    
+
     const result = await findExcelFile(fileNameVendor);
     const filePath = result.fileNameVendor;
 
@@ -705,7 +705,6 @@ async function findVendor(chatId) {
             chatId: chatId
         }
     });
-    console.log (filePath);
 
     if (filePath) {
         try {
@@ -719,23 +718,25 @@ async function findVendor(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('C').value; // Бренд
-                const formatedCellValue = cellValue.toString().trim();
-                const formatedUserBrand = user.brand.toString().trim();
+                if (cellValue !== null) {
+                    const formatedCellValue = cellValue.toString().trim();
+                    const formatedUserBrand = user.brand.toString().trim();
 
-                if (formatedCellValue.toLowerCase() === formatedUserBrand.toLowerCase()) {
-                    foundMatchBrand = true;
+                    if (formatedCellValue.toLowerCase() === formatedUserBrand.toLowerCase()) {
+                        foundMatchBrand = true;
 
-                    const dValue = row.getCell('D').value; // Поставщик
-                    user.update({vendor: dValue.toLowerCase()});
-                    console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
+                        const dValue = row.getCell('D').value; // Поставщик
+                        user.update({vendor: dValue.toLowerCase()});
+                        console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
 
-                } else {
-                    console.log ( `Поставщик бренда ${user.brand} не найден.`);
+                    } else {
+                        console.log ( `Поставщик бренда ${user.brand} не найден.`);
+                    }
                 }
-
                 return;
 
-            })
+            });
+
         } catch (e) {
             return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
         }
