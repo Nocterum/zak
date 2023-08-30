@@ -401,7 +401,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                return bot.sendMessage(chatId, `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.`,  { parse_mode: "HTML" });
+                await bot.sendMessage(chatId, `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.`,  { parse_mode: "HTML" });
             }
 
         } catch (error) {
@@ -449,7 +449,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                return bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.`, { parse_mode: "HTML" });
+                await bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.`, { parse_mode: "HTML" });
             }
 
         } catch (error) {
