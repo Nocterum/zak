@@ -380,7 +380,8 @@ async function findOrac(chatId) {
                     foundMatchOracMSK = true;
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
-                    const a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
+                    let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
+                    a3Value = a3Value.toString().split("(")[0];
 
                     messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
                     
@@ -426,7 +427,8 @@ async function findOrac(chatId) {
                     foundMatchOracSPB = true;
                     const cValue = row.getCell('C').value; //Еденицы измерения
                     const dValue = row.getCell('D').value; //Колличество
-                    const a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
+                    let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
+                    a3Value = a3Value.toString().split("(")[0];
 
                     messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
                     
