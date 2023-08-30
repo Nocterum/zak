@@ -381,7 +381,7 @@ async function findOrac(chatId) {
                     const bValue = row.getCell('B').value; //Еденицы измерения
                     const cValue = row.getCell('C').value; //Колличество
                     let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
-                    a3Value = a3Value.toString().split("(")[0];
+                    a3Value = a3Value.toString().split( "(" )[0];
 
                     messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
                     
@@ -428,7 +428,7 @@ async function findOrac(chatId) {
                     const cValue = row.getCell('C').value; //Еденицы измерения
                     const dValue = row.getCell('D').value; //Колличество
                     let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
-                    a3Value = a3Value.toString().split("(")[0];
+                    a3Value = a3Value.toString().split( "(" )[0];
 
                     messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
                     
@@ -827,12 +827,20 @@ bot.on('message', async msg => {
 
     //Записываем артикул в ячейку БД и начинаем поиск на сайте
     if (lc === '/enterVC') {
+
         await user.update({vendorCode: text});
-        await bot.sendMessage(
-            chatId, 
-            'Идёт обработка вашего запроса . . .');
+        formatedVendor = user.vendor.toLowerCase().split( " " )[0];
+        console.log (formatedVendor);
+
+        await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
         botMsgIdx = msg.message_id += 1; 
+
+        if (formatedVendor !== 'опус') {
+            return bot.sendMessage(chatId, 'Пока что я произвожу поиск только на сайте поставщика ОПУС.')
+        }
+
         return startFind(chatId);
+
     }
 
     //Записываем артикул каталога
