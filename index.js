@@ -891,7 +891,7 @@ bot.on('message', async msg => {
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
                     
                     fileStream.on('end', () => {
-                        bot.sendMessage(chatId, `"${fileName}"\nуспешно сохранен.`);
+                        bot.sendMessage(chatId, `Файл <b>${fileName}</b>\nуспешно сохранен.`, {parse_mode: 'HTML'});
                     });
                 });
                 return;
@@ -903,14 +903,14 @@ bot.on('message', async msg => {
                 await bot.getFile(msg.document.file_id).then((file) => {
                     let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
-                    fileName = fileName.replace(/\s\d+/g, '');
                     fileName = fileName.replace(/\s/g, '_');
+                    fileName = fileName.replace(/\s\d+/g, '');
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
                     
                     fileStream.on('end', () => {
-                        bot.sendMessage(chatId, `"${fileName}"\nуспешно сохранен.`);
+                        bot.sendMessage(chatId, `Файл <b>${fileName}</b>\nуспешно сохранен.`, {parse_mode: 'HTML'});
                     });
                 });
                 return;
