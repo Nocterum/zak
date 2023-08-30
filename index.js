@@ -573,7 +573,7 @@ async function findCatalogTextile(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
-                        user.update({brand: cValue});
+                        user.update({brand: cValue.toUpperCase()});
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -641,7 +641,7 @@ async function findCatalogTextile(chatId) {
 //Функция поиска ссылки на прайслист
 async function findPricelistLink(chatId) {
 
-    let fileNamePricelist = 'Список_прайслистов.xlsx';
+    let fileNamePricelist = 'cписок_прайслистов.xlsx';
     fileNamePricelist = fileNamePricelist.toLowerCase();
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
@@ -679,6 +679,7 @@ async function findPricelistLink(chatId) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                         messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
+                        messagePrice = '';
                     }
                 }
             });
