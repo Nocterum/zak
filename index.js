@@ -427,7 +427,7 @@ async function findOrac(chatId) {
                     foundMatchOracSPB = true;
                     const cValue = row.getCell('C').value; //Еденицы измерения
                     const dValue = row.getCell('D').value; //Колличество
-                    let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
+                    let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
                     a3Value = a3Value.toString().split("(")[0];
 
                     messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
