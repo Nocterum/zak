@@ -261,9 +261,9 @@ async function findExcelFile(
                 fileNameTextile = filePath;
             } else if (file.toLowerCase().includes('список_прайслистов')) {
                 fileNamePricelist = filePath;
-            } else if (file.toLowerCase().includes('остатки_мск_08.08')) {
+            } else if (file.toLowerCase().includes('остатки_мск.xlsx')) {
                 fileNameOracMSK = filePath;
-            } else if (file.toLowerCase().includes('остатки_спб_08.08')) {
+            } else if (file.toLowerCase().includes('остатки_спб.xlsx')) {
                 fileNameOracSPB = filePath;
             }
         }
@@ -468,6 +468,12 @@ async function findCatalogWallpaper(chatId) {
     const filePath = result.fileNameWallpaper;
 
     if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+        });
 
         try { 
 
@@ -836,7 +842,7 @@ bot.on('message', async msg => {
         );
         await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
         botMsgIdx = msg.message_id += 1; 
-        return findCatalogWallpaper(chatId, user);
+        return findCatalogWallpaper(chatId);
 
     }
 
