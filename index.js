@@ -879,8 +879,7 @@ bot.on('message', async msg => {
 
         if (msg.document) {
             if (file_name.toLowerCase().includes('каталоги') ||
-                file_name.toLowerCase().includes('прайслистов') ||
-                file_name.toLowerCase().includes('остатки')
+                file_name.toLowerCase().includes('прайслистов')
                 ) {
             
                 await bot.getFile(msg.document.file_id).then((file) => {
@@ -897,12 +896,15 @@ bot.on('message', async msg => {
                 });
                 return;
 
-            } else if (file_name.toLowerCase().includes('поставщиков')) {
+            } else if (file_name.toLowerCase().includes('поставщиков') || 
+                        file_name.toLowerCase().includes('остатки')
+            ) {
 
                 await bot.getFile(msg.document.file_id).then((file) => {
                     let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
                     fileName = fileName.replace(/\s\d+/g, '');
+                    fileName = fileName.replace(/\s/g, '_');
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
