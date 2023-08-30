@@ -462,7 +462,6 @@ async function findCatalogWallpaper(chatId) {
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
                     user.update({brand: cValue.toUpperCase()});
-                    await findVendor(chatId);
 
                     if (
                         hValue !== null ||
@@ -481,7 +480,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += `<b>${cellValue.trim()}</b> бренда <b>${user.vendor}</b> имеется в следующих магазинах:\n`;
+                        message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
                         
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -592,7 +591,7 @@ async function findCatalogTextile(chatId) {
                                 const o1Value = firstWorksheet.getCell('O1').value;
                                 const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue}</b> имеется в следующих магазинах:\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
                             if (iValue !== null) {
                                 message += `${i1Value}: ${iValue}\n`;
                             }
@@ -646,6 +645,7 @@ async function findPricelistLink(chatId) {
     fileNamePricelist = fileNamePricelist.toLowerCase();
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
+    await findVendor(chatId);
 
     if (filePath) {
 
@@ -676,7 +676,7 @@ async function findPricelistLink(chatId) {
 
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
+                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${user.vendor}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
                 }
@@ -730,8 +730,6 @@ async function findVendor(chatId) {
                         user.update({vendor: dValue.toUpperCase()});
                         console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
 
-                    } else {
-                        console.log ( `Поставщик бренда ${user.brand} не найден.`);
                     }
                 }
                 return;
