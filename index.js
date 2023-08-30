@@ -370,7 +370,6 @@ async function findOrac(chatId) {
             const firstWorksheetMSK = worksheetMSK.worksheets[0];
 
             let foundMatchOracMSK = false;
-            let messageOracMSK = '';
 
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
@@ -383,13 +382,12 @@ async function findOrac(chatId) {
                     const cValue = row.getCell('C').value; //Колличество
                     const a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
 
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
-                    // await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
                 }
 
             });
@@ -401,7 +399,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                messageORAC += `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.\n`;
+                messageORAC += `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
             }
 
         } catch (error) {
@@ -418,7 +416,6 @@ async function findOrac(chatId) {
             const firstWorksheetSPB = worksheetSPB.worksheets[0];
 
             let foundMatchOracSPB = false;
-            let messageOracSPB = '';
 
             firstWorksheetSPB.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
@@ -431,13 +428,12 @@ async function findOrac(chatId) {
                     const dValue = row.getCell('D').value; //Колличество
                     const a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
 
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
-                    // await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
                 }
 
             });
@@ -449,7 +445,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                messageORAC += `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.\n`;
+                messageORAC += `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
             }
 
         } catch (error) {
