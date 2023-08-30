@@ -373,7 +373,7 @@ async function findOrac(chatId) {
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim();
-                const formatedUserVC = user.vendorCode.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim().toUpperCase();
 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
@@ -422,7 +422,7 @@ async function findOrac(chatId) {
             firstWorksheetSPB.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim();
-                const formatedUserVC = user.vendorCode.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim().toUpperCase();
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
@@ -457,7 +457,7 @@ async function findOrac(chatId) {
         }
     }
 
-    return bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
+    return bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
 
 };
 
