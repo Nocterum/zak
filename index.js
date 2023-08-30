@@ -353,6 +353,8 @@ async function findOrac(chatId) {
     const filePathMSK = resultMSK.fileNameOracMSK;
     const filePathSPB = resultSPB.fileNameOracSPB;
 
+    let messageORAC = '';
+
     const user = await UserModel.findOne({
         where: {
           chatId: chatId
@@ -388,7 +390,6 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
-                    messageOracMSK = '';
                 }
 
             });
@@ -437,7 +438,6 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
                     await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
-                    messageOracSPB = '';
                 }
 
             });
@@ -555,7 +555,7 @@ async function findCatalogWallpaper(chatId) {
                             botMsgIdx = null;
                         }
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                        message = null;
+                        message = '';
                     }
                 }
             });
@@ -662,7 +662,7 @@ async function findCatalogTextile(chatId) {
                                 botMsgIdx = null;
                             }
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                            message = null;
+                            message = '';
                         }
                 }
         }});
