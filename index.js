@@ -645,7 +645,6 @@ async function findPricelistLink(chatId) {
     fileNamePricelist = fileNamePricelist.toLowerCase();
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
-    await findVendor(chatId);
 
     if (filePath) {
 
@@ -666,17 +665,19 @@ async function findPricelistLink(chatId) {
             let messagePrice = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
-                const cellValue = row.getCell('B').value;    
+                const cellValue = row.getCell('B').value;
+                const formatedCellValue = cellValue.toString().toUpperCase();
 
-                if (cellValue === user.brand) {
+                if (formatedCellValue === user.brand) {
                     foundMatchPricelist = true;
                     const aValue = row.getCell('A').value;
                     const bValue = row.getCell('B').value;
                     const cValue = row.getCell('C').value;
+                    user.update({vendor: aValue.toUpperCase()});
 
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${user.vendor}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
+                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
                         bot.sendMessage(chatId, messagePrice, beginWork3Options);
                     }
                 }
@@ -892,13 +893,13 @@ bot.on('message', async msg => {
     if (lc === '/enterVC') {
 
         await user.update({vendorCode: text.toUpperCase()});
-        formatedVendor = user.vendor.toLowerCase();
+        // formatedVendor = user.vendor.toLowerCase();
         console.log (formatedVendor);
 
         await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
         botMsgIdx = msg.message_id += 1; 
 
-        if (formatedVendor !== 'опус ооо') {
+        if (user.vendor !== 'ОПУС') {
             return bot.sendMessage(chatId, 'Пока что я произвожу поиск только на сайте поставщика ОПУС.')
         }
 
