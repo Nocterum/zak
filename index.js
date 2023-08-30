@@ -358,6 +358,7 @@ async function findOrac(chatId) {
           chatId: chatId
         }
     });
+    console.log(filePathMSK, filePathSPB)
 
     if (filePathMSK) {
         try {
@@ -441,7 +442,7 @@ async function findOrac(chatId) {
                 }
 
             });
-            
+
             if (!foundMatchOracSPB) {
 
                 if (botMsgIdx !== null) {
