@@ -462,6 +462,7 @@ async function findCatalogWallpaper(chatId) {
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
                     user.update({brand: cValue.toUpperCase()});
+                    await findVendor(chatId);
 
                     if (
                         hValue !== null ||
@@ -480,7 +481,7 @@ async function findCatalogWallpaper(chatId) {
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
 
-                        message += `<b>${cellValue.trim()}</b> бренда <b>${cValue}</b> имеется в следующих магазинах:\n`;
+                        message += `<b>${cellValue.trim()}</b> бренда <b>${user.vendor}</b> имеется в следующих магазинах:\n`;
                         
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
@@ -726,7 +727,7 @@ async function findVendor(chatId) {
                         foundMatchBrand = true;
 
                         const dValue = row.getCell('D').value; // Поставщик
-                        user.update({vendor: dValue.toLowerCase()});
+                        user.update({vendor: dValue.toUpperCase()});
                         console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
 
                     } else {
@@ -1060,8 +1061,7 @@ bot.on('callback_query', async msg => {
     //ввод артикула для поиска остатков
     if(data === '/enterVC') {
         lc = data;
-        await bot.sendMessage(chatId, `Введите артикул:`);
-        return findVendor(chatId);
+        return bot.sendMessage(chatId, `Введите артикул:`);
     }
     
     //начало резервирования
