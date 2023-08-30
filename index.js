@@ -903,8 +903,9 @@ bot.on('message', async msg => {
                 await bot.getFile(msg.document.file_id).then((file) => {
                     let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
+                    fileName = fileName.replace(/\s\d+/g, '').replace(/\.xlsx$/, '');
                     fileName = fileName.replace(/\s/g, '_');
-                    fileName = fileName.replace(/\s\d+/g, '');
+                    fileName = `${fileName}.xlsx`;
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
