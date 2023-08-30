@@ -897,11 +897,13 @@ bot.on('message', async msg => {
         await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
         botMsgIdx = msg.message_id += 1; 
 
-        if (user.vendor !== 'ОПУС') {
-            return bot.sendMessage(chatId, 'Пока что я произвожу поиск только на сайте поставщика ОПУС.')
+        if (user.vendor === 'ОПУС') {
+            return startFind(chatId);
         }
-
-        return startFind(chatId);
+        
+        if (user.vendor !== 'ОПУС') {
+            return bot.sendMessage(chatId, 'Пока что я произвожу поиск только на сайте поставщика ОПУС.');
+        }
 
     }
 
