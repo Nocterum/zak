@@ -461,12 +461,9 @@ async function findCatalogWallpaper(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
+                    await user.update({brand: cValue.toString().toUpperCase()});
 
-                    if (isNaN(cValue)) {
-                        await user.update({brand: cValue.toUpperCase()});
-                    } else {
-                        await user.update({brand: cValue});
-                    }
+                    
 
                     if (
                         hValue !== null ||
