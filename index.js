@@ -375,7 +375,7 @@ async function findOrac(chatId) {
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim();
-                const formatedUserVC = user.vendorCode.toString().trim().toUpperCase();
+                const formatedUserVC = user.vendorCode.toString().trim();
 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
@@ -383,13 +383,13 @@ async function findOrac(chatId) {
                     const cValue = row.getCell('C').value; //Колличество
                     const a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
 
-                    messageOracMSK += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
-                    await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
+                    // await bot.sendMessage(chatId, messageOracMSK, { parse_mode: "HTML" });
                 }
 
             });
@@ -401,7 +401,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                await bot.sendMessage(chatId, `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.`,  { parse_mode: "HTML" });
+                messageORAC += `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.\n`;
             }
 
         } catch (error) {
@@ -423,7 +423,7 @@ async function findOrac(chatId) {
             firstWorksheetSPB.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim();
-                const formatedUserVC = user.vendorCode.toString().trim().toUpperCase();
+                const formatedUserVC = user.vendorCode.toString().trim();
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
@@ -431,13 +431,13 @@ async function findOrac(chatId) {
                     const dValue = row.getCell('D').value; //Колличество
                     const a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
 
-                    messageOracSPB += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
-                    await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
+                    // await bot.sendMessage(chatId, messageOracSPB, { parse_mode: "HTML" });
                 }
 
             });
@@ -449,15 +449,15 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                await bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.`, { parse_mode: "HTML" });
+                messageORAC += `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.\n`;
             }
 
         } catch (error) {
             console.error(`Ошибка при чтении файла ${filePathSPB}:`, error); 
         }
     }
-
-    return bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
+    messageORAC += `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)\n`;
+    return bot.sendMessage(chatId, messageORAC, { parse_mode: "HTML" });
 
 };
 
@@ -850,7 +850,7 @@ bot.on('message', async msg => {
 
     if (lc === '/oracСheck') {
         await user.update(
-            {vendorCode: text}
+            {vendorCode: text.toUpperCase()}
         );
         await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
         botMsgIdx = msg.message_id += 1; 
