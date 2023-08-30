@@ -398,7 +398,7 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
 
-                    bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
+                    return bot.sendMessage(chatId, `На складе в Москве артикул <b>${formatedUserVC}</b> отсутсвует.`,  { parse_mode: "HTML" });
                 }
             });
 
@@ -446,7 +446,7 @@ async function findOrac(chatId) {
                         botMsgIdx = null;
                     }
 
-                    bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
+                    return bot.sendMessage(chatId, `На складе в Санкт-Петербурге артикул <b>${formatedUserVC}</b> отсутсвует.`, { parse_mode: "HTML" });
                 }
             });
 
@@ -455,7 +455,7 @@ async function findOrac(chatId) {
         }
     }
 
-    bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
+    return bot.sendMessage(chatId, `<strong><u>Если вы хотите заказать товар через 2 склада поставщика для 1ого клиента, то делайте 2 ЗАКАЗА ПОСТАВЩИКУ!!</u></strong>\n<strong>ВАЖНО</strong>: максимальный срок для возврата = НЕ более 5 месяцев (от даты доставки товара на наш склад)`, { parse_mode: "HTML" });
 
 };
 
