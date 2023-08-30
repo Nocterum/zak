@@ -452,7 +452,7 @@ async function findCatalogWallpaper(chatId) {
                 // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) { //Точный поиск наименования
                     foundMatchWallpaper = true;
 
-                    const cValue = row.getCell('C').value;
+                    let cValue = row.getCell('C').value;
                     const hValue = row.getCell('H').value;
                     const iValue = row.getCell('I').value;
                     const jValue = row.getCell('J').value;
@@ -461,7 +461,12 @@ async function findCatalogWallpaper(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
-                    await user.update({brand: cValue});
+
+                    if (isNaN(cValue)) {
+                        await user.update({brand: cValue.toUpperCase()});
+                    } else {
+                        await user.update({brand: cValue});
+                    }
 
                     if (
                         hValue !== null ||
