@@ -674,7 +674,7 @@ async function findPricelistLink(chatId, cValue) {
                 const formatedCellValue = cellValue.toString().toUpperCase().replace(/\s/g, '');
                 // const formatedUserBrand = user.brand.toString().toUpperCase().replace(/\s/g, '')
 
-                console.log(formatedCellValue, formatedUserBrand, cValue)
+                console.log(formatedCellValue, cValue)
 
                 if (formatedCellValue === cValue) {
                     foundMatchPricelist = true;
