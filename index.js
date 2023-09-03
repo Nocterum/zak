@@ -512,14 +512,16 @@ async function findCatalogWallpaper(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        await bot.sendMessage(chatId, message, beginWork3Options);
+                        await bot.sendMessage(chatId, message, {parse_mode: 'HTML'});
                     }
                 }
             });
             
-            // if (foundMatchWallpaper) {
-            //     // return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
-            // }
+            if (foundMatchWallpaper) {
+                setTimeout(() => {
+                    return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
+                }, 3000)
+            }
 
             if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
@@ -679,7 +681,6 @@ async function findPricelistLink(chatId) {
                     user.update({vendor: aValue.toUpperCase()});
 
                     if (cValue !== null ) {
-                        // messagePrice = '';
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                         messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>${formattedCValue}</pre>`;
                     } else {
@@ -690,7 +691,6 @@ async function findPricelistLink(chatId) {
             });
 
             if (!foundMatchPricelist) {
-                // messagePrice = '';
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
