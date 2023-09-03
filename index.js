@@ -17,13 +17,14 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {gameOptions, againOptions, resetOptions,
-     workOptions, VCOptions, startFindOptions, 
+     workOptions, VCOptions, startFindOptions, startFind2Options, startFind3Options,
      beginWorkOptions, beginWork2Options, mainMenuOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
 const {transporter, recipient} = require('./nodemailer');
 const clientRDP = require('./rdp');
+const nodemailer = require('./nodemailer');
 //const BrandModel = require('./models');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
@@ -907,15 +908,38 @@ bot.on('message', async msg => {
             }
         }
 
-        //Записываем артикул в ячейку БД и начинаем поиск на сайте
+        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
         if (lc === '/enterVC') {
-
+            lc = null;
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             botMsgIdx = msg.message_id += 1; 
 
             if (user.vendor === 'ОПУС') {
                 return startFind(chatId);
+            }
+
+            if (user.vendor === 'Благодать и Ко' ||
+                user.vendor === 'Декор Трейд' ||
+                user.vendor === 'Hugge' ||
+                user.vendor === 'Milassa' ||
+                user.vendor === 'Rach Marburg' ||
+                user.vendor === 'АВТ' ||
+                user.vendor === 'БауТекс' ||
+                user.vendor === 'Бекарт Текстиль' ||
+                user.vendor === 'ГЛОБАЛТЕКС' ||
+                user.vendor === 'Декор Рус' ||
+                user.vendor === 'Контракт Плюс' ||
+                user.vendor === 'ЛЕВАНТИН' ||
+                user.vendor === 'Протос' ||
+                user.vendor === 'О-Дизайн' ||
+                user.vendor === 'РОБЕРТС' ||
+                user.vendor === 'РуАльянс' ||
+                user.vendor.includes('Лоймина') ||
+                user.vendor.includes('Юг арт')
+            ) {
+                lc = '/enterNumberofVC'; 
+                return bot.sendMessage(chatId, `Бренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nУкажите колличество:`);
             }
 
             if (user.vendor !== 'ОПУС') {
@@ -925,6 +949,11 @@ bot.on('message', async msg => {
                 }
                 return bot.sendMessage(chatId, 'Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.');
             }
+        }
+
+        if (lc === '/enterNumberofVC') {
+            await user.update({reserveNumber: text});
+            return bot.sendMessage(chatId, `Бренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\Колличество: ${user.reserveNumber}`, startFind2Options);
         }
 
         //Записываем артикул каталога
@@ -1086,13 +1115,34 @@ bot.on('callback_query', async msg => {
             subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         }
-        return bot.sendMessage(chatId, `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\n\nТекст сообщения:\n${textMail}\n\n<pre>Это сообщение тестовое и будет отправленно только на ${user.email}.</pre>`, sendReserveOptions);
+        return bot.sendMessage(chatId, `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n"${textMail}"\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
+    }
+
+    if (data === '/preSendEmailReserveYes') {
+        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
+        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        
+        return bot.sendMessage(chatId, `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n"${textMail}"\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
+    }
+
+    if (data === '/preSendEmailReserveNo') {
+        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
+        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        
+        return bot.sendMessage(chatId, `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n"${textMail}"\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
+
     }
 
     //отправка сообщения с запросом резервирования
-       if (data === '/sendReserveEmail') {
+    if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
+    }
+
+    //отправка сообщения с запросом резервирования
+    if (data === '/sendReserveEmail2') {
+        lc = data;
+        return bot.sendMessage(chatId, `Хорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, startFind3Options);
     }
 
     //проверка каталога в наличии в салоне
