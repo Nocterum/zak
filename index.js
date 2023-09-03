@@ -671,7 +671,7 @@ async function findPricelistLink(chatId, cValue) {
 
                 console.log(formatedCellValue, cValue)
 
-                if (formatedCellValue === cValue) {
+                if (formatedCellValue == cValue) {
                     foundMatchPricelist = true;
                     const aValue = row.getCell('A').value;
                     const bValue = row.getCell('B').value;
