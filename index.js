@@ -515,10 +515,10 @@ async function findCatalogWallpaper(chatId) {
                         await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                     }
                 }
+                return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
             });
 
             if (foundMatchWallpaper) {
-                return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
             }
 
             if (!foundMatchWallpaper) {
