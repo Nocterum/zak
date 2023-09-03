@@ -678,13 +678,15 @@ async function findPricelistLink(chatId) {
                     user.update({vendor: aValue.toUpperCase()});
 
                     if (cValue !== null ) {
+                        messagePrice = '';
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
+                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>${formattedCValue}</pre>`;
                     }
                 }
             });
 
             if (!foundMatchPricelist) {
+                messagePrice = '';
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
