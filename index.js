@@ -688,14 +688,15 @@ async function findPricelistLink(chatId, cValue) {
                     const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-]/g, '');
                     const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-]/g, '');
     
-                    console.log(formatedCellValue, formaterdCValue)
-    
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
                         const aValue = row.getCell('A').value;  // Поставщик
                         const bValue = row.getCell('B').value;  // Бренд
                         const cValue = row.getCell('C').value;  // Ссылка на прайслист
+                        const dValue = row.getCell('D').value;
                         user.update({vendor: aValue.toUpperCase()});
+                        user.update({vendorEmail: dValue.toLowerCase()});
+
     
                         if (cValue !== null ) {
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
@@ -1085,7 +1086,7 @@ bot.on('callback_query', async msg => {
             subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         }
-        return bot.sendMessage(chatId, `Сформированно следующее сообщение:${textMail}`, sendReserveOptions)
+        return bot.sendMessage(chatId, `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\n\nТекст сообщения:\n${textMail}\n\n<pre>Это сообщение тестовое и будет отправленно только на ${user.email}.</pre>`, sendReserveOptions);
     }
 
     //отправка сообщения с запросом резервирования
