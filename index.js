@@ -460,8 +460,8 @@ async function findCatalogWallpaper(chatId) {
                     const nValue = row.getCell('N').value;
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
-                    await user.update({brand: cValue.toUpperCase()});
-                    let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase());
+                    await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
+                    let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
                     
                     if (
                         hValue !== null ||
@@ -672,11 +672,11 @@ async function findPricelistLink(chatId, cValue) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
                 const formatedCellValue = cellValue.toString().toUpperCase().replace(/\s/g, '');
-                const formatedUserBrand = user.brand.toString().toUpperCase().replace(/\s/g, '')
+                // const formatedUserBrand = user.brand.toString().toUpperCase().replace(/\s/g, '')
 
                 console.log(formatedCellValue, formatedUserBrand, cValue)
 
-                if (formatedCellValue === formatedUserBrand) {
+                if (formatedCellValue === cValue) {
                     foundMatchPricelist = true;
                     const aValue = row.getCell('A').value;
                     const bValue = row.getCell('B').value;
