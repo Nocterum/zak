@@ -843,146 +843,124 @@ bot.on('message', async msg => {
     });
 
     try {
-    //главное меню
-    if (text === '/mainmenu') {
-        
-        if (user) {
-            lc = null;
-            await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
-        }
-        return;
-    }
 
-    //начало работы
-    if (text === '/beginwork') {
+        //главное меню
+        if (text === '/mainmenu') {
 
-        if (!user.email) {
-            await editEmail(chatId);
-        } else {
-            await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions);
-        } 
-        return; 
-    }
-
-    //изменить e-mail
-    if (text === '/editEmail') {
-        return editEmail(chatId);
-    }
-
-    //Записываем e-mail в ячейку БД
-    if (lc === '/editEmail') {
-        await user.update({email: text.toLowerCase()});
-        return bot.sendMessage(
-            chatId, 
-            `Ваш e-mail "<b>${user.email}</b>" успешно сохранён
-            \n<i>(для перезаписи введите e-mail повторно)</i>`, beginWorkOptions);
-    }            
-
-    //изменить Nickname
-    if (text === '/editNickname') {
-        return editNickname(chatId);
-    }
-    
-    //Записываем Nickname в ячейку БД
-    if (lc === '/editNickname') {
-        await user.update({nickname: text});
-        return bot.sendMessage(
-            chatId, 
-            `Хорошо, "<b>${user.nickname}</b>", я запомню.
-            \n<i>(для перезаписи введите никнейм повторно)</i>`, mainMenuOptions)
-    }
-
-    //Записываем название бренда в ячейку БД
-    if (lc === '/enterBrand') {
-        await user.update({brand: text.toLowerCase()});
-        return bot.sendMessage(
-            chatId, 
-            `Название бренда "<b>${text}</b>" успешно сохранено
-            \n<i>(для перезаписи введите бренд повторно)</i>`, VCOptions);
-    }
-
-    //Записываем название бренда в ячейку БД
-    if (lc === '/enterReserveNumber') {
-        await user.update({reserveNumber: text});
-
-        if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
-        } else {
-            return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
-        }
-    }
-
-    //Записываем артикул в ячейку БД и начинаем поиск на сайте
-    if (lc === '/enterVC') {
-
-        await user.update({vendorCode: text.toUpperCase()});
-        await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
-        botMsgIdx = msg.message_id += 1; 
-
-        if (user.vendor === 'ОПУС') {
-            return startFind(chatId);
-        }
-        
-        if (user.vendor !== 'ОПУС') {
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
+            if (user) {
+                lc = null;
+                await bot.sendMessage(chatId, `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`);
             }
-            return bot.sendMessage(chatId, 'Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.');
+            return;
         }
 
-    }
+        //начало работы
+        if (text === '/beginwork') {
 
-    //Записываем артикул каталога
-    if (lc === '/catalogСheck') {
-        await user.update(
-            {catalog: text}
-        );
-        await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
-        botMsgIdx = msg.message_id += 1; 
-        return findCatalogWallpaper(chatId);
+            if (!user.email) {
+                await editEmail(chatId);
+            } else {
+                await bot.sendMessage(chatId, 'Чем могу вам помочь?', workOptions);
+            } 
+            return; 
+        }
 
-    }
+        //изменить e-mail
+        if (text === '/editEmail') {
+            return editEmail(chatId);
+        }
 
-    if (lc === '/oracСheck') {
-        await user.update(
-            {vendorCode: text.toUpperCase()}
-        );
-        await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
-        botMsgIdx = msg.message_id += 1; 
-        return findOrac(chatId);
-    }
-    //вывод информации
-    if (text === '/infowork') {
-        return bot.sendMessage(
-            chatId, 
-            `${user.nickname} вот, что вы искали:
-            \n\n${user.typeFind}
-            \nБренд: ${user.brand}
-            \nАртикул: ${user.vendorCode}
-            \n\nВаш email: ${user.email}`);
-    }
+        //Записываем e-mail в ячейку БД
+        if (lc === '/editEmail') {
+            await user.update({email: text.toLowerCase()});
+            return bot.sendMessage(chatId, `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите e-mail повторно)</i>`, beginWorkOptions);
+        }            
 
+        //изменить Nickname
+        if (text === '/editNickname') {
+            return editNickname(chatId);
+        }
 
-    if (text === '/infogame') {
-        lc = null;
-        return bot.sendMessage(
-            chatId, 
-            `Правильных ответов: "${user.right}"
-            \nНеправильных ответов: "${user.wrong}"`, resetOptions);
-    }   
-    
-    if (text.toLowerCase().includes('привет')) {
-        return bot.sendSticker(
-            chatId, 
-            'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
-    }
+        //Записываем Nickname в ячейку БД
+        if (lc === '/editNickname') {
+            await user.update({nickname: text});
+            return bot.sendMessage(chatId, `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<i>(для перезаписи введите никнейм повторно)</i>`, mainMenuOptions)
+        }
 
-    if ( (text !== '/game' && text !== '/start') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
-        return bot.sendSticker(
-            chatId, 
-            'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
-    }
+        //Записываем название бренда в ячейку БД
+        if (lc === '/enterBrand') {
+            await user.update({brand: text.toLowerCase()});
+            return bot.sendMessage(chatId, `Название бренда "<b>${text}</b>" успешно сохранено\n<i>(для перезаписи введите бренд повторно)</i>`, VCOptions);
+        }
+
+        //Записываем название бренда в ячейку БД
+        if (lc === '/enterReserveNumber') {
+            await user.update({reserveNumber: text});
+
+            if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
+                return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
+            } else {
+                return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
+            }
+        }
+
+        //Записываем артикул в ячейку БД и начинаем поиск на сайте
+        if (lc === '/enterVC') {
+
+            await user.update({vendorCode: text.toUpperCase()});
+            await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
+            botMsgIdx = msg.message_id += 1; 
+
+            if (user.vendor === 'ОПУС') {
+                return startFind(chatId);
+            }
+
+            if (user.vendor !== 'ОПУС') {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(chatId, 'Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.');
+            }
+        }
+
+        //Записываем артикул каталога
+        if (lc === '/catalogСheck') {
+            await user.update(
+                {catalog: text}
+            );
+            await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
+            botMsgIdx = msg.message_id += 1; 
+            return findCatalogWallpaper(chatId);
+        }
+
+        if (lc === '/oracСheck') {
+            await user.update(
+                {vendorCode: text.toUpperCase()}
+            );
+            await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
+            botMsgIdx = msg.message_id += 1; 
+            return findOrac(chatId);
+        }
+
+        //вывод информации
+        if (text === '/infowork') {
+            return bot.sendMessage(chatId, `${user.nickname} вот, что вы искали:\n\n${user.typeFind}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\n\nВаш email: ${user.email}`);
+        }
+
+        if (text === '/infogame') {
+            lc = null;
+            return bot.sendMessage(chatId, `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions);
+        }   
+
+        if (text.toLowerCase().includes('привет')) {
+            return bot.sendSticker(chatId, 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp');
+        }
+
+        if ( (text !== '/game' && text !== '/start') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+            return bot.sendSticker(chatId, 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp');
+        }
+
     } catch (e) {
         console.log('Сработал слушатель документов.', e)
     }
