@@ -512,14 +512,14 @@ async function findCatalogWallpaper(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                        await bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
-                return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
             });
-
-            if (foundMatchWallpaper) {
-            }
+            
+            // if (foundMatchWallpaper) {
+            //     // return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
+            // }
 
             if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
@@ -627,9 +627,9 @@ async function findCatalogTextile(chatId) {
                 }
         }});
 
-            if (foundMatchTextile) {
-                return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
-            }
+            // if (foundMatchTextile) {
+            //     return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
+            // }
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
