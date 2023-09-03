@@ -706,7 +706,7 @@ async function findPricelistLink(chatId, cValue) {
             });
 
             if (!foundMatchPricelist) {
-                messagePrice += `Прайс-лист по бренду <b>${bValue.toUpperCase()}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
+                messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
             return messagePrice;
