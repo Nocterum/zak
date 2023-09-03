@@ -566,14 +566,15 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
+
                     const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
                     const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
                 
-                    if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
+                    if (formatedCellValue.includes(formatedUserCatalog)) {
                         foundMatchTextile = true;
                         let message = '';
 
-                        const cValue = row.getCell('C').value;
+                        let cValue = row.getCell('C').value.toString();
                         const iValue = row.getCell('I').value;
                         const jValue = row.getCell('J').value;
                         const kValue = row.getCell('K').value;
@@ -582,7 +583,7 @@ async function findCatalogTextile(chatId) {
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
                         await user.update({brand: cValue.toUpperCase()});
-                        let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
+                        let messagePrice = await findPricelistLink(chatId, cValue);
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -628,14 +629,23 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                            await bot.sendMessage(chatId, message, beginWork3Options);
+                        } else {
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
+                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${messagePrice}`, {parse_mode: 'HTML'});
                         }
                     }
                 }
             });
 
             if (!foundMatchTextile) {
-                bot.deleteMessage(chatId, botMsgIdx);
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
                 return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${messagePrice}`, {parse_mode: 'HTML'});
             }
 
@@ -914,7 +924,11 @@ bot.on('message', async msg => {
         }
         
         if (user.vendor !== 'ОПУС') {
-            return bot.sendMessage(chatId, 'Пока что я произвожу поиск только на сайте поставщика ОПУС.');
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, 'Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.');
         }
 
     }
@@ -1072,7 +1086,7 @@ bot.on('callback_query', async msg => {
     //ввод артикула для поиска остатков
     if(data === '/enterVC') {
         lc = data;
-        return bot.sendMessage(chatId, `Продолжаем работу с брендом ${user.brand} поставщика ${user.vendor}\nВведите артикул:`);
+        return bot.sendMessage(chatId, `Продолжаем работу с брендом <b>${user.brand}</b> поставщика <b>${user.vendor}</b>\nВведите артикул:`, {parse_mode: 'HTML'});
     }
     
     //начало резервирования
