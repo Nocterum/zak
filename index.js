@@ -935,8 +935,8 @@ bot.on('message', async msg => {
                 user.vendor === 'О-ДИЗАЙН' ||
                 user.vendor === 'РОБЕРТС' ||
                 user.vendor === 'РУАЛЬЯНС' ||
-                user.vendor.includes('Лоймина') ||
-                user.vendor.includes('Юг арт')
+                user.vendor.includes('ЛОЙМИНА') ||
+                user.vendor.includes('ЮГ АРТ')
             ) {
                 lc = '/enterNumberofVC'; 
                 return bot.sendMessage(chatId, `Бренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nУкажите колличество:`);
