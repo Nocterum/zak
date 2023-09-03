@@ -682,7 +682,10 @@ async function findPricelistLink(chatId) {
                         // messagePrice = '';
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                         messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>${formattedCValue}</pre>`;
+                    } else {
+                        messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b> поставщика <b>${aValue}</b>.😢`
                     }
+
                 }
             });
 
