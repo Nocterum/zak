@@ -451,6 +451,7 @@ async function findCatalogWallpaper(chatId) {
                 if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) { //Поиск совпадений
                 // if (formatedCellValue.toLowerCase().trim() === (formatedUserCatalog.toLowerCase().trim())) { //Точный поиск наименования
                     foundMatchWallpaper = true;
+                    let message = '';
 
                     let cValue = row.getCell('C').value.toString();
                     const hValue = row.getCell('H').value;
@@ -513,10 +514,9 @@ async function findCatalogWallpaper(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
+                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                     }
                 }
-                await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                message = '';
             });
 
             if (foundMatchWallpaper) {
