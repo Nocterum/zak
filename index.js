@@ -464,8 +464,6 @@ async function findCatalogWallpaper(chatId) {
                     const pValue = row.getCell('P').value;
                     await user.update({brand: cValue.toUpperCase()});
 
-                    
-
                     if (
                         hValue !== null ||
                         iValue !== null ||
@@ -482,9 +480,10 @@ async function findCatalogWallpaper(chatId) {
                         const n1Value = firstWorksheet.getCell('N1').value;
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
+                        const messagePrice = await findPricelistLink(chatId);
 
                         message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
-                        
+
                         if (hValue !== null) {
                             message += `${h1Value}: ${hValue}\n`;
                         }
@@ -509,7 +508,8 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
-                        message += `\n`
+                        message += `\n${messagePrice}`
+
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
@@ -520,7 +520,7 @@ async function findCatalogWallpaper(chatId) {
             });
 
             if (foundMatchWallpaper) {
-                return findPricelistLink(chatId);
+                // return findPricelistLink(chatId);;
             }
 
             if (!foundMatchWallpaper) {
@@ -687,9 +687,10 @@ async function findPricelistLink(chatId) {
             });
 
             if (!foundMatchPricelist) {
-                return bot.sendMessage(chatId, `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`, beginWork3Options);
+                messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
+            return messagePrice;
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
