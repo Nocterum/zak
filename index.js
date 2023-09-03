@@ -444,84 +444,82 @@ async function findCatalogWallpaper(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
-                const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
-                const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
+                if (cellValue !== null) {
 
-                if (formatedCellValue.includes(formatedUserCatalog)) {
-                    foundMatchWallpaper = true;
-                    let message = '';
-
-                    let cValue = row.getCell('C').value.toString();
-                    const hValue = row.getCell('H').value;
-                    const iValue = row.getCell('I').value;
-                    const jValue = row.getCell('J').value;
-                    const kValue = row.getCell('K').value;
-                    const mValue = row.getCell('M').value;
-                    const nValue = row.getCell('N').value;
-                    const oValue = row.getCell('O').value;
-                    const pValue = row.getCell('P').value;
-                    await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
-                    let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
+                    const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
+                    const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
                     
-                    if (
-                        hValue !== null ||
-                        iValue !== null ||
-                        jValue !== null ||
-                        kValue !== null ||
-                        mValue !== null || 
-                        nValue !== null
-                        ) {
-                            const h1Value = firstWorksheet.getCell('H1').value;
-                            const i1Value = firstWorksheet.getCell('I1').value;
-                            const j1Value = firstWorksheet.getCell('J1').value;
-                            const k1Value = firstWorksheet.getCell('K1').value;
-                            const m1Value = firstWorksheet.getCell('M1').value;
-                            const n1Value = firstWorksheet.getCell('N1').value;
-                            const p1Value = firstWorksheet.getCell('P1').value;
-                            const o1Value = firstWorksheet.getCell('O1').value;
-
-                        message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
+                    if (formatedCellValue.includes(formatedUserCatalog)) {
+                        foundMatchWallpaper = true;
+                        let message = '';
                         
-                        if (hValue !== null) {
-                            message += `${h1Value}: ${hValue}\n`;
-                        }
-                        if (iValue !== null) {
-                            message += `${i1Value}: ${iValue}\n`;
-                        }
-                        if (jValue !== null) {
-                            message += `${j1Value}: ${jValue}\n`;
-                        }
-                        if (kValue !== null) {
-                            message += `${k1Value}: ${kValue}\n`;
-                        }
-                        if (mValue !== null) {
-                            message += `${m1Value}: ${mValue}\n`;
-                        }
-                        if (nValue !== null) {
-                            message += `${n1Value}: ${nValue}\n`;
-                        }
-                        if (pValue !== null) {
-                            message += `${p1Value}: ${pValue}\n`;
-                        }
-                        if (oValue !== null) {
-                            message += `${o1Value}: ${oValue}\n`;
-                        }
-                        message += `\n${messagePrice}`
+                        let cValue = row.getCell('C').value.toString();
+                        const hValue = row.getCell('H').value;
+                        const iValue = row.getCell('I').value;
+                        const jValue = row.getCell('J').value;
+                        const kValue = row.getCell('K').value;
+                        const mValue = row.getCell('M').value;
+                        const nValue = row.getCell('N').value;
+                        const oValue = row.getCell('O').value;
+                        const pValue = row.getCell('P').value;
+                        await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
+                        let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
+                        
+                        if (
+                            hValue !== null ||
+                            iValue !== null ||
+                            jValue !== null ||
+                            kValue !== null ||
+                            mValue !== null || 
+                            nValue !== null
+                            ) {
+                                const h1Value = firstWorksheet.getCell('H1').value;
+                                const i1Value = firstWorksheet.getCell('I1').value;
+                                const j1Value = firstWorksheet.getCell('J1').value;
+                                const k1Value = firstWorksheet.getCell('K1').value;
+                                const m1Value = firstWorksheet.getCell('M1').value;
+                                const n1Value = firstWorksheet.getCell('N1').value;
+                                const p1Value = firstWorksheet.getCell('P1').value;
+                                const o1Value = firstWorksheet.getCell('O1').value;
 
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
+                            
+                            if (hValue !== null) {
+                                message += `${h1Value}: ${hValue}\n`;
+                            }
+                            if (iValue !== null) {
+                                message += `${i1Value}: ${iValue}\n`;
+                            }
+                            if (jValue !== null) {
+                                message += `${j1Value}: ${jValue}\n`;
+                            }
+                            if (kValue !== null) {
+                                message += `${k1Value}: ${kValue}\n`;
+                            }
+                            if (mValue !== null) {
+                                message += `${m1Value}: ${mValue}\n`;
+                            }
+                            if (nValue !== null) {
+                                message += `${n1Value}: ${nValue}\n`;
+                            }
+                            if (pValue !== null) {
+                                message += `${p1Value}: ${pValue}\n`;
+                            }
+                            if (oValue !== null) {
+                                message += `${o1Value}: ${oValue}\n`;
+                            }
+                            message += `\n${messagePrice}`
+                            
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
+                            await bot.sendMessage(chatId, message, beginWork3Options);
+                        
                         }
-                        await bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
             });
-            
-            // if (foundMatchWallpaper) {
-            //     setTimeout(() => {
-            //         return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
-            //     }, 3000)
-            // }
 
             if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
@@ -562,8 +560,8 @@ async function findCatalogTextile(chatId) {
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
-                    const formatedCellValue = cellValue.toString().split("/")[0];
-                    const formatedUserCatalog = user.catalog.toString().trim();;  
+                    const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
+                    const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
                 
                     if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
                         foundMatchTextile = true;
@@ -577,7 +575,8 @@ async function findCatalogTextile(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
-                        user.update({brand: cValue.toUpperCase()});
+                        await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
+                        let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -617,7 +616,6 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            let messagePrice = await findPricelistLink(chatId);
                             message += `\n${messagePrice}`
 
                             if (botMsgIdx !== null) {
@@ -626,17 +624,15 @@ async function findCatalogTextile(chatId) {
                             }
                             await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
                         }
+                    }
                 }
-        }});
-
-            // if (foundMatchTextile) {
-            //     return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
-            // }
+            });
 
             if (!foundMatchTextile) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 bot.sendMessage(chatId, 'Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
             }
+
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -672,7 +668,6 @@ async function findPricelistLink(chatId, cValue) {
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
                 const formatedCellValue = cellValue.toString().toUpperCase().replace(/\s/g, '');
-                // const formatedUserBrand = user.brand.toString().toUpperCase().replace(/\s/g, '')
 
                 console.log(formatedCellValue, cValue)
 
