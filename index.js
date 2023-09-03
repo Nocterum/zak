@@ -444,10 +444,10 @@ async function findCatalogWallpaper(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
-                const formatedCellValue = cellValue.toString().split("/")[0];
-                const formatedUserCatalog = user.catalog.toString().trim();
+                const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
+                const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
 
-                if (formatedCellValue.toLowerCase().includes(formatedUserCatalog.toLowerCase().trim())) {
+                if (formatedCellValue.includes(formatedUserCatalog)) {
                     foundMatchWallpaper = true;
                     let message = '';
 
