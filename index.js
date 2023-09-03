@@ -513,9 +513,9 @@ async function findCatalogWallpaper(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                        message = '';
                     }
+                    await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                    message = '';
                 }
             });
 
