@@ -919,22 +919,22 @@ bot.on('message', async msg => {
                 return startFind(chatId);
             }
 
-            if (user.vendor === 'Благодать и Ко' ||
-                user.vendor === 'Декор Трейд' ||
-                user.vendor === 'Hugge' ||
-                user.vendor === 'Milassa' ||
-                user.vendor === 'Rach Marburg' ||
+            if (user.vendor.includes('БЛАГОДАТЬ') ||
+                user.vendor === 'ДЕКОР ТРЕЙД' ||
+                user.vendor === 'HUGGE' ||
+                user.vendor === 'MILASSA' ||
+                user.vendor === 'RACH MARBURG' ||
                 user.vendor === 'АВТ' ||
-                user.vendor === 'БауТекс' ||
-                user.vendor === 'Бекарт Текстиль' ||
+                user.vendor === 'БАУТЕКС' ||
+                user.vendor === 'БЕКАРТ ТЕКСТИЛЬ' ||
                 user.vendor === 'ГЛОБАЛТЕКС' ||
-                user.vendor === 'Декор Рус' ||
-                user.vendor === 'Контракт Плюс' ||
+                user.vendor === 'ДЕКОР РУС' ||
+                user.vendor === 'КОНТРАКТ ПЛЮС' ||
                 user.vendor === 'ЛЕВАНТИН' ||
-                user.vendor === 'Протос' ||
-                user.vendor === 'О-Дизайн' ||
+                user.vendor === 'ПРОТОС' ||
+                user.vendor === 'О-ДИЗАЙН' ||
                 user.vendor === 'РОБЕРТС' ||
-                user.vendor === 'РуАльянс' ||
+                user.vendor === 'РУАЛЬЯНС' ||
                 user.vendor.includes('Лоймина') ||
                 user.vendor.includes('Юг арт')
             ) {
