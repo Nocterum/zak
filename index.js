@@ -462,7 +462,7 @@ async function findCatalogWallpaper(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
-                        await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
+                        await user.update({brand: cValue.toUpperCase()});
                         let messagePrice = await findPricelistLink(chatId, cValue);
                         
                         if (
@@ -581,7 +581,7 @@ async function findCatalogTextile(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
-                        await user.update({brand: cValue.toUpperCase().replace(/\s/g, '')});
+                        await user.update({brand: cValue.toUpperCase()});
                         let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase().replace(/\s/g, ''));
 
                         if (iValue !== null ||
@@ -680,9 +680,9 @@ async function findPricelistLink(chatId, cValue) {
 
                 if (formatedCellValue.includes(formaterdCValue)) {
                     foundMatchPricelist = true;
-                    const aValue = row.getCell('A').value;
-                    const bValue = row.getCell('B').value;
-                    const cValue = row.getCell('C').value;
+                    const aValue = row.getCell('A').value;  // Поставщик
+                    const bValue = row.getCell('B').value;  // Бренд
+                    const cValue = row.getCell('C').value;  // Ссылка на прайслист
                     user.update({vendor: aValue.toUpperCase()});
 
                     if (cValue !== null ) {
@@ -1072,7 +1072,7 @@ bot.on('callback_query', async msg => {
     //ввод артикула для поиска остатков
     if(data === '/enterVC') {
         lc = data;
-        return bot.sendMessage(chatId, `Введите артикул:`);
+        return bot.sendMessage(chatId, `Продолжаем работу с брендом ${user.brand} поставщика ${user.vendor}\nВведите артикул:`);
     }
     
     //начало резервирования
@@ -1177,5 +1177,3 @@ bot.on('callback_query', async msg => {
 }
 
 start();
-
-    
