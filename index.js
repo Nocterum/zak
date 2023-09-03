@@ -667,8 +667,8 @@ async function findPricelistLink(chatId, cValue) {
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
-                const formatedCellValue = cellValue.toString().toUpperCase().replace(/\s/g, '');
-                const formaterdCValue = cValue.toString().toUpperCase().replace(/\s/g, '');
+                const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-]/g, '');
+                const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-]/g, '');
 
                 console.log(formatedCellValue, formaterdCValue)
 
@@ -690,7 +690,7 @@ async function findPricelistLink(chatId, cValue) {
             });
 
             if (!foundMatchPricelist) {
-                messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
+                messagePrice += `Прайс-лист по бренду <b>${bValue.toUpperCase()}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
             return messagePrice;
