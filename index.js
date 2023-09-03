@@ -514,9 +514,9 @@ async function findCatalogWallpaper(chatId) {
                             botMsgIdx = null;
                         }
                     }
-                    await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
-                    message = '';
                 }
+                await bot.sendMessage(chatId, message, { parse_mode: "HTML" });
+                message = '';
             });
 
             if (foundMatchWallpaper) {
