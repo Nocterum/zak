@@ -463,6 +463,7 @@ async function findCatalogWallpaper(chatId) {
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
                     await user.update({brand: cValue.toUpperCase()});
+                    const messagePrice = await findPricelistLink(chatId);
 
                     if (
                         hValue !== null ||
@@ -480,7 +481,6 @@ async function findCatalogWallpaper(chatId) {
                         const n1Value = firstWorksheet.getCell('N1').value;
                         const p1Value = firstWorksheet.getCell('P1').value;
                         const o1Value = firstWorksheet.getCell('O1').value;
-                        const messagePrice = await findPricelistLink(chatId);
 
                         message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
 
