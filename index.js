@@ -683,25 +683,27 @@ async function findPricelistLink(chatId, cValue) {
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
-                const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-]/g, '');
-                const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-]/g, '');
+                if (cellValue !== null) {
 
-                console.log(formatedCellValue, formaterdCValue)
-
-                if (formatedCellValue.includes(formaterdCValue)) {
-                    foundMatchPricelist = true;
-                    const aValue = row.getCell('A').value;  // Поставщик
-                    const bValue = row.getCell('B').value;  // Бренд
-                    const cValue = row.getCell('C').value;  // Ссылка на прайслист
-                    user.update({vendor: aValue.toUpperCase()});
-
-                    if (cValue !== null ) {
-                        const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                        messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>:<pre>${formattedCValue}</pre>`;
-                    } else {
-                        messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>.😢`
+                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-]/g, '');
+                    const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-]/g, '');
+    
+                    console.log(formatedCellValue, formaterdCValue)
+    
+                    if (formatedCellValue.includes(formaterdCValue)) {
+                        foundMatchPricelist = true;
+                        const aValue = row.getCell('A').value;  // Поставщик
+                        const bValue = row.getCell('B').value;  // Бренд
+                        const cValue = row.getCell('C').value;  // Ссылка на прайслист
+                        user.update({vendor: aValue.toUpperCase()});
+    
+                        if (cValue !== null ) {
+                            const formattedCValue = cValue.toString().replace(/\\/g, '\\');
+                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>:<pre>${formattedCValue}</pre>`;
+                        } else {
+                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>.😢`
+                        }
                     }
-
                 }
             });
 
