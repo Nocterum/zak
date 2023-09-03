@@ -516,6 +516,12 @@ async function findCatalogWallpaper(chatId) {
                             }
                             await bot.sendMessage(chatId, message, beginWork3Options);
                         
+                        } else {
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
+                            return bot.sendMessage(chatId, 'Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08');
                         }
                     }
                 }
