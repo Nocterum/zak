@@ -461,6 +461,7 @@ async function findCatalogWallpaper(chatId) {
                     const oValue = row.getCell('O').value;
                     const pValue = row.getCell('P').value;
                     await user.update({brand: cValue.toUpperCase()});
+                    let messagePrice = await findPricelistLink(chatId, cValue.toUpperCase());
                     
                     if (
                         hValue !== null ||
@@ -505,23 +506,22 @@ async function findCatalogWallpaper(chatId) {
                         if (oValue !== null) {
                             message += `${o1Value}: ${oValue}\n`;
                         }
-                        let messagePrice = await findPricelistLink(chatId);
                         message += `\n${messagePrice}`
 
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        await bot.sendMessage(chatId, message, {parse_mode: 'HTML'});
+                        await bot.sendMessage(chatId, message, beginWork3Options);
                     }
                 }
             });
             
-            if (foundMatchWallpaper) {
-                setTimeout(() => {
-                    return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
-                }, 3000)
-            }
+            // if (foundMatchWallpaper) {
+            //     setTimeout(() => {
+            //         return bot.sendMessage(chatId, `Поиск закончен\n<i>если результов несколько найдите среди них искомый вами каталог и введите его полное наименование, чтобы продолжить поиск</i>`, beginWork3Options);
+            //     }, 3000)
+            // }
 
             if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
@@ -644,7 +644,7 @@ async function findCatalogTextile(chatId) {
 };
 
 //Функция поиска ссылки на прайслист
-async function findPricelistLink(chatId) {
+async function findPricelistLink(chatId, cValue) {
 
     let fileNamePricelist = 'cписок_прайслистов.xlsx';
     fileNamePricelist = fileNamePricelist.toLowerCase();
@@ -671,9 +671,12 @@ async function findPricelistLink(chatId) {
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
-                const formatedCellValue = cellValue.toString().toUpperCase();
+                const formatedCellValue = cellValue.toString().toUpperCase().replace(/\s/g, '');
+                const formatedUserBrand = user.brand.toString().toUpperCase().replace(/\s/g, '')
 
-                if (formatedCellValue === user.brand) {
+                console.log(formatedCellValue, formatedUserBrand, cValue)
+
+                if (formatedCellValue === formatedUserBrand) {
                     foundMatchPricelist = true;
                     const aValue = row.getCell('A').value;
                     const bValue = row.getCell('B').value;
