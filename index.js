@@ -680,8 +680,6 @@ async function findPricelistLink(chatId) {
                     if (cValue !== null ) {
                         const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                         messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b> поставщика <b>${aValue}</b>:<pre>\n${formattedCValue}</pre>`;
-                        bot.sendMessage(chatId, messagePrice, beginWork3Options);
-                        messagePrice = '';
                     }
                 }
             });
