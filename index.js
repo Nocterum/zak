@@ -691,12 +691,15 @@ async function findPricelistLink(chatId, cValue) {
     
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
+
                         const aValue = row.getCell('A').value;  // Поставщик
                         const bValue = row.getCell('B').value;  // Бренд
                         const cValue = row.getCell('C').value;  // Ссылка на прайслист
                         const dValue = row.getCell('D').value;
                         user.update({vendor: aValue.toUpperCase()});
+                        if (dValue !== null) {
                         user.update({vendorEmail: dValue.toLowerCase()});
+                        }
 
     
                         if (cValue !== null ) {
