@@ -93,18 +93,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Запросить наличие и сроки поставки', callback_data: '/sendReserveEmail2'}],
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'},{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
-            ]
-        })
-    },
-
-    startFind3Options: {
-        parse_mode: 'HTML',
-        reply_markup: JSON.stringify( {
-            inline_keyboard: [
                 [{text: 'Да', callback_data: '/preSendEmailReserveYes'},{text: 'Нет', callback_data: '/preSendEmailReserveNo'}],
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'},{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })

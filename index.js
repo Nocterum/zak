@@ -17,7 +17,7 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {gameOptions, againOptions, resetOptions,
-     workOptions, VCOptions, startFindOptions, startFind2Options, startFind3Options,
+     workOptions, VCOptions, startFindOptions, startFind2Options, 
      beginWorkOptions, beginWork2Options, mainMenuOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
@@ -724,54 +724,54 @@ async function findPricelistLink(chatId, cValue) {
 };
 
 // Функция поиска по бренду поставщика, ссылки на стоки и его почтового адреса
-async function findVendor(chatId) {
+// async function findVendor(chatId) {
 
-    let fileNameVendor = 'список_поставщиков.xlsx';
-    fileNameVendor = fileNameVendor.toLowerCase();
+//     let fileNameVendor = 'список_поставщиков.xlsx';
+//     fileNameVendor = fileNameVendor.toLowerCase();
 
-    const result = await findExcelFile(fileNameVendor);
-    const filePath = result.fileNameVendor;
+//     const result = await findExcelFile(fileNameVendor);
+//     const filePath = result.fileNameVendor;
 
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        }
-    });
+//     const user = await UserModel.findOne({
+//         where: {
+//             chatId: chatId
+//         }
+//     });
 
-    if (filePath) {
-        try {
+//     if (filePath) {
+//         try {
 
-            const workbook = new ExcelJS.Workbook();
-            const stream = fs.createReadStream(filePath);
-            const worksheet = await workbook.xlsx.read(stream);
-            const firstWorksheet = worksheet.worksheets[0];
+//             const workbook = new ExcelJS.Workbook();
+//             const stream = fs.createReadStream(filePath);
+//             const worksheet = await workbook.xlsx.read(stream);
+//             const firstWorksheet = worksheet.worksheets[0];
 
-            let foundMatchBrand = false;
+//             let foundMatchBrand = false;
 
-            firstWorksheet.eachRow( async (row, rowNumber) => {
-                const cellValue = row.getCell('C').value; // Бренд
-                if (cellValue !== null) {
-                    const formatedCellValue = cellValue.toString().trim();
-                    const formatedUserBrand = user.brand.toString().trim();
+//             firstWorksheet.eachRow( async (row, rowNumber) => {
+//                 const cellValue = row.getCell('C').value; // Бренд
+//                 if (cellValue !== null) {
+//                     const formatedCellValue = cellValue.toString().trim();
+//                     const formatedUserBrand = user.brand.toString().trim();
 
-                    if (formatedCellValue.toLowerCase() === formatedUserBrand.toLowerCase()) {
-                        foundMatchBrand = true;
+//                     if (formatedCellValue.toLowerCase() === formatedUserBrand.toLowerCase()) {
+//                         foundMatchBrand = true;
 
-                        const dValue = row.getCell('D').value; // Поставщик
-                        user.update({vendor: dValue.toUpperCase()});
-                        console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
+//                         const dValue = row.getCell('D').value; // Поставщик
+//                         user.update({vendor: dValue.toUpperCase()});
+//                         console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
 
-                    }
-                }
-                return;
+//                     }
+//                 }
+//                 return;
 
-            });
+//             });
 
-        } catch (e) {
-            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
-        }
-    }
-};
+//         } catch (e) {
+//             return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
+//         }
+//     }
+// };
 
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 
@@ -905,9 +905,19 @@ bot.on('message', async msg => {
             await user.update({reserveNumber: text});
 
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-                return bot.sendMessage(chatId, `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
+                return bot.sendMessage(
+                    chatId, 
+                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
+                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    enterReserveNumberOptions
+                );
             } else {
-                return bot.sendMessage(chatId, `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, enterReserveNumberOptions);
+                return bot.sendMessage(
+                    chatId, 
+                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
+                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    enterReserveNumberOptions
+                );
             }
         }
 
@@ -916,37 +926,46 @@ bot.on('message', async msg => {
             lc = null;
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
+            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
             botMsgIdx = msg.message_id += 1; 
 
-            if (user.vendor === 'ОПУС') {
+            if (formatedUserVendor === 'ОПУС') {
                 return startFind(chatId);
             }
 
             if (user.vendor.includes('БЛАГОДАТЬ') ||
-                user.vendor === 'ДЕКОР ТРЕЙД' ||
-                user.vendor === 'HUGGE' ||
-                user.vendor === 'MILASSA' ||
-                user.vendor === 'RACH MARBURG' ||
-                user.vendor === 'АВТ' ||
-                user.vendor === 'БАУТЕКС' ||
-                user.vendor === 'БЕКАРТ ТЕКСТИЛЬ' ||
-                user.vendor === 'ГЛОБАЛТЕКС' ||
-                user.vendor === 'ДЕКОР РУС' ||
-                user.vendor === 'КОНТРАКТ ПЛЮС' ||
-                user.vendor === 'ЛЕВАНТИН' ||
-                user.vendor === 'ПРОТОС' ||
-                user.vendor === 'О-ДИЗАЙН' ||
-                user.vendor === 'РОБЕРТС' ||
-                user.vendor === 'РУАЛЬЯНС' ||
+                user.vendor.includes('ДЕКОРТРЕЙД') ||
+                user.vendor.includes('HUGGE') ||
+                user.vendor.includes('MILASSA') ||
+                user.vendor.includes('RACH MARBURG') ||
+                user.vendor.includes('АВТ') ||
+                user.vendor.includes('БАУТЕКС') ||
+                user.vendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+                user.vendor.includes('ГЛОБАЛТЕКС') ||
+                user.vendor.includes('ДЕКОРРУС') ||
+                user.vendor.includes('КОНТРАКТ ПЛЮС') ||
+                user.vendor.includes('ЛЕВАНТИН') ||
+                user.vendor.includes('ПРОТОС') ||
+                user.vendor.includes('ОДИЗАЙН') ||
+                user.vendor.includes('РОБЕРТС') ||
+                user.vendor.includes('РУАЛЬЯНС') ||
                 user.vendor.includes('ЛОЙМИНА') ||
-                user.vendor.includes('ЮГ АРТ')
+                user.vendor.includes('ЮГАРТ')
             ) {
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
                 lc = '/enterNumberofVC'; 
-                return bot.sendMessage(chatId, `Бренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nУкажите колличество:`);
+                return bot.sendMessage(
+                    chatId, 
+                    `<b>Искомые вами параметры:</b>
+                    Бренд: ${user.brand}
+                    Поставщик: ${user.vendor}
+                    Артикул: ${user.vendorCode}
+                    Укажите колличество:`,
+                    {parse_mode: 'HTML'}
+                );
             }
 
             if (user.vendor !== 'ОПУС') {
@@ -954,13 +973,26 @@ bot.on('message', async msg => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                return bot.sendMessage(chatId, 'Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.');
+                return bot.sendMessage(
+                    chatId, 
+                    `Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.
+                    А так же отправлять письмо с запросом остатков, сроков поставки по поставщикам:
+                    Декор Трейд, АВТ, БауТекс, Бекарт Текстиль, Глобалтекс, Декор Рус, Контракт Плюс, Левантин, Протос, О-Дизайн, Робертс, Ру Альянс, Лоймина, Юг Арт.`);
             }
         }
 
         if (lc === '/enterNumberofVC') {
             await user.update({reserveNumber: text});
-            return bot.sendMessage(chatId, `Бренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}`, startFind2Options);
+            return bot.sendMessage(
+                chatId, 
+                `<b>Искомые вами параметры:</b>
+                Бренд: ${user.brand}
+                Поставщик: ${user.vendor}
+                Артикул: ${user.vendorCode}
+                Колличество: ${user.reserveNumber}
+                Хорошо, я запрошу наличие и срок поставки.
+                Нужно поставить резерв?`, 
+                startFind2Options);
         }
 
         //Записываем артикул каталога
@@ -1103,13 +1135,24 @@ bot.on('callback_query', async msg => {
     //ввод артикула для поиска остатков
     if(data === '/enterVC') {
         lc = data;
-        return bot.sendMessage(chatId, `Продолжаем работу с брендом <b>${user.brand}</b> поставщика <b>${user.vendor}</b>\nВведите артикул:`, {parse_mode: 'HTML'});
+        return bot.sendMessage(
+            chatId, 
+            `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, 
+            то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.
+            Какой артикул из каталога вам нужен?`, 
+            {parse_mode: 'HTML'}
+        );
     }
     
     //начало резервирования
     if (data === '/enterReserveNumber') {
         lc = data;
-        return bot.sendMessage(chatId, `Введите номер партии и колличество, которое желаете зарезервировать:\n<i>например: 268А 3\nесли партия отсутствует, то введите только колличество</i>`, { parse_mode: "HTML" })
+        return bot.sendMessage(
+            chatId, 
+            `Введите номер партии и колличество, которое желаете зарезервировать:
+            <i>например: 268А 3\nесли партия отсутствует, то введите только колличество</i>`,
+            { parse_mode: "HTML" }
+        )
     }
 
     //подтверждение резервирования
@@ -1144,12 +1187,6 @@ bot.on('callback_query', async msg => {
     if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
-    }
-
-    //отправка сообщения с запросом резервирования
-    if (data === '/sendReserveEmail2') {
-        lc = data;
-        return bot.sendMessage(chatId, `Хорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, startFind3Options);
     }
 
     //проверка каталога в наличии в салоне
