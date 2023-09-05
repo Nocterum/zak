@@ -647,7 +647,7 @@ async function findCatalogTextile(chatId) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${messagePrice}`, {parse_mode: 'HTML'});
+                return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n`, {parse_mode: 'HTML'});
             }
 
         } catch (error) {
@@ -706,7 +706,7 @@ async function findPricelistLink(chatId, cValue) {
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                             messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>:<pre>${formattedCValue}</pre>`;
                         } else {
-                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>.😢`
+                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue.toUpperCase()}</b> поставщика <b>${aValue.toUpperCase()}</b>.😢\nЗапросите прайсы в отделе закупок.`
                         }
                     }
                 }
