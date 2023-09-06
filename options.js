@@ -73,7 +73,7 @@ module.exports = {
             inline_keyboard: [
                 [{text: 'Остатки/сроки/резерв', callback_data: '/catalogСheck'}, {text: 'Работа в магазине', callback_data: '/enterBrand'}],
                 [{text: 'Остатки ORAC', callback_data: '/oracСheck'}],
-                [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}]
+                // [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}]
                 [{text: 'Превью изображений', callback_data: '/work2'}],
                 [{text: 'Добавить в заказ', callback_data: '/work3'}],
             ]
