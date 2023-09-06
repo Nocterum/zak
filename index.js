@@ -847,7 +847,7 @@ bot.onText(/\/start/, async msg => {
             );
         } else if (password !== 'true') {
             password = false;
-            return bot.sendmessage(
+            return bot.sendMessage(
                 chatId, 
                 `Введите пароль:`
             );
