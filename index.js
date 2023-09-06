@@ -60,6 +60,19 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+const startFindWeb = async (chatId) => {
+    try {
+        
+        const search = 'http://post.manders.ru:10001/QuantityProduct.php';
+
+        const response = await axios.get(search);
+        const $ = cheerio.load(response.data);
+        return bot.sendmessage(chatId, $);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 // Функция html запроса по данным из БД
 const startFind = async (chatId) => {
     lc = '/enterVC';
@@ -1143,15 +1156,6 @@ bot.on('callback_query', async msg => {
             chatId, 
             `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`); 
     }
-    
-    // //начало поиска остатков
-    // if(data === '/enterBrand') {
-    //     lc = data;
-    //     return bot.sendMessage(
-    //         chatId, 
-    //         `Введите название бренда:`
-    //     );
-    // }
 
     //Проверяем поставщика по бренду
     if (data === '/checkVendor') {
@@ -1301,7 +1305,7 @@ bot.on('callback_query', async msg => {
         lc = null;
         return bot.sendMessage(
             chatId, 
-            sorry, 
+            startFindWeb(chatId), 
             mainMenuOptions
         );
     }
