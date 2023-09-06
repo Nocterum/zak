@@ -62,7 +62,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'К следующей ступени поиска', callback_data: '/enterVC'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'В главное меню', callback_data: backLc}],
             ]
         })
     },
@@ -94,7 +94,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Да', callback_data: '/preSendEmailReserveYes'},{text: 'Нет', callback_data: '/preSendEmailReserveNo'}],
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'},{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
+                [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })

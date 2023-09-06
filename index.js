@@ -29,6 +29,7 @@ const nodemailer = require('./nodemailer');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
+backLc = {}; //предпоследняя команда для опции "назад"
 lc = {};    //последняя команда
 findCatalogIndex = {};   //состояние: нужно ли зайдествовать функцию поиска каталога текстиля.
 botMsgIdx = {};    //айди последнего сообщения от бота
@@ -876,7 +877,7 @@ bot.on('message', async msg => {
 
         //начало работы
         if (text === '/beginwork') {
-
+            backLc = text;
             if (!user.email) {
                 await editEmail(chatId);
             } else {
@@ -988,7 +989,7 @@ bot.on('message', async msg => {
                 lc = '/enterNumberofVC'; 
                 return bot.sendMessage(
                     chatId, 
-                    `<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\n\nТеперь укажите колличество\n<i>и еденицы измерения</i>:`,
+                    `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
             }
@@ -1188,7 +1189,7 @@ bot.on('callback_query', async msg => {
     if(data === '/enterVC') {
         lc = data;
         return bot.sendMessage(
-            chatId, `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`, 
+            chatId, `<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\n\nТеперь укажите колличество\n<i>и еденицы измерения</i>:`, 
             {parse_mode: 'HTML'}
         );
     }
