@@ -947,7 +947,7 @@ bot.on('message', async msg => {
                 bot.deleteMessage(chatId, botMsgIdx);
                 return bot.sendMessage(
                     chatId,
-                    `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:`,
+                    `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>введите так же единицы измерения, например:\n11 шт / 3 м.п.</i>`,
                     {parse_mode: 'HTML'}
                 );
             }
@@ -979,7 +979,7 @@ bot.on('message', async msg => {
             await user.update({reserveNumber: text});
             return bot.sendMessage(
                 chatId, 
-                `Отлично!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\nХорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, 
+                `Отлично!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, 
                 startFind2Options);
             }
             
