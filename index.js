@@ -1244,7 +1244,7 @@ bot.on('callback_query', async msg => {
     if(data === '/enterVC') {
         lc = data;
         cValue = user.brand;
-        let messagePrice = await findPricelistLink(chatId, cValue);
+        let messagePrice =await findPricelistLink(chatId, cValue);
         return bot.sendMessage(
             chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\n${messagePrice}\n\nВведите искомый артикул:\n`, 
             {parse_mode: 'HTML'}
@@ -1265,12 +1265,12 @@ bot.on('callback_query', async msg => {
         lc = data;
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
-            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт по запросу ${(chatId).split("@")[0]}`;
+            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт по запросу ${chatId}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         } else {
 
-            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(chatId).split("@")[0]}`;
+            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${chatId}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         }
@@ -1281,7 +1281,7 @@ bot.on('callback_query', async msg => {
 
     if (data === '/preSendEmailReserveYes') {
 
-        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(chatId).split("@")[0]}`;
+        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
@@ -1293,7 +1293,7 @@ bot.on('callback_query', async msg => {
 
     if (data === '/preSendEmailReserveNo') {
 
-        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(chatId).split("@")[0]}`;
+        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
