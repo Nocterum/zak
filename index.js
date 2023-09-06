@@ -944,6 +944,7 @@ bot.on('message', async msg => {
                 return startFind(chatId);
             } else {
                 lc = '/enterNumberofVC';
+                bot.deleteMessage(chatId, botMsgIdx);
                 return bot.sendMessage(
                     chatId,
                     `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:`,
@@ -1158,7 +1159,6 @@ bot.on('callback_query', async msg => {
     if (data === '/checkVendor') {
         lc = '/enterVC';
         const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
-        botMsgIdx = msg.message.message_id += 1; 
 
         if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
             formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
@@ -1179,31 +1179,14 @@ bot.on('callback_query', async msg => {
             formatedUserVendor.includes('ЛОЙМИНА') ||
             formatedUserVendor.includes('ЮГАРТ')
         ) {
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-             
-            await bot.sendMessage(
+
+            return bot.sendMessage(
                 chatId, 
                 `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                 {parse_mode: 'HTML'}
-                );
-                return;
-            }
+            );
+        }
             
-            if (user.vendor !== 'ОПУС') {
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-                }
-                
-                return bot.sendMessage(
-                    chatId, 
-                    `Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.\nА так же отправлять письмо с запросом остатков, сроков поставки по поставщикам:\nДекор Трейд, АВТ, БауТекс, Бекарт Текстиль, Глобалтекс, Декор Рус, Контракт Плюс, Левантин, Протос, О-Дизайн, Робертс, Ру Альянс, Лоймина, Юг Арт.`,
-                    beginWork2Options
-                );
-            };
     }
 
     //ввод артикула 
