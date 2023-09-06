@@ -897,7 +897,7 @@ bot.on('message', async msg => {
         if (password === false) {
             if (text === '111QWER!!!') {
                 password = 'true';
-                bot.emit('text', { text: '/start', chat: { id: chatId } });
+                return bot.emit('text', { text: '/start', chat: { id: chatId } });
             } else {
                 return bot.sendMessage(
                     chatId, 
