@@ -932,56 +932,6 @@ bot.on('message', async msg => {
             );
         }
 
-        //Проверяем поставщика по бренду
-        if (lc === '/checkVendor') {
-            lc = '/enterVC';
-
-            if (user.vendor.includes('БЛАГОДАТЬ') ||
-                user.vendor.includes('ДЕКОРТРЕЙД') ||
-                user.vendor.includes('HUGGE') ||
-                user.vendor.includes('MILASSA') ||
-                user.vendor.includes('RACH MARBURG') ||
-                user.vendor.includes('АВТ') ||
-                user.vendor.includes('БАУТЕКС') ||
-                user.vendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-                user.vendor.includes('ГЛОБАЛТЕКС') ||
-                user.vendor.includes('ДЕКОРРУС') ||
-                user.vendor.includes('КОНТРАКТ ПЛЮС') ||
-                user.vendor.includes('ЛЕВАНТИН') ||
-                user.vendor.includes('ПРОТОС') ||
-                user.vendor.includes('ОДИЗАЙН') ||
-                user.vendor.includes('РОБЕРТС') ||
-                user.vendor.includes('РУАЛЬЯНС') ||
-                user.vendor.includes('ЛОЙМИНА') ||
-                user.vendor.includes('ЮГАРТ')
-            ) {
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-                 
-                await bot.sendMessage(
-                    chatId, 
-                    `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
-                    {parse_mode: 'HTML'}
-                    );
-                    return;
-                }
-                
-                if (user.vendor !== 'ОПУС') {
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                    }
-                    
-                    return bot.sendMessage(
-                        chatId, 
-                        `Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.\nА так же отправлять письмо с запросом остатков, сроков поставки по поставщикам:\nДекор Трейд, АВТ, БауТекс, Бекарт Текстиль, Глобалтекс, Декор Рус, Контракт Плюс, Левантин, Протос, О-Дизайн, Робертс, Ру Альянс, Лоймина, Юг Арт.`,
-                        beginWork2Options
-                    );
-                };
-        }
-
         //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
         if (lc === '/enterVC') {
             lc = 'null';
@@ -1195,16 +1145,66 @@ bot.on('callback_query', async msg => {
             `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`); 
     }
     
-    //начало поиска остатков
-    if(data === '/enterBrand') {
-        lc = data;
-        return bot.sendMessage(
-            chatId, 
-            `Введите название бренда:`
-        );
+    // //начало поиска остатков
+    // if(data === '/enterBrand') {
+    //     lc = data;
+    //     return bot.sendMessage(
+    //         chatId, 
+    //         `Введите название бренда:`
+    //     );
+    // }
+
+    //Проверяем поставщика по бренду
+    if (data === '/checkVendor') {
+        lc = '/enterVC';
+
+        if (user.vendor.includes('БЛАГОДАТЬ') ||
+            user.vendor.includes('ДЕКОРТРЕЙД') ||
+            user.vendor.includes('HUGGE') ||
+            user.vendor.includes('MILASSA') ||
+            user.vendor.includes('RACH MARBURG') ||
+            user.vendor.includes('АВТ') ||
+            user.vendor.includes('БАУТЕКС') ||
+            user.vendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+            user.vendor.includes('ГЛОБАЛТЕКС') ||
+            user.vendor.includes('ДЕКОРРУС') ||
+            user.vendor.includes('КОНТРАКТ ПЛЮС') ||
+            user.vendor.includes('ЛЕВАНТИН') ||
+            user.vendor.includes('ПРОТОС') ||
+            user.vendor.includes('ОДИЗАЙН') ||
+            user.vendor.includes('РОБЕРТС') ||
+            user.vendor.includes('РУАЛЬЯНС') ||
+            user.vendor.includes('ЛОЙМИНА') ||
+            user.vendor.includes('ЮГАРТ')
+        ) {
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+             
+            await bot.sendMessage(
+                chatId, 
+                `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                {parse_mode: 'HTML'}
+                );
+                return;
+            }
+            
+            if (user.vendor !== 'ОПУС') {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+                }
+                
+                return bot.sendMessage(
+                    chatId, 
+                    `Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.\nА так же отправлять письмо с запросом остатков, сроков поставки по поставщикам:\nДекор Трейд, АВТ, БауТекс, Бекарт Текстиль, Глобалтекс, Декор Рус, Контракт Плюс, Левантин, Протос, О-Дизайн, Робертс, Ру Альянс, Лоймина, Юг Арт.`,
+                    beginWork2Options
+                );
+            };
     }
 
-    //ввод артикула для поиска остатков
+    //ввод артикула 
     if(data === '/enterVC') {
         lc = data;
         return bot.sendMessage(
