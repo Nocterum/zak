@@ -1157,25 +1157,27 @@ bot.on('callback_query', async msg => {
     //Проверяем поставщика по бренду
     if (data === '/checkVendor') {
         lc = '/enterVC';
+        const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+        botMsgIdx = msg.message.message_id += 1; 
 
-        if (user.vendor.includes('БЛАГОДАТЬ') ||
-            user.vendor.includes('ДЕКОРТРЕЙД') ||
-            user.vendor.includes('HUGGE') ||
-            user.vendor.includes('MILASSA') ||
-            user.vendor.includes('RACH MARBURG') ||
-            user.vendor.includes('АВТ') ||
-            user.vendor.includes('БАУТЕКС') ||
-            user.vendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-            user.vendor.includes('ГЛОБАЛТЕКС') ||
-            user.vendor.includes('ДЕКОРРУС') ||
-            user.vendor.includes('КОНТРАКТ ПЛЮС') ||
-            user.vendor.includes('ЛЕВАНТИН') ||
-            user.vendor.includes('ПРОТОС') ||
-            user.vendor.includes('ОДИЗАЙН') ||
-            user.vendor.includes('РОБЕРТС') ||
-            user.vendor.includes('РУАЛЬЯНС') ||
-            user.vendor.includes('ЛОЙМИНА') ||
-            user.vendor.includes('ЮГАРТ')
+        if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
+            formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
+            formatedUserVendor.includes('HUGGE') ||
+            formatedUserVendor.includes('MILASSA') ||
+            formatedUserVendor.includes('RACH MARBURG') ||
+            formatedUserVendor.includes('АВТ') ||
+            formatedUserVendor.includes('БАУТЕКС') ||
+            formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+            formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
+            formatedUserVendor.includes('ДЕКОРРУС') ||
+            formatedUserVendor.includes('КОНТРАКТ ПЛЮС') ||
+            formatedUserVendor.includes('ЛЕВАНТИН') ||
+            formatedUserVendor.includes('ПРОТОС') ||
+            formatedUserVendor.includes('ОДИЗАЙН') ||
+            formatedUserVendor.includes('РОБЕРТС') ||
+            formatedUserVendor.includes('РУАЛЬЯНС') ||
+            formatedUserVendor.includes('ЛОЙМИНА') ||
+            formatedUserVendor.includes('ЮГАРТ')
         ) {
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
