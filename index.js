@@ -28,6 +28,7 @@ const nodemailer = require('./nodemailer');
 //const BrandModel = require('./models');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+password = {};
 chats = {};
 let backLc = '/mainmenu'; //предпоследняя команда для опции "назад"
 lc = {};    //последняя команда
@@ -60,14 +61,22 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
-const startFindWeb = async (chatId) => {
+const startRequest1C = async (chatId) => {
     try {
         
         const search = 'http://post.manders.ru:10001/QuantityProduct.php';
 
+        
+        const axiosPost = await axios.post(search, {
+            Артикул: 'PLGUM5'
+        });
+        
         const response = await axios.get(search);
+        
+        await bot.sendmessage(chatId, '');
         const $ = cheerio.load(response.data);
-        return bot.sendmessage(chatId, $);
+        const results = $('');
+
     } catch (e) {
         console.log(e);
     }
@@ -823,7 +832,8 @@ bot.onText(/\/start/, async msg => {
                 chatId, 
                 `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`
             );
-        } else {
+
+        } else if (password === 'true') {
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
              await user.update({
@@ -835,7 +845,13 @@ bot.onText(/\/start/, async msg => {
                 chatId, 
                 `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде е-мейла на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
             );
-        }  
+        } else if (password !== 'true') {
+            password = false;
+            return bot.sendmessage(
+                chatId, 
+                `Введите пароль:`
+            );
+        }
      } catch (e) {
     console.log('Ошибка при создании нового пользователя', e);
     }
@@ -877,6 +893,19 @@ bot.on('message', async msg => {
 
     try {
 
+        //Проверка ввода пароля
+        if (password === false) {
+            if (text === '111QWER!!!') {
+                password = 'true';
+                bot.emit('text', { text: '/start', chat: { id: chatId } });
+            } else {
+                return bot.sendmessage(
+                    chatId, 
+                    `В доступе отказанно.`
+                );
+            }
+        };
+
         //главное меню
         if (text === '/mainmenu') {
 
@@ -884,7 +913,7 @@ bot.on('message', async msg => {
                 lc = null;
                 await bot.sendMessage(
                     chatId, 
-                    `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`
+                    `И снова здравствуйте, ${user.nickname}!\nВаш персональный id: ${chatId}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`
                 );
             }
             return;
@@ -937,7 +966,7 @@ bot.on('message', async msg => {
 
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
-            await user.update({brand: text.toLowerCase()});
+            await user.update({brand: text.toUpperCase()});
             return bot.sendMessage(
                 chatId, 
                 `Название бренда "<b>${text}</b>" успешно сохранено\n<i>(для перезаписи введите бренд повторно)</i>`, 
@@ -1202,6 +1231,15 @@ bot.on('callback_query', async msg => {
             
     }
 
+    //ввод бренда 
+    if(data === '/enterBrand') {
+        lc = data;
+        return bot.sendMessage(
+            chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
+            {parse_mode: 'HTML'}
+        );
+    }
+
     //ввод артикула 
     if(data === '/enterVC') {
         lc = data;
@@ -1225,12 +1263,12 @@ bot.on('callback_query', async msg => {
         lc = data;
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
-            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт по запросу ${(user.email).split("@")[0]}`;
+            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт по запросу ${(chatId).split("@")[0]}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         } else {
 
-            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(user.email).split("@")[0]}`;
+            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${(chatId).split("@")[0]}`;
             textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         }
@@ -1241,7 +1279,7 @@ bot.on('callback_query', async msg => {
 
     if (data === '/preSendEmailReserveYes') {
 
-        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(user.email).split("@")[0]}`;
+        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(chatId).split("@")[0]}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
@@ -1253,7 +1291,7 @@ bot.on('callback_query', async msg => {
 
     if (data === '/preSendEmailReserveNo') {
 
-        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(user.email).split("@")[0]}`;
+        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${(chatId).split("@")[0]}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
@@ -1305,7 +1343,17 @@ bot.on('callback_query', async msg => {
         lc = null;
         return bot.sendMessage(
             chatId, 
-            startFindWeb(chatId), 
+            sorry, 
+            mainMenuOptions
+        );
+    }
+
+    //добавить в заказ
+    if(data === '/request1C') {
+        lc = null;
+        return bot.sendMessage(
+            chatId, 
+            startRequest1C(chatId), 
             mainMenuOptions
         );
     }
