@@ -1246,7 +1246,7 @@ bot.on('callback_query', async msg => {
         cValue = user.brand;
         await findPricelistLink(chatId, cValue);
         return bot.sendMessage(
-            chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nВведите искомый артикул:`, 
+            chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\n${messagePrice}\n\nВведите искомый артикул:\n`, 
             {parse_mode: 'HTML'}
         );
     }
