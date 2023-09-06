@@ -1243,7 +1243,7 @@ bot.on('callback_query', async msg => {
     //ввод артикула 
     if(data === '/enterVC') {
         lc = data;
-        cValue === user.brand;
+        cValue = user.brand;
         await findPricelistLink(chatId, cValue);
         return bot.sendMessage(
             chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nВведите искомый артикул:`, 
