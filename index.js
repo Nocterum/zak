@@ -947,7 +947,7 @@ bot.on('message', async msg => {
                 bot.deleteMessage(chatId, botMsgIdx);
                 return bot.sendMessage(
                     chatId,
-                    `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>введите так же единицы измерения, например:\n11 шт / 3 м.п.</i>`,
+                    `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>введите так же единицы измерения, например:\n11 <b>шт</b> или 3 <b>м.п.</b></i>`,
                     {parse_mode: 'HTML'}
                 );
             }
@@ -979,7 +979,7 @@ bot.on('message', async msg => {
             await user.update({reserveNumber: text});
             return bot.sendMessage(
                 chatId, 
-                `Отлично!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, 
+                `Отлично!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
                 startFind2Options);
             }
             
@@ -1179,10 +1179,15 @@ bot.on('callback_query', async msg => {
             formatedUserVendor.includes('ЛОЙМИНА') ||
             formatedUserVendor.includes('ЮГАРТ')
         ) {
-
             return bot.sendMessage(
                 chatId, 
                 `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                {parse_mode: 'HTML'}
+            );
+        } else if (formatedUserVendor.includes('ОПУС')) {
+            return bot.sendMessage(
+                chatId, 
+                `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                 {parse_mode: 'HTML'}
             );
         }
