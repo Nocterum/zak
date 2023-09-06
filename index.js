@@ -899,7 +899,7 @@ bot.on('message', async msg => {
                 password = 'true';
                 bot.emit('text', { text: '/start', chat: { id: chatId } });
             } else {
-                return bot.sendmessage(
+                return bot.sendMessage(
                     chatId, 
                     `В доступе отказанно.`
                 );
