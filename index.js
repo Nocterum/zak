@@ -976,7 +976,6 @@ bot.on('message', async msg => {
 
         //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
         if (lc === '/enterVC') {
-            lc = 'null';
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
@@ -1234,6 +1233,7 @@ bot.on('callback_query', async msg => {
     //ввод бренда 
     if(data === '/enterBrand') {
         lc = data;
+
         return bot.sendMessage(
             chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
             {parse_mode: 'HTML'}
@@ -1243,8 +1243,10 @@ bot.on('callback_query', async msg => {
     //ввод артикула 
     if(data === '/enterVC') {
         lc = data;
+        cValue === user.brand;
+        await findPricelistLink(chatId, cValue);
         return bot.sendMessage(
-            chatId, `<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\n\nТеперь укажите колличество\n<i>и еденицы измерения</i>:`, 
+            chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nВведите искомый артикул:`, 
             {parse_mode: 'HTML'}
         );
     }
