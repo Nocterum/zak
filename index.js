@@ -960,15 +960,13 @@ bot.on('message', async msg => {
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
-                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
-                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             }
