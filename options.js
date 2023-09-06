@@ -62,8 +62,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'К следующей ступени поиска', callback_data: '/enterVC'}],
-                [{text: 'В главное меню', callback_data: backLc}],
+                [{text: 'К следующей ступени поиска', callback_data: '/checkVendor'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
     },

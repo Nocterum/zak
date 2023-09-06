@@ -932,39 +932,9 @@ bot.on('message', async msg => {
             );
         }
 
-        //Записываем название бренда в ячейку БД
-        if (lc === '/enterReserveNumber') {
-            await user.update({reserveNumber: text});
-
-            if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
-                    <i>(для перезаписи введите информацию повторно)</i>`, 
-                    enterReserveNumberOptions
-                );
-            } else {
-                return bot.sendMessage(
-                    chatId, 
-                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
-                    <i>(для перезаписи введите информацию повторно)</i>`, 
-                    enterReserveNumberOptions
-                );
-            }
-        }
-
-        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
-        if (lc === '/enterVC') {
-            lc = null;
-            await user.update({vendorCode: text.toUpperCase()});
-            await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
-            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
-            botMsgIdx = msg.message_id += 1; 
-
-            if (formatedUserVendor === 'ОПУС') {
-                return startFind(chatId);
-            }
-
+        //Проверяем поставщика по бренду
+        if (lc === '/checkVendor') {
+            
             if (user.vendor.includes('БЛАГОДАТЬ') ||
                 user.vendor.includes('ДЕКОРТРЕЙД') ||
                 user.vendor.includes('HUGGE') ||
@@ -988,53 +958,95 @@ bot.on('message', async msg => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                lc = '/enterNumberofVC'; 
+                lc = '/enterVC'; 
                 return bot.sendMessage(
                     chatId, 
                     `Так как поставщиком искомого вами бренда <b>${user.brand}</b> является <b>${user.vendor}</b>, то я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
-                );
-            }
-
-            if (user.vendor !== 'ОПУС') {
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
+                    );
+                }
+                
+                if (user.vendor !== 'ОПУС') {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
                 return bot.sendMessage(
                     chatId, 
                     `Простите, но на данный момент я умею искать остатки только на сайте поставщика ОПУС.\nА так же отправлять письмо с запросом остатков, сроков поставки по поставщикам:\nДекор Трейд, АВТ, БауТекс, Бекарт Текстиль, Глобалтекс, Декор Рус, Контракт Плюс, Левантин, Протос, О-Дизайн, Робертс, Ру Альянс, Лоймина, Юг Арт.`);
-            };
+                };
+        }
+
+        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
+        if (lc === '/enterVC') {
+            lc = 'null';
+            await user.update({vendorCode: text.toUpperCase()});
+            await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
+            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+            botMsgIdx = msg.message_id += 1; 
+
+            if (formatedUserVendor === 'ОПУС') {
+                return startFind(chatId);
+            } else {
+                lc = '/enterNumberofVC';
+                return bot.sendMessage(
+                    chatId,
+                    `Хорошо!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:`,
+                    {parse_mode: 'HTML'}
+                );
+            }
+        }
+
+        //Вводится Партия и колличество для резерва по поставщику ОПУС
+        if (lc === '/enterReserveNumber') {
+            await user.update({reserveNumber: text});
+
+            if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?
+                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    enterReserveNumberOptions
+                );
+            } else {
+                return bot.sendMessage(
+                    chatId, 
+                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?
+                    <i>(для перезаписи введите информацию повторно)</i>`, 
+                    enterReserveNumberOptions
+                );
+            }
         }
 
         if (lc === '/enterNumberofVC') {
+            lc = null;
             await user.update({reserveNumber: text});
             return bot.sendMessage(
                 chatId, 
-                `<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\nХорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, 
+                `Отлично!\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\nПоставщик: ${user.vendor}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\nХорошо, я запрошу наличие и срок поставки.\nНужно поставить резерв?`, 
                 startFind2Options);
-        }
-
-        //Записываем артикул каталога
-        if (lc === '/catalogСheck') {
-            await user.update(
-                {catalog: text}
-            );
-            await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
-            botMsgIdx = msg.message_id += 1; 
-            return findCatalogWallpaper(chatId);
-        }
-
-        if (lc === '/oracСheck') {
-            await user.update(
-                {vendorCode: text.toUpperCase()}
-            );
-            await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
-            botMsgIdx = msg.message_id += 1; 
-            return findOrac(chatId);
-        }
-
-        //вывод информации
+            }
+            
+            //Записываем артикул каталога
+            if (lc === '/catalogСheck') {
+                await user.update(
+                    {catalog: text}
+                    );
+                    await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
+                    botMsgIdx = msg.message_id += 1; 
+                    return findCatalogWallpaper(chatId);
+                }
+                
+                if (lc === '/oracСheck') {
+                    await user.update(
+                        {vendorCode: text.toUpperCase()}
+                        );
+                        await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
+                        botMsgIdx = msg.message_id += 1; 
+                        return findOrac(chatId);
+                    }
+                    
+                    //вывод информации
         if (text === '/infowork') {
             return bot.sendMessage(
                 chatId, 
