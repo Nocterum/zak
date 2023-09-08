@@ -86,7 +86,7 @@ const startRequest1C = async (chatId) => {
         const updatedResponse = await axios.get(request);
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
-        console.log(updatedDom);
+        console.log(updatedDocument);
         const tableElement = updatedDocument.querySelector('table tbody');
 
         if (tableElement) {
@@ -113,7 +113,7 @@ const startRequest1C = async (chatId) => {
                 console.log('Не найденны строки в таблице');
             }
         } else {
-            console.log('Элементы таблицы не найденны');
+            console.log('Элементы таблицы не найдены');
         }
 
     } catch (e) {
