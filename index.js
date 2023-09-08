@@ -64,7 +64,7 @@ const editNickname = async (chatId) => {
 
 const startRequest1C = async (chatId) => {
     try {
-        
+
         const vendorCode = 'PLGUM5';
 
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
@@ -72,28 +72,29 @@ const startRequest1C = async (chatId) => {
 
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
-        
+
         const inputElement = document.querySelector('input[name="VendorCode"]');
         inputElement.value = vendorCode;
-        
         const submitElement = document.querySelector('input[name="submit"]');
         submitElement.click();
-        
+
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         // Получаем ответ после обработки запроса
         const updatedResponse = await axios.get(request);
+        const updatedDom = new JSDOM(updatedResponse.data);
+        const updatedDocument = updatedDom.window.document;
+
+        const tableElement = updatedDocument.querySelector('table');
+        const rows = tableElement.querySelectorAll('tr');
+
+        const formatedData = Array.from(rows).map(row => {
+             const cells = row.querySelectorAll('td');
+             return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+        });
         
-        console.log(updatedResponse.data);
-        
-        // Отправляем информацию пользователю в телеграмм
-        
-        // const lines = updatedResponse.data.split('<br />');
-        // const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
-        
-        // await bot.sendMessage(chatId, formatedData.join('\n'));
-        return bot.sendMessage(chatId, updatedResponse.data);
+        await bot.sendMessage(chatId, formatedData.join('\n'));
 
     } catch (e) {
         console.log(e);
