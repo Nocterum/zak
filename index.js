@@ -74,20 +74,22 @@ const startRequest1C = async (chatId) => {
         const window = dom.window;
         const document = dom.window.document;
 
-        const formElement = document.querySelector('form');
+        // const formElement = document.querySelector('form');
         
         const inputElement = document.querySelector('input[name="VendorCode"]');
         inputElement.value = vendorCode;
         const elementSubmit = document.querySelector('input[type="submit"][name="submit"]');
-        const eventClick = new MouseEvent("click", {
-            bubbles: true,
-            cancelable: true,
-            view: window
-          });
-          elementSubmit.dispatchEvent(eventClick);
+        // const eventClick = new MouseEvent("click", {
+        //     bubbles: true,
+        //     cancelable: true,
+        //     view: window
+        //   });
+        //   elementSubmit.dispatchEvent(eventClick);
         // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true });
-        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
+        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
         // formElement.dispatchEvent(submitEvent); 
+        elementSubmit.dispatchEvent(submitEvent); 
+
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 5000));
