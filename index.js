@@ -92,14 +92,15 @@ const startRequest1C = async (chatId) => {
 
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         // Получаем ответ после обработки запроса
         const updatedResponse = await axios.get(request);
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
-        // const tableElement = updatedDocument.querySelectorAll('body table')[2];
-        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)")
+        // const tableElement = updatedDocument.querySelectorAll('body table')[2];  // пример пути
+        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь
+        const tableElement = updatedDocument.querySelector("body > form");  
         console.log(tableElement);
         
 
