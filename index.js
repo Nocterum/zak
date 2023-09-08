@@ -71,6 +71,7 @@ const startRequest1C = async (chatId) => {
         const response = await axios.get(request);
 
         const dom = new JSDOM(response.data);
+        const window = dom.window;
         const document = dom.window.document;
 
         const formElement = document.querySelector('form');
