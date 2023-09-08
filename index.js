@@ -79,7 +79,7 @@ const startRequest1C = async (chatId) => {
         const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)");
         console.log('Поле ввода артикула найдено');
         inputElement.value = vendorCode;
-        console.log('Артикул введен');
+        console.log('Артикул ' + vendorCode + ' введен');
         const elementSubmit = document.querySelector("body > form > input[type=submit]:nth-child(3)");
         console.log('Кнопка "Получить" найдена');
 
@@ -90,8 +90,8 @@ const startRequest1C = async (chatId) => {
         //   });
         //   elementSubmit.dispatchEvent(eventClick);
 
-        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод click
+        const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод click
         // formElement.dispatchEvent(submitEvent); 
         elementSubmit.dispatchEvent(submitEvent); 
 
