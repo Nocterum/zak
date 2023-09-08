@@ -77,9 +77,13 @@ const startRequest1C = async (chatId) => {
         
         const inputElement = document.querySelector('input[name="VendorCode"]');
         inputElement.value = vendorCode;
-        const elementsubmit = document.querySelector('input[type="submit"][name="submit"]');
-        const event = new Event("click");
-        elementsubmit.dispatchEvent(event);
+        const elementSubmit = document.querySelector('input[type="submit"][name="submit"]');
+        const eventClick = new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window
+          });
+          elementSubmit.dispatchEvent(eventClick);
         // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true });
         // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
         // formElement.dispatchEvent(submitEvent); 
