@@ -114,8 +114,6 @@ const startRequest1C = async (chatId) => {
             console.log('Элементы таблицы не найденны');
         }
 
-        await bot.sendMessage(chatId, formatedData.join('\n'));
-
     } catch (e) {
         console.log(e);
     }
