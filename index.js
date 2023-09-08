@@ -89,10 +89,10 @@ const startRequest1C = async (chatId) => {
         
         // Отправляем информацию пользователю в телеграмм
         
-        const lines = updatedResponse.data.split('<br />');
-        const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
+        // const lines = updatedResponse.data.split('<br />');
+        // const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
         
-        await bot.sendMessage(chatId, formatedData.join('\n'));
+        // await bot.sendMessage(chatId, formatedData.join('\n'));
         return bot.sendMessage(chatId, updatedResponse.data);
 
     } catch (e) {
