@@ -77,16 +77,21 @@ const startRequest1C = async (chatId) => {
         // const formElement = document.querySelector('form');
         
         const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)");
+        console.log('Поле ввода артикула найдено');
         inputElement.value = vendorCode;
+        console.log('Артикул введен');
         const elementSubmit = document.querySelector("body > form > input[type=submit]:nth-child(3)");
+        console.log('Кнопка "Получить" найдена');
+
         // const eventClick = new MouseEvent("click", {
         //     bubbles: true,
         //     cancelable: true,
         //     view: window
         //   });
         //   elementSubmit.dispatchEvent(eventClick);
-        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true });
-        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
+
+        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод click
         // formElement.dispatchEvent(submitEvent); 
         elementSubmit.dispatchEvent(submitEvent); 
 
@@ -98,9 +103,10 @@ const startRequest1C = async (chatId) => {
         const updatedResponse = await axios.get(request);
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
+
         // const tableElement = updatedDocument.querySelectorAll('body table')[2];  // пример пути
-        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь
-        const tableElement = updatedDocument.querySelector("body > form");  
+        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь
+        // const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь тела
         console.log(tableElement);
         
 
