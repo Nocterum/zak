@@ -79,7 +79,7 @@ const startRequest1C = async (chatId) => {
         submitElement.click();
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
         // Получаем ответ после обработки запроса
         const updatedResponse = await axios.get(request);
