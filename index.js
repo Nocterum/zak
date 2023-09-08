@@ -87,7 +87,7 @@ const startRequest1C = async (chatId) => {
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
 
-        const tableElement = updatedDocument.querySelector('table');
+        const tableElement = updatedDocument.querySelector('table tbody');
 
         if (tableElement) {
 
