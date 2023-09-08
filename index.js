@@ -73,10 +73,10 @@ const startRequest1C = async (chatId) => {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
+        const formElement = document.querySelector('form');
         const inputElement = document.querySelector('input[name="VendorCode"]');
         inputElement.value = vendorCode;
-        const submitElement = document.querySelector('input[name="submit"]');
-        submitElement.click();
+        formElement.submit();
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 1000));
