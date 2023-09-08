@@ -65,14 +65,18 @@ const startRequest1C = async (chatId) => {
     try {
         
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const vendorCode = 'PLGUM5';
 
-        const axiosPost = await axios.post(request, {
-            Артикул: 'PLGUM5'
-        });
-        const data = axiosPost.data;
-        const response = await axios.get(request);
+        const response = await axios.post(request, { VendorCode: vendorCode });
+
+        const lines = response.data.split('<br />');
+        const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
+
+        bot.sendMessage(chatId, formatedData.join('\n'));
+
+        // const response = await axios.get(request);
         
-        console.log(data, response.data);
+        console.log(response.data);
         // await bot.sendMessage(chatId, '');
         // const $ = cheerio.load(response.data);
         // const results = $('');
