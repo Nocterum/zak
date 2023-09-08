@@ -74,7 +74,7 @@ const startRequest1C = async (chatId) => {
         const window = dom.window;
         const document = dom.window.document;
 
-        // const formElement = document.querySelector('form');
+        const formElement = document.querySelector("body > form")
         
         const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)");
         console.log('Поле ввода артикула найдено');
@@ -83,18 +83,9 @@ const startRequest1C = async (chatId) => {
         const elementSubmit = document.querySelector("body > form > input[type=submit]:nth-child(3)");
         console.log('Кнопка "Получить" найдена');
 
-        // const eventClick = new MouseEvent("click", {
-        //     bubbles: true,
-        //     cancelable: true,
-        //     view: window
-        //   });
-        //   elementSubmit.dispatchEvent(eventClick);
-
         const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод click
-        // formElement.dispatchEvent(submitEvent); 
-        elementSubmit.dispatchEvent(submitEvent); 
-
+        formElement.dispatchEvent(submitEvent); 
+        // elementSubmit.dispatchEvent(submitEvent); 
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 10000));
@@ -104,12 +95,9 @@ const startRequest1C = async (chatId) => {
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
 
-        // const tableElement = updatedDocument.querySelectorAll('body table')[2];  // пример пути
         const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь
-        // const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь тела
         console.log(tableElement);
         
-
         if (tableElement) {
 
             const rows = tableElement.querySelectorAll('tr');
@@ -134,7 +122,7 @@ const startRequest1C = async (chatId) => {
                 console.log('Не найденны строки в таблице');
             }
         } else {
-            console.log('Элементы таблицы не найдены');
+            console.log('Элемент таблицы не найден');
         }
 
     } catch (e) {
