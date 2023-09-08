@@ -80,12 +80,9 @@ const startRequest1C = async (chatId) => {
         console.log('Поле ввода артикула найдено');
         inputElement.value = vendorCode;
         console.log('Артикул ' + vendorCode + ' введен');
-        const elementSubmit = document.querySelector("body > form > input[type=submit]:nth-child(3)");
-        console.log('Кнопка "Получить" найдена');
 
         const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
         formElement.dispatchEvent(submitEvent); 
-        // elementSubmit.dispatchEvent(submitEvent); 
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 10000));
@@ -95,7 +92,9 @@ const startRequest1C = async (chatId) => {
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
 
-        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь
+        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        const tableElement = updatedDocument.querySelector(); // Истинный путь к таблице
+        
         console.log(tableElement);
         
         if (tableElement) {
