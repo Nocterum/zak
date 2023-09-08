@@ -99,7 +99,7 @@ const startRequest1C = async (chatId) => {
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
         // const tableElement = updatedDocument.querySelectorAll('body table')[2];
-        const tableElement = updatedDocument.querySelectorAll('body');
+        const tableElement = updatedDocument.querySelector('body');
         console.log(tableElement);
         
 
