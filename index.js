@@ -98,11 +98,13 @@ const startRequest1C = async (chatId) => {
 
                     const cells = row.querySelectorAll('td');
                     return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+
                 });
 
                 if (formatedData.length > 0) {
 
-                    await bot.sendMessage(chatId, formatedData.join('\n'));
+                    // await bot.sendMessage(chatId, formatedData.join('\n'));
+                    console.log (formatedData.join('\n'));
 
                 } else {
                     console.log('В таблице нет данных');
@@ -115,7 +117,7 @@ const startRequest1C = async (chatId) => {
         }
 
     } catch (e) {
-        console.log(e);
+        console.log('Ошибка выполенния кода');
     }
 }
 
