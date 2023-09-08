@@ -91,21 +91,27 @@ const startRequest1C = async (chatId) => {
         const updatedResponse = await axios.get(request);
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
-        
+
         // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        const tableElement = updatedDocument.querySelector("body > form > input[type=text]:nth-child(1)"); // Истинный путь к таблице
+        const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь к таблице
         
         console.log(tableElement);
         
         if (tableElement) {
 
-            const rows = tableElement.querySelectorAll('tr');
+            // const rows = tableElement.querySelectorAll('tr');
+            const rows = tableElement.querySelectorAll('input');//
+            console.log(rows);//
+
 
             if (rows.length > 0) {
 
                 const formatedData = Array.from(rows).map(row => {
 
-                    const cells = row.querySelectorAll('td');
+                    // const cells = row.querySelectorAll('td');
+                    const cells = row.querySelectorAll('type');//
+                    console.log(rows);//
+
                     return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
 
                 });
