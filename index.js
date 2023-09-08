@@ -71,7 +71,6 @@ const startRequest1C = async (chatId) => {
         const response = await axios.get(request);
 
         const dom = new JSDOM(response.data);
-        const window = dom.window;
         const document = dom.window.document;
 
         const formElement = document.querySelector("body > form")
@@ -81,8 +80,9 @@ const startRequest1C = async (chatId) => {
         inputElement.value = vendorCode;
         console.log('Артикул ' + vendorCode + ' введен');
 
-        const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        formElement.dispatchEvent(submitEvent); 
+        formElement.submit();
+        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        // formElement.dispatchEvent(submitEvent); 
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 10000));
@@ -92,8 +92,8 @@ const startRequest1C = async (chatId) => {
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
 
-        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь к таблице
+        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        // const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь к таблице
         
         console.log(tableElement);
         
