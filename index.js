@@ -93,7 +93,7 @@ const startRequest1C = async (chatId) => {
         const updatedDocument = updatedDom.window.document;
 
         // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        const tableElement = updatedDocument.querySelector(); // Истинный путь к таблице
+        const tableElement = updatedDocument.querySelector("body > form"); // Истинный путь к таблице
         
         console.log(tableElement);
         
