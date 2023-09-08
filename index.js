@@ -76,9 +76,9 @@ const startRequest1C = async (chatId) => {
 
         // const formElement = document.querySelector('form');
         
-        const inputElement = document.querySelector('input[name="VendorCode"]');
+        const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)");
         inputElement.value = vendorCode;
-        const elementSubmit = document.querySelector('input[type="submit"][name="submit"]');
+        const elementSubmit = document.querySelector("body > form > input[type=submit]:nth-child(3)");
         // const eventClick = new MouseEvent("click", {
         //     bubbles: true,
         //     cancelable: true,
