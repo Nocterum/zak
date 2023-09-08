@@ -86,7 +86,7 @@ const startRequest1C = async (chatId) => {
         const updatedResponse = await axios.get(request);
         const updatedDom = new JSDOM(updatedResponse.data);
         const updatedDocument = updatedDom.window.document;
-
+        console.log(updatedDom);
         const tableElement = updatedDocument.querySelector('table tbody');
 
         if (tableElement) {
