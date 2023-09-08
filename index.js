@@ -64,18 +64,18 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId) => {
     try {
         
-        const search = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const request = 'http://post.manders.ru:10001/QuantityProduct.php';
 
-        
-        const axiosPost = await axios.post(search, {
+        const axiosPost = await axios.post(request, {
             Артикул: 'PLGUM5'
         });
+        const data = axiosPost.data;
+        const response = await axios.get(request);
         
-        const response = await axios.get(search);
-        
-        await bot.sendmessage(chatId, '');
-        const $ = cheerio.load(response.data);
-        const results = $('');
+        console.log(data, response.data);
+        // await bot.sendMessage(chatId, '');
+        // const $ = cheerio.load(response.data);
+        // const results = $('');
 
     } catch (e) {
         console.log(e);
