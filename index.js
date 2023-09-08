@@ -87,13 +87,33 @@ const startRequest1C = async (chatId) => {
         const updatedDocument = updatedDom.window.document;
 
         const tableElement = updatedDocument.querySelector('table');
-        const rows = tableElement.querySelectorAll('tr');
 
-        const formatedData = Array.from(rows).map(row => {
-             const cells = row.querySelectorAll('td');
-             return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
-        });
-        
+        if (tableElement) {
+
+            const rows = tableElement.querySelectorAll('tr');
+
+            if (rows.length > 0) {
+
+                const formatedData = Array.from(rows).map(row => {
+
+                    const cells = row.querySelectorAll('td');
+                    return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+                });
+
+                if (formatedData.length > 0) {
+
+                    await bot.sendMessage(chatId, formatedData.join('\n'));
+
+                } else {
+                    console.log('В таблице нет данных');
+                }
+            } else {
+                console.log('Не найденны строки в таблице');
+            }
+        } else {
+            console.log('Элементы таблицы не найденны');
+        }
+
         await bot.sendMessage(chatId, formatedData.join('\n'));
 
     } catch (e) {
