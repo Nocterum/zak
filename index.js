@@ -4,6 +4,7 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
+const { JSDOM } = require('jsdom');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -64,22 +65,35 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId) => {
     try {
         
-        const request = 'http://post.manders.ru:10001/QuantityProduct.php';
         const vendorCode = 'PLGUM5';
 
-        const response = await axios.post(request, { VendorCode: vendorCode, submit: true });
+        const request = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const response = await axios.get(request);
 
-        const lines = response.data.split('<br />');
-        const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
-
-        bot.sendMessage(chatId, formatedData.join('\n'));
-
-        // const response = await axios.get(request);
+        const dom = new JSDOM(response.data);
+        const document = dom.window.document;
         
-        console.log(response.data);
-        // await bot.sendMessage(chatId, '');
-        // const $ = cheerio.load(response.data);
-        // const results = $('');
+        const inputElement = document.querySelector('input[name="VendorCode"]');
+        inputElement.value = vendorCode;
+        
+        const submitElement = document.querySelector('input[name="submit"]');
+        submitElement.click();
+        
+        // Ждем некоторое время, чтобы страница успела обработать запрос
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Получаем ответ после обработки запроса
+        const updatedResponse = await axios.get(request);
+        
+        console.log(updatedResponse.data);
+        
+        // Отправляем информацию пользователю в телеграмм
+        
+        const lines = updatedResponse.data.split('<br />');
+        const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
+        
+        await bot.sendMessage(chatId, formatedData.join('\n'));
+        return bot.sendMessage(chatId, updatedResponse.data);
 
     } catch (e) {
         console.log(e);
