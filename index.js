@@ -74,11 +74,15 @@ const startRequest1C = async (chatId) => {
         const document = dom.window.document;
 
         const formElement = document.querySelector('form');
+        
         const inputElement = document.querySelector('input[name="VendorCode"]');
         inputElement.value = vendorCode;
+        const elementsubmit = document.querySelector('input[type="submit"][name="submit"]');
+        const event = new Event("click");
+        elementsubmit.dispatchEvent(event);
         // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true });
-        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
-        formElement.dispatchEvent(submitEvent); // Используем метод dispatchEvent для отправки события submit
+        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true });
+        // formElement.dispatchEvent(submitEvent); 
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 5000));
