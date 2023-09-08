@@ -103,8 +103,7 @@ const startRequest1C = async (chatId) => {
 
                 if (formatedData.length > 0) {
 
-                    // await bot.sendMessage(chatId, formatedData.join('\n'));
-                    console.log (formatedData.join('\n'));
+                    return bot.sendMessage(chatId, formatedData.join('\n'));
 
                 } else {
                     console.log('В таблице нет данных');
@@ -1392,11 +1391,7 @@ bot.on('callback_query', async msg => {
     //добавить в заказ
     if(data === '/request1C') {
         lc = null;
-        return bot.sendMessage(
-            chatId, 
-            startRequest1C(chatId), 
-            mainMenuOptions
-        );
+        await startRequest1C(chatId); 
     }
 
 
