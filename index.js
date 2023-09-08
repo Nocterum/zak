@@ -67,7 +67,7 @@ const startRequest1C = async (chatId) => {
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
         const vendorCode = 'PLGUM5';
 
-        const response = await axios.post(request, { VendorCode: vendorCode, submit: 'true' });
+        const response = await axios.post(request, { VendorCode: vendorCode, submit: true });
 
         const lines = response.data.split('<br />');
         const formatedData = lines.map(line => line.replace(/<\/?[^>]+(>|$)/g, '').trim());
