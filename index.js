@@ -73,16 +73,17 @@ const startRequest1C = async (chatId) => {
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
-        const formElement = document.querySelector("body > form")
+        const formElement = document.querySelector("body > form");  // ссылка на форму отправки
         
-        const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)");
+        const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
         console.log('Поле ввода артикула найдено');
         inputElement.value = vendorCode;
         console.log('Артикул ' + vendorCode + ' введен');
 
-        formElement.submit();
-        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        // formElement.dispatchEvent(submitEvent); 
+        // formElement.submit();
+        const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        formElement.dispatchEvent(submitEvent); 
+        await formElement.requestSubmit();
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 10000));
