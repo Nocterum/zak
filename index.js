@@ -70,69 +70,71 @@ const startRequest1C = async (chatId) => {
 
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
 
-        const formData = new FormData();
-        formData.append('VendorCode', vendorCode);
+        // const formData = new FormData();
+        // formData.append('VendorCode', vendorCode);
         
-        await axios.post(request, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        // await axios.post(request, formData, {
+        //     headers: { 'Content-Type': 'multipart/form-data' }
+        // });
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await axios.get(request);
 
-        console.log(response.data);
+        // console.log(response.data);
 
 
-        // const dom = new JSDOM(response.data);
-        // const document = dom.window.document;
+        const dom = new JSDOM(response.data);
+        const document = dom.window.document;
 
-        // const formElement = document.querySelector("body > form");  // ссылка на форму отправки
+        const formElement = document.querySelector("body > form");  // ссылка на форму отправки
         
-        // const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
-        // console.log('Поле ввода артикула найдено');
-        // inputElement.value = vendorCode;
-        // console.log('Артикул ' + vendorCode + ' введен');
+        const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
+        console.log('Поле ввода артикула найдено');
+        inputElement.value = vendorCode;
+        console.log('Артикул ' + vendorCode + ' введен');
 
-        // // formElement.submit();
-        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        // formElement.dispatchEvent(submitEvent); 
-        // await formElement.requestSubmit();
+        // formElement.submit();
+        const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        formElement.dispatchEvent(submitEvent); 
+        await formElement.requestSubmit();
 
-        // // Ждем некоторое время, чтобы страница успела обработать запрос
-        // await new Promise(resolve => setTimeout(resolve, 10000));
+        // Ждем некоторое время, чтобы страница успела обработать запрос
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
-        // // Получаем ответ после обработки запроса
-        // const updatedResponse = await axios.get(request);
-        // const updatedDom = new JSDOM(updatedResponse.data);
-        // const updatedDocument = updatedDom.window.document;
+        // Получаем ответ после обработки запроса
+        const updatedResponse = await axios.get(request);
+        const updatedDom = new JSDOM(updatedResponse.data);
+        const updatedDocument = updatedDom.window.document;
 
-        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        const responseUpdate = await axios.get(request);
+
+        console.log(responseUpdate.data);
+        console.log(tableElement);
         
-        // console.log(tableElement);
-        
-        // if (tableElement) {
+        if (tableElement) {
 
-        //     const rows = tableElement.querySelectorAll('tr');
+            const rows = tableElement.querySelectorAll('tr');
 
 
-        //     if (rows.length > 0) {
+            if (rows.length > 0) {
 
-        //         const formatedData = Array.from(rows).map(row => {
-        //             const cells = row.querySelectorAll('td');
-        //             return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
-        //         });
+                const formatedData = Array.from(rows).map(row => {
+                    const cells = row.querySelectorAll('td');
+                    return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+                });
 
-        //         if (formatedData.length > 0) {
-        //             return bot.sendMessage(chatId, formatedData.join('\n'));
-        //         } else {
-        //             console.log('В таблице нет данных');
-        //         }
-        //     } else {
-        //         console.log('Не найденны строки в таблице');
-        //     }
-        // } else {
-        //     console.log('Элемент таблицы не найден');
-        // }
+                if (formatedData.length > 0) {
+                    return bot.sendMessage(chatId, formatedData.join('\n'));
+                } else {
+                    console.log('В таблице нет данных');
+                }
+            } else {
+                console.log('Не найденны строки в таблице');
+            }
+        } else {
+            console.log('Элемент таблицы не найден');
+        }
 
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
