@@ -6,6 +6,7 @@ const fs = require('fs');
 const ExcelJS = require('exceljs');
 const { JSDOM } = require('jsdom'); //
 const FormData = require('form-data');  //
+const tough = require('tough-cookie');  //
 const axiosCookieJarSupport = require('axios-cookiejar-support').default;   //
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
