@@ -72,7 +72,6 @@ const startRequest1C = async (chatId) => {
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
         const cookieJar = new tough.CookieJar();
-        axiosCookieJarSupport(axios);
     
         const response = await axios.request({
           method: 'post',
@@ -82,17 +81,6 @@ const startRequest1C = async (chatId) => {
           withCredentials: true,
         });
         console.log(response.data);
-    
-        await promisify(setTimeout)(2000);
-    
-        const response1 = await axios.request({
-          method: 'get',
-          url,
-          jar: cookieJar,
-          withCredentials: true,
-        });
-        console.log(response1.data);
-
 
         // const formData = new FormData();
         // formData.append('VendorCode', vendorCode);
