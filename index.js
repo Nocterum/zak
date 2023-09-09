@@ -68,7 +68,14 @@ const startRequest1C = async (chatId) => {
 
         const vendorCode = 'PLGUM5';
 
-        const request = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const url = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const config = {
+            method: 'post',
+            url: 'http://post.manders.ru:10001/QuantityProduct.php',
+            headers: {'VendorCode': vendorCode} ,
+        }
+        const response = await axios(config);
+        console.log(response.data);
 
         // const formData = new FormData();
         // formData.append('VendorCode', vendorCode);
@@ -78,38 +85,37 @@ const startRequest1C = async (chatId) => {
         // });
 
         // await new Promise(resolve => setTimeout(resolve, 2000));
-        const response = await axios.get(request);
-
-        // console.log(response.data);
 
 
-        const dom = new JSDOM(response.data);
-        const document = dom.window.document;
 
-        const formElement = document.querySelector("body > form");  // ссылка на форму отправки
+
+        // const dom = new JSDOM(response.data);
+        // const document = dom.window.document;
+
+        // const formElement = document.querySelector("body > form");  // ссылка на форму отправки
         
-        const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
-        console.log('Поле ввода артикула найдено');
-        inputElement.value = vendorCode;
-        console.log('Артикул ' + vendorCode + ' введен');
+        // const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
+        // console.log('Поле ввода артикула найдено');
+        // inputElement.value = vendorCode;
+        // console.log('Артикул ' + vendorCode + ' введен');
 
-        // formElement.submit();
-        const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        formElement.dispatchEvent(submitEvent); 
+        // // formElement.submit();
+        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
+        // formElement.dispatchEvent(submitEvent); 
 
-        // Ждем некоторое время, чтобы страница успела обработать запрос
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        // // Ждем некоторое время, чтобы страница успела обработать запрос
+        // await new Promise(resolve => setTimeout(resolve, 10000));
 
-        // Получаем ответ после обработки запроса
-        const updatedResponse = await axios.get(request);
-        const updatedDom = new JSDOM(updatedResponse.data);
-        const updatedDocument = updatedDom.window.document;
+        // // Получаем ответ после обработки запроса
+        // const updatedResponse = await axios.get(request);
+        // const updatedDom = new JSDOM(updatedResponse.data);
+        // const updatedDocument = updatedDom.window.document;
 
-        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        const responseUpdate = await axios.get(request);
+        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        // const responseUpdate = await axios.get(request);
 
-        console.log(responseUpdate.data);
-        console.log(tableElement);
+        // console.log(responseUpdate.data);
+        // console.log(tableElement);
         
         if (tableElement) {
 
