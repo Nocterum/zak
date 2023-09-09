@@ -74,10 +74,8 @@ const startRequest1C = async (chatId) => {
         
         await axios.post(request, formData);
 
-        setTimeout(async () => {
-            const response = await axios.get(request);
-            console.log(response.data);
-        }, 2000);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const response = await axios.get(request);
 
         console.log(response.data);
 
