@@ -96,7 +96,6 @@ const startRequest1C = async (chatId) => {
         // formElement.submit();
         const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
         formElement.dispatchEvent(submitEvent); 
-        await formElement.requestSubmit();
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
         await new Promise(resolve => setTimeout(resolve, 10000));
