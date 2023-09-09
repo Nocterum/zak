@@ -74,7 +74,7 @@ const startRequest1C = async (chatId) => {
         formData.append('VendorCode', vendorCode, SubmitEvent());
         
         await axios.post(request, formData, {
-            headers: formData.getHeaders()
+            headers: { 'Content-Type': 'multipart/form-data' }
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
