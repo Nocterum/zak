@@ -76,8 +76,11 @@ const startRequest1C = async (chatId) => {
         }
         const response = await axios(config);
         console.log(response.data);
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
         const response1 = await axios.get(url);
-        console.log(url.data);
+        console.log(response1.data);
 
 
         // const formData = new FormData();
