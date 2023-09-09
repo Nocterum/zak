@@ -69,23 +69,28 @@ const startRequest1C = async (chatId) => {
     try {
 
         const vendorCode = 'PLGUM5';
-
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
-        axiosCookieJarSupport(axios);
 
         const cookieJar = new tough.CookieJar();
-
-        const response = await axios.post(url, {
-            VendorCode: vendorCode 
-        }, {
-            jar: cookieJar,
-            withCredentials: true
+        axiosCookieJarSupport(axios);
+    
+        const response = await axios.request({
+          method: 'post',
+          url,
+          data: { VendorCode: vendorCode },
+          jar: cookieJar,
+          withCredentials: true,
         });
         console.log(response.data);
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        const response1 = await axios.get(url);
+    
+        await promisify(setTimeout)(2000);
+    
+        const response1 = await axios.request({
+          method: 'get',
+          url,
+          jar: cookieJar,
+          withCredentials: true,
+        });
         console.log(response1.data);
 
 
