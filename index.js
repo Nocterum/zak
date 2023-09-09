@@ -4,8 +4,9 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
-const { JSDOM } = require('jsdom');
-const FormData = require('form-data');
+const { JSDOM } = require('jsdom'); //
+const FormData = require('form-data');  //
+const axiosCookieJarSupport = require('axios-cookiejar-support').default;   //
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -69,13 +70,16 @@ const startRequest1C = async (chatId) => {
         const vendorCode = 'PLGUM5';
 
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
-        const config = {
-            method: 'post',
-            url: 'http://post.manders.ru:10001/QuantityProduct.php',
-            VendorCode: vendorCode,
-            submit: 'Получить',
-        }
-        const response = await axios(config);
+        axiosCookieJarSupport(axios);
+
+        const cookieJar = new tough.CookieJar();
+
+        const response = await axios.post(url, {
+            VendorCode: vendorCode 
+        }, {
+            jar: cookieJar,
+            withCredentials: true
+        });
         console.log(response.data);
 
         await new Promise(resolve => setTimeout(resolve, 2000));
