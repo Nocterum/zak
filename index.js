@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
 const { JSDOM } = require('jsdom');
+const FormData = require('form-data');
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot = new TelegramApi(token, {
     polling: {
@@ -72,7 +73,9 @@ const startRequest1C = async (chatId) => {
         const formData = new FormData();
         formData.append('VendorCode', vendorCode);
         
-        await axios.post(request, formData);
+        await axios.post(request, formData, {
+            headers: formData.getHeaders()
+        });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         const response = await axios.get(request);
