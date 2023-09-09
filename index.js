@@ -71,7 +71,7 @@ const startRequest1C = async (chatId) => {
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
 
         const formData = new FormData();
-        formData.append('VendorCode', vendorCode, SubmitEvent());
+        formData.append('VendorCode', vendorCode);
         
         await axios.post(request, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
