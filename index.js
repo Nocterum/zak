@@ -76,6 +76,9 @@ const startRequest1C = async (chatId) => {
         }
         const response = await axios(config);
         console.log(response.data);
+        const response1 = await axios.get(url);
+        console.log(url.data);
+
 
         // const formData = new FormData();
         // formData.append('VendorCode', vendorCode);
