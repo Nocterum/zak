@@ -68,8 +68,8 @@ const startRequest1C = async (chatId) => {
         const vendorCode = 'PLGUM5';
 
         const request = 'http://post.manders.ru:10001/QuantityProduct.php';
-        
-        const formData = new URLSearchParams();
+
+        const formData = new FormData();
         formData.append('VendorCode', vendorCode);
         
         await axios.post(request, formData);
