@@ -73,7 +73,7 @@ const startRequest1C = async (chatId) => {
             method: 'post',
             url: 'http://post.manders.ru:10001/QuantityProduct.php',
             VendorCode: vendorCode,
-            submit: 'submit',
+            submit: 'Получить',
         }
         const response = await axios(config);
         console.log(response.data);
