@@ -73,8 +73,7 @@ const startRequest1C = async (chatId) => {
 
         const cookieJar = new tough.CookieJar();
     
-        const response = await axios.request({
-          method: 'post',
+        const response = await axios.post({
           url,
           data: { VendorCode: vendorCode },
           jar: cookieJar,
