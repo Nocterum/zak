@@ -90,6 +90,8 @@ const startRequest1C = async (chatId) => {
             VendorCode: vendorCode,
         });
 
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
         console.log(response.data);
 
         // const formData = new FormData();
