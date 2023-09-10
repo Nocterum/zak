@@ -1515,11 +1515,11 @@ bot.on('callback_query', async msg => {
         }
     }
 
-    } catch (err) {      
+    } catch (err) {    
+        console.log(err);  
         return bot.sendMessage(
             chatId, 
-            'Ошибка в исполнении кода прослушивателя колбэков', 
-            err
+            'Ошибка в исполнении кода прослушивателя колбэков',
         );
     }
 
