@@ -77,7 +77,11 @@ const startRequest1C = async (chatId) => {
             withCredentials: true,
         });
 
-        const response = await axiosInstance.request(url, `VendorCode=${vendorCode}`);
+        const response = await axiosInstance.request({
+            url: url,
+            method: 'POST',
+            data: `VendorCode=${vendorCode}`
+        });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
         const responseUpdate = await axiosInstance.get(url);
