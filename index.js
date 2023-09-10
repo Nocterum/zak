@@ -1296,50 +1296,49 @@ bot.on('callback_query', async msg => {
     if (data === '/checkVendor') {
         lc = '/enterVC';
         if (user.vendor !== null) {
+
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+
+            if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
+                formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
+                formatedUserVendor.includes('HUGGE') ||
+                formatedUserVendor.includes('MILASSA') ||
+                formatedUserVendor.includes('RACH MARBURG') ||
+                formatedUserVendor.includes('АВТ') ||
+                formatedUserVendor.includes('БАУТЕКС') ||
+                formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+                formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
+                formatedUserVendor.includes('ДЕКОРРУС') ||
+                formatedUserVendor.includes('КОНТРАКТ ПЛЮС') ||
+                formatedUserVendor.includes('ЛЕВАНТИН') ||
+                formatedUserVendor.includes('ПРОТОС') ||
+                formatedUserVendor.includes('ОДИЗАЙН') ||
+                formatedUserVendor.includes('РОБЕРТС') ||
+                formatedUserVendor.includes('РУАЛЬЯНС') ||
+                formatedUserVendor.includes('ЛОЙМИНА') ||
+                formatedUserVendor.includes('ЮГАРТ')
+            ) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Так как искомый вами бренд <b>${user.brand}</b>, я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                    {parse_mode: 'HTML'}
+                );
+            } else if (formatedUserVendor.includes('ОПУС')) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                    {parse_mode: 'HTML'}
+                );
+            } else {
+                return bot.sendMessage(
+                    chatId, 
+                    `К сожалению, я еще не знаю как работать с поставщиком бренда<b>${user.brand}</b>.\nНо я могу подсказать остатки с сайта поставщика ОПУС, а так же, могу отправить запрос многим российским поставщикам о наличии, сроках и резервах.`,
+                    {parse_mode: 'HTML'}
+                );
+            }
         } else {
             return bot.sendMessage(
-                chatId, `Бренд не найден, соответсвие брендов в эксель файлах:\n"Каталоги  распределение в салоны 26.09.19"\n"Текстиль Каталоги  распределение в салоны"\nc эксель файлом "Список прайслистов".
-                `
-            );
-        }
-
-
-        if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
-            formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
-            formatedUserVendor.includes('HUGGE') ||
-            formatedUserVendor.includes('MILASSA') ||
-            formatedUserVendor.includes('RACH MARBURG') ||
-            formatedUserVendor.includes('АВТ') ||
-            formatedUserVendor.includes('БАУТЕКС') ||
-            formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-            formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-            formatedUserVendor.includes('ДЕКОРРУС') ||
-            formatedUserVendor.includes('КОНТРАКТ ПЛЮС') ||
-            formatedUserVendor.includes('ЛЕВАНТИН') ||
-            formatedUserVendor.includes('ПРОТОС') ||
-            formatedUserVendor.includes('ОДИЗАЙН') ||
-            formatedUserVendor.includes('РОБЕРТС') ||
-            formatedUserVendor.includes('РУАЛЬЯНС') ||
-            formatedUserVendor.includes('ЛОЙМИНА') ||
-            formatedUserVendor.includes('ЮГАРТ')
-        ) {
-            return bot.sendMessage(
-                chatId, 
-                `Так как искомый вами бренд <b>${user.brand}</b>, я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
-                {parse_mode: 'HTML'}
-            );
-        } else if (formatedUserVendor.includes('ОПУС')) {
-            return bot.sendMessage(
-                chatId, 
-                `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
-                {parse_mode: 'HTML'}
-            );
-        } else {
-            return bot.sendMessage(
-                chatId, 
-                `К сожалению, я еще не знаю как работать с поставщиком бренда<b>${user.brand}</b>.\nНо я могу подсказать остатки с сайта поставщика ОПУС, а так же, могу отправить запрос многим российским поставщикам о наличии, сроках и резервах.`,
-                {parse_mode: 'HTML'}
+                chatId, `Бренд не найден, соответсвие брендов в эксель файлах:\n"Каталоги  распределение в салоны 26.09.19"\n"Текстиль Каталоги  распределение в салоны"\nc эксель файлом "Список прайслистов".`
             );
         }
             
