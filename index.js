@@ -804,12 +804,13 @@ async function findPricelistLink(chatId, cValue) {
 
             if (!foundMatchPricelist) {
                 user.update({vendor: null});
+                vendor = user.vendor;
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
             return {
                 messagePrice,
-                user
+                vendor
             };
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -1038,7 +1039,7 @@ bot.on('message', async msg => {
             await user.update({brand: text.toUpperCase()});
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
-            if (user.vendor === null) {
+            if (vendor === null) {
                 return bot.sendMessage(
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
