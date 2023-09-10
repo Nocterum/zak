@@ -975,6 +975,16 @@ bot.on('message', async msg => {
         };
 
         
+        //главное меню 
+        if (data === '/mainmenu') {
+            lc = null;
+            return bot.sendMessage(
+                chatId, 
+                `Вы в главном меню, ${user.nickname}\nВаш персональный id: ${chatId}`,
+                mainMenuOptions
+            ); 
+        }
+
         //Записываем e-mail в ячейку БД
         if (lc === '/editEmail') {
             await user.update({email: text.toLowerCase()});
