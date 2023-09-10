@@ -20,7 +20,7 @@ const bot = new TelegramApi(token, {
 });
 
 //ИМПОРТЫ
-const {mainMenuOptions, gameOptions, againOptions, resetOptions,
+const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
      workOptions, work1Options, checkVendorOptions, startFindOptions, startFind2Options, 
      beginWorkOptions, beginWork2Options, mainMenuReturnOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
@@ -1097,7 +1097,8 @@ bot.on('message', async msg => {
         if (text === '/infowork') {
             return bot.sendMessage(
                 chatId, 
-                `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`
+                `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
+                resetInfoWorkOptions
             );
         }
 
@@ -1277,6 +1278,18 @@ bot.on('callback_query', async msg => {
     //изменить e-mail
     if (data === '/editEmail') {
         return editEmail(chatId);
+    }
+
+    //сброс искомых параметров
+    if (data === '/resetInfoWork') {
+        await user.update({catalog: null});
+        await user.update({brand: null});
+        await user.update({vendorCode: null});
+        await user.update({reserveNumber: null});
+        return bot.sendMessage(
+            chatId,
+            `Искомые параметры сброшенныю.`
+        );
     }
 
     //Проверяем поставщика по бренду

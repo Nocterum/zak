@@ -150,6 +150,13 @@ module.exports = {
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
-    }
+    },
 
+    resetInfoWorkOptions: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Сбросить параметры', callback_data: '/resetInfoWork'}],
+            ]
+        })
+    },
 }
