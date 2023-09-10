@@ -72,6 +72,10 @@ const startRequest1C = async (chatId) => {
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
         const cookieJar = new tough.CookieJar({
+            key: 'keyBotManders',
+            value: 'ValueBotManders',
+            domain: 'http://post.manders.ru:10001',
+            path: '/QuantityProduct.php'
         });
 
         // Создаем экземпляр axios с настройками cookie
