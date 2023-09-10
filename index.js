@@ -1436,7 +1436,7 @@ bot.on('callback_query', async msg => {
     //добавить в заказ
     if(data === '/request1C') {
         lc = null;
-        await bot.sendMessage(chatId, sorry);
+        await bot.sendMessage(chatId, `Извините, я этому пока ещё учусь😅`, mainMenuReturnOptions);
         return startRequest1C(chatId); 
     }
 
