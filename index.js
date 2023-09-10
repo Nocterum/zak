@@ -71,10 +71,10 @@ const startRequest1C = async (chatId) => {
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
 
-        // Создаем экземпляр axios с настройками cookie
-        const axiosInstance = axios.create({
-            withCredentials: true,
-        });
+        // // Создаем экземпляр axios с настройками cookie
+        // const axiosInstance = axios.create({
+        //     withCredentials: true,
+        // });
 
         const response = await axiosInstance.request({
             url: url,
@@ -82,63 +82,66 @@ const startRequest1C = async (chatId) => {
             data: `VendorCode=${vendorCode}`
         });
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // await new Promise(resolve => setTimeout(resolve, 2000));
 
-        console.log(response.data);
+        // console.log(response.data);
 
 
 
-        // const dom = new JSDOM(response.data);
-        // const document = dom.window.document;
+        const dom = new JSDOM(response.data);
+        const documentUrl = dom.window.document;
 
-        // const formElement = document.querySelector("body > form");  // ссылка на форму отправки
+        const formElement = documentUrl.querySelector("body > form");  // ссылка на форму отправки
         
-        // const inputElement = document.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
-        // console.log('Поле ввода артикула найдено');
-        // inputElement.value = vendorCode;
-        // console.log('Артикул ' + vendorCode + ' введен');
+        const inputElement = documentUrl.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
+        console.log('Поле ввода артикула найдено');
+        inputElement.value = vendorCode;
+        console.log('Артикул ' + vendorCode + ' введен');
 
-        // // formElement.submit();
-        // const submitEvent = new dom.window.Event('submit', { bubbles: true, cancelable: true }); // метод submit
-        // formElement.dispatchEvent(submitEvent); 
+        // formElement.submit();
+        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод submit
+        if (formElement !== null) {
 
-        // // Ждем некоторое время, чтобы страница успела обработать запрос
-        // await new Promise(resolve => setTimeout(resolve, 10000));
+            formElement.dispatchEvent(submitEvent); 
+        }
 
-        // // Получаем ответ после обработки запроса
-        // const updatedResponse = await axios.get(request);
-        // const updatedDom = new JSDOM(updatedResponse.data);
-        // const updatedDocument = updatedDom.window.document;
+        // Ждем некоторое время, чтобы страница успела обработать запрос
+        await new Promise(resolve => setTimeout(resolve, 10000));
 
-        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        // const responseUpdate = await axios.get(request);
+        // Получаем ответ после обработки запроса
+        const updatedResponse = await axios.get(url);
+        const updatedDom = new JSDOM(updatedResponse.data);
+        const updatedDocument = updatedDom.window.document;
 
-        // console.log(responseUpdate.data);
-        // console.log(tableElement);
+        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        const responseUpdate = await axios.get(url);
+
+        console.log(responseUpdate.data);
+        console.log(tableElement);
         
-//         if (tableElement) {
+        if (tableElement) {
 
-//             const rows = tableElement.querySelectorAll('tr');
+            const rows = tableElement.querySelectorAll('tr');
 
 
-//             if (rows.length > 0) {
+            if (rows.length > 0) {
 
-//                 const formatedData = Array.from(rows).map(row => {
-//                     const cells = row.querySelectorAll('td');
-//                     return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
-//                 });
+                const formatedData = Array.from(rows).map(row => {
+                    const cells = row.querySelectorAll('td');
+                    return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+                });
 
-//                 if (formatedData.length > 0) {
-//                     return bot.sendMessage(chatId, formatedData.join('\n'));
-//                 } else {
-//                     console.log('В таблице нет данных');
-//                 }
-//             } else {
-//                 console.log('Не найденны строки в таблице');
-//             }
-//         } else {
-//             console.log('Элемент таблицы не найден');
-//         }
+                if (formatedData.length > 0) {
+                    return bot.sendMessage(chatId, formatedData.join('\n'));
+                } else {
+                    console.log('В таблице нет данных');
+                }
+            } else {
+                console.log('Не найденны строки в таблице');
+            }
+        } else {
+            console.log('Таблица не найдена');
+        }
 
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
@@ -571,7 +574,7 @@ async function findCatalogWallpaper(chatId) {
                                 // const p1Value = firstWorksheet.getCell('P1').value;
                                 // const o1Value = firstWorksheet.getCell('O1').value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders:\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
                             // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
 
                             
@@ -692,7 +695,7 @@ async function findCatalogTextile(chatId) {
                                 // const o1Value = firstWorksheet.getCell('O1').value;
                                 // const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders:\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
                             // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
                             // if (iValue !== null) {
                             //     message += `${i1Value}: ${iValue}\n`;
