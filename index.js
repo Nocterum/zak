@@ -34,7 +34,7 @@ const nodemailer = require('./nodemailer');
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 password = {};
 chats = {};
-let backLc = '/mainmenu'; //предпоследняя команда для опции "назад"
+
 lc = {};    //последняя команда
 findCatalogIndex = {};   //состояние: нужно ли зайдествовать функцию поиска каталога текстиля.
 botMsgIdx = {};    //айди последнего сообщения от бота
@@ -42,7 +42,7 @@ sorry = 'Извините, я этому пока ещё учусь😅\nПро�
 let subject = {};   //тема письма
 let textMail = {};  //текст письма
 
-module.exports = backLc;
+
 
 //МЕНЮ КОМАНД
 bot.setMyCommands([
@@ -1241,7 +1241,7 @@ bot.on('callback_query', async msg => {
 
     //начало работы
     if (data === '/beginwork') {
-        backLc = text;
+
         if (!user.email) {
             await editEmail(chatId);
         } else {
@@ -1256,7 +1256,7 @@ bot.on('callback_query', async msg => {
 
     //начало работы
     if (data === '/beginwork1') {
-        backLc = text;
+
         if (!user.email) {
             await editEmail(chatId);
         } else {
