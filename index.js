@@ -562,41 +562,43 @@ async function findCatalogWallpaper(chatId) {
                             mValue !== null || 
                             nValue !== null
                             ) {
-                                const h1Value = firstWorksheet.getCell('H1').value;
-                                const i1Value = firstWorksheet.getCell('I1').value;
-                                const j1Value = firstWorksheet.getCell('J1').value;
-                                const k1Value = firstWorksheet.getCell('K1').value;
-                                const m1Value = firstWorksheet.getCell('M1').value;
-                                const n1Value = firstWorksheet.getCell('N1').value;
-                                const p1Value = firstWorksheet.getCell('P1').value;
-                                const o1Value = firstWorksheet.getCell('O1').value;
+                                // const h1Value = firstWorksheet.getCell('H1').value;
+                                // const i1Value = firstWorksheet.getCell('I1').value;
+                                // const j1Value = firstWorksheet.getCell('J1').value;
+                                // const k1Value = firstWorksheet.getCell('K1').value;
+                                // const m1Value = firstWorksheet.getCell('M1').value;
+                                // const n1Value = firstWorksheet.getCell('N1').value;
+                                // const p1Value = firstWorksheet.getCell('P1').value;
+                                // const o1Value = firstWorksheet.getCell('O1').value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders:\n`;
+                            // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
+
                             
-                            if (hValue !== null) {
-                                message += `${h1Value}: ${hValue}\n`;
-                            }
-                            if (iValue !== null) {
-                                message += `${i1Value}: ${iValue}\n`;
-                            }
-                            if (jValue !== null) {
-                                message += `${j1Value}: ${jValue}\n`;
-                            }
-                            if (kValue !== null) {
-                                message += `${k1Value}: ${kValue}\n`;
-                            }
-                            if (mValue !== null) {
-                                message += `${m1Value}: ${mValue}\n`;
-                            }
-                            if (nValue !== null) {
-                                message += `${n1Value}: ${nValue}\n`;
-                            }
-                            if (pValue !== null) {
-                                message += `${p1Value}: ${pValue}\n`;
-                            }
-                            if (oValue !== null) {
-                                message += `${o1Value}: ${oValue}\n`;
-                            }
+                            // if (hValue !== null) {
+                            //     message += `${h1Value}: ${hValue}\n`;
+                            // }
+                            // if (iValue !== null) {
+                            //     message += `${i1Value}: ${iValue}\n`;
+                            // }
+                            // if (jValue !== null) {
+                            //     message += `${j1Value}: ${jValue}\n`;
+                            // }
+                            // if (kValue !== null) {
+                            //     message += `${k1Value}: ${kValue}\n`;
+                            // }
+                            // if (mValue !== null) {
+                            //     message += `${m1Value}: ${mValue}\n`;
+                            // }
+                            // if (nValue !== null) {
+                            //     message += `${n1Value}: ${nValue}\n`;
+                            // }
+                            // if (pValue !== null) {
+                            //     message += `${p1Value}: ${pValue}\n`;
+                            // }
+                            // if (oValue !== null) {
+                            //     message += `${o1Value}: ${oValue}\n`;
+                            // }
                             message += `\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
@@ -682,36 +684,37 @@ async function findCatalogTextile(chatId) {
                             oValue !== null
                             ) {
 
-                                const i1Value = firstWorksheet.getCell('I1').value;
-                                const j1Value = firstWorksheet.getCell('J1').value;
-                                const k1Value = firstWorksheet.getCell('K1').value;
-                                const l1Value = firstWorksheet.getCell('L1').value;
-                                const n1Value = firstWorksheet.getCell('N1').value;
-                                const o1Value = firstWorksheet.getCell('O1').value;
-                                const p1Value = firstWorksheet.getCell(`P1`).value;
+                                // const i1Value = firstWorksheet.getCell('I1').value;
+                                // const j1Value = firstWorksheet.getCell('J1').value;
+                                // const k1Value = firstWorksheet.getCell('K1').value;
+                                // const l1Value = firstWorksheet.getCell('L1').value;
+                                // const n1Value = firstWorksheet.getCell('N1').value;
+                                // const o1Value = firstWorksheet.getCell('O1').value;
+                                // const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
-                            if (iValue !== null) {
-                                message += `${i1Value}: ${iValue}\n`;
-                            }
-                            if (jValue !== null) {
-                                message += `${j1Value}: ${jValue}\n`;
-                            }
-                            if (kValue !== null) {
-                                message += `${k1Value}: ${kValue}\n`;
-                            }
-                            if (lValue !== null) {
-                                message += `${l1Value}: ${lValue}\n`;
-                            }
-                            if (nValue !== null) {
-                                message += `${n1Value}: ${nValue}\n`;
-                            }
-                            if (oValue !== null) {
-                              message += `${o1Value}: ${oValue}\n`;
-                            }
-                            if (pValue !== null) {
-                                message += `${p1Value}: ${pValue}\n`;
-                            }
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders:\n`;
+                            // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
+                            // if (iValue !== null) {
+                            //     message += `${i1Value}: ${iValue}\n`;
+                            // }
+                            // if (jValue !== null) {
+                            //     message += `${j1Value}: ${jValue}\n`;
+                            // }
+                            // if (kValue !== null) {
+                            //     message += `${k1Value}: ${kValue}\n`;
+                            // }
+                            // if (lValue !== null) {
+                            //     message += `${l1Value}: ${lValue}\n`;
+                            // }
+                            // if (nValue !== null) {
+                            //     message += `${n1Value}: ${nValue}\n`;
+                            // }
+                            // if (oValue !== null) {
+                            //   message += `${o1Value}: ${oValue}\n`;
+                            // }
+                            // if (pValue !== null) {
+                            //     message += `${p1Value}: ${pValue}\n`;
+                            // }
                             message += `\n${PricelistLink.messagePrice}`
 
                             if (botMsgIdx !== null) {
@@ -1040,7 +1043,7 @@ bot.on('message', async msg => {
                 bot.deleteMessage(chatId, botMsgIdx);
                 return bot.sendMessage(
                     chatId,
-                    `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>введите так же единицы измерения, например:\n11 <b>шт</b> или 3 <b>м.п.</b></i>`,
+                    `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>а так же введите единицы измерения через пробел</i>`,
                     {parse_mode: 'HTML'}
                 );
             }
