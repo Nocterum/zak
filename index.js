@@ -795,10 +795,10 @@ async function findPricelistLink(chatId, cValue) {
 
                         if (cValue !== null ) {
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:<pre>${formattedCValue}</pre>\n`;
+                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:<pre>${formattedCValue}</pre>\n\n`;
                         } else {
-                            user.update({vendorEmail: bValue});
-                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b>.😢\nЗапросите прайсы в отделе закупок.\n`
+                            user.update({brand: bValue});
+                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b>.😢\nЗапросите прайсы в отделе закупок.\n\n`
                         }
                     }
                 }
