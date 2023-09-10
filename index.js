@@ -553,7 +553,7 @@ async function findCatalogWallpaper(chatId) {
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
                         await user.update({brand: cValue.toUpperCase()});
-                        let messagePrice = await findPricelistLink(chatId, cValue);
+                        let PricelistLink = await findPricelistLink(chatId, cValue);
                         
                         if (
                             hValue !== null ||
@@ -598,7 +598,7 @@ async function findCatalogWallpaper(chatId) {
                             if (oValue !== null) {
                                 message += `${o1Value}: ${oValue}\n`;
                             }
-                            message += `\n${messagePrice}`
+                            message += `\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -611,7 +611,7 @@ async function findCatalogWallpaper(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${messagePrice}`, {parse_mode: 'HTML'});
+                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
                         }
                     }
                 }
@@ -673,7 +673,7 @@ async function findCatalogTextile(chatId) {
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
                         await user.update({brand: cValue.toUpperCase()});
-                        let messagePrice = await findPricelistLink(chatId, cValue);
+                        let PricelistLink = await findPricelistLink(chatId, cValue);
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -713,7 +713,7 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${messagePrice}`
+                            message += `\n${PricelistLink.messagePrice}`
 
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -725,7 +725,7 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${messagePrice}`, {parse_mode: 'HTML'});
+                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
                         }
                     }
                 }
@@ -1037,9 +1037,9 @@ bot.on('message', async msg => {
             await user.update({brand: text.toUpperCase()});
 
             let cValue = text;
-            let messagePrice = await findPricelistLink(chatId, cValue);
+            let PricelistLink = await findPricelistLink(chatId, cValue);
 
-            if (messagePrice.vendor === null) {
+            if (PricelistLink.vendor === null) {
                 return bot.sendMessage(
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
@@ -1047,7 +1047,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `${messagePrice.messagePrice}`,
+                    `${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
