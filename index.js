@@ -1240,7 +1240,7 @@ bot.on('callback_query', async msg => {
     }
 
     //начало работы
-    if (fata === '/beginwork') {
+    if (data === '/beginwork') {
         backLc = text;
         if (!user.email) {
             await editEmail(chatId);
@@ -1255,7 +1255,7 @@ bot.on('callback_query', async msg => {
     }
 
     //начало работы
-    if (text === '/beginwork1') {
+    if (data === '/beginwork1') {
         backLc = text;
         if (!user.email) {
             await editEmail(chatId);
