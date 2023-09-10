@@ -1038,7 +1038,7 @@ bot.on('message', async msg => {
             await user.update({brand: text.toUpperCase()});
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
-            if (user.vendor = null) {
+            if (user.vendor === null) {
                 return bot.sendMessage(
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
