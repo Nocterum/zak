@@ -802,6 +802,7 @@ async function findPricelistLink(chatId, cValue) {
             });
 
             if (!foundMatchPricelist) {
+                user.update({vendor: null});
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
@@ -1033,11 +1034,18 @@ bot.on('message', async msg => {
             await user.update({brand: text.toUpperCase()});
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
-            return bot.sendMessage(
-                chatId, 
-                `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\n${messagePrice}`,
-                checkVendorOptions
-            );
+            if (user.vendor = null) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Такой бренд не найден, проверьте написание бренда.`
+                );
+            } else {
+                return bot.sendMessage(
+                    chatId, 
+                    `${messagePrice}`,
+                    checkVendorOptions
+                );
+            }
         }
 
         //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
