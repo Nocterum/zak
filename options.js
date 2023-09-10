@@ -29,7 +29,7 @@ module.exports = {
         })
     },
 //НАВИГАЦИОННЫЕ КНОПКИ=============================================================================================================================================
-    mainMenuOptions: {
+    mainMenuReturnOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
@@ -38,6 +38,19 @@ module.exports = {
         })
     },
 //РАБОЧИЕ КНОПКИ=============================================================================================================================================
+    mainMenuOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Запрос: остатки+сроки+резерв', callback_data: '/beginwork'}],
+                [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
+                [{text: 'Изменить никнейм', callback_data: '/editNickname'}],
+                [{text: 'Изменить email', callback_data: '/editEmail'}],
+
+            ]
+        })
+    },
+
     beginWorkOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
@@ -71,8 +84,15 @@ module.exports = {
     workOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Остатки/сроки/резерв', callback_data: '/catalogСheck'}, {text: 'Работа в магазине', callback_data: '/enterBrand'}],
+                [{text: 'Поиск по каталогу', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду', callback_data: '/enterBrand'}],
                 [{text: 'Остатки ORAC', callback_data: '/oracСheck'}],
+            ]
+        })
+    },
+
+    work1Options: {
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
                 [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
                 [{text: 'Превью изображений', callback_data: '/work2'}],
                 [{text: 'Добавить в заказ', callback_data: '/work3'}],

@@ -20,9 +20,9 @@ const bot = new TelegramApi(token, {
 });
 
 //ИМПОРТЫ
-const {gameOptions, againOptions, resetOptions,
+const {mainMenuOptions, gameOptions, againOptions, resetOptions,
      workOptions, checkVendorOptions, startFindOptions, startFind2Options, 
-     beginWorkOptions, beginWork2Options, mainMenuOptions, 
+     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
@@ -47,7 +47,6 @@ module.exports = backLc;
 //МЕНЮ КОМАНД
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
-    {command: '/beginwork', description:'Начало работы'},
     {command: '/infowork', description:'Проверка введенных параметров'},
 ])
 
@@ -898,7 +897,8 @@ bot.onText(/\/start/, async msg => {
             lc = null;
             return bot.sendMessage(
                 chatId, 
-                `И снова здравствуйте, ${user.nickname}!\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`
+                `И снова здравствуйте, ${user.nickname}!\nВы в главном меню:`,
+                mainMenuOptions
             );
 
         } else if (password === 'true') {
@@ -974,39 +974,7 @@ bot.on('message', async msg => {
             }
         };
 
-        //главное меню
-        if (text === '/mainmenu') {
-
-            if (user) {
-                lc = null;
-                await bot.sendMessage(
-                    chatId, 
-                    `И снова здравствуйте, ${user.nickname}!\nВаш персональный id: ${chatId}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`
-                );
-            }
-            return;
-        }
-
-        //начало работы
-        if (text === '/beginwork') {
-            backLc = text;
-            if (!user.email) {
-                await editEmail(chatId);
-            } else {
-                await bot.sendMessage(
-                    chatId, 
-                    'Чем могу вам помочь?', 
-                    workOptions
-                );
-            } 
-            return; 
-        }
-
-        //изменить e-mail
-        if (text === '/editEmail') {
-            return editEmail(chatId);
-        }
-
+        
         //Записываем e-mail в ячейку БД
         if (lc === '/editEmail') {
             await user.update({email: text.toLowerCase()});
@@ -1016,19 +984,14 @@ bot.on('message', async msg => {
                 beginWorkOptions
             );
         }            
-
-        //изменить Nickname
-        if (text === '/editNickname') {
-            return editNickname(chatId);
-        }
-
+            
         //Записываем Nickname в ячейку БД
         if (lc === '/editNickname') {
             await user.update({nickname: text});
             return bot.sendMessage(
                 chatId, 
                 `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<i>(для перезаписи введите никнейм повторно)</i>`, 
-                mainMenuOptions
+                mainMenuReturnOptions
             );
         }
 
@@ -1261,7 +1224,49 @@ bot.on('callback_query', async msg => {
         lc = null;
         return bot.sendMessage(
             chatId, 
-            `Главное меню, ${user.nickname}\n\nНачать работу: /beginwork,\nПроверить введенные данные: /infowork,\n\nИзменить e-mail: /editEmail,\nИзменить обращение /editNickname`); 
+            `Вы в главном меню, ${user.nickname}\nВаш персональный id: ${chatId}`,
+            mainMenuOptions
+        ); 
+    }
+
+    //начало работы
+    if (fata === '/beginwork') {
+        backLc = text;
+        if (!user.email) {
+            await editEmail(chatId);
+        } else {
+            await bot.sendMessage(
+                chatId, 
+                'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвеста возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев когда вы уверенны, искомый вами артикул возможно заказать у поставщика.', 
+                workOptions
+            );
+        } 
+        return; 
+    }
+
+    //начало работы
+    if (text === '/beginwork1') {
+        backLc = text;
+        if (!user.email) {
+            await editEmail(chatId);
+        } else {
+            await bot.sendMessage(
+                chatId, 
+                'Чем могу вам помочь?', 
+                work1Options
+            );
+        } 
+        return; 
+    }
+
+    //изменить Nickname
+    if (data === '/editNickname') {
+        return editNickname(chatId);
+    }
+
+    //изменить e-mail
+    if (data === '/editEmail') {
+        return editEmail(chatId);
     }
 
     //Проверяем поставщика по бренду
@@ -1404,7 +1409,7 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(
             chatId, 
             sorry, 
-            mainMenuOptions
+            mainMenuReturnOptions
         );
     }
 
@@ -1414,7 +1419,7 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(
             chatId, 
             sorry, 
-            mainMenuOptions
+            mainMenuReturnOptions
         );
     }
 
