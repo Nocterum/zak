@@ -770,7 +770,8 @@ async function findPricelistLink(chatId, cValue) {
 
             let foundMatchPricelist = false;
             let messagePrice = '';
-
+            let vendor = '';
+            
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
                 if (cellValue !== null) {
@@ -803,7 +804,7 @@ async function findPricelistLink(chatId, cValue) {
 
             if (!foundMatchPricelist) {
                 user.update({vendor: null});
-                let vendor = user.vendor;
+                vendor = user.vendor;
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
