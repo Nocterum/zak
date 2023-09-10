@@ -84,8 +84,8 @@ const startRequest1C = async (chatId) => {
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const responseUpdate = await axiosInstance.get(url);
-        console.log(responseUpdate.data, response.data);
+
+        console.log(response.data);
 
 
 
@@ -1417,7 +1417,8 @@ bot.on('callback_query', async msg => {
     //добавить в заказ
     if(data === '/request1C') {
         lc = null;
-        await startRequest1C(chatId); 
+        await bot.sendMessage(chatId, sorry);
+        return startRequest1C(chatId); 
     }
 
 
