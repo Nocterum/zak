@@ -794,6 +794,7 @@ async function findPricelistLink(chatId, cValue) {
                         }
 
                         if (cValue !== null ) {
+                            user.update({brand: bValue});
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
                             messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:<pre>${formattedCValue}</pre>\n\n`;
                         } else {
