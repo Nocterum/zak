@@ -71,19 +71,10 @@ const startRequest1C = async (chatId) => {
         const vendorCode = 'PLGUM5';
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
-        const cookieJar = new tough.CookieJar({
-            key: 'keyBotManders',
-            value: 'ValueBotManders',
-            domain: 'http://post.manders.ru:10001',
-            path: '/QuantityProduct.php'
-        });
 
         // Создаем экземпляр axios с настройками cookie
         const axiosInstance = axios.create({
             withCredentials: true,
-            headers: {
-                Cookie: cookieJar.toString()
-            }
         });
 
         const response = await axiosInstance.post(url, {
@@ -91,7 +82,7 @@ const startRequest1C = async (chatId) => {
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         console.log(response.data);
 
         // const formData = new FormData();
