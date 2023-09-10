@@ -770,7 +770,6 @@ async function findPricelistLink(chatId, cValue) {
 
             let foundMatchPricelist = false;
             let messagePrice = '';
-            let vendor = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
@@ -804,14 +803,11 @@ async function findPricelistLink(chatId, cValue) {
 
             if (!foundMatchPricelist) {
                 user.update({vendor: null});
-                vendor = user.vendor;
+
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
-            return {
-                messagePrice,
-                vendor
-            };
+            return messagePrice;
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -1036,14 +1032,6 @@ bot.on('message', async msg => {
 
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
-
-            const user = await UserModel.findOne({
-                where: {
-                  chatId: chatId
-                },
-                attributes: ['vendor', 'brand']
-            });
-
             await UserModel.update({brand: text.toUpperCase()});
 
             let cValue = text;
