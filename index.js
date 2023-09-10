@@ -21,7 +21,7 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {gameOptions, againOptions, resetOptions,
-     workOptions, VCOptions, startFindOptions, startFind2Options, 
+     workOptions, checkVendorOptions, startFindOptions, startFind2Options, 
      beginWorkOptions, beginWork2Options, mainMenuOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
@@ -1031,10 +1031,12 @@ bot.on('message', async msg => {
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
             await user.update({brand: text.toUpperCase()});
+            let cValue = text;
+            let messagePrice = await findPricelistLink(chatId, cValue);
             return bot.sendMessage(
                 chatId, 
-                `Название бренда "<b>${text}</b>" успешно сохранено\n<i>(для перезаписи введите бренд повторно)</i>`, 
-                VCOptions
+                `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\n${messagePrice}`,
+                checkVendorOptions
             );
         }
 
@@ -1304,17 +1306,6 @@ bot.on('callback_query', async msg => {
         );
     }
 
-    //ввод артикула 
-    if(data === '/enterVC') {
-        lc = data;
-        cValue = user.brand;
-        let messagePrice =await findPricelistLink(chatId, cValue);
-        return bot.sendMessage(
-            chatId, `Понял, принял\n<b>Искомые вами параметры:</b>\nБренд: ${user.brand}\n${messagePrice}\n\nВведите искомый артикул:\n`, 
-            {parse_mode: 'HTML'}
-        );
-    }
-    
     //начало резервирования
     if (data === '/enterReserveNumber') {
         lc = data;

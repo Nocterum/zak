@@ -102,11 +102,11 @@ module.exports = {
         })
     },
 
-    VCOptions: {
+    checkVendorOptions: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/enterVC'}],
+                [{text: 'Продолжить', callback_data: '/checkVendor'}],
             ]
         })
     },
