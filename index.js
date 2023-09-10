@@ -1036,17 +1036,18 @@ bot.on('message', async msg => {
 
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
-            await user.update({brand: text.toUpperCase()});
-
-            let cValue = text;
-            let messagePrice = await findPricelistLink(chatId, cValue);
 
             const user = await UserModel.findOne({
                 where: {
                   chatId: chatId
                 },
-                attributes: ['vendor']
-              });
+                attributes: ['vendor', 'brand']
+            });
+
+            await user.update({brand: text.toUpperCase()});
+
+            let cValue = text;
+            let messagePrice = await findPricelistLink(chatId, cValue);
 
             if (user.vendor === null) {
                 return bot.sendMessage(
