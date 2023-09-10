@@ -21,7 +21,7 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions,
-     workOptions, checkVendorOptions, startFindOptions, startFind2Options, 
+     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind2Options, 
      beginWorkOptions, beginWork2Options, mainMenuReturnOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
