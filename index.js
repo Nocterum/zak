@@ -71,10 +71,10 @@ const startRequest1C = async (chatId) => {
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
 
-        // // Создаем экземпляр axios с настройками cookie
-        // const axiosInstance = axios.create({
-        //     withCredentials: true,
-        // });
+        // Создаем экземпляр axios с настройками cookie
+        const axiosInstance = axios.create({
+            withCredentials: true,
+        });
 
         const response = await axiosInstance.request({
             url: url,
