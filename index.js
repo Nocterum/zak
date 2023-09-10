@@ -1044,7 +1044,7 @@ bot.on('message', async msg => {
                 attributes: ['vendor', 'brand']
             });
 
-            await user.update({brand: text.toUpperCase()});
+            await UserModel.update({brand: text.toUpperCase()});
 
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
