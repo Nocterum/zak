@@ -770,6 +770,7 @@ async function findPricelistLink(chatId, cValue) {
 
             let foundMatchPricelist = false;
             let messagePrice = '';
+            let vendor = '';
 
             firstWorksheet.eachRow((row, rowNumber) => {
                 const cellValue = row.getCell('B').value;
@@ -786,6 +787,7 @@ async function findPricelistLink(chatId, cValue) {
                         const cValue = row.getCell('C').value;  // Ссылка на прайслист
                         const dValue = row.getCell('D').value;
                         user.update({vendor: aValue.toUpperCase()});
+                        vendor = aValue.toUpperCase();
                         if (dValue !== null) {
                         user.update({vendorEmail: dValue.toLowerCase()});
                         }
@@ -803,11 +805,11 @@ async function findPricelistLink(chatId, cValue) {
 
             if (!foundMatchPricelist) {
                 user.update({vendor: null});
-
+                vendor = null;
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
-            return messagePrice;
+            return messagePrice, vendor;
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -1032,7 +1034,7 @@ bot.on('message', async msg => {
 
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
-            await UserModel.update({brand: text.toUpperCase()});
+            await user.update({brand: text.toUpperCase()});
 
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
