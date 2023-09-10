@@ -70,7 +70,6 @@ const startRequest1C = async (chatId) => {
         const vendorCode = 'plege075';
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
-
         // Создаем экземпляр axios с настройками cookie
         const axiosInstance = axios.create({
             withCredentials: true,
@@ -82,31 +81,26 @@ const startRequest1C = async (chatId) => {
             data: `VendorCode=${vendorCode}`
         });
 
-        // await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // console.log(response.data);
-
-
-
         const dom = new JSDOM(response.data);
         const documentUrl = dom.window.document;
 
         const formElement = documentUrl.querySelector("body > form");  // ссылка на форму отправки
-        
+
         const inputElement = documentUrl.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
         console.log('Поле ввода артикула найдено');
         inputElement.value = vendorCode;
         console.log('Артикул ' + vendorCode + ' введен');
 
-        // formElement.submit();
         const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод submit
         if (formElement !== null) {
 
             formElement.dispatchEvent(submitEvent); 
+        } else {
+            console.log('formElement не найден')
         }
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         // Получаем ответ после обработки запроса
         const updatedResponse = await axios.get(url);
@@ -118,11 +112,10 @@ const startRequest1C = async (chatId) => {
 
         console.log(responseUpdate.data);
         console.log(tableElement);
-        
+
         if (tableElement) {
 
             const rows = tableElement.querySelectorAll('tr');
-
 
             if (rows.length > 0) {
 
@@ -788,7 +781,7 @@ async function findPricelistLink(chatId, cValue) {
                         foundMatchPricelist = true;
 
                         const aValue = row.getCell('A').value;  // Поставщик
-                        const bValue = row.getCell('B').value;  // Бренд
+                        let bValue = row.getCell('B').value;  // Бренд
                         const cValue = row.getCell('C').value;  // Ссылка на прайслист
                         const dValue = row.getCell('D').value;
                         user.update({vendor: aValue.toUpperCase()});
@@ -796,13 +789,15 @@ async function findPricelistLink(chatId, cValue) {
                         if (dValue !== null) {
                         user.update({vendorEmail: dValue.toLowerCase()});
                         }
+                        if (isNaN(bValue)) {
+                            bValue = bValue.toUpperCase();
+                        }
 
-    
                         if (cValue !== null ) {
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue.toUpperCase()}</b>:<pre>${formattedCValue}</pre>`;
+                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:<pre>${formattedCValue}</pre>`;
                         } else {
-                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue.toUpperCase()}</b>.😢\nЗапросите прайсы в отделе закупок.`
+                            messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b>.😢\nЗапросите прайсы в отделе закупок.`
                         }
                     }
                 }
@@ -975,7 +970,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `В доступе отказанно.`
+                    `В доступе отказано.`
                 );
             }
         };
