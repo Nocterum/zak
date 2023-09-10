@@ -976,7 +976,7 @@ bot.on('message', async msg => {
 
         
         //главное меню 
-        if (data === '/mainmenu') {
+        if (text === '/mainmenu') {
             lc = null;
             return bot.sendMessage(
                 chatId, 
