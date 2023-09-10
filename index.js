@@ -1037,7 +1037,10 @@ bot.on('message', async msg => {
         //Записываем название бренда в ячейку БД
         if (lc === '/enterBrand') {
             await user.update({brand: text.toUpperCase()});
+
             let cValue = text;
+            let vendor = '';
+            
             let messagePrice = await findPricelistLink(chatId, cValue);
             if (vendor === null) {
                 return bot.sendMessage(
