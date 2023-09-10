@@ -68,7 +68,7 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId) => {
     try {
 
-        const vendorCode = 'PLGUM5';
+        const vendorCode = 'plege075';
         const url = 'http://post.manders.ru:10001/QuantityProduct.php';
 
 
@@ -77,13 +77,13 @@ const startRequest1C = async (chatId) => {
             withCredentials: true,
         });
 
-        const response = await axiosInstance.post(url, {
+        const response = await axiosInstance.get(url, {
             VendorCode: vendorCode,
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
-        const responseUpdate = await axiosInstance.post(url);
-        console.log(responseUpdate.data);
+        const responseUpdate = await axiosInstance.get(url);
+        console.log(responseUpdate.data, response.data);
 
 
 
