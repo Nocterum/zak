@@ -294,7 +294,7 @@ const sendReserveEmail = async (chatId) => {
 
       } catch (e) {
         console.error(e);
-        throw new Error('Ошибка при отправке е-мейла');
+        throw new Error('Ошибка при отправке емейла');
     }
 }
 
@@ -774,8 +774,8 @@ async function findPricelistLink(chatId, cValue) {
                 const cellValue = row.getCell('B').value;
                 if (cellValue !== null) {
 
-                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-]/g, '');
-                    const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-]/g, '');
+                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-&]/g, '');
+                    const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-&]/g, '');
     
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
@@ -912,7 +912,7 @@ bot.onText(/\/start/, async msg => {
             lc = '/editNickname';
             return bot.sendMessage(
                 chatId, 
-                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде е-мейла на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
+                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде емейла на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
             );
         } else if (password !== 'true') {
             password = false;
@@ -1021,7 +1021,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\n${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
