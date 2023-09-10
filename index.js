@@ -82,18 +82,8 @@ const startRequest1C = async (chatId) => {
         });
 
         await new Promise(resolve => setTimeout(resolve, 2000));
-
-        console.log(response.data);
-
-        // const formData = new FormData();
-        // formData.append('VendorCode', vendorCode);
-        
-        // await axios.post(request, formData, {
-        //     headers: { 'Content-Type': 'multipart/form-data' }
-        // });
-
-        // await new Promise(resolve => setTimeout(resolve, 2000));
-
+        const responseUpdate = await axiosInstance.post(url);
+        console.log(responseUpdate.data);
 
 
 
