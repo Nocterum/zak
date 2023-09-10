@@ -1039,7 +1039,7 @@ bot.on('message', async msg => {
             let cValue = text;
             let messagePrice = await findPricelistLink(chatId, cValue);
 
-            if (user.vendor === null) {
+            if (messagePrice.vendor === null) {
                 return bot.sendMessage(
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
@@ -1047,7 +1047,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `${messagePrice}`,
+                    `${messagePrice.messagePrice}`,
                     checkVendorOptions
                 );
             }
