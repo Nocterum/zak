@@ -1295,7 +1295,15 @@ bot.on('callback_query', async msg => {
     //Проверяем поставщика по бренду
     if (data === '/checkVendor') {
         lc = '/enterVC';
-        const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+        if (user.vendor !== null) {
+            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+        } else {
+            return bot.sendMessage(
+                chatId, `Бренд не найден, соответсвие брендов в эксель файлах:\n"Каталоги  распределение в салоны 26.09.19"\n"Текстиль Каталоги  распределение в салоны"\nc эксель файлом "Список прайслистов".
+                `
+            );
+        }
+
 
         if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
             formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
@@ -1378,7 +1386,7 @@ bot.on('callback_query', async msg => {
     if (data === '/preSendEmailReserveYes') {
 
         subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
             chatId, 
@@ -1390,7 +1398,7 @@ bot.on('callback_query', async msg => {
     if (data === '/preSendEmailReserveNo') {
 
         subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
             chatId, 
