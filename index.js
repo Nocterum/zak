@@ -809,7 +809,7 @@ async function findPricelistLink(chatId, cValue) {
                 messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
             }
 
-            return messagePrice, vendor;
+            return {messagePrice, vendor};
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
