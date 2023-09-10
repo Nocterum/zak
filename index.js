@@ -1039,10 +1039,16 @@ bot.on('message', async msg => {
             await user.update({brand: text.toUpperCase()});
 
             let cValue = text;
-            let vendor = '';
-            
             let messagePrice = await findPricelistLink(chatId, cValue);
-            if (vendor === null) {
+
+            const user = await UserModel.findOne({
+                where: {
+                  chatId: chatId
+                },
+                attributes: ['vendor']
+              });
+
+            if (user.vendor === null) {
                 return bot.sendMessage(
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
