@@ -874,7 +874,7 @@ async function findDecorDelux(chatId) {
 
         try {
 
-            const workbook = xlsjs.readFile(filePath);
+            const workbook = XLSX.readFile(filePath);
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
@@ -911,7 +911,7 @@ async function findDecorDelux(chatId) {
             return;
 
         } catch (e) {
-            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`, e);
         }
     }
 };
