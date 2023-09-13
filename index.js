@@ -963,7 +963,7 @@ bot.on('message', async msg => {
     });
 
     try {
-
+        
         //Проверка ввода пароля
         if (password === false) {
             if (text === '111QWER!!!') {
@@ -1114,6 +1114,16 @@ bot.on('message', async msg => {
         }   
 
         if (text.toLowerCase().includes('привет')) {
+
+            return bot.processUpdate({
+              message: {
+                text: '/start',
+                chat: {
+                  id: chatId
+                }
+              }
+            });
+            
             return bot.sendSticker(
                 chatId, 
                 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
