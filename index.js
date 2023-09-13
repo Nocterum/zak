@@ -70,50 +70,57 @@ const startRequest1C = async (chatId) => {
     try {
 
         const vendorCode = 'plege075';
-        const url = 'http://post.manders.ru:10001/QuantityProduct.php';
+        const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
+
+
+        const response = axios.get(searchUrl1C);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log(response.data);
+
+        
 
         // Создаем экземпляр axios с настройками cookie
-        const axiosInstance = axios.create({
-            withCredentials: true,
-        });
+        // const axiosInstance = axios.create({
+        //     withCredentials: true,
+        // });
 
-        const response = await axiosInstance.request({
-            url: url,
-            method: 'POST',
-            data: `VendorCode=${vendorCode}`
-        });
+        // const response = await axiosInstance.request({
+        //     url: url,
+        //     method: 'POST',
+        //     data: `VendorCode=${vendorCode}`
+        // });
 
-        const dom = new JSDOM(response.data);
-        const documentUrl = dom.window.document;
+        // const dom = new JSDOM(response.data);
+        // const documentUrl = dom.window.document;
 
-        const formElement = documentUrl.querySelector("body > form");  // ссылка на форму отправки
+        // const formElement = documentUrl.querySelector("body > form");  // ссылка на форму отправки
 
-        const inputElement = documentUrl.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
-        console.log('Поле ввода артикула найдено');
-        inputElement.value = vendorCode;
-        console.log('Артикул ' + vendorCode + ' введен');
+        // const inputElement = documentUrl.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
+        // console.log('Поле ввода артикула найдено');
+        // inputElement.value = vendorCode;
+        // console.log('Артикул ' + vendorCode + ' введен');
 
-        const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод submit
-        if (formElement !== null) {
+        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод submit
+        // if (formElement !== null) {
 
-            formElement.dispatchEvent(submitEvent); 
-        } else {
-            console.log('formElement не найден')
-        }
+        //     formElement.dispatchEvent(submitEvent); 
+        // } else {
+        //     console.log('formElement не найден')
+        // }
 
         // Ждем некоторое время, чтобы страница успела обработать запрос
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // Получаем ответ после обработки запроса
-        const updatedResponse = await axios.get(url);
-        const updatedDom = new JSDOM(updatedResponse.data);
-        const updatedDocument = updatedDom.window.document;
+        // // Получаем ответ после обработки запроса
+        // const updatedResponse = await axios.get(url);
+        // const updatedDom = new JSDOM(updatedResponse.data);
+        // const updatedDocument = updatedDom.window.document;
 
-        const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        const responseUpdate = await axios.get(url);
+        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
+        // const responseUpdate = await axios.get(url);
 
-        console.log(responseUpdate.data);
-        console.log(tableElement);
+        // console.log(responseUpdate.data);
+        // console.log(tableElement);
 
         if (tableElement) {
 
@@ -911,7 +918,8 @@ async function findDecorDelux(chatId) {
             return;
 
         } catch (e) {
-            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`, e);
+            console.log(e);
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
         }
     }
 };
