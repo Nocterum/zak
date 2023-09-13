@@ -901,9 +901,9 @@ async function findDecorDelux(chatId) {
                         )
                     }
                 }
-                return;
-
+                
             });
+            return;
 
         } catch (e) {
             return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
