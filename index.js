@@ -371,7 +371,9 @@ async function findExcelFile(
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
-            } else if (file.toLowerCase().includes('остатки_дд')) {
+            }
+        } else if (path.extname(file) === '.xls') {
+            if (file.toLowerCase().includes('остатки_дд')) {
                 fileNameDecorDelux = filePath;
             }
         }
