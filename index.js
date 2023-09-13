@@ -141,7 +141,10 @@ const startRequest1C = async (chatId) => {
     }
 }
 
+// ======================================================================================================================================
 // Функция html запроса по данным из БД
+// ======================================================================================================================================
+
 const startFind = async (chatId) => {
     lc = '/enterVC';
 
@@ -269,7 +272,10 @@ const startFind = async (chatId) => {
    
 }
 
+// ======================================================================================================================================
 // Функция отправки емейла с запросом на резервирование
+// ======================================================================================================================================
+
 const sendReserveEmail = async (chatId) => {
 
     const user = await UserModel.findOne({
@@ -298,14 +304,18 @@ const sendReserveEmail = async (chatId) => {
     }
 }
 
+// ======================================================================================================================================
 // Функция для поиска эксель файла
+// ======================================================================================================================================
+
 async function findExcelFile(
     fileNameWallpaper = '', 
     fileNameTextile = '', 
     fileNamePricelist = '',
     fileNameOracMSK = '', 
     fileNameOracSPB = '',
-    fileNameVendor = ''
+    fileNameVendor = '',
+    fileNameDecorDelux =''
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -323,7 +333,8 @@ async function findExcelFile(
                 fileNamePricelist, 
                 fileNameOracMSK, 
                 fileNameOracSPB,
-                fileNameVendor
+                fileNameVendor,
+                fileNameDecorDelux
                 );
 
             if (result.fileNameWallpaper) {
@@ -344,6 +355,9 @@ async function findExcelFile(
             if (result.fileNameVendor) {
                 fileNameVendor = result.fileNameVendor;
             }
+            if (result.fileNameDecorDelux) {
+                fileNameDecorDelux = result.fileNameDecorDelux;
+            }
         } else if (path.extname(file) === '.xlsx') {
             if (file.toLowerCase().includes('каталоги_распределение_в_салоны_26_09_19')) {
                 fileNameWallpaper = filePath;
@@ -357,6 +371,8 @@ async function findExcelFile(
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
+            } else if (file.toLowerCase().includes('список_поставщиков')) {
+                fileNameDecorDelux = filePath;
             }
         }
         if (fileNameWallpaper && 
@@ -364,7 +380,8 @@ async function findExcelFile(
             fileNamePricelist && 
             fileNameOracMSK &&
             fileNameOracSPB && 
-            fileNameVendor
+            fileNameVendor &&
+            fileNameDecorDelux
             ) {
             break;
         }
@@ -375,12 +392,15 @@ async function findExcelFile(
         fileNamePricelist, 
         fileNameOracMSK,
         fileNameOracSPB,
-        fileNameVendor
+        fileNameVendor,
+        fileNameDecorDelux
     };
 }
 
-
+// ======================================================================================================================================
 // Функция поиска артикула ORAC
+// ======================================================================================================================================
+
 async function findOrac(chatId) {
     
     let fileNameOracMSK = 'остатки_мск.xlsx';
@@ -502,7 +522,10 @@ async function findOrac(chatId) {
     
 };
 
+// ======================================================================================================================================
 //Функция поиска каталога обоев
+// ======================================================================================================================================
+
 async function findCatalogWallpaper(chatId) {
 
     let fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
@@ -564,8 +587,8 @@ async function findCatalogWallpaper(chatId) {
                                 // const k1Value = firstWorksheet.getCell('K1').value;
                                 // const m1Value = firstWorksheet.getCell('M1').value;
                                 // const n1Value = firstWorksheet.getCell('N1').value;
-                                // const p1Value = firstWorksheet.getCell('P1').value;
-                                // const o1Value = firstWorksheet.getCell('O1').value;
+                                const o1Value = firstWorksheet.getCell('O1').value;
+                                const p1Value = firstWorksheet.getCell('P1').value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
                             // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
@@ -589,12 +612,12 @@ async function findCatalogWallpaper(chatId) {
                             // if (nValue !== null) {
                             //     message += `${n1Value}: ${nValue}\n`;
                             // }
-                            // if (pValue !== null) {
-                            //     message += `${p1Value}: ${pValue}\n`;
-                            // }
-                            // if (oValue !== null) {
-                            //     message += `${o1Value}: ${oValue}\n`;
-                            // }
+                            if (oValue !== null) {
+                                message += `${o1Value}: ${oValue}\n`;
+                            }
+                            if (pValue !== null) {
+                                message += `${p1Value}: ${pValue}\n`;
+                            }
                             message += `\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
@@ -624,7 +647,10 @@ async function findCatalogWallpaper(chatId) {
     }
 };
 
+// ======================================================================================================================================
 //Функция поиска каталога текстиля
+// ======================================================================================================================================
+
 async function findCatalogTextile(chatId) {
 
     let fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны.xlsx';
@@ -686,7 +712,7 @@ async function findCatalogTextile(chatId) {
                                 // const l1Value = firstWorksheet.getCell('L1').value;
                                 // const n1Value = firstWorksheet.getCell('N1').value;
                                 // const o1Value = firstWorksheet.getCell('O1').value;
-                                // const p1Value = firstWorksheet.getCell(`P1`).value;
+                                const p1Value = firstWorksheet.getCell(`P1`).value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
                             // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
@@ -708,9 +734,9 @@ async function findCatalogTextile(chatId) {
                             // if (oValue !== null) {
                             //   message += `${o1Value}: ${oValue}\n`;
                             // }
-                            // if (pValue !== null) {
-                            //     message += `${p1Value}: ${pValue}\n`;
-                            // }
+                            if (pValue !== null) {
+                                message += `${p1Value}: ${pValue}\n`;
+                            }
                             message += `\n${PricelistLink.messagePrice}`
 
                             if (botMsgIdx !== null) {
@@ -743,7 +769,10 @@ async function findCatalogTextile(chatId) {
     }
 };
 
+// ======================================================================================================================================
 //Функция поиска ссылки на прайслист
+// ======================================================================================================================================
+
 async function findPricelistLink(chatId, cValue) {
 
     let fileNamePricelist = 'cписок_прайслистов.xlsx';
@@ -796,7 +825,7 @@ async function findPricelistLink(chatId, cValue) {
                         if (cValue !== null ) {
                             user.update({brand: bValue});
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:<pre>${formattedCValue}</pre>\n\n`;
+                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:\n<pre>${formattedCValue}</pre>\n\n`;
                         } else {
                             user.update({brand: bValue});
                             messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b>.😢\nЗапросите прайсы в отделе закупок.\n\n`
@@ -818,57 +847,72 @@ async function findPricelistLink(chatId, cValue) {
     }
 };
 
-// Функция поиска по бренду поставщика, ссылки на стоки и его почтового адреса
-// async function findVendor(chatId) {
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Декор Делюкс
+// ======================================================================================================================================
 
-//     let fileNameVendor = 'список_поставщиков.xlsx';
-//     fileNameVendor = fileNameVendor.toLowerCase();
+async function findDecorDelux(chatId) {
 
-//     const result = await findExcelFile(fileNameVendor);
-//     const filePath = result.fileNameVendor;
+    lc = 'findDecorDelux';
+    let fileNameVendor = 'остатки_дд_на.xlsx';
+    fileNameVendor = fileNameVendor.toLowerCase();
 
-//     const user = await UserModel.findOne({
-//         where: {
-//             chatId: chatId
-//         }
-//     });
+    const result = await findExcelFile(fileNameVendor);
+    const filePath = result.fileNameVendor;
 
-//     if (filePath) {
-//         try {
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
 
-//             const workbook = new ExcelJS.Workbook();
-//             const stream = fs.createReadStream(filePath);
-//             const worksheet = await workbook.xlsx.read(stream);
-//             const firstWorksheet = worksheet.worksheets[0];
+    if (filePath) {
+        try {
 
-//             let foundMatchBrand = false;
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
 
-//             firstWorksheet.eachRow( async (row, rowNumber) => {
-//                 const cellValue = row.getCell('C').value; // Бренд
-//                 if (cellValue !== null) {
-//                     const formatedCellValue = cellValue.toString().trim();
-//                     const formatedUserBrand = user.brand.toString().trim();
+            let foundMatchBrand = false;
 
-//                     if (formatedCellValue.toLowerCase() === formatedUserBrand.toLowerCase()) {
-//                         foundMatchBrand = true;
+            firstWorksheet.eachRow( async (row, rowNumber) => {
+                const cellValue = row.getCell('F').value; // Артикул
 
-//                         const dValue = row.getCell('D').value; // Поставщик
-//                         user.update({vendor: dValue.toUpperCase()});
-//                         console.log ( `Поставщик бренда ${user.brand} = ${user.vendor}`);
+                if (cellValue !== null) {
+                    const formatedCellValue = cellValue.toString().trim();
+                    const formatedUserVC = user.vendorCode.toString().trim();
 
-//                     }
-//                 }
-//                 return;
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toLowerCase();
+                    }
 
-//             });
+                    if (formatedCellValue === formatedUserVC.toLowerCase()) {
+                        foundMatchBrand = true;
 
-//         } catch (e) {
-//             return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
-//         }
-//     }
-// };
+                        const gValue = row.getCell('G').value; // Номенкулатура
+                        const hValue = row.getCell('H').value; // Серия
+                        const iValue = row.getCell('I').value; // Свободный остаток
 
+                        await bot.sendMessage(
+                            chatId, 
+                            `${gValue}\n серии ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
+                            startFindOptions
+                        )
+                    }
+                }
+                return;
+
+            });
+
+        } catch (e) {
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`)
+        }
+    }
+};
+// ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
+// ======================================================================================================================================
 
 const start = async () => {
     console.log('Бот запщуен...')
@@ -1039,7 +1083,11 @@ bot.on('message', async msg => {
 
         //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
         if (lc === '/enterVC') {
-            await user.update({vendorCode: text.toUpperCase()});
+            if (isNaN(vendorCode)) {
+                await user.update({vendorCode: text.toUpperCase()});
+            } else {
+                await user.update({vendorCode: text});
+            }
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
             botMsgIdx = msg.message_id += 1; 
@@ -1055,6 +1103,15 @@ bot.on('message', async msg => {
                     {parse_mode: 'HTML'}
                 );
             }
+        }
+
+        if (lc === 'findDecorDelux') {
+            if (isNaN(vendorCode)) {
+                await user.update({vendorCode: text.toUpperCase()});
+            } else {
+                await user.update({vendorCode: text});
+            }
+            return findDecorDelux(chatId);
         }
 
         //Вводится Партия и колличество для резерва по поставщику ОПУС
@@ -1149,7 +1206,7 @@ bot.on('message', async msg => {
     try {
         const file_name = msg.document.file_name;
         const chatId = msg.chat.id;
-
+        // нижний регистр, замена пробелов на _
         if (msg.document) {
             if (file_name.toLowerCase().includes('каталоги') ||
                 file_name.toLowerCase().includes('прайслистов')
@@ -1172,9 +1229,10 @@ bot.on('message', async msg => {
                     });
                 });
                 return;
-
+            // обрезка дат, нижний регистр, замена пробелов на _
             } else if (file_name.toLowerCase().includes('поставщиков') || 
-                        file_name.toLowerCase().includes('остатки')
+                        file_name.toLowerCase().includes('остатки') ||
+                        file_name.toLowerCase().includes('ДД')
                     ) {
 
                 await bot.getFile(msg.document.file_id).then((file) => {
@@ -1352,6 +1410,8 @@ bot.on('callback_query', async msg => {
                     `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
+            } else if(formatedUserVendor.includes('ДЕКОРДУЛЮКС')) {
+                return findDecorDelux(chatId);
             } else {
                 return bot.sendMessage(
                     chatId, 
