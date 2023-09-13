@@ -1083,7 +1083,7 @@ bot.on('message', async msg => {
 
         //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
         if (lc === '/enterVC') {
-            if (isNaN(vendorCode)) {
+            if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
             } else {
                 await user.update({vendorCode: text});
@@ -1106,7 +1106,7 @@ bot.on('message', async msg => {
         }
 
         if (lc === 'findDecorDelux') {
-            if (isNaN(vendorCode)) {
+            if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
             } else {
                 await user.update({vendorCode: text});
