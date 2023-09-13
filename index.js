@@ -859,7 +859,8 @@ async function findDecorDelux(chatId) {
 
     const result = await findExcelFile(fileNameDecorDelux);
     const filePath = result.fileNameDecorDelux;
-
+    console.log(filePath);
+    
     if (filePath) {
 
     const user = await UserModel.findOne({
