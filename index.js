@@ -371,7 +371,7 @@ async function findExcelFile(
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
-            } else if (file.toLowerCase().includes('остатки_дд_на')) {
+            } else if (file.toLowerCase().includes('остатки_дд')) {
                 fileNameDecorDelux = filePath;
             }
         }
@@ -860,13 +860,14 @@ async function findDecorDelux(chatId) {
     const result = await findExcelFile(fileNameDecorDelux);
     const filePath = result.fileNameDecorDelux;
 
+    if (filePath) {
+
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         }
     });
 
-    if (filePath) {
         try {
 
             const workbook = new ExcelJS.Workbook();
@@ -878,16 +879,16 @@ async function findDecorDelux(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('F').value; // Артикул
-
                 if (cellValue !== null) {
+
                     const formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
 
                     if (isNaN(formatedCellValue)) {
-                        formatedCellValue = formatedCellValue.toLowerCase();
+                        formatedCellValue = formatedCellValue.toUpperCase();
                     }
 
-                    if (formatedCellValue === formatedUserVC.toLowerCase()) {
+                    if (formatedCellValue === formatedUserVC) {
                         foundMatchBrand = true;
 
                         const gValue = row.getCell('G').value; // Номенкулатура
