@@ -853,14 +853,13 @@ async function findPricelistLink(chatId, cValue) {
 
 async function findDecorDelux(chatId) {
 
-    lc = 'findDecorDelux';
     let fileNameDecorDelux = 'остатки_дд_на.xlsx';
     fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
     const result = await findExcelFile(fileNameDecorDelux);
     const filePath = result.fileNameDecorDelux;
     console.log(filePath);
-    
+
     if (filePath) {
 
     const user = await UserModel.findOne({
@@ -1096,6 +1095,8 @@ bot.on('message', async msg => {
 
             if (formatedUserVendor === 'ОПУС') {
                 return startFind(chatId);
+            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+                return findDecorDelux(chatId);
             } else {
                 lc = '/enterNumberofVC';
                 bot.deleteMessage(chatId, botMsgIdx);
@@ -1413,11 +1414,10 @@ bot.on('callback_query', async msg => {
                     {parse_mode: 'HTML'}
                 );
             } else if(formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
-                lc = 'findDecorDelux';
                 return bot.sendMessage(
                     chatId,
                     `Введите искомый вами артикул:`
-                )
+                );
             } else {
                 return bot.sendMessage(
                     chatId, 
