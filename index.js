@@ -1411,7 +1411,11 @@ bot.on('callback_query', async msg => {
                     {parse_mode: 'HTML'}
                 );
             } else if(formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
-                return findDecorDelux(chatId);
+                lc = 'findDecorDelux';
+                return bot.sendMessage(
+                    chatId,
+                    `Введите искомый вами артикул:`
+                )
             } else {
                 return bot.sendMessage(
                     chatId, 
