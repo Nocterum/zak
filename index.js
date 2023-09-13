@@ -892,7 +892,7 @@ async function findDecorDelux(chatId) {
                 const cellValue = firstWorksheet[cellAddress].v;
         
                 if (cellValue !== null) {
-                    const formatedCellValue = cellValue.toString().trim();
+                    let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
         
                     if (isNaN(formatedCellValue)) {
