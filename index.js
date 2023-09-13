@@ -4,7 +4,8 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
-const xlsjs = require('xlsjs');
+const xlsjs = require('xlsjs'); //
+const XLSX = require('xlsx');
 const { JSDOM } = require('jsdom'); //
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
@@ -873,7 +874,7 @@ async function findDecorDelux(chatId) {
 
         try {
 
-            const workbook = xls.readFile(filePath);
+            const workbook = XLSX.readFile(filePath);
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
