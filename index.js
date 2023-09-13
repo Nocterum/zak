@@ -73,7 +73,7 @@ const startRequest1C = async (chatId) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
 
-        const response = axios.get(searchUrl1C);
+        const response = await axios.get(searchUrl1C);
         await new Promise(resolve => setTimeout(resolve, 2000));
         console.log(response.data);
 
@@ -909,7 +909,7 @@ async function findDecorDelux(chatId) {
 
                         await bot.sendMessage(
                             chatId, 
-                            `${gValue}\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         )
                     }
