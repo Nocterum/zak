@@ -72,79 +72,41 @@ const startRequest1C = async (chatId) => {
         const vendorCode = 'PLGUM5';
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
-
         const response = await axios.get(searchUrl1C);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        console.log(response.data);
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        
+        // Создание виртуального DOM
+        const dom = new JSDOM(response.data);
+        const document = dom.window.document;
 
-        // Создаем экземпляр axios с настройками cookie
-        // const axiosInstance = axios.create({
-        //     withCredentials: true,
-        // });
+        // Получение таблицы из DOM
+        const tableElement = document.createElement('table');
+        tableElement.innerHTML = response.data;
 
-        // const response = await axiosInstance.request({
-        //     url: url,
-        //     method: 'POST',
-        //     data: `VendorCode=${vendorCode}`
-        // });
+        // Получение строк таблицы
+        const rows = tableElement.querySelectorAll('tr');
 
-        // const dom = new JSDOM(response.data);
-        // const documentUrl = dom.window.document;
+        // Проверка наличия данных в таблице
+        if (rows.length > 0) {
 
-        // const formElement = documentUrl.querySelector("body > form");  // ссылка на форму отправки
+            // Форматирование данных построчно
+            const formatedData = Array.from(rows).map(row => {
+                const cells = row.querySelectorAll('td');
+                return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+            });
 
-        // const inputElement = documentUrl.querySelector("body > form > input[type=text]:nth-child(1)"); // ссылка на поле ввода артикула
-        // console.log('Поле ввода артикула найдено');
-        // inputElement.value = vendorCode;
-        // console.log('Артикул ' + vendorCode + ' введен');
-
-        // const submitEvent = new dom.window.Event('click', { bubbles: true, cancelable: true }); // метод submit
-        // if (formElement !== null) {
-
-        //     formElement.dispatchEvent(submitEvent); 
-        // } else {
-        //     console.log('formElement не найден')
-        // }
-
-        // Ждем некоторое время, чтобы страница успела обработать запрос
-        // await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // // Получаем ответ после обработки запроса
-        // const updatedResponse = await axios.get(url);
-        // const updatedDom = new JSDOM(updatedResponse.data);
-        // const updatedDocument = updatedDom.window.document;
-
-        // const tableElement = updatedDocument.querySelector("body > table:nth-child(3)"); // Истинный путь к таблице
-        // const responseUpdate = await axios.get(url);
-
-        // console.log(responseUpdate.data);
-        // console.log(tableElement);
-
-        // if (tableElement) {
-
-        //     const rows = tableElement.querySelectorAll('tr');
-
-        //     if (rows.length > 0) {
-
-        //         const formatedData = Array.from(rows).map(row => {
-        //             const cells = row.querySelectorAll('td');
-        //             return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
-        //         });
-
-        //         if (formatedData.length > 0) {
-        //             return bot.sendMessage(chatId, formatedData.join('\n'));
-        //         } else {
-        //             console.log('В таблице нет данных');
-        //         }
-        //     } else {
-        //         console.log('Не найденны строки в таблице');
-        //     }
-        // } else {
-        //     console.log('Таблица не найдена');
-        // }
-
+            // Вывод данных пользователю
+            if (formatedData.length > 0) {
+                return bot.sendMessage(
+                    chatId, 
+                    `${formatedData.join('\n')}`
+                );
+            } else {
+                console.log('В таблице нет данных');
+            }
+        } else {
+            console.log('Не найденны строки в таблице');
+        }
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
     }
