@@ -853,7 +853,7 @@ async function findPricelistLink(chatId, cValue) {
 
 async function findDecorDelux(chatId) {
 
-    let fileNameDecorDelux = 'остатки_дд_на.xlsx';
+    let fileNameDecorDelux = 'остатки_дд_на.xls';
     fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
     const result = await findExcelFile(fileNameDecorDelux);
@@ -1106,15 +1106,6 @@ bot.on('message', async msg => {
                     {parse_mode: 'HTML'}
                 );
             }
-        }
-
-        if (lc === 'findDecorDelux') {
-            if (isNaN(user.vendorCode)) {
-                await user.update({vendorCode: text.toUpperCase()});
-            } else {
-                await user.update({vendorCode: text});
-            }
-            return findDecorDelux(chatId);
         }
 
         //Вводится Партия и колличество для резерва по поставщику ОПУС
