@@ -1410,7 +1410,7 @@ bot.on('callback_query', async msg => {
                     `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
-            } else if(formatedUserVendor.includes('ДЕКОРДУЛЮКС')) {
+            } else if(formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
                 return findDecorDelux(chatId);
             } else {
                 return bot.sendMessage(
