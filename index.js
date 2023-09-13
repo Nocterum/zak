@@ -909,7 +909,7 @@ async function findDecorDelux(chatId) {
 
                         await bot.sendMessage(
                             chatId, 
-                            `${gValue}\n серии ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `${gValue}\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         )
                     }
