@@ -69,7 +69,7 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId) => {
     try {
 
-        const vendorCode = 'plege075';
+        const vendorCode = 'PLGUM5';
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
 
