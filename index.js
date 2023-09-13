@@ -4,6 +4,7 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const ExcelJS = require('exceljs');
+const xlsjs = require('xlsjs');
 const { JSDOM } = require('jsdom'); //
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
@@ -860,7 +861,7 @@ async function findDecorDelux(chatId) {
 
     const result = await findExcelFile(fileNameDecorDelux);
     const filePath = result.fileNameDecorDelux;
-    console.log(filePath);
+
 
     if (filePath) {
 
@@ -872,30 +873,31 @@ async function findDecorDelux(chatId) {
 
         try {
 
-            const workbook = new ExcelJS.Workbook();
-            const stream = fs.createReadStream(filePath);
-            const worksheet = await workbook.xlsx.read(stream);
-            const firstWorksheet = worksheet.worksheets[0];
+            const workbook = xls.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-            let foundMatchBrand = false;
+            let foundMatch = false;
 
-            firstWorksheet.eachRow( async (row, rowNumber) => {
-                const cellValue = row.getCell('F').value; // Артикул
+            for (let cellAddress in firstWorksheet) {
+                if (cellAddress[0] === '!') continue;
+        
+                const cellValue = firstWorksheet[cellAddress].v;
+        
                 if (cellValue !== null) {
-
                     const formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
-
+        
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-
+        
                     if (formatedCellValue === formatedUserVC) {
-                        foundMatchBrand = true;
+                        foundMatch = true;
 
-                        const gValue = row.getCell('G').value; // Номенкулатура
-                        const hValue = row.getCell('H').value; // Серия
-                        const iValue = row.getCell('I').value; // Свободный остаток
+                        const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
+                        const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия
+                        const iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Свободный остаток
+        
 
                         await bot.sendMessage(
                             chatId, 
@@ -904,8 +906,7 @@ async function findDecorDelux(chatId) {
                         )
                     }
                 }
-                
-            });
+            };
             return;
 
         } catch (e) {
