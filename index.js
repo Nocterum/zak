@@ -122,28 +122,28 @@ const startRequest1C = async (chatId) => {
         // console.log(responseUpdate.data);
         // console.log(tableElement);
 
-        if (tableElement) {
+        // if (tableElement) {
 
-            const rows = tableElement.querySelectorAll('tr');
+        //     const rows = tableElement.querySelectorAll('tr');
 
-            if (rows.length > 0) {
+        //     if (rows.length > 0) {
 
-                const formatedData = Array.from(rows).map(row => {
-                    const cells = row.querySelectorAll('td');
-                    return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
-                });
+        //         const formatedData = Array.from(rows).map(row => {
+        //             const cells = row.querySelectorAll('td');
+        //             return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+        //         });
 
-                if (formatedData.length > 0) {
-                    return bot.sendMessage(chatId, formatedData.join('\n'));
-                } else {
-                    console.log('В таблице нет данных');
-                }
-            } else {
-                console.log('Не найденны строки в таблице');
-            }
-        } else {
-            console.log('Таблица не найдена');
-        }
+        //         if (formatedData.length > 0) {
+        //             return bot.sendMessage(chatId, formatedData.join('\n'));
+        //         } else {
+        //             console.log('В таблице нет данных');
+        //         }
+        //     } else {
+        //         console.log('Не найденны строки в таблице');
+        //     }
+        // } else {
+        //     console.log('Таблица не найдена');
+        // }
 
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
