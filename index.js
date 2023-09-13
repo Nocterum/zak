@@ -73,8 +73,8 @@ const startRequest1C = async (chatId) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
 
-        const response = axios.get(searchUrl1C);
         await new Promise(resolve => setTimeout(resolve, 1000));
+        const response = axios.get(searchUrl1C);
         console.log(response.data);
 
         
