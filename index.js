@@ -54,10 +54,10 @@ bot.setMyCommands([
 
 //ФУНКЦИИ=========================================================================================
 
-// Функция ввода емейла
+// Функция ввода email
 const editEmail = async (chatId) => {
     lc = '/editEmail'
-    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий e-mail:`)
+    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий email:`)
 }
 
 // Функция ввода никнейма
@@ -97,6 +97,12 @@ const startRequest1C = async (chatId) => {
 
             // Вывод данных пользователю
             if (formatedData.length > 0) {
+
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+
                 return bot.sendMessage(
                     chatId, 
                     `${formatedData.join('\n')}`
@@ -197,7 +203,11 @@ const startFind = async (chatId) => {
             });
         });
 
-            await bot.deleteMessage(chatId, botMsgIdx);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+
             // Проверяем наличие таблицы
             if (availabilityTable.length === 0) {
 
@@ -230,21 +240,27 @@ const startFind = async (chatId) => {
             }
 
         } else {
-            await bot.deleteMessage(chatId, botMsgIdx);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
             bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFindOptions);
             return;
         }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
-        bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
-        return bot.deleteMessage(chatId, botMsgIdx);
+        if (botMsgIdx !== null) {
+            bot.deleteMessage(chatId, botMsgIdx);
+            botMsgIdx = null;
+        }
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
     }
    
 }
 
 // ======================================================================================================================================
-// Функция отправки емейла с запросом на резервирование
+// Функция отправки email с запросом на резервирование
 // ======================================================================================================================================
 
 const sendReserveEmail = async (chatId) => {
@@ -271,7 +287,7 @@ const sendReserveEmail = async (chatId) => {
 
       } catch (e) {
         console.error(e);
-        throw new Error('Ошибка при отправке емейла');
+        throw new Error('Ошибка при отправке email');
     }
 }
 
@@ -933,7 +949,7 @@ bot.onText(/\/start/, async msg => {
             lc = '/editNickname';
             return bot.sendMessage(
                 chatId, 
-                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде емейла на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
+                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
             );
         } else if (password !== 'true') {
             password = false;
@@ -1004,7 +1020,6 @@ bot.on('message', async msg => {
             }
         };
 
-        
         //главное меню 
         if (text === '/mainmenu') {
             lc = null;
@@ -1015,12 +1030,12 @@ bot.on('message', async msg => {
             ); 
         }
 
-        //Записываем e-mail в ячейку БД
+        //Записываем email в ячейку БД
         if (lc === '/editEmail') {
             await user.update({email: text.toLowerCase()});
             return bot.sendMessage(
                 chatId, 
-                `Ваш e-mail "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите e-mail повторно)</i>`, 
+                `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите email повторно)</i>`, 
                 beginWorkOptions
             );
         }            
@@ -1056,7 +1071,7 @@ bot.on('message', async msg => {
             }
         }
 
-        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку емейла
+        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку email
         if (lc === '/enterVC') {
             if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
@@ -1073,13 +1088,23 @@ bot.on('message', async msg => {
                 return findDecorDelux(chatId);
             } else {
                 lc = '/enterNumberofVC';
-                bot.deleteMessage(chatId, botMsgIdx);
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
                 return bot.sendMessage(
                     chatId,
                     `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>а так же введите единицы измерения через пробел</i>`,
                     {parse_mode: 'HTML'}
                 );
             }
+        }
+
+        // Поиск в базе 1С
+        if (lc === '/request1C') {
+            await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
+            botMsgIdx = msg.message.message_id += 1; 
+            return startRequest1C(chatId); 
         }
 
         //Вводится Партия и колличество для резерва по поставщику ОПУС
@@ -1101,35 +1126,35 @@ bot.on('message', async msg => {
             }
         }
 
+        // Ввод колличества запрашиваемого артикула
         if (lc === '/enterNumberofVC') {
             lc = null;
             await user.update({reserveNumber: text});
             return bot.sendMessage(
                 chatId, 
                 `Отлично!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
-                startFind2Options);
-            }
+                startFind2Options
+            );
+        }
             
-            //Записываем артикул каталога
-            if (lc === '/catalogСheck') {
-                await user.update(
-                    {catalog: text}
-                    );
-                    await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
-                    botMsgIdx = msg.message_id += 1; 
-                    return findCatalogWallpaper(chatId);
-                }
-                
-                if (lc === '/oracСheck') {
-                    await user.update(
-                        {vendorCode: text.toUpperCase()}
-                        );
-                        await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
-                        botMsgIdx = msg.message_id += 1; 
-                        return findOrac(chatId);
-                    }
+        //Записываем артикул каталога
+        if (lc === '/catalogСheck') {
+            await user.update({catalog: text});
+
+            await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
+            botMsgIdx = msg.message_id += 1; 
+            return findCatalogWallpaper(chatId);
+        }
+         
+        // Ввод артикула Orac для поиска
+        if (lc === '/oracСheck') {
+            await user.update({vendorCode: text.toUpperCase()});
+            await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
+            botMsgIdx = msg.message_id += 1; 
+            return findOrac(chatId);
+        }
                     
-                    //вывод информации
+        //вывод информации
         if (text === '/infowork') {
             return bot.sendMessage(
                 chatId, 
@@ -1138,6 +1163,7 @@ bot.on('message', async msg => {
             );
         }
 
+        // Результаты в игре
         if (text === '/infogame') {
             lc = null;
             return bot.sendMessage(
@@ -1146,6 +1172,7 @@ bot.on('message', async msg => {
             );
         }   
 
+        // Приветствие 
         if (text.toLowerCase().includes('привет')) {
 
             return bot.sendSticker(
@@ -1154,6 +1181,7 @@ bot.on('message', async msg => {
             );
         }
 
+        // Заглушка на все случаи жизни
         if ( (text !== '/game' && text !== '/start') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendSticker(
                 chatId, 
@@ -1313,7 +1341,7 @@ bot.on('callback_query', async msg => {
         return editNickname(chatId);
     }
 
-    //изменить e-mail
+    //изменить email
     if (data === '/editEmail') {
         return editEmail(chatId);
     }
@@ -1433,7 +1461,7 @@ bot.on('callback_query', async msg => {
         }
         return bot.sendMessage(
             chatId, 
-            `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
     }
 
     if (data === '/preSendEmailReserveYes') {
@@ -1443,7 +1471,7 @@ bot.on('callback_query', async msg => {
         
         return bot.sendMessage(
             chatId, 
-            `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
             sendReserveOptions
         );
     }
@@ -1455,7 +1483,7 @@ bot.on('callback_query', async msg => {
         
         return bot.sendMessage(
             chatId, 
-            `Сформирован емейл:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
             sendReserveOptions
         );
 
@@ -1468,7 +1496,7 @@ bot.on('callback_query', async msg => {
     }
 
     //проверка каталога в наличии в салоне
-    if(data === '/catalogСheck') {
+    if (data === '/catalogСheck') {
         lc = data;
         return bot.sendMessage(
             chatId, 
@@ -1478,17 +1506,26 @@ bot.on('callback_query', async msg => {
     }
 
     //проверка наличия артикула ORAC в салоне
-    if(data === '/oracСheck') {
+    if (data === '/oracСheck') {
         lc = data;
         return bot.sendMessage(
             chatId, 
-            'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
+            'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
+            {parse_mode: 'HTML'}
+        );
+    }
+
+    if (data === '/request1C') {
+        lc = '/request1C';
+        return bot.sendMessage(
+            chatId, 
+            'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
             {parse_mode: 'HTML'}
         );
     }
 
     //превью фото
-    if(data === '/work2') {
+    if (data === '/work2') {
         lc = null;
         return bot.sendMessage(
             chatId, 
@@ -1498,7 +1535,7 @@ bot.on('callback_query', async msg => {
     }
 
     //добавить в заказ
-    if(data === '/work3') {
+    if (data === '/work3') {
         lc = null;
         return bot.sendMessage(
             chatId, 
@@ -1506,14 +1543,6 @@ bot.on('callback_query', async msg => {
             mainMenuReturnOptions
         );
     }
-
-    //добавить в заказ
-    if(data === '/request1C') {
-        lc = null;
-        await bot.sendMessage(chatId, `Извините, я этому пока ещё учусь😅`, mainMenuReturnOptions);
-        return startRequest1C(chatId); 
-    }
-
 
     //рестарт игры
     if (data === '/again') {
