@@ -371,7 +371,7 @@ async function findExcelFile(
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
-            } else if (file.toLowerCase().includes('список_поставщиков')) {
+            } else if (file.toLowerCase().includes('остатки_дд_на')) {
                 fileNameDecorDelux = filePath;
             }
         }
@@ -854,11 +854,11 @@ async function findPricelistLink(chatId, cValue) {
 async function findDecorDelux(chatId) {
 
     lc = 'findDecorDelux';
-    let fileNameVendor = 'остатки_дд_на.xlsx';
-    fileNameVendor = fileNameVendor.toLowerCase();
+    let fileNameDecorDelux = 'остатки_дд_на.xlsx';
+    fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
-    const result = await findExcelFile(fileNameVendor);
-    const filePath = result.fileNameVendor;
+    const result = await findExcelFile(fileNameDecorDelux);
+    const filePath = result.fileNameDecorDelux;
 
     const user = await UserModel.findOne({
         where: {
