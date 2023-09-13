@@ -783,7 +783,7 @@ async function findPricelistLink(chatId, cValue) {
                         const aValue = row.getCell('A').value;  // Поставщик
                         let bValue = row.getCell('B').value;  // Бренд
                         const cValue = row.getCell('C').value;  // Ссылка на прайслист
-                        const dValue = row.getCell('D').value;
+                        const dValue = row.getCell('D').value;  // почтовый ящик поставщика
                         user.update({vendor: aValue.toUpperCase()});
                         vendor = aValue.toUpperCase();
                         if (dValue !== null) {
@@ -968,7 +968,15 @@ bot.on('message', async msg => {
         if (password === false) {
             if (text === '111QWER!!!') {
                 password = 'true';
-                return bot.emit('text', { text: '/start', chat: { id: chatId } });
+
+                return bot.processUpdate({
+                    message: {
+                      text: '/start',
+                      chat: {
+                        id: chatId
+                      }
+                    }
+                  });
             } else {
                 return bot.sendMessage(
                     chatId, 
@@ -1115,15 +1123,6 @@ bot.on('message', async msg => {
 
         if (text.toLowerCase().includes('привет')) {
 
-            return bot.processUpdate({
-              message: {
-                text: '/start',
-                chat: {
-                  id: chatId
-                }
-              }
-            });
-            
             return bot.sendSticker(
                 chatId, 
                 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
@@ -1312,24 +1311,35 @@ bot.on('callback_query', async msg => {
 
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-            if (formatedUserVendor.includes('БЛАГОДАТЬ') ||
-                formatedUserVendor.includes('ДЕКОРТРЕЙД') ||
-                formatedUserVendor.includes('HUGGE') ||
-                formatedUserVendor.includes('MILASSA') ||
-                formatedUserVendor.includes('RACH MARBURG') ||
-                formatedUserVendor.includes('АВТ') ||
-                formatedUserVendor.includes('БАУТЕКС') ||
-                formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+            if (formatedUserVendor.includes('КАДО') ||
+                formatedUserVendor.includes('АКУРА') ||
+                formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
+                formatedUserVendor.includes('ГАЙДАРЬ') ||
                 formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-                formatedUserVendor.includes('ДЕКОРРУС') ||
-                formatedUserVendor.includes('КОНТРАКТ ПЛЮС') ||
-                formatedUserVendor.includes('ЛЕВАНТИН') ||
-                formatedUserVendor.includes('ПРОТОС') ||
-                formatedUserVendor.includes('ОДИЗАЙН') ||
-                formatedUserVendor.includes('РОБЕРТС') ||
-                formatedUserVendor.includes('РУАЛЬЯНС') ||
+                formatedUserVendor.includes('БЕРНИНГХЭДС') ||
+                formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+                formatedUserVendor.includes('АВТ') ||
+                formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
+                formatedUserVendor.includes('ФАБРИКДЕКО') ||
+                formatedUserVendor.includes('ШИЛИН') ||
+                formatedUserVendor.includes('ENGLISCHDECOR') ||
+                formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
+                formatedUserVendor.includes('ШЕВЧЕНКО') ||
+                formatedUserVendor.includes('ФОРПОСТ') ||
+                formatedUserVendor.includes('HOUSEOFJAB') ||
+                formatedUserVendor.includes('РИКСОР') ||
+                formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
+                formatedUserVendor.includes('БУНТИНА') ||
+                formatedUserVendor.includes('RUBELLI') ||
+                formatedUserVendor.includes('ИНТЕРДЕКОР') ||
+                formatedUserVendor.includes('ОКНАРОСТА') ||
                 formatedUserVendor.includes('ЛОЙМИНА') ||
-                formatedUserVendor.includes('ЮГАРТ')
+                formatedUserVendor.includes('ЛИСОХМАРА') ||
+                formatedUserVendor.includes('ПОДРЕЗ') ||
+                formatedUserVendor.includes('РОБЕРТС') ||
+                formatedUserVendor.includes('ЮГАРТ') ||
+                formatedUserVendor.includes('ПРОТОС') ||
+                formatedUserVendor.includes('РУАЛЬЯНС') 
             ) {
                 return bot.sendMessage(
                     chatId, 
