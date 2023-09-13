@@ -874,7 +874,7 @@ async function findDecorDelux(chatId) {
 
         try {
 
-            const workbook = XLSX.readFile(filePath);
+            const workbook = xlsjs.readFile(filePath);
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
