@@ -85,21 +85,22 @@ const startRequest1C = async (chatId, vendorCode) => {
         // Проверка наличия данных в таблице
 
         if (rows.length > 0) {
+            let warehouse, quantity, reserve;
 
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
 
                 if (cells[0]) {
-                    const warehouse = cells[0].textContent.trim();  // склад
+                    warehouse = cells[0].textContent.trim();  // склад
                     return warehouse;
                 }
                 if (cells[1]) {
-                    const quantity = cells[1].textContent.trim();   // колличество
+                    quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     return quantity;
                 }
                 if (cells[2]) {
-                    const reserve = cells[2].textContent.trim();     // резерв
+                    reserve = cells[2].textContent.trim();     // резерв
                     return reserve;
                 }
                 return `${warehouse}\nКолличество: ${quantity}; Резерв: ${reserve}\n\n`
@@ -107,7 +108,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             });
 
             // Вывод данных пользователю
-            if (formatedData.length > 0) {
+            if (formatedData.length > 0 && warehouse && quantity && reserve) {
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
