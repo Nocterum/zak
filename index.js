@@ -91,7 +91,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
 
-                if (row !== 1) {
+                if (row !== 4) {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
@@ -99,7 +99,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     }
                     if (cells[2]) {
-                        reserve = cells[2].textContent.trim();     // резерв
+                        reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     }
                 }
 
