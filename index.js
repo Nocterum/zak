@@ -88,12 +88,13 @@ const startRequest1C = async (chatId, vendorCode) => {
 
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
+                const cells = row.querySelectorAll('td');
+                
                 if (index !== 0) {
                     const header1 = cells[0].textContent.trim();
                     console.log(header1);
                     // return `${header1}`;
                 } else {
-                    const cells = row.querySelectorAll('td');
                     if (cells[0]) {
                         const warehouse = cells[0].textContent.trim();  // склад
                         return warehouse;
