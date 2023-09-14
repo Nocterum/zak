@@ -119,7 +119,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                if (obj.warehouse === "Склад") {
+                if (obj.warehouse === "undefined") {
                     return "";
                 } else {
                 const message = formatedData.map(obj => `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`).join('');
