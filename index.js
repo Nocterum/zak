@@ -28,7 +28,7 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
-const {transporter, recipient} = require('./nodemailer');
+const {transporter} = require('./nodemailer');
 const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
 //const BrandModel = require('./models');
@@ -291,6 +291,7 @@ const sendReserveEmail = async (chatId) => {
         }
     });
     
+    const recipient = 'nick.of.darkwood@gmail.com';     // email поставщика
     const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
 
     try {
