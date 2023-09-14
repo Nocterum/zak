@@ -72,7 +72,7 @@ const startRequest1C = async (chatId, vendorCode) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
         const response = await axios.get(searchUrl1C);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
@@ -1104,7 +1104,7 @@ bot.on('message', async msg => {
             await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
-            botMsgIdx = msg.message += 1; 
+            botMsgIdx = msg.message_id += 1; 
             return startRequest1C(chatId, vendorCode); 
         }
 
