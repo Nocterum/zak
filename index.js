@@ -72,15 +72,14 @@ const startRequest1C = async (chatId, vendorCode) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
 
         const response = await axios.get(searchUrl1C);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // await new Promise(resolve => setTimeout(resolve, 500));
 
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
         // Получение таблицы из DOM
-        const tableElement = document.createElement('table');
-        tableElement.innerHTML = response.data;
+        const tableElement = document.querySelector('table');
 
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
@@ -89,9 +88,16 @@ const startRequest1C = async (chatId, vendorCode) => {
         if (rows.length > 0) {
 
             // Форматирование данных построчно
-            const formatedData = Array.from(rows).map(row => {
-                const cells = row.querySelectorAll('td');
-                return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+            const formatedData = Array.from(rows).map((row, index) => {
+                if (index === 0) {
+                    return `Склад:\n${row.querySelector('td').textContent.trim()}`;
+                } else {
+                    const cells = row.querySelectorAll('td');
+                    const warehouse = cells[0].textContent.trim();
+                    const quantity = cells[1].textContent.trim();
+                    const reserve = cells[2].textContent.trim();
+                    return `${warehouse}\nКоличество: ${quantity}\nРезерв: ${reserve}`;
+                }
             });
 
             // Вывод данных пользователю
@@ -104,7 +110,7 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                 return bot.sendMessage(
                     chatId, 
-                    `${formatedData.join('\n')}`
+                    `${formatedData.join('\n\n')}`
                 );
             } else {
                 console.log('В таблице нет данных');
