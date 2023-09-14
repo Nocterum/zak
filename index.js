@@ -97,9 +97,13 @@ const startRequest1C = async (chatId, vendorCode) => {
                     }
                     if (cells[1]) {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
+                    } else {
+                        quantity = `0`;
                     }
                     if (cells[2]) {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
+                    } else {
+                        reserve = `0`;
                     }
                 }
 
