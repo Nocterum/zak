@@ -95,7 +95,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     const header2 = cells[1].textContent.trim();
                     // const header3 = cells[2].textContent.trim();
                     console.log(header1, header2, header3);
-                    return `${header1}, ${header2}, ${header3}`;
+                    return `${header1}, ${header2}`;
                 } else {
                     const cells = row.querySelectorAll('td');
                     const warehouse = cells[0].textContent.trim();
