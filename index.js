@@ -1103,7 +1103,7 @@ bot.on('message', async msg => {
         if (lc === '/request1C') {
             await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
-            botMsgIdx = msg.message.message_id += 1; 
+            botMsgIdx = msg.message += 1; 
             return startRequest1C(chatId, user.vendorCode); 
         }
 
