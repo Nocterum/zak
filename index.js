@@ -93,15 +93,12 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                 if (cells[0]) {
                     warehouse = cells[0].textContent.trim();  // склад
-                    return warehouse;
                 }
                 if (cells[1]) {
                     quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
-                    return quantity;
                 }
                 if (cells[2]) {
                     reserve = cells[2].textContent.trim();     // резерв
-                    return reserve;
                 }
                 return {
                     warehouse,
