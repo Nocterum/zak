@@ -78,7 +78,6 @@ const startRequest1C = async (chatId, vendorCode) => {
 
         // Получение таблицы из DOM
         const tableElement = document.querySelector("body > table:nth-child(3)");
-        // tableElement.innerHTML = response.data;
 
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
@@ -98,15 +97,14 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[1]) {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     } else {
-                        quantity = `0`;
+                        quantity = 0;
                     }
-                    if (cells[2] !== null) {
+                    if (cells[2]) {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     } else {
-                        reserve = `0`;
+                        reserve = 0;
                     }
                 }
-
                 return {
                     warehouse,
                     quantity,
