@@ -91,7 +91,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
 
-                if (row !== 0) {
+                if (row !== 1) {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
