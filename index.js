@@ -120,7 +120,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     botMsgIdx = null;
                 }
                 const message = formatedData.map(obj => {
-                    if (obj.warehouse === "Склад") {
+                    if (obj.warehouse === "undefined") {
                         return "";
                     } else {
                         return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`;
