@@ -89,7 +89,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
-                
+
                 if (index !== 0) {
                     const header1 = cells[0].textContent.trim();
                     console.log(header1);
@@ -108,7 +108,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         return reserve;
                     }
 
-                    return `${warehouse}\nКолличество: ${quantity} \ Резерв: ${reserve}\n\n`
+                    return `${warehouse}\nКолличество: ${quantity}; Резерв: ${reserve}\n\n`
                 }
             });
 
