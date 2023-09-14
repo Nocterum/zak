@@ -67,55 +67,37 @@ const editNickname = async (chatId) => {
 }
 
 const startRequest1C = async (chatId, vendorCode) => {
+
     try {
-
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
-
         const response = await axios.get(searchUrl1C);
-        await new Promise(resolve => setTimeout(resolve, 500));
-
+        // await new Promise(resolve => setTimeout(resolve, 500));
+        
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
 
         // Получение таблицы из DOM
-        const tableElement = document.querySelector('table');
+        const tableElement = document.createElement('table');
 
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
-
         // Проверка наличия данных в таблице
         if (rows.length > 0) {
-
             // Форматирование данных построчно
-            const formatedData = Array.from(rows).map((row, index) => {
-                if (index === 0) {
-                    const cells = row.querySelectorAll('td');
-                    const header1 = cells[0].textContent.trim();
-                    const header2 = cells[1].textContent.trim();
-                    // const header3 = cells[2].textContent.trim();
-                    console.log(header1, header2);
-                    return `${header1}, ${header2}`;
-                } else {
-                    const cells = row.querySelectorAll('td');
-                    const warehouse = cells[0].textContent.trim();
-                    const quantity = cells[1].textContent.trim();
-                    const reserve = cells[2].textContent.trim();
-                    return `${warehouse}\nКоличество: ${quantity}\nРезерв: ${reserve}`;
-                }
+            const formatedData = Array.from(rows).map(row => {
+                const cells = row.querySelectorAll('td');
+                return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
             });
-
             // Вывод данных пользователю
             if (formatedData.length > 0) {
-
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-
                 return bot.sendMessage(
                     chatId, 
-                    `${formatedData.join('\n\n')}`
+                    `${formatedData.join('\n')}`
                 );
             } else {
                 console.log('В таблице нет данных');
