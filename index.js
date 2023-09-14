@@ -108,7 +108,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             });
 
             // Вывод данных пользователю
-            if (formatedData.length > 0 && warehouse && quantity && reserve) {
+            if (formatedData.length > 0 ) {
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
