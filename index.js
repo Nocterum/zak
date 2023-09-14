@@ -84,13 +84,14 @@ const startRequest1C = async (chatId, vendorCode) => {
         const rows = tableElement.querySelectorAll('tr');
         // Проверка наличия данных в таблице
 
-        if (rows.length > 0 && row >= 1) {
+        if (rows.length > 0) {
             let warehouse, quantity, reserve;
 
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
 
+                if (index !== 0) {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
@@ -100,6 +101,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[2]) {
                         reserve = cells[2].textContent.trim();     // резерв
                     }
+                }
 
                 return {
                     warehouse,
