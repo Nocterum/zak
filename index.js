@@ -77,8 +77,10 @@ const startRequest1C = async (chatId, vendorCode) => {
         const document = dom.window.document;
 
         // Получение таблицы из DOM
-        const tableElement = document.querySelector("body > table:nth-child(3)");
-        tableElement.innerHTML = response.data;
+        const table = document.querySelector('table');
+        table.innerHTML = response.data;
+        const tableElement = table.querySelector("body > table:nth-child(3)");
+
 
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
