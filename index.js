@@ -123,7 +123,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (obj.warehouse === undefined) {
                         return "";
                     } else {
-                        return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`;
+                        return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve};\n\n`;
                     }
                 }).join('');
                 return bot.sendMessage(chatId, message);
@@ -290,17 +290,31 @@ const sendReserveEmail = async (chatId) => {
             chatId: chatId
         }
     });
-    //
+    
     const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
 
     try {
+        if (user.vendor !== null) {
+            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-        let result = transporter.sendMail({
-            from: 'zakupki_bot@manders.ru',
-            to: `${recipient}, ${copy}`,
-            subject: subject,
-            text: textMail,
-        });
+            if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+                let result = transporter.sendMail({
+                    from: 'zakupki_bot@manders.ru',
+                    to: `${copy}`,
+                    subject: subject,
+                    text: textMail,
+                });
+                return result;
+            } else {
+                let result = transporter.sendMail({
+                    from: 'zakupki_bot@manders.ru',
+                    to: `${recipient}, ${copy}`,
+                    subject: subject,
+                    text: textMail,
+                });
+                return result;
+            }
+        }
         
         console.log(result);
         bot.sendMessage(chatId, `Сообщение с темой: \n<pre>"${subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
@@ -1387,35 +1401,38 @@ bot.on('callback_query', async msg => {
 
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-            if (formatedUserVendor.includes('КАДО') ||
-                formatedUserVendor.includes('АКУРА') ||
-                formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
-                formatedUserVendor.includes('ГАЙДАРЬ') ||
-                formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-                formatedUserVendor.includes('БЕРНИНГХЭДС') ||
-                formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-                formatedUserVendor.includes('АВТ') ||
-                formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
-                formatedUserVendor.includes('ФАБРИКДЕКО') ||
-                formatedUserVendor.includes('ШИЛИН') ||
-                formatedUserVendor.includes('ENGLISCHDECOR') ||
-                formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
-                formatedUserVendor.includes('ШЕВЧЕНКО') ||
-                formatedUserVendor.includes('ФОРПОСТ') ||
-                formatedUserVendor.includes('HOUSEOFJAB') ||
-                formatedUserVendor.includes('РИКСОР') ||
-                formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
-                formatedUserVendor.includes('БУНТИНА') ||
-                formatedUserVendor.includes('RUBELLI') ||
+            if (formatedUserVendor.includes('РИКСОР') ||
+                formatedUserVendor.includes('ЛЕВАНТИН') ||
                 formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-                formatedUserVendor.includes('ОКНАРОСТА') ||
-                formatedUserVendor.includes('ЛОЙМИНА') ||
-                formatedUserVendor.includes('ЛИСОХМАРА') ||
-                formatedUserVendor.includes('ПОДРЕЗ') ||
-                formatedUserVendor.includes('РОБЕРТС') ||
-                formatedUserVendor.includes('ЮГАРТ') ||
-                formatedUserVendor.includes('ПРОТОС') ||
-                formatedUserVendor.includes('РУАЛЬЯНС') 
+                formatedUserVendor.includes('ОРАК') ||
+                formatedUserVendor.includes('ДЕКОРТРЕЙД') 
+                // formatedUserVendor.includes('КАДО') ||
+                // formatedUserVendor.includes('АКУРА') ||
+                // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
+                // formatedUserVendor.includes('ГАЙДАРЬ') ||
+                // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
+                // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
+                // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+                // formatedUserVendor.includes('АВТ') ||
+                // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
+                // formatedUserVendor.includes('ФАБРИКДЕКО') ||
+                // formatedUserVendor.includes('ШИЛИН') ||
+                // formatedUserVendor.includes('ENGLISCHDECOR') ||
+                // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
+                // formatedUserVendor.includes('ШЕВЧЕНКО') ||
+                // formatedUserVendor.includes('ФОРПОСТ') ||
+                // formatedUserVendor.includes('HOUSEOFJAB') ||
+                // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
+                // formatedUserVendor.includes('БУНТИНА') ||
+                // formatedUserVendor.includes('RUBELLI') ||
+                // formatedUserVendor.includes('ОКНАРОСТА') ||
+                // formatedUserVendor.includes('ЛОЙМИНА') ||
+                // formatedUserVendor.includes('ЛИСОХМАРА') ||
+                // formatedUserVendor.includes('ПОДРЕЗ') ||
+                // formatedUserVendor.includes('РОБЕРТС') ||
+                // formatedUserVendor.includes('ЮГАРТ') ||
+                // formatedUserVendor.includes('ПРОТОС') ||
+                // formatedUserVendor.includes('РУАЛЬЯНС') 
             ) {
                 return bot.sendMessage(
                     chatId, 
@@ -1436,7 +1453,7 @@ bot.on('callback_query', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `К сожалению, я еще не знаю как работать с поставщиком бренда<b>${user.brand}</b>.\nНо я могу подсказать остатки с сайта поставщика ОПУС, а так же, могу отправить запрос многим российским поставщикам о наличии, сроках и резервах.`,
+                    `К сожалению, я еще не могу работать с поставщиком бренда<b>${user.brand}</b>.`,
                     {parse_mode: 'HTML'}
                 );
             }
