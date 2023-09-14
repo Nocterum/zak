@@ -84,7 +84,7 @@ const startRequest1C = async (chatId, vendorCode) => {
         const rows = tableElement.querySelectorAll('tr');
         // Проверка наличия данных в таблице
 
-        if (rows.length > 0) {
+        if (rows.length > 0 && row >= 1) {
             let warehouse, quantity, reserve;
 
             // Форматирование данных построчно
