@@ -294,7 +294,7 @@ const sendReserveEmail = async (chatId) => {
     const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
 
     try {
-        if (user.vendor !== null) {
+
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
             if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
@@ -314,12 +314,12 @@ const sendReserveEmail = async (chatId) => {
                 });
                 return result;
             }
-        }
+        
         
         console.log(result);
-        bot.sendMessage(chatId, `Сообщение с темой: \n<pre>"${subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
+        return bot.sendMessage(chatId, `Сообщение с темой: \n<pre>"${subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, beginWork2Options)
 
-      } catch (e) {
+    } catch (e) {
         console.error(e);
         throw new Error('Ошибка при отправке email');
     }
