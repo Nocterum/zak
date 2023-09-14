@@ -119,12 +119,14 @@ const startRequest1C = async (chatId, vendorCode) => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                if (obj.warehouse === "undefined") {
-                    return "";
-                } else {
-                const message = formatedData.map(obj => `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`).join('');
+                const message = formatedData.map(obj => {
+                    if (obj.warehouse === "Склад") {
+                        return "";
+                    } else {
+                        return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`;
+                    }
+                }).join('');
                 return bot.sendMessage(chatId, message);
-                }
             } else {
                 console.log('В таблице нет данных');
             }
