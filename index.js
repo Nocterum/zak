@@ -103,7 +103,11 @@ const startRequest1C = async (chatId, vendorCode) => {
                     reserve = cells[2].textContent.trim();     // резерв
                     return reserve;
                 }
-                return `${warehouse}\nКолличество: ${quantity}; Резерв: ${reserve}\n\n`
+                return {
+                    warehouse,
+                    quantity,
+                    reserve
+                };
                 
             });
 
@@ -113,10 +117,8 @@ const startRequest1C = async (chatId, vendorCode) => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                return bot.sendMessage(
-                    chatId, 
-                    `${formatedData.join('\n')}`
-                );
+                const message = formatedData.map(obj => `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve}\n\n`).join('');
+                return bot.sendMessage(chatId, message);
             } else {
                 console.log('В таблице нет данных');
             }
