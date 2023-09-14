@@ -90,15 +90,16 @@ const startRequest1C = async (chatId, vendorCode) => {
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
-
-                if (cells[0]) {
-                    warehouse = cells[0].textContent.trim();  // склад
-                }
-                if (cells[1]) {
-                    quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
-                }
-                if (cells[2]) {
-                    reserve = cells[2].textContent.trim();     // резерв
+                if (index >= 5) {
+                    if (cells[0]) {
+                        warehouse = cells[0].textContent.trim();  // склад
+                    }
+                    if (cells[1]) {
+                        quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
+                    }
+                    if (cells[2]) {
+                        reserve = cells[2].textContent.trim();     // резерв
+                    }
                 }
                 return {
                     warehouse,
