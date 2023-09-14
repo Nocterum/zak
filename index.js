@@ -100,12 +100,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[2]) {
                         reserve = cells[2].textContent.trim();     // резерв
                     }
+                    return {
+                        warehouse,
+                        quantity,
+                        reserve
+                    };
                 }
-                return {
-                    warehouse,
-                    quantity,
-                    reserve
-                };
                 
             });
 
