@@ -69,8 +69,7 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId) => {
     try {
 
-        const vendorCode = 'PLGUM5';
-        const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
+        const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${user.vendorCode}&submit=Получить`;
 
         const response = await axios.get(searchUrl1C);
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -1102,9 +1101,10 @@ bot.on('message', async msg => {
 
         // Поиск в базе 1С
         if (lc === '/request1C') {
+            await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             botMsgIdx = msg.message.message_id += 1; 
-            return startRequest1C(chatId); 
+            return startRequest1C(chatId, user.vendorCode); 
         }
 
         //Вводится Партия и колличество для резерва по поставщику ОПУС
