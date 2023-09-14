@@ -94,12 +94,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
-                    if (cells[1]) {
+                    if (cells[1] !== null) {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     } else {
                         quantity = 0;
                     }
-                    if (cells[2]) {
+                    if (cells[2] !== null) {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     } else {
                         reserve = 0;
