@@ -94,10 +94,19 @@ const startRequest1C = async (chatId, vendorCode) => {
                     // return `${header1}`;
                 } else {
                     const cells = row.querySelectorAll('td');
-                    const warehouse = cells[0].textContent.trim();  // склад
-                    const quantity = cells[1].textContent.trim();   // колличество
-                    const reserve = cells[2].textContent.trim();     // резерв
-                    
+                    if (cells[0]) {
+                        const warehouse = cells[0].textContent.trim();  // склад
+                        return warehouse;
+                    }
+                    if (cells[1]) {
+                        const quantity = cells[1].textContent.trim();   // колличество
+                        return quantity;
+                    }
+                    if (cells[2]) {
+                        const reserve = cells[2].textContent.trim();     // резерв
+                        return reserve;
+                    }
+
                     return `${warehouse}\nКолличество: ${quantity} \ Резерв: ${reserve}\n\n`
                 }
             });
