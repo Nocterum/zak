@@ -71,7 +71,7 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // await new Promise(resolve => setTimeout(resolve, 500));
 
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
@@ -79,7 +79,8 @@ const startRequest1C = async (chatId, vendorCode) => {
 
         // Получение таблицы из DOM
         const tableElement = document.createElement('table');
-        // tableElement.innerHTML = response.data;
+        tableElement.innerHTML = response.data;
+        
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
         // Проверка наличия данных в таблице
