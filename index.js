@@ -71,7 +71,6 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C);
-        // await new Promise(resolve => setTimeout(resolve, 500));
 
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
@@ -80,16 +79,29 @@ const startRequest1C = async (chatId, vendorCode) => {
         // Получение таблицы из DOM
         const tableElement = document.createElement('table');
         tableElement.innerHTML = response.data;
-        
+
         // Получение строк таблицы
         const rows = tableElement.querySelectorAll('tr');
         // Проверка наличия данных в таблице
+
         if (rows.length > 0) {
+
             // Форматирование данных построчно
-            const formatedData = Array.from(rows).map(row => {
-                const cells = row.querySelectorAll('td');
-                return Array.from(cells).map(cell => cell.textContent.trim()).join('\t');
+            const formatedData = Array.from(rows).map((row, index) => {
+                if (index !== 0) {
+                    const header1 = cells[0].textContent.trim();
+                    console.log(header1);
+                    // return `${header1}`;
+                } else {
+                    const cells = row.querySelectorAll('td');
+                    const warehouse = cells[0].textContent.trim();  // склад
+                    const quantity = cells[1].textContent.trim();   // колличество
+                    const reserve = cells[2].textContent.trim();     // резерв
+                    
+                    return `${warehouse}\nКолличество: ${quantity} \ Резерв: ${reserve}\n\n`
+                }
             });
+
             // Вывод данных пользователю
             if (formatedData.length > 0) {
                 if (botMsgIdx !== null) {
