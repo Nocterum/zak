@@ -100,7 +100,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     } else {
                         quantity = `0`;
                     }
-                    if (cells[2]) {
+                    if (cells[2] !== null) {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     } else {
                         reserve = `0`;
