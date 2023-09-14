@@ -90,7 +90,12 @@ const startRequest1C = async (chatId, vendorCode) => {
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 if (index === 0) {
-                    return `Склад:\n${row.querySelector('td').textContent.trim()}`;
+                    const cells = row.querySelectorAll('td');
+                    const header1 = cells[0].textContent.trim();
+                    const header2 = cells[1].textContent.trim();
+                    const header3 = cells[2].textContent.trim();
+                    console.log(header1, header2, header3);
+                    return `${header1}, ${header2}, ${header3}`;
                 } else {
                     const cells = row.querySelectorAll('td');
                     const warehouse = cells[0].textContent.trim();
