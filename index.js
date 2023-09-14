@@ -77,7 +77,7 @@ const startRequest1C = async (chatId, vendorCode) => {
         const document = dom.window.document;
 
         // Получение таблицы из DOM
-        const tableElement = document.createElement('table');
+        const tableElement = document.querySelector("body > table:nth-child(3)");
         tableElement.innerHTML = response.data;
 
         // Получение строк таблицы
@@ -90,7 +90,7 @@ const startRequest1C = async (chatId, vendorCode) => {
             // Форматирование данных построчно
             const formatedData = Array.from(rows).map((row, index) => {
                 const cells = row.querySelectorAll('td');
-                if (index >= 5) {
+
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
@@ -100,12 +100,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[2]) {
                         reserve = cells[2].textContent.trim();     // резерв
                     }
-                    return {
-                        warehouse,
-                        quantity,
-                        reserve
-                    };
-                }
+
+                return {
+                    warehouse,
+                    quantity,
+                    reserve
+                };
                 
             });
 
