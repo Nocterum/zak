@@ -124,6 +124,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (obj.warehouse === undefined) {
                         return "";
                     } else {
+                        message = '';
                         message += `${obj.warehouse}\n`
 
                         if (!isNaN(obj.quantity)) {
