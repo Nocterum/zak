@@ -125,7 +125,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         return "";
                     } else {
                         message = '';
-                        message += `${obj.warehouse}\n`
+                        message += `<strong>${obj.warehouse}</strong>\n`
 
                         if (obj.quantity > 0) {
                             message += `Количество: ${obj.quantity};\n`
@@ -1152,7 +1152,7 @@ bot.on('message', async msg => {
                 return bot.sendMessage(
                     chatId,
                     `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>а так же введите единицы измерения через пробел</i>`,
-                    {parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
             }
         }
@@ -1166,7 +1166,8 @@ bot.on('message', async msg => {
             let findResult1C = await startRequest1C(chatId, vendorCode); 
             return bot.sendMessage(
                 chatId, 
-                `${findResult1C.messageResult1C}`
+                `${findResult1C.messageResult1C}`,
+                { parse_mode: 'HTML'}
             );
         }
 
