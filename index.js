@@ -1143,10 +1143,10 @@ bot.on('message', async msg => {
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
             botMsgIdx = msg.message_id += 1; 
-            await startRequest1C(chatId, vendorCode); 
+            let findResult1C = await startRequest1C(chatId, vendorCode); 
             return bot.sendMessage(
                 chatId, 
-                `${messageResult1C}`
+                `${findResult1C.messageResult1C}`
             );
         }
 
