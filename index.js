@@ -66,6 +66,7 @@ const editNickname = async (chatId) => {
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
+// Функция поиска в 1С
 const startRequest1C = async (chatId, vendorCode) => {
 
     try {
@@ -128,10 +129,10 @@ const startRequest1C = async (chatId, vendorCode) => {
                         message += `<strong>${obj.warehouse}</strong>\n`
 
                         if (obj.quantity > 0) {
-                            message += `Количество: ${obj.quantity};\n`
+                            message += `Количество: ${obj.quantity}\n`
                         }
                         if (obj.reserve > 0) {
-                            message += `Резерв: ${obj.reserve};\n`
+                            message += `Резерв: ${obj.reserve}\n`
                         }
                         message += `\n`
                         return message;
@@ -1481,7 +1482,7 @@ bot.on('callback_query', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `К сожалению, я еще не могу работать с поставщиком бренда<b>${user.brand}</b>.`,
+                    `К сожалению, я еще не могу работать с поставщиком бренда <b>${user.brand}</b>.`,
                     {parse_mode: 'HTML'}
                 );
             }
