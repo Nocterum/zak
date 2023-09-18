@@ -587,6 +587,7 @@ async function findCatalogWallpaper(chatId) {
                         foundMatchWallpaper = true;
                         let message = '';
                         
+                        const bValue = row.getCell('B').value;
                         let cValue = row.getCell('C').value.toString();
                         const hValue = row.getCell('H').value;
                         const iValue = row.getCell('I').value;
@@ -596,8 +597,11 @@ async function findCatalogWallpaper(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
+                        const vendorCode = bValue;
+
                         await user.update({brand: cValue.toUpperCase()});
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+                        let findResult1C = await startRequest1C(chatId, vendorCode);
                         
                         if (
                             hValue !== null ||
@@ -644,7 +648,7 @@ async function findCatalogWallpaper(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${PricelistLink.messagePrice}`
+                            message += `${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -713,6 +717,7 @@ async function findCatalogTextile(chatId) {
                         foundMatchTextile = true;
                         let message = '';
 
+                        const bValue = row.getCell('B').value;
                         let cValue = row.getCell('C').value.toString();
                         const iValue = row.getCell('I').value;
                         const jValue = row.getCell('J').value;
@@ -721,8 +726,11 @@ async function findCatalogTextile(chatId) {
                         const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
+                        const vendorCode = bValue;
+
                         await user.update({brand: cValue.toUpperCase()});
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+                        let findResult1C = await startRequest1C(chatId, vendorCode);
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -763,7 +771,8 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${PricelistLink.messagePrice}`
+                            message += `${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
+                            
 
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
