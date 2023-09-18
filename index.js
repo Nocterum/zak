@@ -119,14 +119,14 @@ const startRequest1C = async (chatId, vendorCode) => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                const message = formatedData.map(obj => {
+                const messageResult1C = formatedData.map(obj => {
                     if (obj.warehouse === undefined) {
                         return "";
                     } else {
                         return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve};\n\n`;
                     }
                 }).join('');
-                return bot.sendMessage(chatId, message);
+                return { messageResult1C };
             } else {
                 console.log('В таблице нет данных');
             }
@@ -1143,7 +1143,11 @@ bot.on('message', async msg => {
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
             botMsgIdx = msg.message_id += 1; 
-            return startRequest1C(chatId, vendorCode); 
+            await startRequest1C(chatId, vendorCode); 
+            return bot.sendMessage(
+                chatId, 
+                `${messageResult1C}`
+            );
         }
 
         //Вводится Партия и колличество для резерва по поставщику ОПУС
