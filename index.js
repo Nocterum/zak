@@ -127,10 +127,10 @@ const startRequest1C = async (chatId, vendorCode) => {
                         message = '';
                         message += `${obj.warehouse}\n`
 
-                        if (!isNaN(obj.quantity)) {
+                        if (obj.quantity > 0) {
                             message += `Количество: ${obj.quantity}`
                         }
-                        if (!isNaN(obj.reserve)) {
+                        if (obj.reserve > 0) {
                             message += `; Резерв: ${obj.reserve};\n\n`
                         }
                         return message;
