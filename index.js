@@ -659,7 +659,7 @@ async function findCatalogWallpaper(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
+                            message += `\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -782,7 +782,7 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
+                            message += `\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
                             
 
                             if (botMsgIdx !== null) {
