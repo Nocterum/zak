@@ -94,12 +94,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
-                    if (cells[1] !== null) {
+                    if (cells[1] !== '') {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     } else {
                         quantity = 0;
                     }
-                    if (cells[2] !== null) {
+                    if (cells[2] !== '') {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     } else {
                         reserve = 0;
@@ -119,11 +119,20 @@ const startRequest1C = async (chatId, vendorCode) => {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
+                let message = '';
                 const messageResult1C = formatedData.map(obj => {
                     if (obj.warehouse === undefined) {
                         return "";
                     } else {
-                        return `${obj.warehouse}\nКоличество: ${obj.quantity}; Резерв: ${obj.reserve};\n\n`;
+                        message += `${obj.warehouse}\n`
+
+                        if (!isNaN(obj.quantity)) {
+                            message += `Количество: ${obj.quantity}`
+                        }
+                        if (!isNaN(obj.reserve)) {
+                            message += `; Резерв: ${obj.reserve};\n\n`
+                        }
+                        return message;
                     }
                 }).join('');
                 return { messageResult1C };
@@ -648,7 +657,7 @@ async function findCatalogWallpaper(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
+                            message += `\n${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -771,7 +780,7 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
+                            message += `\n${findResult1C.messageResult1C}\n\n${PricelistLink.messagePrice}`
                             
 
                             if (botMsgIdx !== null) {
