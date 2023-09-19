@@ -409,7 +409,7 @@ async function findExcelFile(
                 fileNameVendor = filePath;
             }
         } else if (path.extname(file) === '.xls') {
-            if (file.toLowerCase().includes('остатки_дд')) {
+            if (file.toLowerCase().includes('декор_делюкс')) {
                 fileNameDecorDelux = filePath;
             }
         }
