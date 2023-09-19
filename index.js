@@ -1260,7 +1260,7 @@ bot.on('message', async msg => {
 
     try {
         let file_name = msg.document.file_name;
-        let file_format = msg.document.file_name.split(".")[1];
+        let file_format = file_name.split(".")[1];
         const chatId = msg.chat.id;
         
         // нижний регистр, замена пробелов на _
