@@ -1299,7 +1299,7 @@ bot.on('message', async msg => {
 
             // обрезка дат, нижний регистр, замена пробелов на _
             } else if (file_name.toLowerCase().includes('orac') ||
-                        file_name.toLowerCase().includes('ДД')
+                        file_name.toLowerCase().includes('дд')
                     ) {
 
                     let fileName = '';
@@ -1309,7 +1309,7 @@ bot.on('message', async msg => {
                     if (file_name.toLowerCase().includes('orac' && 'спб')) {
                         fileName = 'orac спб';
                     }
-                    if (file_name.toLowerCase().includes('ДД')) {
+                    if (file_name.toLowerCase().includes('дд')) {
                         fileName = 'остатки декор делюкс';
                     }
 
