@@ -463,7 +463,7 @@ async function findOrac(chatId) {
 
     let vendorCode = user.vendorCode;
     const findResult1C = await startRequest1C(chatId, vendorCode);
-    messageORAC = `По 1С:\n${findResult1C.messageResult1C}\n\n`;
+    messageORAC = `В 1С:\n${findResult1C.messageResult1C}\n\n`;
     
     if (filePathMSK) {
         try {
@@ -488,7 +488,7 @@ async function findOrac(chatId) {
                     let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
                     a3Value = a3Value.toString().split( "(" )[0];
                     
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
