@@ -138,6 +138,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         return message;
                     }
                 }).join('');
+
                 if (messageResult1C.length !== 0) {
                     return { messageResult1C };
                 } else {
@@ -460,9 +461,9 @@ async function findOrac(chatId) {
         }
     });
 
-    const vendorCode = user.vendorCode;
+    let vendorCode = user.vendorCode;
     const findResult1C = await startRequest1C(vendorCode);
-    messageORAC = `По 1С:\n${findResult1C.messageResult1C}`;
+    messageORAC = `По 1С:\n${findResult1C.messageResult1C}\n\n`;
     
     if (filePathMSK) {
         try {
