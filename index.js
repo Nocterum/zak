@@ -141,7 +141,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                 if (messageResult1C.length !== 0) {
                     return { messageResult1C };
                 } else {
-                    messageResult1C = `В 1С нигде не числится`
+                    messageResult1C = `${vendorCode} нигде не числится`
                     return { messageResult1C };
                 }
             } else {
@@ -459,6 +459,10 @@ async function findOrac(chatId) {
             chatId: chatId
         }
     });
+
+    const vendorCode = user.vendorCode;
+    const findResult1C = await startRequest1C(vendorCode);
+    messageORAC = `По 1С:\n${findResult1C.messageResult1C}`;
     
     if (filePathMSK) {
         try {
@@ -467,7 +471,7 @@ async function findOrac(chatId) {
             const streamMSK = fs.createReadStream(filePathMSK);
             const worksheetMSK = await workbookMSK.xlsx.read(streamMSK);
             const firstWorksheetMSK = worksheetMSK.worksheets[0];
-            
+
             let foundMatchOracMSK = false;
             
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
