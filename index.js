@@ -447,8 +447,8 @@ async function findOrac(chatId) {
     let fileNameOracSPB = 'остатки_orac_спб.xlsx';
     fileNameOracSPB = fileNameOracSPB.toLowerCase();
     
-    const resultMSK = await findExcelFile('orac_msk');
-    const resultSPB = await findExcelFile('orac_spb');
+    const resultMSK = await findExcelFile('orac_мск');
+    const resultSPB = await findExcelFile('orac_спб');
     
     const filePathMSK = resultMSK.fileNameOracMSK;
     const filePathSPB = resultSPB.fileNameOracSPB;
