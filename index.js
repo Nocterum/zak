@@ -936,7 +936,10 @@ async function findDecorDelux(chatId) {
                         const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия
                         const iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Свободный остаток
         
-
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
                         await bot.sendMessage(
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
@@ -949,6 +952,10 @@ async function findDecorDelux(chatId) {
 
         } catch (e) {
             console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
             return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
         }
     }
@@ -1135,10 +1142,15 @@ bot.on('message', async msg => {
             botMsgIdx = msg.message_id += 1; 
 
             if (formatedUserVendor === 'ОПУС') {
+
                 return startFind(chatId);
+
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+
                 return findDecorDelux(chatId);
+
             } else {
+
                 lc = '/enterNumberofVC';
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
@@ -1488,11 +1500,13 @@ bot.on('callback_query', async msg => {
                     `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
-            } else if(formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
-                return bot.sendMessage(
+            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+                await bot.sendMessage(
                     chatId,
                     `Введите искомый вами артикул:`
                 );
+                botMsgIdx = msg.message.message_id += 1;
+                return;
             } else {
                 return bot.sendMessage(
                     chatId, 
