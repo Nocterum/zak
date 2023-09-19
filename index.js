@@ -1314,7 +1314,6 @@ bot.on('message', async msg => {
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
-                    let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
                     fileName = fileName.replace(/\s\d+|\.\d+/g, '');
                     fileName = fileName.replace(/\s/g, '_');
