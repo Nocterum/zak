@@ -441,10 +441,10 @@ async function findExcelFile(
 
 async function findOrac(chatId) {
     
-    let fileNameOracMSK = 'остатки_мск.xlsx';
+    let fileNameOracMSK = 'orac_мск.xlsx';
     fileNameOracMSK = fileNameOracMSK.toLowerCase();
     
-    let fileNameOracSPB = 'остатки_спб.xlsx';
+    let fileNameOracSPB = 'orac_спб.xlsx';
     fileNameOracSPB = fileNameOracSPB.toLowerCase();
     
     const resultMSK = await findExcelFile(fileNameOracMSK);
@@ -612,8 +612,8 @@ async function findCatalogWallpaper(chatId) {
                         const vendorCode = bValue;
 
                         await user.update({brand: cValue.toUpperCase()});
-                        let PricelistLink = await findPricelistLink(chatId, cValue);
                         let findResult1C = await startRequest1C(chatId, vendorCode);
+                        let PricelistLink = await findPricelistLink(chatId, cValue);
                         
                         if (
                             hValue !== null ||
@@ -741,8 +741,8 @@ async function findCatalogTextile(chatId) {
                         const vendorCode = bValue;
 
                         await user.update({brand: cValue.toUpperCase()});
-                        let PricelistLink = await findPricelistLink(chatId, cValue);
                         let findResult1C = await startRequest1C(chatId, vendorCode);
+                        let PricelistLink = await findPricelistLink(chatId, cValue);
 
                         if (iValue !== null ||
                             jValue !== null ||
@@ -1292,7 +1292,7 @@ bot.on('message', async msg => {
                 return;
             // обрезка дат, нижний регистр, замена пробелов на _
             } else if (file_name.toLowerCase().includes('поставщиков') || 
-                        file_name.toLowerCase().includes('остатки') ||
+                        file_name.toLowerCase().includes('orac') ||
                         file_name.toLowerCase().includes('ДД')
                     ) {
 
