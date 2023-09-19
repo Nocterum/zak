@@ -441,14 +441,14 @@ async function findExcelFile(
 
 async function findOrac(chatId) {
     
-    let fileNameOracMSK = 'orac_мск.xlsx';
+    let fileNameOracMSK = 'остатки_orac_мск.xlsx';
     fileNameOracMSK = fileNameOracMSK.toLowerCase();
     
-    let fileNameOracSPB = 'orac_спб.xlsx';
+    let fileNameOracSPB = 'остатки_orac_спб.xlsx';
     fileNameOracSPB = fileNameOracSPB.toLowerCase();
     
-    const resultMSK = await findExcelFile(fileNameOracMSK);
-    const resultSPB = await findExcelFile(fileNameOracSPB);
+    const resultMSK = await findExcelFile('orac_msk');
+    const resultSPB = await findExcelFile('orac_spb');
     
     const filePathMSK = resultMSK.fileNameOracMSK;
     const filePathSPB = resultSPB.fileNameOracSPB;
