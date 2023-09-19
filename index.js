@@ -138,7 +138,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                         return message;
                     }
                 }).join('');
-                return { messageResult1C };
+                if (messageResult1C.length !== 0) {
+                    return { messageResult1C };
+                } else {
+                    messageResult1C = `В 1С нигде не числится`
+                    return { messageResult1C };
+                }
             } else {
                 console.log('В таблице нет данных');
             }
@@ -1174,7 +1179,7 @@ bot.on('message', async msg => {
                 );
 
             } else if (formatedUserVendor.includes('ОРАК')) {
-                
+
                 lc === '/oracСheck';
                 return findOrac(chatId);
 
@@ -1520,7 +1525,7 @@ bot.on('callback_query', async msg => {
             ) {
                 return bot.sendMessage(
                     chatId, 
-                    `Так как искомый вами бренд <b>${user.brand}</b>, я могу запросить остатки, уточнить сроки поставки и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                    `Так как искомый вами бренд <b>${user.brand}</b>, я могу <b>отправить email</b> с запросом по остаткам, сроку поставки, а так же резервированию интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
             } else if (formatedUserVendor.includes('ОПУС')) {
