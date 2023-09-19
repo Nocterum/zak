@@ -560,7 +560,7 @@ async function findOrac(chatId) {
 
 async function findCatalogWallpaper(chatId) {
 
-    let fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19.xlsx';
+    let fileNameWallpaper = 'Каталоги_распределение_в_салоны_26_09_19';
     fileNameWallpaper = fileNameWallpaper.toLowerCase();
     const result = await findExcelFile(fileNameWallpaper);
     const filePath = result.fileNameWallpaper;
@@ -689,7 +689,7 @@ async function findCatalogWallpaper(chatId) {
 
 async function findCatalogTextile(chatId) {
 
-    let fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны.xlsx';
+    let fileNameTextile = 'Текстиль_Каталоги_распределение_в_салоны';
     fileNameTextile = fileNameTextile.toLowerCase();
     const result = await findExcelFile(fileNameTextile);
     const filePath = result.fileNameTextile;
@@ -816,7 +816,7 @@ async function findCatalogTextile(chatId) {
 
 async function findPricelistLink(chatId, cValue) {
 
-    let fileNamePricelist = 'cписок_прайслистов.xlsx';
+    let fileNamePricelist = 'cписок_прайслистов';
     fileNamePricelist = fileNamePricelist.toLowerCase();
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
