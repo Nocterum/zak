@@ -462,7 +462,7 @@ async function findOrac(chatId) {
     });
 
     let vendorCode = user.vendorCode;
-    const findResult1C = await startRequest1C(vendorCode);
+    const findResult1C = await startRequest1C(chatId, vendorCode);
     messageORAC = `По 1С:\n${findResult1C.messageResult1C}\n\n`;
     
     if (filePathMSK) {
