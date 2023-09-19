@@ -1149,6 +1149,35 @@ bot.on('message', async msg => {
 
                 return findDecorDelux(chatId);
 
+            } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
+
+                return bot.sendMessage(
+                    chatId,
+                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (formatedUserVendor.includes('БАУТЕКС')) {
+
+                return bot.sendMessage(
+                    chatId,
+                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
+
+                return bot.sendMessage(
+                    chatId,
+                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (formatedUserVendor.includes('ОРАК')) {
+                
+                lc === '/oracСheck';
+                return findOrac(chatId);
+
             } else {
 
                 lc = '/enterNumberofVC';
@@ -1500,7 +1529,12 @@ bot.on('callback_query', async msg => {
                     `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
                     {parse_mode: 'HTML'}
                 );
-            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+            } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
+                        formatedUserVendor.includes('ДЕКОРРУС') ||
+                        formatedUserVendor.includes('БАУТЕКС') ||
+                        formatedUserVendor.includes('ЛОЙМИНА') ||
+                        formatedUserVendor.includes('ОРАК')
+                    ) {
                 await bot.sendMessage(
                     chatId,
                     `Введите искомый вами артикул:`
