@@ -1260,10 +1260,9 @@ bot.on('message', async msg => {
 
     try {
         let file_name = msg.document.file_name;
-        let file_format = file_name.split(".")[1];
         const chatId = msg.chat.id;
         
-        // нижний регистр, замена пробелов на _
+        // Сохранение стабильных файлов
         if (msg.document) {
 
             if (file_name.toLowerCase().includes('каталоги') ||
@@ -1272,18 +1271,16 @@ bot.on('message', async msg => {
 
                 let fileName = '';
                 if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
-                    fileName = `Каталоги  распределение в салоны 26.09.19.${file_format}`;
+                    fileName = `Каталоги  распределение в салоны 26.09.19.xlsx`;
                 }
                 if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
-                    fileName = `Текстиль Каталоги  распределение в салоны.${file_format}`;
+                    fileName = `Текстиль Каталоги  распределение в салоны.xlsx`;
                 }
                 if (file_name.toLowerCase().includes('прайслистов')) {
-                    fileName = `Список прайслистов.${file_format}`;
+                    fileName = `Список прайслистов.xlsx`;
                 }
 
                 await bot.getFile(msg.document.file_id).then((file) => {
-                    // fileName = fileName.toLowerCase();
-                    // fileName = fileName.replace(/\s/g, '_');
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
@@ -1298,12 +1295,16 @@ bot.on('message', async msg => {
                 });
                 return;
 
-            // обрезка дат, нижний регистр, замена пробелов на _
+            // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
             } else if (file_name.toLowerCase().includes('orac') ||
                         file_name.toLowerCase().includes('дд')
                     ) {
 
                     let fileName = '';
+                    file_name = file_name.replace(/\s\d+|\.\d+/g, '');
+                    file_name = file_name.replace(/\s/g, '_');
+                    let file_format = file_name.split(".")[1];
+
                     if (file_name.toLowerCase().includes('orac' && 'мск')) {
                         fileName = `orac мск.${file_format}`;
                     }
@@ -1316,8 +1317,6 @@ bot.on('message', async msg => {
 
                     await bot.getFile(msg.document.file_id).then((file) => {
                     fileName = fileName.toLowerCase();
-                    // fileName = fileName.replace(/\s\d+|\.\d+/g, '');
-                    // fileName = fileName.replace(/\s/g, '_');
                     const fileStream = bot.getFileStream(file.file_id);
                     
                     fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
