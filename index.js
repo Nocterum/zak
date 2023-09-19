@@ -121,7 +121,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                     botMsgIdx = null;
                 }
                 let message = '';
-                const messageResult1C = formatedData.map(obj => {
+                let messageResult1C = formatedData.map(obj => {
                     if (obj.warehouse === undefined) {
                         return "";
                     } else {
@@ -500,7 +500,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
 
-                messageORAC += `На складе в Москве артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
+                messageORAC += `На складе ОРАК в Москве артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
             }
 
         } catch (error) {
@@ -547,7 +547,7 @@ async function findOrac(chatId) {
                     botMsgIdx = null;
                 }
                 
-                messageORAC += `На складе в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
+                messageORAC += `На складе ОРАК в Санкт-Петербурге артикул <b>${user.vendorCode}</b> отсутсвует.\n\n`;
             }
             
         } catch (error) {
