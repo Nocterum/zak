@@ -401,9 +401,9 @@ async function findExcelFile(
                 fileNameTextile = filePath;
             } else if (file.toLowerCase().includes('список_прайслистов')) {
                 fileNamePricelist = filePath;
-            } else if (file.toLowerCase().includes('остатки_мск')) {
+            } else if (file.toLowerCase().includes('orac_мск')) {
                 fileNameOracMSK = filePath;
-            } else if (file.toLowerCase().includes('остатки_спб')) {
+            } else if (file.toLowerCase().includes('orac_спб')) {
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
