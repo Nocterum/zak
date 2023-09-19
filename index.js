@@ -1269,7 +1269,7 @@ bot.on('message', async msg => {
                 file_name.toLowerCase().includes('прайслистов')
                 ) {
 
-                let fileName = '';
+                let fileName = {};
                 if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
                     fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
                 }
@@ -1300,7 +1300,7 @@ bot.on('message', async msg => {
                         file_name.toLowerCase().includes('дд')
                     ) {
 
-                    let fileName = '';
+                    let fileName = {};
                     file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
                     let file_format = file_name.split(".")[1];  // определение формата файла
                     
