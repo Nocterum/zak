@@ -894,7 +894,7 @@ async function findPricelistLink(chatId, cValue) {
 
 async function findDecorDelux(chatId) {
 
-    let fileNameDecorDelux = 'остатки_декор_делюкс.xls';
+    let fileNameDecorDelux = 'остатки_декор_делюкс';
     fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
     const result = await findExcelFile(fileNameDecorDelux);
@@ -1260,6 +1260,7 @@ bot.on('message', async msg => {
 
     try {
         let file_name = msg.document.file_name;
+        let file_format = msg.document.file_name.split(".")[1];
         const chatId = msg.chat.id;
         
         // нижний регистр, замена пробелов на _
@@ -1271,13 +1272,13 @@ bot.on('message', async msg => {
 
                 let fileName = '';
                 if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
-                    fileName = 'Каталоги  распределение в салоны 26.09.19';
+                    fileName = `Каталоги  распределение в салоны 26.09.19.${file_format}`;
                 }
                 if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
-                    fileName = 'Текстиль Каталоги  распределение в салоны';
+                    fileName = `Текстиль Каталоги  распределение в салоны.${file_format}`;
                 }
                 if (file_name.toLowerCase().includes('прайслистов')) {
-                    fileName = 'Список прайслистов';
+                    fileName = `Список прайслистов.${file_format}`;
                 }
 
                 await bot.getFile(msg.document.file_id).then((file) => {
@@ -1304,13 +1305,13 @@ bot.on('message', async msg => {
 
                     let fileName = '';
                     if (file_name.toLowerCase().includes('orac' && 'мск')) {
-                        fileName = 'orac мск';
+                        fileName = `orac мск.${file_format}`;
                     }
                     if (file_name.toLowerCase().includes('orac' && 'спб')) {
-                        fileName = 'orac спб';
+                        fileName = `orac спб.${file_format}`;
                     }
                     if (file_name.toLowerCase().includes('дд')) {
-                        fileName = 'остатки декор делюкс';
+                        fileName = `остатки декор делюкс.${file_format}`;
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
