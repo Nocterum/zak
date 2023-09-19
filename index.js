@@ -440,13 +440,7 @@ async function findExcelFile(
 // ======================================================================================================================================
 
 async function findOrac(chatId) {
-    
-    let fileNameOracMSK = 'остатки_orac_мск.xlsx';
-    fileNameOracMSK = fileNameOracMSK.toLowerCase();
-    
-    let fileNameOracSPB = 'остатки_orac_спб.xlsx';
-    fileNameOracSPB = fileNameOracSPB.toLowerCase();
-    
+        
     const resultMSK = await findExcelFile('orac_мск');
     const resultSPB = await findExcelFile('orac_спб');
     
@@ -900,7 +894,7 @@ async function findPricelistLink(chatId, cValue) {
 
 async function findDecorDelux(chatId) {
 
-    let fileNameDecorDelux = 'остатки_дд_на.xls';
+    let fileNameDecorDelux = 'остатки_декор_делюкс.xls';
     fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
     const result = await findExcelFile(fileNameDecorDelux);
@@ -1265,16 +1259,28 @@ bot.on('message', async msg => {
 bot.on('message', async msg => {
 
     try {
-        const file_name = msg.document.file_name;
+        let file_name = msg.document.file_name;
         const chatId = msg.chat.id;
+        
         // нижний регистр, замена пробелов на _
         if (msg.document) {
+
             if (file_name.toLowerCase().includes('каталоги') ||
                 file_name.toLowerCase().includes('прайслистов')
                 ) {
-            
+
+                let fileName = '';
+                if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
+                    fileName = 'Каталоги  распределение в салоны 26.09.19';
+                }
+                if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
+                    fileName = 'Текстиль Каталоги  распределение в салоны';
+                }
+                if (file_name.toLowerCase().includes('прайслистов')) {
+                    fileName = 'Список прайслистов';
+                }
+
                 await bot.getFile(msg.document.file_id).then((file) => {
-                    let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
                     fileName = fileName.replace(/\s/g, '_');
                     const fileStream = bot.getFileStream(file.file_id);
@@ -1290,13 +1296,24 @@ bot.on('message', async msg => {
                     });
                 });
                 return;
+
             // обрезка дат, нижний регистр, замена пробелов на _
-            } else if (file_name.toLowerCase().includes('поставщиков') || 
-                        file_name.toLowerCase().includes('orac') ||
+            } else if (file_name.toLowerCase().includes('orac') ||
                         file_name.toLowerCase().includes('ДД')
                     ) {
 
-                await bot.getFile(msg.document.file_id).then((file) => {
+                    let fileName = '';
+                    if (file_name.toLowerCase().includes('orac' && 'мск')) {
+                        fileName = 'orac мск';
+                    }
+                    if (file_name.toLowerCase().includes('orac' && 'спб')) {
+                        fileName = 'orac спб';
+                    }
+                    if (file_name.toLowerCase().includes('ДД')) {
+                        fileName = 'остатки декор делюкс';
+                    }
+
+                    await bot.getFile(msg.document.file_id).then((file) => {
                     let fileName = msg.document.file_name;
                     fileName = fileName.toLowerCase();
                     fileName = fileName.replace(/\s\d+|\.\d+/g, '');
