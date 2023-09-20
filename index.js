@@ -1083,13 +1083,18 @@ bot.on('message', async msg => {
             if (text === '111QWER!!!') {
                 password = 'true';
 
+                await bot.sendMessage(
+                    chatId, 
+                    `Доступ разрешен!`
+                );
+
                 return bot.processUpdate({
                     message: {
                       text: '/start',
                       chat: {
                         id: chatId
                       }
-                    }
+                    }, msg
                   });
             } else {
                 return bot.sendMessage(
@@ -1302,7 +1307,7 @@ bot.on('message', async msg => {
         }
 
         // Заглушка на все случаи жизни
-        if ( (text !== '/game' && text !== '/start') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+        if ( (text !== '/game' && text !== '/start' && text !== '/settings') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendSticker(
                 chatId, 
                 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
