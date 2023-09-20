@@ -41,11 +41,19 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
-                [{text: 'Изменить никнейм', callback_data: '/editNickname'},{text: 'Изменить емейл', callback_data: '/editEmail'}],
-                [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
                 [{text: 'Запрос: остатки+сроки+резерв', callback_data: '/beginwork'}],
+                [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
+                [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
+            ]
+        })
+    },
 
+    settingsOptions: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Изменить никнейм', callback_data: '/editNickname'}],
+                [{text: 'Изменить емейл', callback_data: '/editEmail'}]
             ]
         })
     },

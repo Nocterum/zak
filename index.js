@@ -24,7 +24,7 @@ const bot = new TelegramApi(token, {
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
      workOptions, work1Options, checkVendorOptions, startFindOptions, startFind2Options, 
-     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, 
+     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions,
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
@@ -49,6 +49,7 @@ let textMail = {};  //текст письма
 //МЕНЮ КОМАНД
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
+    {command: '/settings', description:'Настройки'},
     {command: '/infowork', description:'Проверка введенных параметров'},
 ])
 
@@ -142,7 +143,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                 if (messageResult1C.length !== 0) {
                     return { messageResult1C };
                 } else {
-                    messageResult1C = `${vendorCode} нигде не числится`
+                    messageResult1C = `${vendorCode} нигде не числится\n\n`
                     return { messageResult1C };
                 }
             } else {
@@ -535,7 +536,7 @@ async function findOrac(chatId) {
                     let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
                     a3Value = a3Value.toString().split( "(" )[0];
                     
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
                     
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
@@ -1027,15 +1028,14 @@ bot.onText(/\/start/, async msg => {
                 `Введите пароль:`
             );
         }
-     } catch (e) {
+    } catch (e) {
     console.log('Ошибка при создании нового пользователя', e);
     }
 
-},
+});
 
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
-
     lc = '/game';
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
@@ -1044,14 +1044,24 @@ bot.onText(/\/game/, async msg => {
         `Отгадай число😏`, 
         gameOptions
     );
-}),
+});
 
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
+});
 
-    })
-);
+bot.onText(/\/settings/, async msg => {
+    const chatId = msg.chat.id;
+    lc = null; 
+
+    return bot.sendMessage(
+        chatId, 
+        `Настройки:`, 
+        settingsOptions
+    );
+});
+
 
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
@@ -1163,7 +1173,7 @@ bot.on('message', async msg => {
 
                 return bot.sendMessage(
                     chatId,
-                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
                     { parse_mode: 'HTML' }
                 );
 
@@ -1171,7 +1181,7 @@ bot.on('message', async msg => {
 
                 return bot.sendMessage(
                     chatId,
-                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
                     { parse_mode: 'HTML' }
                 );
 
@@ -1179,7 +1189,7 @@ bot.on('message', async msg => {
 
                 return bot.sendMessage(
                     chatId,
-                    `остатки по поставщику ${user.vendor} будут производиться в файле\n<i>в разработке</i>`,
+                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
                     { parse_mode: 'HTML' }
                 );
 
