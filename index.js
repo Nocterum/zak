@@ -1083,19 +1083,19 @@ bot.on('message', async msg => {
             if (text === '111QWER!!!') {
                 password = 'true';
 
-                await bot.sendMessage(
+                return bot.sendMessage(
                     chatId, 
-                    `Доступ разрешен!`
+                    `Доступ разрешен! Нажмите:\n/start`
                 );
 
-                return bot.processUpdate({
-                    message: {
-                      text: '/start',
-                      chat: {
-                        id: chatId
-                      }
-                    }, msg
-                  });
+                // return bot.processUpdate({
+                //     message: {
+                //       text: '/start',
+                //       chat: {
+                //         id: chatId
+                //       }
+                //     }
+                //   });
             } else {
                 return bot.sendMessage(
                     chatId, 
