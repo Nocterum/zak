@@ -1050,7 +1050,7 @@ async function findDecorRus(chatId) {
                             dValue = 'неизвестно';
                         }
                         
-                        let message = {};
+                        let message = '';
                         message += `<strong>${bValue}</strong>\nСвободный остаток:\t${cValue}\n`;
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
