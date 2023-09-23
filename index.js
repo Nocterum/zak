@@ -1031,18 +1031,6 @@ async function findDecorRus(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
-                        const cellAddresses = []; // Массив для хранения адресов ячеек с найденными подстроками
-
-                        // Получаем адреса ячеек с найденными подстроками
-                        for (let address in firstWorksheet) {
-                          if (address.startsWith('В') && firstWorksheet[address].v.includes(formatedUserVC)) {
-                            cellAddresses.push(address);
-                          }
-                        }
-
-                        // Получаем значения из колонки B для каждого адреса ячейки
-                        const bValues = cellAddresses.map(address => firstWorksheet[address].v);
-
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Характеристика номенклатуры
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка: Свободный остаток в ед. хранения остатков
                         let cValue = {};
@@ -1062,18 +1050,24 @@ async function findDecorRus(chatId) {
                             dValue = 'неизвестно';
                         }
 
-                        // Соединяем значения из колонки B с разделителем
-                        const bValuesString = bValues.join('\nПартия: ');
-
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
+
+                        let message = `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
+
+                        // Добавляем значения из найденной строки и подстроки по иерархии
+                        if (bValue === '379055') {
+                          message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 1)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 1)].v}\n`;
+                          message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 2)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 2)].v}\n`;
+                        }
+                        
                         await bot.sendMessage(
-                            chatId, 
-                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\n${bValuesString}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>`,
-                            startFind1Options
-                        )
+                          chatId, 
+                          message,
+                          startFind1Options
+                        );
                     }
                 }
             };
