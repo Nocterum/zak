@@ -956,8 +956,11 @@ async function findDecorDelux(chatId) {
                         foundMatch = true;
 
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
-                        const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия
-                        const iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Свободный остаток
+                        const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия\Партия
+                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Свободный остаток
+                        if (iValue.length < 1) {
+                            let iValue = '0';
+                        }
         
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
