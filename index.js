@@ -1051,14 +1051,14 @@ async function findDecorRus(chatId) {
                         }
                         
                         let message = '';
-                        message += `<strong>${bValue}</strong>\nСвободный остаток:\t${cValue}\n`;
+                        message += `<strong>${bValue}</strong>\n<pre>Свободный остаток:\t${cValue}</pre>\n`;
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                           const currentBCell = firstWorksheet['B' + i];
                           if (currentBCell && currentBCell.v && !currentBCell.v.includes(' ')) {
                             const currentCCell = firstWorksheet['C' + i];
                             const currentValue = `Партия: ${currentBCell.v}\t${currentCCell.v} ед.`;
-                            message += `${currentValue}\n`;
+                            message += `<pre>${currentValue}</pre>\n`;
                           } else {
                             break;
                           }
