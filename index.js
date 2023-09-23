@@ -1057,11 +1057,8 @@ async function findDecorRus(chatId) {
 
                         let message = `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
 
-                        // Добавляем значения из найденной строки и подстроки по иерархии
-                        if (bValue === '379055') {
-                          message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 1)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 1)].v}\n`;
-                          message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 2)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 2)].v}\n`;
-                        }
+                        message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 1)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 1)].v}\n`;
+                        message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 2)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 2)].v}\n`;
                         
                         await bot.sendMessage(
                           chatId, 
