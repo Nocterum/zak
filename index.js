@@ -96,15 +96,15 @@ const startRequest1C = async (chatId, vendorCode) => {
                     if (cells[0]) {
                         warehouse = cells[0].textContent.trim();  // склад
                     }
-                    if (cells[1] !== '') {
+                    if (cells[1].length === 0) {
                         quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
                     } else {
-                        quantity = 0;
+                        quantity = '0';
                     }
-                    if (cells[2] !== '') {
+                    if (cells[2].length === 0) {
                         reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
                     } else {
-                        reserve = 0;
+                        reserve = '0';
                     }
                 }
                 return {
@@ -990,8 +990,8 @@ async function findDecorRus(chatId) {
 
     const result = await findExcelFile(fileNameDecorRus);
     const filePath = result.fileNameDecorRus;
-
-
+    console.log(filePath);
+    
     if (filePath) {
 
         const user = await UserModel.findOne({
@@ -1042,8 +1042,13 @@ async function findDecorRus(chatId) {
             };
             return;
 
-        } catch {
-
+        } catch (e) {
+            console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
         }    
     }
         
