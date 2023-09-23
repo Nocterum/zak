@@ -217,7 +217,7 @@ const startFind = async (chatId) => {
                 
                 // Присваиваим переменным соответствующие наименования
                 availabilityContent += 'Наличие на складе:\n';
-                availabilityContent += `${$$(names[0]).text()}: <pre>${$$(cells[0]).text()}</pre>\n`;
+                availabilityContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
                 availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
@@ -235,7 +235,7 @@ const startFind = async (chatId) => {
                 
                 // Присваиваим переменным соответствующие наименования
                 expectedArrivalContent += `Ожидаемое поступление:\n`;
-                expectedArrivalContent += `${$$(names[0]).text()}: <pre>${$$(cells[0]).text()}</pre>\n`;
+                expectedArrivalContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
                 expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
                 expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
                 expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
@@ -890,7 +890,7 @@ async function findPricelistLink(chatId, cValue) {
                         if (cValue !== null ) {
                             user.update({brand: bValue});
                             const formattedCValue = cValue.toString().replace(/\\/g, '\\');
-                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:\n<pre>${formattedCValue}</pre>\n\n`;
+                            messagePrice += `Ссылка на папку с прайс-листом бренда <b>${bValue}</b>:\n<code>${formattedCValue}</code>\n\n`;
                         } else {
                             user.update({brand: bValue});
                             messagePrice += `Я пока не знаю в какой папке лежит прайс-лист бренда <b>${bValue}</b>.😢\nЗапросите прайсы в отделе закупок.\n\n`
@@ -1230,7 +1230,7 @@ bot.on('message', async msg => {
             lc = null;
             return bot.sendMessage(
                 chatId, 
-                `Вы в главном меню, ${user.nickname}\nВаш персональный id: ${chatId}`,
+                `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
                 mainMenuOptions
             ); 
         }
