@@ -1437,7 +1437,8 @@ bot.on('message', async msg => {
 
             // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
             } else if (file_name.toLowerCase().includes('orac') ||
-                        file_name.toLowerCase().includes('дд')
+                        file_name.toLowerCase().includes('дд') ||
+                        file_name.toLowerCase().includes('рус')
                     ) {
 
                     let fileName = {};
