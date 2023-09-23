@@ -957,9 +957,11 @@ async function findDecorDelux(chatId) {
 
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
                         const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия\Партия
-                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Свободный остаток
-                        if (iValue.length < 1) {
-                            let iValue = '0';
+                        let iCell = firstWorksheet['I' + cellAddress.substring(1)];
+                        let iValue = {};
+
+                        if (iCell && iCell.v !== undefined) {
+                            iValue = iCell.v; // Свободный остаток
                         }
         
                         if (botMsgIdx !== null) {
@@ -1024,7 +1026,7 @@ async function findDecorRus(chatId) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
         
-                    if (formatedCellValue === formatedUserVC) {
+                    if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Характеристика номенклатуры
