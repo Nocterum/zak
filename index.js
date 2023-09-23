@@ -1567,7 +1567,7 @@ bot.on('callback_query', async msg => {
         lc = null;
         return bot.sendMessage(
             chatId, 
-            `Вы в главном меню, ${user.nickname}\nВаш персональный id: ${chatId}`,
+            `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
             mainMenuOptions
         ); 
     }
