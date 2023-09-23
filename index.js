@@ -1031,6 +1031,18 @@ async function findDecorRus(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
+                        const cellAddresses = []; // Массив для хранения адресов ячеек с найденными подстроками
+
+                        // Получаем адреса ячеек с найденными подстроками
+                        for (let address in firstWorksheet) {
+                          if (address.startsWith('I') && firstWorksheet[address].v.includes(formatedUserVC)) {
+                            cellAddresses.push(address);
+                          }
+                        }
+
+                        // Получаем значения из колонки B для каждого адреса ячейки
+                        const bValues = cellAddresses.map(address => firstWorksheet['B' + address.substring(1)].v);
+
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Характеристика номенклатуры
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка: Свободный остаток в ед. хранения остатков
                         let cValue = {};
@@ -1050,7 +1062,8 @@ async function findDecorRus(chatId) {
                             dValue = 'неизвестно';
                         }
 
-
+                        // Соединяем значения из колонки B с разделителем
+                        const bValuesString = bValues.join(', ');
 
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
@@ -1058,7 +1071,7 @@ async function findDecorRus(chatId) {
                         }
                         await bot.sendMessage(
                             chatId, 
-                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\nПартии:\n${bValuesString}<i>можете ввести следующий артикул для поиска</i>`,
                             startFind1Options
                         )
                     }
