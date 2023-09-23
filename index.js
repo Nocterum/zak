@@ -1050,15 +1050,27 @@ async function findDecorRus(chatId) {
                             dValue = 'неизвестно';
                         }
 
+                        let message = `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n`;
+                        
+                        // Проверяем каждую ячейку после bValue на наличие пробела
+                        for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
+                          const currentBCell = firstWorksheet['B' + i];
+                          if (currentBCell && currentBCell.v && !currentBCell.v.includes(' ')) {
+                            const currentCCell = firstWorksheet['C' + i];
+                            const currentValue = currentBCell.v + ' ' + currentCCell.v;
+                            message += currentValue + '\n';
+                          } else {
+                            break;
+                          }
+                        }
+                        // message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 1)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 1)].v}\n`;
+                        // message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 2)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 2)].v}\n`;
+                        message += `<i>можете ввести следующий артикул для поиска</i>\n`;
+
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-
-                        let message = `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
-
-                        message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 1)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 1)].v}\n`;
-                        message += `Партия: ${firstWorksheet['B' + (parseInt(cellAddress.substring(1)) + 2)].v} ${firstWorksheet['C' + (parseInt(cellAddress.substring(1)) + 2)].v}\n`;
                         
                         await bot.sendMessage(
                           chatId, 
