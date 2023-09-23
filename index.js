@@ -957,13 +957,13 @@ async function findDecorDelux(chatId) {
 
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
                         const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия\Партия
-                        let iCell = firstWorksheet['I' + cellAddress.substring(1)];
+                        const iCell = firstWorksheet['I' + cellAddress.substring(1)];   // Ячейка: Свободный остаток
                         let iValue = {};
 
                         if (iCell && iCell.v !== undefined) {
                             iValue = iCell.v; // Свободный остаток
                         } else {
-                            iValue = 0;
+                            iValue = '0';
                         }
         
                         if (botMsgIdx !== null) {
@@ -1032,16 +1032,33 @@ async function findDecorRus(chatId) {
                         foundMatch = true;
 
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Характеристика номенклатуры
-                        const cValue = firstWorksheet['C' + cellAddress.substring(1)].v; // Свободный остаток в ед. хранения остатков
-                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Цена (руб.)
-        
+                        const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка: Свободный остаток в ед. хранения остатков
+                        let cValue = {};
+
+                        if (cCell && cCell.v !== undefined) {
+                            cValue = cCell.v; // Свободный остаток в ед. хранения остатков
+                        } else {
+                            cValue = '0';
+                        }
+
+                        const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // Ячейка: Цена (руб.)
+                        let dValue = {};
+
+                        if (dCell && dCell.v !== undefined) {
+                            dValue = `${dCell.v} руб.`; // Цена (руб.)
+                        } else {
+                            dValue = 'неизвестно';
+                        }
+
+
+
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
                         await bot.sendMessage(
                             chatId, 
-                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue} руб.\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFind1Options
                         )
                     }
