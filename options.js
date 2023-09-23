@@ -119,6 +119,16 @@ module.exports = {
         })
     },
 
+    startFind1Options: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+            ]
+        })
+    },
+
     startFind2Options: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {

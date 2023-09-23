@@ -23,8 +23,8 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
-     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind2Options, 
-     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions,
+     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
+     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions, 
      enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
 const sequelize = require('./db');
 const UserModel = require('./models');
@@ -259,7 +259,7 @@ const startFind = async (chatId) => {
                 } else {
 
                     // Отправляем сообщение о отсутствии товара
-                    bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика', startFindOptions);
+                    bot.sendMessage(chatId, 'В данный момент товар отсутствует на складе поставщика', startFind1Options);
                     console.log('информация об отсутствии товара отправленна');
                     return;
                 }
@@ -283,7 +283,7 @@ const startFind = async (chatId) => {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
             }
-            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFindOptions);
+            bot.sendMessage(chatId, 'Товары не найдены. Проверьте правильное написание артикула и бренда.', startFind1Options);
             return;
         }
 
@@ -293,7 +293,7 @@ const startFind = async (chatId) => {
             bot.deleteMessage(chatId, botMsgIdx);
             botMsgIdx = null;
         }
-        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
     }
    
 }
@@ -358,7 +358,8 @@ async function findExcelFile(
     fileNameOracMSK = '', 
     fileNameOracSPB = '',
     fileNameVendor = '',
-    fileNameDecorDelux =''
+    fileNameDecorDelux = '',
+    fileNameDecorRus = ''
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -377,7 +378,8 @@ async function findExcelFile(
                 fileNameOracMSK, 
                 fileNameOracSPB,
                 fileNameVendor,
-                fileNameDecorDelux
+                fileNameDecorDelux,
+                fileNameDecorRus
                 );
 
             if (result.fileNameWallpaper) {
@@ -401,7 +403,12 @@ async function findExcelFile(
             if (result.fileNameDecorDelux) {
                 fileNameDecorDelux = result.fileNameDecorDelux;
             }
+            if (result.fileNameDecorRus) {
+                fileNameDecorRus = result.fileNameDecorRus;
+            }
+
         } else if (path.extname(file) === '.xlsx') {
+            
             if (file.toLowerCase().includes('каталоги_распределение_в_салоны_26_09_19')) {
                 fileNameWallpaper = filePath;
             } else if (file.toLowerCase().includes('текстиль_каталоги_распределение_в_салоны')) {
@@ -416,8 +423,12 @@ async function findExcelFile(
                 fileNameVendor = filePath;
             }
         } else if (path.extname(file) === '.xls') {
+
             if (file.toLowerCase().includes('декор_делюкс')) {
                 fileNameDecorDelux = filePath;
+            }
+            if (file.toLowerCase().includes('декор_рус')) {
+                fileNameDecorRus = filePath;
             }
         }
         if (fileNameWallpaper && 
@@ -426,7 +437,8 @@ async function findExcelFile(
             fileNameOracMSK &&
             fileNameOracSPB && 
             fileNameVendor &&
-            fileNameDecorDelux
+            fileNameDecorDelux && 
+            fileNameDecorRus
             ) {
             break;
         }
@@ -438,7 +450,8 @@ async function findExcelFile(
         fileNameOracMSK,
         fileNameOracSPB,
         fileNameVendor,
-        fileNameDecorDelux
+        fileNameDecorDelux,
+        fileNameDecorRus
     };
 }
 
@@ -828,7 +841,7 @@ async function findCatalogTextile(chatId) {
 async function findPricelistLink(chatId, cValue) {
 
     let fileNamePricelist = 'cписок_прайслистов';
-    fileNamePricelist = fileNamePricelist.toLowerCase();
+
     const result = await findExcelFile(fileNamePricelist);
     const filePath = result.fileNamePricelist;
 
@@ -906,7 +919,6 @@ async function findPricelistLink(chatId, cValue) {
 async function findDecorDelux(chatId) {
 
     let fileNameDecorDelux = 'остатки_декор_делюкс';
-    fileNameDecorDelux = fileNameDecorDelux.toLowerCase();
 
     const result = await findExcelFile(fileNameDecorDelux);
     const filePath = result.fileNameDecorDelux;
@@ -914,11 +926,11 @@ async function findDecorDelux(chatId) {
 
     if (filePath) {
 
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        }
-    });
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
 
         try {
 
@@ -954,7 +966,7 @@ async function findDecorDelux(chatId) {
                         await bot.sendMessage(
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
-                            startFindOptions
+                            startFind1Options
                         )
                     }
                 }
@@ -971,6 +983,72 @@ async function findDecorDelux(chatId) {
         }
     }
 };
+
+async function findDecorRus(chatId) {
+
+    let fileNameDecorRus = 'остатки_декор_рус';
+
+    const result = await findExcelFile(fileNameDecorRus);
+    const filePath = result.fileNameDecorRus;
+
+
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+        
+        try { 
+            
+            const workbook = XLSX.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let foundMatch = false;
+
+            for (let cellAddress in firstWorksheet) {
+
+                if (cellAddress[0] === '!') continue;
+        
+                const cellValue = firstWorksheet[cellAddress].v;
+        
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim();
+                    const formatedUserVC = user.vendorCode.toString().trim();
+        
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toUpperCase();
+                    }
+        
+                    if (formatedCellValue === formatedUserVC) {
+                        foundMatch = true;
+
+                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Характеристика номенклатуры
+                        const cValue = firstWorksheet['C' + cellAddress.substring(1)].v; // Свободный остаток в ед. хранения остатков
+                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Цена (руб.)
+        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        await bot.sendMessage(
+                            chatId, 
+                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue} рую.\n<i>можете ввести следующий артикул для поиска</i>`,
+                            startFind1Options
+                        )
+                    }
+                }
+            };
+            return;
+
+        } catch {
+
+        }    
+    }
+        
+};
+
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
 // ======================================================================================================================================
@@ -1176,11 +1254,7 @@ bot.on('message', async msg => {
 
             } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
-                return bot.sendMessage(
-                    chatId,
-                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
-                    { parse_mode: 'HTML' }
-                );
+                return findDecorRus(chatId);
 
             } else if (formatedUserVendor.includes('БАУТЕКС')) {
 
@@ -1370,14 +1444,17 @@ bot.on('message', async msg => {
                     file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
                     let file_format = file_name.split(".")[1];  // определение формата файла
                     
-                    if (file_name.toLowerCase().includes('orac' && 'мск')) {
+                    if (file_name.toLowerCase().includes( ( 'orac' || 'орак' ) && ( 'msk' || 'мск' ) )) {
                         fileName = `orac_мск.${file_format}`;
                     }
-                    if (file_name.toLowerCase().includes('orac' && 'спб')) {
+                    if (file_name.toLowerCase().includes( ( 'orac' || 'орак' ) && ( 'spb' || 'спб' ) )) {
                         fileName = `orac_спб.${file_format}`;
                     }
-                    if (file_name.toLowerCase().includes('дд')) {
+                    if (file_name.toLowerCase().includes( 'дд' )) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
+                    }
+                    if (file_name.toLowerCase().includes( 'декор' && 'рус' )) {
+                        fileName = `остатки_декор_рус.${file_format}`;
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
