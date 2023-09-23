@@ -962,6 +962,8 @@ async function findDecorDelux(chatId) {
 
                         if (iCell && iCell.v !== undefined) {
                             iValue = iCell.v; // Свободный остаток
+                        } else {
+                            iValue = 0;
                         }
         
                         if (botMsgIdx !== null) {
@@ -1039,7 +1041,7 @@ async function findDecorRus(chatId) {
                         }
                         await bot.sendMessage(
                             chatId, 
-                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue} рую.\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `<strong>${bValue}</strong>\nСвободный остаток: ${cValue}\nЦена: ${dValue} руб.\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFind1Options
                         )
                     }
