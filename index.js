@@ -1054,7 +1054,8 @@ async function findDecorRus(chatId) {
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                           const currentBCell = firstWorksheet['B' + i];
-                          if (currentBCell && currentBCell.v && !currentBCell.v.includes(' ')) {
+
+                          if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
                             const currentCCell = firstWorksheet['C' + i];
                             const currentValue = `Партия: ${currentBCell.v}\t${currentCCell.v} ед.`;
                             message += `<code>${currentValue}</code>\n`;
@@ -1333,7 +1334,7 @@ bot.on('message', async msg => {
                         { parse_mode: 'HTML' }
                     );
                 }
-                
+
             } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
                 return bot.sendMessage(
@@ -1710,7 +1711,8 @@ bot.on('callback_query', async msg => {
                     ) {
                 await bot.sendMessage(
                     chatId,
-                    `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`
+                    `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
+                    { parse_mode: 'HTML' }
                 );
                 botMsgIdx = msg.message.message_id += 1;
                 return;
@@ -1723,7 +1725,8 @@ bot.on('callback_query', async msg => {
             }
         } else {
             return bot.sendMessage(
-                chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`
+                chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`,
+                { parse_mode: 'HTML' }
             );
         }
             
