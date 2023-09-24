@@ -31,7 +31,6 @@ const UserModel = require('./models');
 const {transporter} = require('./nodemailer');
 const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
-//const BrandModel = require('./models');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 password = {};
@@ -1289,24 +1288,52 @@ bot.on('message', async msg => {
 
             if (formatedUserVendor === 'ОПУС') {
 
-                return startFind(chatId);
+                if (user.vendorCode.length < 4) {
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                    );
+                } else {
+                    return startFind(chatId);
+                }
 
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
-                return findDecorDelux(chatId);
+                if (user.vendorCode.length < 4) {
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                    );
+                } else {
+                    return findDecorDelux(chatId);
+                }
 
             } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
-                return findDecorRus(chatId);
+                if (user.vendorCode.length < 4) {
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                    );
+                } else {
+                    return findDecorRus(chatId);
+                }
 
             } else if (formatedUserVendor.includes('БАУТЕКС')) {
 
-                return bot.sendMessage(
-                    chatId,
-                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
-                    { parse_mode: 'HTML' }
-                );
-
+                if (user.vendorCode.length < 4) {
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                    );
+                } else {
+                    return bot.sendMessage(
+                        chatId,
+                        `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
+                        { parse_mode: 'HTML' }
+                    );
+                }
+                
             } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
                 return bot.sendMessage(
@@ -1580,7 +1607,7 @@ bot.on('callback_query', async msg => {
         } else {
             await bot.sendMessage(
                 chatId, 
-                'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвеста возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев когда вы уверенны, искомый вами артикул возможно заказать у поставщика.', 
+                'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвеста возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев когда вы уверенны, что искомый вами артикул возможно заказать у поставщика.', 
                 workOptions
             );
         } 
@@ -1620,7 +1647,7 @@ bot.on('callback_query', async msg => {
         await user.update({reserveNumber: null});
         return bot.sendMessage(
             chatId,
-            `Искомые параметры сброшенныю.`
+            `Искомые параметры сброшенны.`
         );
     }
 
@@ -1666,13 +1693,13 @@ bot.on('callback_query', async msg => {
             ) {
                 return bot.sendMessage(
                     chatId, 
-                    `Так как искомый вами бренд <b>${user.brand}</b>, я могу <b>отправить email</b> с запросом по остаткам, сроку поставки, а так же резервированию интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                    `Чтобы <b>отправить email</b> с запросом:\nостатков,\nсрока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if (formatedUserVendor.includes('ОПУС')) {
                 return bot.sendMessage(
                     chatId, 
-                    `Так как искомый вами бренд <b>${user.brand}</b> является <b>${user.vendor}</b>, я могу найти остатки на сайте поставщика и при необходимости запросить резерв интересующей вас позиции.\nКакой артикул из каталога вам нужен?`,
+                    `Чтобы <b>посмотреть остатки</b> на сайте "https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
@@ -1683,20 +1710,20 @@ bot.on('callback_query', async msg => {
                     ) {
                 await bot.sendMessage(
                     chatId,
-                    `Введите искомый вами артикул:`
+                    `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`
                 );
                 botMsgIdx = msg.message.message_id += 1;
                 return;
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `К сожалению, я еще не могу работать с поставщиком бренда <b>${user.brand}</b>.`,
+                    `К сожалению, мне ещё не разрешили работать с поставщиком бренда <b>${user.brand}</b>.`,
                     {parse_mode: 'HTML'}
                 );
             }
         } else {
             return bot.sendMessage(
-                chatId, `Бренд не найден, соответсвие брендов в эксель файлах:\n"Каталоги  распределение в салоны 26.09.19"\n"Текстиль Каталоги  распределение в салоны"\nc эксель файлом "Список прайслистов".`
+                chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`
             );
         }
             
@@ -1716,7 +1743,7 @@ bot.on('callback_query', async msg => {
     if (data === '/enterReserveNumber') {
         lc = data;
         return bot.sendMessage(
-            chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: 268А 3\nесли партия отсутствует, то введите только колличество</i>`,
+            chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только колличество</i>`,
             { parse_mode: "HTML" }
         );
     }

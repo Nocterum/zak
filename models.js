@@ -18,15 +18,5 @@ const UserModel = sequelize.define( 'user', {
     vendorEmail: {type: DataTypes.TEXT('tiny')},
 })
 
-/*
-const BrandModel = sequelize.define( 'brand', {
-    id: {type: DataTypes.SMALLINT, primaryKey: true, unique: true, autoIncrement: true},
-    brand: {type: DataTypes.TEXT('tiny')},
-    provider: {type: DataTypes.TEXT},
-    link: {type: DataTypes.TEXT},
-
-})
-*/
-
 module.exports = UserModel;
 //module.exports = BrandModel;

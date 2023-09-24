@@ -3,14 +3,14 @@
 // // Создание экземпляра класса RDP
 
 //     const clientRDP = RDP.createClient({
-//         domain: 'MANDERS',
-//         userName: 'n_kharitonov',
-//         password: '1929qweR',
+//         domain: 'DOMAIN',
+//         userName: 'login',
+//         password: 'password',
 //         autoLogin : true,
-//     }).on('connect', function () { searchFiles('E:/Users/n_kharitonov/Desktop/bot')
+//     }).on('connect', function () { searchFiles('E:/Users/login/Desktop/folder')
 //     }).on('close', function() {
 //     }).on('bitmap', function(bitmap) {
 //     }).on('error', function(err) {
-//     }).connect('185.159.81.174', 55505);
+//     }).connect('111.222.33.444', 55505);
 
 // module.exports = clientRDP;
