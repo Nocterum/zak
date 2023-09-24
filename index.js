@@ -358,7 +358,8 @@ async function findExcelFile(
     fileNameOracSPB = '',
     fileNameVendor = '',
     fileNameDecorDelux = '',
-    fileNameDecorRus = ''
+    fileNameDecorRus = '',
+    fileNameBautex = ''
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -378,7 +379,8 @@ async function findExcelFile(
                 fileNameOracSPB,
                 fileNameVendor,
                 fileNameDecorDelux,
-                fileNameDecorRus
+                fileNameDecorRus,
+                fileNameBautex
                 );
 
             if (result.fileNameWallpaper) {
@@ -405,6 +407,9 @@ async function findExcelFile(
             if (result.fileNameDecorRus) {
                 fileNameDecorRus = result.fileNameDecorRus;
             }
+            if (result.fileNameBautex) {
+                fileNameBautex = result.fileNameBautex;
+            }
 
         } else if (path.extname(file) === '.xlsx') {
             
@@ -420,6 +425,8 @@ async function findExcelFile(
                 fileNameOracSPB = filePath;
             } else if (file.toLowerCase().includes('список_поставщиков')) {
                 fileNameVendor = filePath;
+            } else if (file.toLowerCase().includes('баутекс')) {
+                fileNameBautex = filePath;
             }
         } else if (path.extname(file) === '.xls') {
 
@@ -437,7 +444,8 @@ async function findExcelFile(
             fileNameOracSPB && 
             fileNameVendor &&
             fileNameDecorDelux && 
-            fileNameDecorRus
+            fileNameDecorRus &&
+            fileNameBautex
             ) {
             break;
         }
@@ -450,7 +458,8 @@ async function findExcelFile(
         fileNameOracSPB,
         fileNameVendor,
         fileNameDecorDelux,
-        fileNameDecorRus
+        fileNameDecorRus,
+        fileNameBautex
     };
 }
 
@@ -972,7 +981,7 @@ async function findDecorDelux(chatId) {
                         await bot.sendMessage(
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
-                            startFind1Options
+                            startFindOptions
                         )
                     }
                 }
@@ -1055,13 +1064,13 @@ async function findDecorRus(chatId) {
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                           const currentBCell = firstWorksheet['B' + i];
 
-                          if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
-                            const currentCCell = firstWorksheet['C' + i];
-                            const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell.v} ед.`;
-                            message += `<code>${currentValue}</code>\n`;
-                          } else {
-                            break;
-                          }
+                            if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
+                                const currentCCell = firstWorksheet['C' + i];
+                                const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell.v} ед.`;
+                                message += `<code>${currentValue}</code>\n`;
+                            } else {
+                              break;
+                            }
                         }
                         message += `Цена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
 
@@ -1073,7 +1082,7 @@ async function findDecorRus(chatId) {
                         await bot.sendMessage(
                           chatId, 
                           message,
-                          startFind1Options
+                          startFindOptions
                         );
                     }
                 }
@@ -1091,6 +1100,16 @@ async function findDecorRus(chatId) {
     }
         
 };
+
+async function findBautex(chatId) {
+
+    let fileNameBautex = 'остатки_баутекс';
+
+    const result = await findExcelFile(fileNameBautex);
+    const filePath = result.fileNameBautex;
+    console.log(filePath);
+    
+}
 
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -1290,9 +1309,14 @@ bot.on('message', async msg => {
             if (formatedUserVendor === 'ОПУС') {
 
                 if (user.vendorCode.length < 4) {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
                     return bot.sendMessage(
                         chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
                     return startFind(chatId);
@@ -1301,9 +1325,13 @@ bot.on('message', async msg => {
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
                 if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
                     return bot.sendMessage(
                         chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
                     return findDecorDelux(chatId);
@@ -1312,9 +1340,13 @@ bot.on('message', async msg => {
             } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
                 if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
                     return bot.sendMessage(
                         chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
                     return findDecorRus(chatId);
@@ -1323,26 +1355,41 @@ bot.on('message', async msg => {
             } else if (formatedUserVendor.includes('БАУТЕКС')) {
 
                 if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
                     return bot.sendMessage(
                         chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново`
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
                     return bot.sendMessage(
                         chatId,
-                        `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
+                        `поиск по остаткам поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
                         { parse_mode: 'HTML' }
                     );
+                    return findBautex(chatId);
                 }
 
             } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
-                return bot.sendMessage(
-                    chatId,
-                    `поиск по остатки поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
-                    { parse_mode: 'HTML' }
-                );
-
+                if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                    );
+                } else {
+                    return bot.sendMessage(
+                        chatId,
+                        `поиск по остаткам поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
+                        { parse_mode: 'HTML' }
+                    );
+                }
             } else if (formatedUserVendor.includes('ОРАК')) {
 
                 lc === '/oracСheck';
@@ -1525,8 +1572,11 @@ bot.on('message', async msg => {
                     if (file_name.toLowerCase().includes( 'дд' )) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
                     }
-                    if (file_name.toLowerCase().includes( 'декор' && 'рус' )) {
+                    if (file_name.toLowerCase().includes( 'декор' || 'decor' && 'рус' || 'rus')) {
                         fileName = `остатки_декор_рус.${file_format}`;
+                    }
+                    if (file_name.toLowerCase().includes( 'баутекс' || 'bautex' )) {
+                        fileName = `остатки_баутекс.${file_format}`;
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
