@@ -1057,7 +1057,7 @@ async function findDecorRus(chatId) {
 
                           if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
                             const currentCCell = firstWorksheet['C' + i];
-                            const currentValue = `Партия: ${currentBCell.v}\t${currentCCell.v} ед.`;
+                            const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell.v} ед.`;
                             message += `<code>${currentValue}</code>\n`;
                           } else {
                             break;
