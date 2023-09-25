@@ -1639,9 +1639,10 @@ bot.on('message', async msg => {
                 return;
 
             // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
-            } else if (file_name.toLowerCase().includes('orac') ||
-                        file_name.toLowerCase().includes('дд') ||
-                        file_name.toLowerCase().includes('рус')
+            } else if (file_name.toLowerCase().includes('orac' || 'орак') ||
+                        file_name.toLowerCase().includes('дд' || 'dd') ||
+                        file_name.toLowerCase().includes('рус' || 'rus') ||
+                        file_name.toLowerCase().includes('баутекс' || 'bautex')
                     ) {
 
                     let fileName = {};
@@ -1654,7 +1655,7 @@ bot.on('message', async msg => {
                     if (file_name.toLowerCase().includes( ( 'orac' || 'орак' ) && ( 'spb' || 'спб' ) )) {
                         fileName = `orac_спб.${file_format}`;
                     }
-                    if (file_name.toLowerCase().includes( 'дд' )) {
+                    if (file_name.toLowerCase().includes( 'дд' || 'dd' )) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
                     }
                     if (file_name.toLowerCase().includes( 'декор' || 'decor' && 'рус' || 'rus')) {
