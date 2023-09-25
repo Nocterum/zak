@@ -1260,7 +1260,7 @@ async function findLoymina(chatId) {
         try {
 
             const workbook = XLSX.readFile(filePath);
-            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]['A'];
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
 
@@ -1281,18 +1281,16 @@ async function findLoymina(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
-                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v;    // Партия
-                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v;    // ед.изм.
-                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v;    //колличество
+                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v;    // дизайн
 
                         let message = '';
-                        message += `<b>${cellValue}</b>\n`;
+                        message += `<b>${aValue}</b>\n`;
 
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                                 const currentDCell = firstWorksheet['D' + i];
                             
-                                if (currentDCell && currentDCell.v && !currentDCell.v.toString() !== null) {
+                                if (currentDCell && currentDCell.v) {
                                     const currentDCell = firstWorksheet['D' + i];   // Партия
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
                                     const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
