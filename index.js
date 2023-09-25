@@ -1302,7 +1302,7 @@ async function findLoymina(chatId) {
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
                                     const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
 
-                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u>${currentKCell.v} ${currentJCell.v}</u>`;
+                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u><b>${currentKCell.v}</b> ${currentJCell.v}</u>`;
                                     message += `${currentValue}\n`;
 
                                     // Проверяем, является ли текущая итерация кратной 10
