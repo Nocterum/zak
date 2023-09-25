@@ -1290,19 +1290,20 @@ async function findLoymina(chatId) {
                         const aValue = aValueCell.v;    // дизайн
 
                         let message = '';
-                        message += `<b>${aValue}</b>\n`;
-
+                        
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
-                                const currentDCell = firstWorksheet['D' + i];
+
+                            message += `<b>${aValue}</b>\n`;
+                            const currentDCell = firstWorksheet['D' + i];
                             
                                 if (currentDCell && currentDCell.v) {
                                     const currentDCell = firstWorksheet['D' + i];   // Партия
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
                                     const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
 
-                                    const currentValue = `${currentDCell.v}\t\t<b>${currentKCell.v}</b> ${currentJCell.v}`;
-                                    message += `<code>${currentValue}</code>\n`;
+                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u>${currentKCell.v}</u> <code>${currentJCell.v}</code>`;
+                                    message += `${currentValue}\n`;
 
                                     // Проверяем, является ли текущая итерация кратной 10
                                     if (i % 10 === 0) {
@@ -1310,7 +1311,8 @@ async function findLoymina(chatId) {
                                         // Отправляем сообщение пользователю
                                         await bot.sendMessage(
                                         chatId,
-                                        message
+                                        message,
+                                        { parse_mode: 'HTML' }
                                         );
                                     
                                         // Обнуляем переменную message
@@ -1319,8 +1321,8 @@ async function findLoymina(chatId) {
                                 } else {
                                     break;
                                 }
+                            message += `\n<i>можете ввести следующий артикул для поиска</i>\n`;
                         }
-                          message += `\n<i>можете ввести следующий артикул для поиска</i>\n`;
 
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
