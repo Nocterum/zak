@@ -1334,7 +1334,7 @@ bot.on('message', async msg => {
         //Проверка ввода пароля
         if (password === false) {
             if (text === '111QWER!!!') {
-                password = 'true';W
+                password = 'true';
 
                 let createNewUser = await UserModel.create({chatId});
                 console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
