@@ -1260,7 +1260,7 @@ async function findLoymina(chatId) {
         try {
 
             const workbook = XLSX.readFile(filePath);
-            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]['A'];
 
             let foundMatch = false;
             let cellAddress = '';
@@ -1268,11 +1268,7 @@ async function findLoymina(chatId) {
             for (let cell of Object.values(firstWorksheet)) {
                 const cellValue = cell.v;
                 cellAddress = cellAddress.split('!')[1];
-
-                // if (cellAddress[0] === '!') continue;
-
-                // if (cellAddress[0] !== 'A') continue;
-        
+                
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
@@ -1284,20 +1280,18 @@ async function findLoymina(chatId) {
                     if (formatedCellValue === formatedUserVC) {
                         foundMatch = true;
 
-                        const gValue = firstWorksheet['А' + cellAddress.substring(1)].v; // Дизайн
-                        const hValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Серия\Партия
-                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v;   // Ед. измерения
-                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v;   // Колличество
+                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v;    // Партия
+                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v;    // ед.изм.
+                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v;    //колличество
 
                         let message = '';
-                        message += `<b>${gValue}</b>\n`;
+                        message += `<b>${formatedCellValue}</b>\n`;
 
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
-                            const currentDCell = firstWorksheet['D' + i]; // Дизайн
-                            const currentJCell = firstWorksheet['J' + i];
-                            const currentKCell = firstWorksheet['K' + i];
-
+                            
+                                const currentDCell = firstWorksheet['D' + i];
+                            
                                 if (currentDCell && currentDCell.v && !currentDCell.v.toString() !== null) {
                                     const currentDCell = firstWorksheet['D' + i];   // Дизайн
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
@@ -1309,7 +1303,7 @@ async function findLoymina(chatId) {
                                     break;
                                 }
                         }
-                          message += `Цена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
+                          message += `\n<i>можете ввести следующий артикул для поиска</i>\n`;
 
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
