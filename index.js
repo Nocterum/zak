@@ -1297,6 +1297,20 @@ async function findLoymina(chatId) {
 
                                     const currentValue = `${currentDCell.v}\t\t<b>${currentKCell.v}</b> ${currentJCell.v}`;
                                     message += `<code>${currentValue}</code>\n`;
+
+                                    // Проверяем, является ли текущая итерация кратной 10
+                                    if (i % 10 === 0) {
+
+                                      // Отправляем сообщение пользователю
+                                      await bot.sendMessage(
+                                        chatId,
+                                        message,
+                                        startFindOptions
+                                      );
+                                    
+                                      // Обнуляем переменную message
+                                      message = '';
+                                    }
                                 } else {
                                     break;
                                 }
