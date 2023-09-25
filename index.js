@@ -1165,16 +1165,16 @@ async function findBautex(chatId) {
 
                         message += `<b>${dValue}</b>\n\n`
                         if (jValue !== null) {
-                            message += `${j8Value}\n${jValue} ${lValue}\n\n`
+                            message += `${j8Value}\n${jValue.toString()} ${lValue}\n\n`
                         }
                         if (mValue !== null) {
-                            message += `${m8Value}\n${mValue} ${nValue}\n\n`
+                            message += `${m8Value}\n${mValue.toString()} ${nValue}\n\n`
                         }
                         if (oValue !== null) {
-                            message += `${o8Value}\n${oValue} ${qValue}\n\n`
+                            message += `${o8Value}\n${oValue.toString()} ${qValue}\n\n`
                         }
                         if (rValue !== null) {
-                            message += `${r8Value}\n${rValue} ${sValue}\n\n`
+                            message += `${r8Value}\n${rValue.toString()} ${sValue}\n\n`
                         }
                         message += `<i>можете ввести следующий артикул для поиска</i>\n\n`;
 
