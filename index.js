@@ -1281,11 +1281,13 @@ async function findLoymina(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
+                        const aValueCell = firstWorksheet['A' + cellAddress.substring(1)];
+
                         if (!aValueCell || !aValueCell.v) {
                             break; // Выходим из цикла, если aValue равно undefined или null
                         }
 
-                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v;    // дизайн
+                        const aValue = aValueCell.v;    // дизайн
 
                         let message = '';
                         message += `<b>${aValue}</b>\n`;
