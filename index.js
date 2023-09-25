@@ -1263,7 +1263,8 @@ async function findLoymina(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
-
+            let cellAddress = '';
+            
             for (let cell of Object.values(firstWorksheet)) {
                 const cellValue = cell.v;
                 const cellAddress = cellAddress.split('!')[1];
