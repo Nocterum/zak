@@ -1148,34 +1148,59 @@ async function findBautex(chatId) {
                         const dValue = row.getCell('D').value;  // номенкулатура
                         
                         const j8Value = firstWorksheet.getCell('J8').value;  // Склад 1
-                        const jValue = row.getCell('J').value;  // Значение
+                        let jValue = row.getCell('J').value;  // Значение
                         const lValue = row.getCell('L').value;  // ед. измерения
 
                         const m8Value = firstWorksheet.getCell('M8').value;  // Склад 2
-                        const mValue = row.getCell('M').value;  // Значение
+                        let mValue = row.getCell('M').value;  // Значение
                         const nValue = row.getCell('N').value;  // ед. измерения
 
                         const o8Value = firstWorksheet.getCell('O8').value;  // Склад 3
-                        const oValue = row.getCell('O').value;  // Значение
+                        let oValue = row.getCell('O').value;  // Значение
                         const qValue = row.getCell('Q').value;  // ед. измерения
 
                         const r8Value = firstWorksheet.getCell('R8').value;  // Склад 4
-                        const rValue = row.getCell('R').value;  // Значение
+                        let rValue = row.getCell('R').value;  // Значение
                         const sValue = row.getCell('S').value;  // ед. измерения
 
-                        message += `<b>${dValue}</b>\n\n`
-                        if (jValue !== null) {
-                            message += `${j8Value}\n${jValue.toString()} ${lValue}\n\n`
+                        message += `<b>${dValue}</b>\n\n`;
+
+                        if (jValue !== null && jValue.formula) {
+
+                            jValue = jValue.evaluateFormula();
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
+
+                        } else if (jValue !== null) {
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
                         }
-                        if (mValue !== null) {
-                            message += `${m8Value}\n${mValue.toString()} ${nValue}\n\n`
+
+                        if (mValue !== null && mValue.formula) {
+
+                            mValue = mValue.evaluateFormula();
+                            message += `${m8Value}\n${mValue} ${nValue}\n\n`;
+
+                        } else if (mValue !== null) {
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
                         }
-                        if (oValue !== null) {
-                            message += `${o8Value}\n${oValue.toString()} ${qValue}\n\n`
+
+                        if (oValue !== null && oValue.formula) {
+
+                            oValue = oValue.evaluateFormula();
+                            message += `${o8Value}\n${oValue} ${qValue}\n\n`;
+
+                        } else if (oValue !== null) {
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
                         }
-                        if (rValue !== null) {
-                            message += `${r8Value}\n${rValue.toString()} ${sValue}\n\n`
+
+                        if (rValue !== null && rValue.formula) {
+                            
+                            rValue = rValue.evaluateFormula();
+                            message += `${r8Value}\n${rValue} ${sValue}\n\n`;
+
+                        } else if (rValue !== null) {
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
                         }
+
                         message += `<i>можете ввести следующий артикул для поиска</i>\n\n`;
 
                         await bot.sendMessage(
