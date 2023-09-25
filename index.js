@@ -1290,11 +1290,11 @@ async function findLoymina(chatId) {
                         const aValue = aValueCell.v;    // дизайн
 
                         let message = '';
+                        message += `<b>${aValue}</b>\n`;
                         
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
 
-                            message += `<b>${aValue}</b>\n`;
                             const currentDCell = firstWorksheet['D' + i];
                             
                                 if (currentDCell && currentDCell.v) {
@@ -1302,7 +1302,7 @@ async function findLoymina(chatId) {
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
                                     const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
 
-                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u>${currentKCell.v}</u> <code>${currentJCell.v}</code>`;
+                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u>${currentKCell.v} ${currentJCell.v}</u>`;
                                     message += `${currentValue}\n`;
 
                                     // Проверяем, является ли текущая итерация кратной 10
@@ -1321,13 +1321,16 @@ async function findLoymina(chatId) {
                                 } else {
                                     break;
                                 }
-                            message += `\n<i>можете ввести следующий артикул для поиска</i>\n`;
-                        }
-
+                            }
+                            
+                            
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
+
+                        message += `\n<i>можете ввести следующий артикул для поиска</i>\n`;
+
                         await bot.sendMessage(
                             chatId, 
                             message,
