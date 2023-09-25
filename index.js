@@ -1670,7 +1670,9 @@ bot.on('message', async msg => {
                         file_name.toLowerCase().includes('рус') ||
                         file_name.toLowerCase().includes('rus') ||
                         file_name.toLowerCase().includes('баутекс') ||
-                        file_name.toLowerCase().includes('bautex')
+                        file_name.toLowerCase().includes('bautex') || 
+                        file_name.toLowerCase().includes('loymina') ||
+                        file_name.toLowerCase().includes('лоймина')
                     ) {
 
                     let fileName = {};
@@ -1682,25 +1684,35 @@ bot.on('message', async msg => {
                     ) {
                         fileName = `orac_мск.${file_format}`;
                     }
+
                     if ( (file_name.toLowerCase().includes('orac') || file_name.toLowerCase().includes('орак')) &&
                     (file_name.toLowerCase().includes('spb') || file_name.toLowerCase().includes('спб')) 
                     ) {
                         fileName = `orac_спб.${file_format}`;
                     }
+
                     if (file_name.toLowerCase().includes( 'дд' ) || 
                     file_name.toLowerCase().includes( 'dd' ) 
                     ) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
                     }
+
                     if ( (file_name.toLowerCase().includes('декор') || file_name.toLowerCase().includes('decor')) &&
                     (file_name.toLowerCase().includes('рус') || file_name.toLowerCase().includes('rus')) 
                     ) {
                         fileName = `остатки_декор_рус.${file_format}`;
                     }
+
                     if (file_name.toLowerCase().includes( 'баутекс' ) || 
                     file_name.toLowerCase().includes( 'bautex' ) 
                     ) {
                         fileName = `остатки_баутекс.${file_format}`;
+                    }
+
+                    if (file_name.toLowerCase().includes( 'лоймина' ) || 
+                    file_name.toLowerCase().includes( 'loymina' ) 
+                    ) {
+                        fileName = `остатки_лоймина.${file_format}`;
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
