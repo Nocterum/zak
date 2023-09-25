@@ -1338,7 +1338,7 @@ bot.on('message', async msg => {
 
                 let createNewUser = await UserModel.create({chatId});
                 console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-                 await user.update({
+                 await createNewUser.update({
                     firstName: msg.from.first_name, 
                     lastName: msg.from.last_name, 
                 });
