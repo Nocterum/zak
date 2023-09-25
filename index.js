@@ -1167,7 +1167,7 @@ async function findBautex(chatId) {
 
                         if (jValue !== null && jValue.formula) {
                             jValue = jValue.result;
-                            message += `${j8Value}\n${jValue.result} ${lValue}\n\n`;
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
 
                         } else if (jValue !== null) {
                             message += `${j8Value}\n${jValue} ${lValue}\n\n`;
