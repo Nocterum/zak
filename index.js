@@ -1665,12 +1665,12 @@ bot.on('message', async msg => {
             // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
             } else if (file_name.toLowerCase().includes('orac') || 
                         file_name.toLowerCase().includes('орак') ||
-                        file_name.toLowerCase().includes('дд') ||
-                        file_name.toLowerCase().includes('dd') ||
-                        file_name.toLowerCase().includes('рус') ||
+                        file_name.toLowerCase().includes('delux') ||
+                        file_name.toLowerCase().includes('делюкс') ||
                         file_name.toLowerCase().includes('rus') ||
-                        file_name.toLowerCase().includes('баутекс') ||
+                        file_name.toLowerCase().includes('рус') ||
                         file_name.toLowerCase().includes('bautex') || 
+                        file_name.toLowerCase().includes('баутекс') ||
                         file_name.toLowerCase().includes('loymina') ||
                         file_name.toLowerCase().includes('лоймина')
                     ) {
@@ -1691,8 +1691,8 @@ bot.on('message', async msg => {
                         fileName = `orac_спб.${file_format}`;
                     }
 
-                    if (file_name.toLowerCase().includes( 'дд' ) || 
-                    file_name.toLowerCase().includes( 'dd' ) 
+                    if ( (file_name.toLowerCase().includes('decor') || file_name.toLowerCase().includes('декор')) &&
+                    (file_name.toLowerCase().includes('delux') || file_name.toLowerCase().includes('делюкс')) 
                     ) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
                     }
