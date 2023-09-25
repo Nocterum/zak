@@ -1271,7 +1271,7 @@ async function findLoymina(chatId) {
 
                 // if (cellAddress[0] === '!') continue;
 
-                if (cellAddress[0] !== 'A') continue;
+                // if (cellAddress[0] !== 'A') continue;
         
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
