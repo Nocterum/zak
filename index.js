@@ -1135,7 +1135,7 @@ async function findBautex(chatId) {
             let foundMatch = false;
             let message = '';
 
-            firstWorksheet.eachRow((row, rowNumber) => {
+            firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
 
@@ -1176,8 +1176,13 @@ async function findBautex(chatId) {
                         if (rValue !== '') {
                             message += `${r8Value}\n${rValue} ${sValue}\n\n`
                         }
+                        message += `<i>можете ввести следующий артикул для поиска</i>`;
 
-                        return message;
+                        await bot.sendMessage(
+                            chatId, 
+                            message,
+                            startFindOptions
+                        );
                     }
                 }
             });
@@ -1448,12 +1453,7 @@ bot.on('message', async msg => {
                     );
                 } else {
 
-                    await findBautex(chatId);
-                    return bot.sendMessage(
-                        chatId,
-                        message,
-                        { parse_mode: 'HTML' }
-                    )
+                    return findBautex(chatId);
                 }
 
             } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
