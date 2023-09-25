@@ -1166,16 +1166,15 @@ async function findBautex(chatId) {
                         message += `<b>${dValue}</b>\n\n`;
 
                         if (jValue !== null && jValue.formula) {
-
-                            // jValue = jValue.evaluateFormula();
-                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
+                            jValue = jValue.result;
+                            message += `${j8Value}\n${jValue.result} ${lValue}\n\n`;
 
                         } else if (jValue !== null) {
                             message += `${j8Value}\n${jValue} ${lValue}\n\n`;
                         }
 
                         if (mValue !== null && mValue.formula) {
-
+                            mValue = mValue.result;
                             // mValue = mValue.evaluateFormula();
                             message += `${m8Value}\n${mValue} ${nValue}\n\n`;
 
@@ -1184,7 +1183,7 @@ async function findBautex(chatId) {
                         }
 
                         if (oValue !== null && oValue.formula) {
-
+                            oValue = oValue.result;
                             // oValue = oValue.evaluateFormula();
                             message += `${o8Value}\n${oValue} ${qValue}\n\n`;
 
@@ -1193,7 +1192,7 @@ async function findBautex(chatId) {
                         }
 
                         if (rValue !== null && rValue.formula) {
-
+                            rValue = rValue.result;
                             // rValue = rValue.evaluateFormula();
                             message += `${r8Value}\n${rValue} ${sValue}\n\n`;
 
