@@ -1269,7 +1269,7 @@ async function findLoymina(chatId) {
                 const cellValue = cell.v;
                 cellAddress = cellAddress.split('!')[1];
 
-                if (cellAddress[0] === '!') continue;
+                // if (cellAddress[0] === '!') continue;
 
                 if (cellAddress[0] !== 'A') continue;
         
