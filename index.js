@@ -1263,12 +1263,13 @@ async function findLoymina(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]]['A'];
 
             let foundMatch = false;
-            let cellAddress = '';
 
-            for (let cell of Object.values(firstWorksheet)) {
-                const cellValue = cell.v;
-                cellAddress = cellAddress.split('!')[1];
-                
+            for (let cellAddress of Object.values(firstWorksheet)) {
+
+                if (cellAddress[0] === '!') continue;
+        
+                const cellValue = firstWorksheet[cellAddress].v;
+
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
@@ -1277,7 +1278,7 @@ async function findLoymina(chatId) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
         
-                    if (formatedCellValue === formatedUserVC) {
+                    if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
                         const dValue = firstWorksheet['D' + cellAddress.substring(1)].v;    // Партия
@@ -1285,19 +1286,18 @@ async function findLoymina(chatId) {
                         const kValue = firstWorksheet['K' + cellAddress.substring(1)].v;    //колличество
 
                         let message = '';
-                        message += `<b>${formatedCellValue}</b>\n`;
+                        message += `<b>${cellValue}</b>\n`;
 
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
-                            
                                 const currentDCell = firstWorksheet['D' + i];
                             
                                 if (currentDCell && currentDCell.v && !currentDCell.v.toString() !== null) {
-                                    const currentDCell = firstWorksheet['D' + i];   // Дизайн
+                                    const currentDCell = firstWorksheet['D' + i];   // Партия
                                     const currentKCell = firstWorksheet['K' + i];   // Колличество
                                     const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
 
-                                    const currentValue = `${currentDCell.v}\t\t<b>${currentKCell.v}</b> ${currentJCell}`;
+                                    const currentValue = `${currentDCell.v}\t\t<b>${currentKCell.v}</b> ${currentJCell.v}`;
                                     message += `<code>${currentValue}</code>\n`;
                                 } else {
                                     break;
