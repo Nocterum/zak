@@ -1603,11 +1603,6 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
-                    return bot.sendMessage(
-                        chatId,
-                        `поиск по остаткам поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
-                        { parse_mode: 'HTML' }
-                    ); 
                     return findLoymina(chatId);
                 }
             } else if (formatedUserVendor.includes('ОРАК')) {
