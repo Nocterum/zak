@@ -686,7 +686,7 @@ async function findCatalogWallpaper(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
+                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
                             
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -809,7 +809,7 @@ async function findCatalogTextile(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
+                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
                             
 
                             if (botMsgIdx !== null) {
@@ -1402,7 +1402,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `<b>Бренд найден</b>\n${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\n<u>ВАЖНО: Уточняйте наличие каталога. Без каталога в наличии, продажа запрещена!</u>\n${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
