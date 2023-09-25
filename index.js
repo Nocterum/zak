@@ -1185,10 +1185,9 @@ async function findBautex(chatId) {
             if (!foundMatch) {
                 user.update({vendor: null});
                 vendor = null;
-                messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
+                messagePrice += `<b>${user.vendorCode}</b> в файле остатков не найден.\nЗапросите информацию в отделе закупок.`;
             }
 
-            return {messagePrice, vendor};
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
