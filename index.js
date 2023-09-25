@@ -1144,22 +1144,22 @@ async function findBautex(chatId) {
     
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
-
+                        
                         const dValue = row.getCell('D').value;  // номенкулатура
-
-                        const j8Value = row.getCell('J8').value;  // Склад 1
+                        
+                        const j8Value = firstWorksheet.getCell('J8').value;  // Склад 1
                         const jValue = row.getCell('J').value;  // Значение
                         const lValue = row.getCell('L').value;  // ед. измерения
 
-                        const m8Value = row.getCell('M8').value;  // Склад 2
+                        const m8Value = firstWorksheet.getCell('M8').value;  // Склад 2
                         const mValue = row.getCell('M').value;  // Значение
                         const nValue = row.getCell('N').value;  // ед. измерения
 
-                        const o8Value = row.getCell('O8').value;  // Склад 3
+                        const o8Value = firstWorksheet.getCell('O8').value;  // Склад 3
                         const oValue = row.getCell('O').value;  // Значение
                         const qValue = row.getCell('Q').value;  // ед. измерения
 
-                        const r8Value = row.getCell('R8').value;  // Склад 4
+                        const r8Value = firstWorksheet.getCell('R8').value;  // Склад 4
                         const rValue = row.getCell('R').value;  // Значение
                         const sValue = row.getCell('S').value;  // ед. измерения
 
