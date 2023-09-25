@@ -1133,18 +1133,18 @@ async function findBautex(chatId) {
             const firstWorksheet = worksheet.worksheets[0];
 
             let foundMatch = false;
-            let message = '';
-
+            
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
-
+                    
                     const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-&]/g, '');
                     const formatedUserVC = user.vendorCode.toString().toUpperCase().replace(/[\s-&]/g, '');
-    
+                    
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
                         
+                        let message = '';
                         const dValue = row.getCell('D').value;  // номенкулатура
                         
                         const j8Value = firstWorksheet.getCell('J8').value;  // Склад 1
@@ -1164,19 +1164,19 @@ async function findBautex(chatId) {
                         const sValue = row.getCell('S').value;  // ед. измерения
 
                         message += `<b>${dValue}</b>\n\n`
-                        if (jValue !== '') {
+                        if (jValue !== null) {
                             message += `${j8Value}\n${jValue} ${lValue}\n\n`
                         }
-                        if (mValue !== '') {
+                        if (mValue !== null) {
                             message += `${m8Value}\n${mValue} ${nValue}\n\n`
                         }
-                        if (oValue !== '') {
+                        if (oValue !== null) {
                             message += `${o8Value}\n${oValue} ${qValue}\n\n`
                         }
-                        if (rValue !== '') {
+                        if (rValue !== null) {
                             message += `${r8Value}\n${rValue} ${sValue}\n\n`
                         }
-                        message += `<i>можете ввести следующий артикул для поиска</i>`;
+                        message += `<i>можете ввести следующий артикул для поиска</i>\n\n`;
 
                         await bot.sendMessage(
                             chatId, 
