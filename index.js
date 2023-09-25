@@ -1336,9 +1336,21 @@ bot.on('message', async msg => {
             if (text === '111QWER!!!') {
                 password = 'true';
 
-                return bot.sendMessage(
+                await bot.sendMessage(
                     chatId, 
                     `Доступ разрешен! Нажмите:\n/start`
+                );
+                
+                user = await UserModel.create({chatId});
+                console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+                 await user.update({
+                    firstName: msg.from.first_name, 
+                    lastName: msg.from.last_name, 
+                });
+                lc = '/editNickname';
+                return bot.sendMessage(
+                    chatId, 
+                    `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
                 );
 
                 // return bot.processUpdate({
