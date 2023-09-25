@@ -359,7 +359,8 @@ async function findExcelFile(
     fileNameVendor = '',
     fileNameDecorDelux = '',
     fileNameDecorRus = '',
-    fileNameBautex = ''
+    fileNameBautex = '',
+    fileNameLoymina = ''
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -380,7 +381,8 @@ async function findExcelFile(
                 fileNameVendor,
                 fileNameDecorDelux,
                 fileNameDecorRus,
-                fileNameBautex
+                fileNameBautex,
+                fileNameLoymina
                 );
 
             if (result.fileNameWallpaper) {
@@ -410,6 +412,9 @@ async function findExcelFile(
             if (result.fileNameBautex) {
                 fileNameBautex = result.fileNameBautex;
             }
+            if (result.fileNameLoymina) {
+                fileNameLoymina = result.fileNameLoymina;
+            }
 
         } else if (path.extname(file) === '.xlsx') {
             
@@ -435,6 +440,8 @@ async function findExcelFile(
             }
             if (file.toLowerCase().includes('декор_рус')) {
                 fileNameDecorRus = filePath;
+            } else if (file.toLowerCase().includes('лоймина')) {
+                fileNameLoymina = filePath;
             }
         }
         if (fileNameWallpaper && 
@@ -445,7 +452,8 @@ async function findExcelFile(
             fileNameVendor &&
             fileNameDecorDelux && 
             fileNameDecorRus &&
-            fileNameBautex
+            fileNameBautex &&
+            fileNameLoymina
             ) {
             break;
         }
@@ -459,7 +467,8 @@ async function findExcelFile(
         fileNameVendor,
         fileNameDecorDelux,
         fileNameDecorRus,
-        fileNameBautex
+        fileNameBautex,
+        fileNameLoymina
     };
 }
 
@@ -1064,6 +1073,7 @@ async function findDecorRus(chatId) {
                         
                         let message = '';
                         message += `<strong>${bValue}</strong>\n<pre>Свободный остаток:\t${cValue}</pre>\n`;
+
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                           const currentBCell = firstWorksheet['B' + i];
@@ -1201,7 +1211,11 @@ async function findBautex(chatId) {
                         }
 
                         message += `<i>можете ввести следующий артикул для поиска</i>\n\n`;
-
+                        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
                         await bot.sendMessage(
                             chatId, 
                             message,
@@ -1222,6 +1236,104 @@ async function findBautex(chatId) {
         }
     }
 };
+
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Баутекс
+// ======================================================================================================================================
+
+async function findLoymina(chatId) {
+
+    let fileNameLoymina = 'остатки_лоймина';
+
+    const result = await findExcelFile(fileNameLoymina);
+    const filePath = result.fileNameLoymina;
+    console.log(filePath);
+
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        try {
+
+            const workbook = XLSX.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let foundMatch = false;
+
+            for (let cellAddress in firstWorksheet) {
+                if (cellAddress[0] === '!') continue;
+        
+                const cellValue = firstWorksheet[cellAddress].v;
+        
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim();
+                    const formatedUserVC = user.vendorCode.toString().trim();
+        
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toUpperCase();
+                    }
+        
+                    if (formatedCellValue === formatedUserVC) {
+                        foundMatch = true;
+
+                        const gValue = firstWorksheet['А' + cellAddress.substring(1)].v; // Дизайн
+                        const hValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Серия\Партия
+                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v;   // Ед. измерения
+                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v;   // Колличество
+
+                        let message = '';
+                        message += `<b>${gValue}</b>\n`;
+
+                        // Проверяем каждую ячейку после bValue на наличие пробела
+                        for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
+                            const currentDCell = firstWorksheet['D' + i]; // Дизайн
+                            const currentJCell = firstWorksheet['J' + i];
+                            const currentKCell = firstWorksheet['K' + i];
+
+                                if (currentDCell && currentDCell.v && !currentDCell.v.toString() !== null) {
+                                    const currentDCell = firstWorksheet['D' + i];   // Дизайн
+                                    const currentKCell = firstWorksheet['K' + i];   // Колличество
+                                    const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
+
+                                    const currentValue = `${currentDCell.v}\t\t<b>${currentKCell.v}</b> ${currentJCell}`;
+                                    message += `<code>${currentValue}</code>\n`;
+                                } else {
+                                    break;
+                                }
+                        }
+                          message += `Цена: ${dValue}\n<i>можете ввести следующий артикул для поиска</i>\n`;
+
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        await bot.sendMessage(
+                            chatId, 
+                            message,
+                            startFindOptions
+                        );
+                    }
+                }
+            };
+            return;
+
+        } catch (e) {
+            console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
+        }
+    }
+};
+
+
+
 
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -1495,7 +1607,8 @@ bot.on('message', async msg => {
                         chatId,
                         `поиск по остаткам поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
                         { parse_mode: 'HTML' }
-                    );
+                    ); 
+                    return findLoymina(chatId);
                 }
             } else if (formatedUserVendor.includes('ОРАК')) {
 
