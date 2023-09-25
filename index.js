@@ -1281,6 +1281,10 @@ async function findLoymina(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
+                        if (!aValueCell || !aValueCell.v) {
+                            break; // Выходим из цикла, если aValue равно undefined или null
+                        }
+
                         const aValue = firstWorksheet['A' + cellAddress.substring(1)].v;    // дизайн
 
                         let message = '';
@@ -1301,15 +1305,14 @@ async function findLoymina(chatId) {
                                     // Проверяем, является ли текущая итерация кратной 10
                                     if (i % 10 === 0) {
 
-                                      // Отправляем сообщение пользователю
-                                      await bot.sendMessage(
+                                        // Отправляем сообщение пользователю
+                                        await bot.sendMessage(
                                         chatId,
-                                        message,
-                                        startFindOptions
-                                      );
+                                        message
+                                        );
                                     
-                                      // Обнуляем переменную message
-                                      message = '';
+                                        // Обнуляем переменную message
+                                        message = '';
                                     }
                                 } else {
                                     break;
