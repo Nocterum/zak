@@ -1264,10 +1264,13 @@ async function findLoymina(chatId) {
 
             let foundMatch = false;
 
-            for (let cellAddress in firstWorksheet) {
+            for (let cell of Object.values(firstWorksheet)) {
                 if (cellAddress[0] === '!') continue;
         
-                const cellValue = firstWorksheet[cellAddress].v;
+                const cellValue = cell.v;
+                const cellAddress = cellAddress.split('!')[1];
+
+                if (cellAddress[0] !== 'A') continue;
         
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
