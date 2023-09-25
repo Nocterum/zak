@@ -999,6 +999,10 @@ async function findDecorDelux(chatId) {
     }
 };
 
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Декор Рус
+// ======================================================================================================================================
+
 async function findDecorRus(chatId) {
 
     let fileNameDecorRus = 'остатки_декор_рус';
@@ -1101,6 +1105,10 @@ async function findDecorRus(chatId) {
         
 };
 
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Баутекс
+// ======================================================================================================================================
+
 async function findBautex(chatId) {
 
     let fileNameBautex = 'остатки_баутекс';
@@ -1109,7 +1117,83 @@ async function findBautex(chatId) {
     const filePath = result.fileNameBautex;
     console.log(filePath);
     
-}
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+              chatId: chatId
+            }
+        });
+
+        try { 
+
+            const workbook = new ExcelJS.Workbook();
+            const stream = fs.createReadStream(filePath);
+            const worksheet = await workbook.xlsx.read(stream);
+            const firstWorksheet = worksheet.worksheets[0];
+
+            let foundMatch = false;
+            let message = '';
+
+            firstWorksheet.eachRow((row, rowNumber) => {
+                const cellValue = row.getCell('D').value;
+                if (cellValue !== null) {
+
+                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-&]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().toUpperCase().replace(/[\s-&]/g, '');
+    
+                    if (formatedCellValue.includes(formatedUserVC)) {
+                        foundMatch = true;
+
+                        const dValue = row.getCell('D').value;  // номенкулатура
+
+                        const j8Value = row.getCell('J8').value;  // Склад 1
+                        const jValue = row.getCell('J').value;  // Значение
+                        const lValue = row.getCell('L').value;  // ед. измерения
+
+                        const m8Value = row.getCell('M8').value;  // Склад 2
+                        const mValue = row.getCell('M').value;  // Значение
+                        const nValue = row.getCell('N').value;  // ед. измерения
+
+                        const o8Value = row.getCell('O8').value;  // Склад 3
+                        const oValue = row.getCell('O').value;  // Значение
+                        const qValue = row.getCell('Q').value;  // ед. измерения
+
+                        const r8Value = row.getCell('R8').value;  // Склад 4
+                        const rValue = row.getCell('R').value;  // Значение
+                        const sValue = row.getCell('S').value;  // ед. измерения
+
+                        message += `<b>${dValue}</b>\n\n`
+                        if (jValue !== '') {
+                            message += `${j8Value}\n${jValue} ${lValue}\n\n`
+                        }
+                        if (mValue !== '') {
+                            message += `${m8Value}\n${mValue} ${nValue}\n\n`
+                        }
+                        if (oValue !== '') {
+                            message += `${o8Value}\n${oValue} ${qValue}\n\n`
+                        }
+                        if (rValue !== '') {
+                            message += `${r8Value}\n${rValue} ${sValue}\n\n`
+                        }
+
+                        return message;
+                    }
+                }
+            });
+
+            if (!foundMatch) {
+                user.update({vendor: null});
+                vendor = null;
+                messagePrice += `Прайс-лист по бренду <b>${user.brand}</b> в локальных файлах не найден.\nЗапросите прайсы в отделе закупок.`;
+            }
+
+            return {messagePrice, vendor};
+        } catch (error) {
+            console.error('Ошибка при чтении файла Excel:', error);
+        }
+    }
+};
 
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
@@ -1364,12 +1448,13 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
+
+                    await findBautex(chatId);
                     return bot.sendMessage(
                         chatId,
-                        `поиск по остаткам поставщика ${user.vendor} будет производиться в эксель файле\n<i>пока в разработке</i>`,
+                        message,
                         { parse_mode: 'HTML' }
-                    );
-                    return findBautex(chatId);
+                    )
                 }
 
             } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
