@@ -1483,6 +1483,40 @@ bot.onText(/\/settings/, async msg => {
     );
 });
 
+bot.onText(/\/getfile/, (msg) => {
+    const chatId = msg.chat.id;
+    const folderPath = 'root/zak/xl';
+  
+    // Получение списка файлов в папке
+    fs.readdir(folderPath, (err, files) => {
+        if (err) {
+            bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+            return;
+        }
+  
+        // Отправка списка файлов
+        bot.sendMessage(chatId, 'Список файлов:');
+        files.forEach((file) => {
+            bot.sendMessage(chatId, file);
+        });
+    });
+});
+
+bot.onText(/\/getfile (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const fileName = match[1];
+    const filePath = path.join('root/zak/xl', fileName);
+  
+    // Проверка существования файла
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return bot.sendMessage(chatId, 'Файл не найден.');
+        }
+  
+        // Отправка файла
+        bot.sendDocument(chatId, filePath);
+    });
+  });
 
 //слушатель сообщений==========================================================================================
 bot.on('message', async msg => {
@@ -1771,7 +1805,7 @@ bot.on('message', async msg => {
         }
 
         // Заглушка на все случаи жизни
-        if ( (text !== '/game' && text !== '/start' && text !== '/settings') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== 'getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendSticker(
                 chatId, 
                 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
