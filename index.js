@@ -360,7 +360,9 @@ async function findExcelFile(
     fileNameDecorDelux = '',
     fileNameDecorRus = '',
     fileNameBautex = '',
-    fileNameLoymina = ''
+    fileNameLoymina = '',
+    fileNameSirpi = '',
+
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -382,38 +384,47 @@ async function findExcelFile(
                 fileNameDecorDelux,
                 fileNameDecorRus,
                 fileNameBautex,
-                fileNameLoymina
+                fileNameLoymina,
+                fileNameSirpi,
+                fileNameBrink
                 );
 
             if (result.fileNameWallpaper) {
                 fileNameWallpaper = result.fileNameWallpaper;
-            }
-            if (result.fileNameTextile) {
+
+            } else if (result.fileNameTextile) {
                 fileNameTextile = result.fileNameTextile;
-            }
-            if (result.fileNamePricelist) {
+
+            } else if (result.fileNamePricelist) {
                 fileNamePricelist = result.fileNamePricelist;
-            }
-            if (result.fileNameOracMSK) {
+
+            } else if (result.fileNameOracMSK) {
                 fileNameOracMSK = result.fileNameOracMSK;
-            }
-            if (result.fileNameOracSPB) {
+
+            } else if (result.fileNameOracSPB) {
                 fileNameOracSPB = result.fileNameOracSPB;
-            }
-            if (result.fileNameVendor) {
+
+            } else if (result.fileNameVendor) {
                 fileNameVendor = result.fileNameVendor;
-            }
-            if (result.fileNameDecorDelux) {
+
+            } else if (result.fileNameDecorDelux) {
                 fileNameDecorDelux = result.fileNameDecorDelux;
-            }
-            if (result.fileNameDecorRus) {
+
+            } else if (result.fileNameDecorRus) {
                 fileNameDecorRus = result.fileNameDecorRus;
-            }
-            if (result.fileNameBautex) {
+
+            } else if (result.fileNameBautex) {
                 fileNameBautex = result.fileNameBautex;
-            }
-            if (result.fileNameLoymina) {
+
+            } else if (result.fileNameLoymina) {
                 fileNameLoymina = result.fileNameLoymina;
+
+            } else if (result.fileNameSirpi) {
+                fileNameSirpi = result.fileNameSirpi;
+
+            } else if (result.fileNameBrink) {
+                fileNameBrink = result.fileNameBrink;
+                
             }
 
         } else if (path.extname(file) === '.xlsx') {
@@ -432,16 +443,19 @@ async function findExcelFile(
                 fileNameVendor = filePath;
             } else if (file.toLowerCase().includes('баутекс')) {
                 fileNameBautex = filePath;
+            } else if (file.toLowerCase().includes('brink&campman')) {
+                fileNameBrink = filePath;
             }
         } else if (path.extname(file) === '.xls') {
 
             if (file.toLowerCase().includes('декор_делюкс')) {
                 fileNameDecorDelux = filePath;
-            }
-            if (file.toLowerCase().includes('декор_рус')) {
+            } else if (file.toLowerCase().includes('декор_рус')) {
                 fileNameDecorRus = filePath;
             } else if (file.toLowerCase().includes('лоймина')) {
                 fileNameLoymina = filePath;
+            } else if (file.toLowerCase().includes('сирпи')) {
+                fileNameSirpi = filePath;
             }
         }
         if (fileNameWallpaper && 
@@ -453,7 +467,9 @@ async function findExcelFile(
             fileNameDecorDelux && 
             fileNameDecorRus &&
             fileNameBautex &&
-            fileNameLoymina
+            fileNameLoymina &&
+            fileNameSirpi &&
+            fileNameBrink
             ) {
             break;
         }
@@ -468,7 +484,9 @@ async function findExcelFile(
         fileNameDecorDelux,
         fileNameDecorRus,
         fileNameBautex,
-        fileNameLoymina
+        fileNameLoymina,
+        fileNameSirpi,
+        fileNameBrink
     };
 }
 
@@ -708,7 +726,11 @@ async function findCatalogWallpaper(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
+                            return bot.sendMessage(
+                                chatId, 
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`,
+                                {parse_mode: 'HTML'}
+                            );
                         }
                     }
                 }
@@ -1389,7 +1411,31 @@ async function findLoymina(chatId) {
     }
 };
 
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Лоймина
+// ======================================================================================================================================
 
+async function findBrink(chatId) {
+
+    let fileNameBrink = 'остатки_brink&campman';
+
+    const result = await findExcelFile(fileNameBrink);
+    const filePath = result.fileNameBrink;
+    console.log(filePath);
+}
+
+// ======================================================================================================================================
+// Функция поиска остатков по поставщику Лоймина
+// ======================================================================================================================================
+
+async function findSirpi(chatId) {
+
+    let fileNameSirpi = 'остатки_сирпи';
+
+    const result = await findExcelFile(fileNameSirpi);
+    const filePath = result.fileNameSirpi;
+    console.log(filePath);
+}
 
 
 // ======================================================================================================================================
@@ -1533,8 +1579,8 @@ bot.on('message', async msg => {
 
     try {
         
-        //Проверка ввода пароля
         if (password === false) {
+
             if (text === '111QWER!!!') {
                 password = 'true';
 
@@ -1556,40 +1602,36 @@ bot.on('message', async msg => {
                     `В доступе отказано.`
                 );
             }
-        };
 
-        //главное меню 
-        if (text === '/mainmenu') {
+        } else if (text === '/mainmenu') {
+
             lc = null;
             return bot.sendMessage(
                 chatId, 
                 `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
                 mainMenuOptions
             ); 
-        }
 
-        //Записываем email в ячейку БД
-        if (lc === '/editEmail') {
+        } else if (lc === '/editEmail') {
+
             await user.update({email: text.toLowerCase()});
             return bot.sendMessage(
                 chatId, 
                 `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите email повторно)</i>`, 
                 beginWorkOptions
             );
-        }            
-            
-        //Записываем Nickname в ячейку БД
-        if (lc === '/editNickname') {
+
+        } else if (lc === '/editNickname') {
+
             await user.update({nickname: text});
             return bot.sendMessage(
                 chatId, 
                 `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<i>(для перезаписи введите никнейм повторно)</i>`, 
                 mainMenuReturnOptions
             );
-        }
 
-        //Записываем название бренда в ячейку БД
-        if (lc === '/enterBrand') {
+        } else if (lc === '/enterBrand') {
+
             await user.update({brand: text.toUpperCase()});
 
             let cValue = text;
@@ -1600,6 +1642,11 @@ bot.on('message', async msg => {
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
                 );
+            } else if (PricelistLink.vendor === 'RASCH') {
+                return bot.sendMessage(
+                    chatId,
+                    `Возможность продажи уточнить у Юлии Скрибник!`
+                )
             } else {
                 return bot.sendMessage(
                     chatId, 
@@ -1607,10 +1654,8 @@ bot.on('message', async msg => {
                     checkVendorOptions
                 );
             }
-        }
 
-        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку email
-        if (lc === '/enterVC') {
+        } else if (lc === '/enterVC') {
             if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
             } else {
@@ -1678,7 +1723,6 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
-
                     return findBautex(chatId);
                 }
 
@@ -1714,10 +1758,8 @@ bot.on('message', async msg => {
                     { parse_mode: 'HTML' }
                 );
             }
-        }
 
-        // Поиск в базе 1С
-        if (lc === '/request1C') {
+        } else if (lc === '/request1C') {
             await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
@@ -1728,10 +1770,8 @@ bot.on('message', async msg => {
                 `${findResult1C.messageResult1C}`,
                 { parse_mode: 'HTML'}
             );
-        }
 
-        //Вводится Партия и колличество для резерва по поставщику ОПУС
-        if (lc === '/enterReserveNumber') {
+        } else if (lc === '/enterReserveNumber') {
             await user.update({reserveNumber: text});
 
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
@@ -1747,10 +1787,9 @@ bot.on('message', async msg => {
                     enterReserveNumberOptions
                 );
             }
-        }
 
-        // Ввод колличества запрашиваемого артикула
-        if (lc === '/enterNumberofVC') {
+        } else if (lc === '/enterNumberofVC') {
+
             lc = null;
             await user.update({reserveNumber: text});
             return bot.sendMessage(
@@ -1758,54 +1797,47 @@ bot.on('message', async msg => {
                 `Отлично!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
                 startFind2Options
             );
-        }
-            
-        //Записываем артикул каталога
-        if (lc === '/catalogСheck') {
+
+        } else if (lc === '/catalogСheck') {
+
             await user.update({catalog: text});
 
             await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
             botMsgIdx = msg.message_id += 1; 
             return findCatalogWallpaper(chatId);
-        }
-         
-        // Ввод артикула Orac для поиска
-        if (lc === '/oracСheck') {
+
+        } else if (lc === '/oracСheck') {
+
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
             botMsgIdx = msg.message_id += 1; 
             return findOrac(chatId);
-        }
-                    
-        //вывод информации
-        if (text === '/infowork') {
+
+        } else if (text === '/infowork') {
+
             return bot.sendMessage(
                 chatId, 
                 `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
                 resetInfoWorkOptions
             );
-        }
 
-        // Результаты в игре
-        if (text === '/infogame') {
+        } else if (text === '/infogame') {
+
             lc = null;
             return bot.sendMessage(
                 chatId, 
                 `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions
             );
-        }   
 
-        // Приветствие 
-        if (text.toLowerCase().includes('привет')) {
+        } else if (text.toLowerCase().includes('привет')) {
 
             return bot.sendSticker(
                 chatId, 
                 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
             );
-        }
 
-        // Заглушка на все случаи жизни
-        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && !text.startsWith('/getfile')) || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+        } else /*if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && !text.startsWith('/getfile')) || (lc ==='/catalogСheck') || (lc === '/oracСheck') )*/ {
+            
             return bot.sendMessage(
                 chatId,
                 `Для начала работы перейдите в Главное меню: <b>/mainmenu</b>\nи нажмите кнопку <b>"Запрос: остатки+сроки+резерв"</b>.`,
@@ -1913,6 +1945,18 @@ bot.on('message', async msg => {
                         fileName = `остатки_лоймина.${file_format}`;
                     }
 
+                    if (file_name.toLowerCase().includes( 'brink' ) || 
+                    file_name.toLowerCase().includes( 'campman' ) 
+                    ) {
+                        fileName = `остатки_brink&campman.${file_format}`;
+                    }
+
+                    if (file_name.toLowerCase().includes( 'sirpi' ) || 
+                    file_name.toLowerCase().includes( 'сирпи' ) 
+                    ) {
+                        fileName = `остатки_сирпи.${file_format}`;
+                    }
+
                     await bot.getFile(msg.document.file_id).then((file) => {
 
                         const fileStream = bot.getFileStream(file.file_id);
@@ -1968,8 +2012,8 @@ bot.on('callback_query', async msg => {
 
     try {
 
-    //главное меню 
     if (data === '/mainmenu') {
+
         if (lc === '/game' || lc === '/again' || lc === '/reset') {
             await bot.deleteMessage(
                 chatId, 
@@ -1982,10 +2026,8 @@ bot.on('callback_query', async msg => {
             `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
             mainMenuOptions
         ); 
-    }
 
-    //начало работы
-    if (data === '/beginwork') {
+    } else if (data === '/beginwork') {
 
         if (!user.email) {
             await editEmail(chatId);
@@ -1997,10 +2039,8 @@ bot.on('callback_query', async msg => {
             );
         } 
         return; 
-    }
 
-    //начало работы
-    if (data === '/beginwork1') {
+    } else if (data === '/beginwork1') {
 
         if (!user.email) {
             await editEmail(chatId);
@@ -2012,20 +2052,17 @@ bot.on('callback_query', async msg => {
             );
         } 
         return; 
-    }
 
-    //изменить Nickname
-    if (data === '/editNickname') {
+    } else if (data === '/editNickname') {
+
         return editNickname(chatId);
-    }
 
-    //изменить email
-    if (data === '/editEmail') {
+    } else if (data === '/editEmail') {
+
         return editEmail(chatId);
-    }
 
-    //сброс искомых параметров
-    if (data === '/resetInfoWork') {
+    } else if (data === '/resetInfoWork') {
+
         await user.update({catalog: null});
         await user.update({brand: null});
         await user.update({vendorCode: null});
@@ -2034,10 +2071,9 @@ bot.on('callback_query', async msg => {
             chatId,
             `Искомые параметры сброшенны.`
         );
-    }
 
-    //Проверяем поставщика по бренду
-    if (data === '/checkVendor') {
+    } else if (data === '/checkVendor') {
+
         lc = '/enterVC';
         if (user.vendor !== null) {
 
@@ -2114,29 +2150,25 @@ bot.on('callback_query', async msg => {
             );
         }
             
-    }
+    } else if(data === '/enterBrand') {
 
-    //ввод бренда 
-    if(data === '/enterBrand') {
         lc = data;
 
         return bot.sendMessage(
             chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
             {parse_mode: 'HTML'}
         );
-    }
 
-    //начало резервирования
-    if (data === '/enterReserveNumber') {
+    } else if (data === '/enterReserveNumber') {
+
         lc = data;
         return bot.sendMessage(
             chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только колличество</i>`,
             { parse_mode: "HTML" }
         );
-    }
 
-    //подтверждение резервирования
-    if (data === '/preSendEmail') {
+    } else if (data === '/preSendEmail') {
+
         lc = data;
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
@@ -2151,10 +2183,11 @@ bot.on('callback_query', async msg => {
         }
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
-    }
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            sendReserveOptions
+        );
 
-    if (data === '/preSendEmailReserveYes') {
+    } else if (data === '/preSendEmailReserveYes') {
 
         subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
@@ -2164,9 +2197,8 @@ bot.on('callback_query', async msg => {
             `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
             sendReserveOptions
         );
-    }
 
-    if (data === '/preSendEmailReserveNo') {
+    } else if (data === '/preSendEmailReserveNo') {
 
         subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
@@ -2177,75 +2209,67 @@ bot.on('callback_query', async msg => {
             sendReserveOptions
         );
 
-    }
+    } else if (data === '/sendReserveEmail') {
 
-    //отправка сообщения с запросом резервирования
-    if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
-    }
 
-    //проверка каталога в наличии в салоне
-    if (data === '/catalogСheck') {
+    } else if (data === '/catalogСheck') {
+
         lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
             {parse_mode: 'HTML'}
         );
-    }
 
-    //проверка наличия артикула ORAC в салоне
-    if (data === '/oracСheck') {
+    } else if (data === '/oracСheck') {
+
         lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
             {parse_mode: 'HTML'}
         );
-    }
 
-    if (data === '/request1C') {
+    } else if (data === '/request1C') {
+
         lc = '/request1C';
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
             {parse_mode: 'HTML'}
         );
-    }
 
-    //превью фото
-    if (data === '/work2') {
+    } else if (data === '/work2') {
+
         lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
             mainMenuReturnOptions
         );
-    }
 
-    //добавить в заказ
-    if (data === '/work3') {
+    } else if (data === '/work3') {
+
         lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
             mainMenuReturnOptions
         );
-    }
 
-    //рестарт игры
-    if (data === '/again') {
+    } else if (data === '/again') {
+
         lc = data;
         await bot.deleteMessage(
             chatId, 
             msg.message.message_id
         );
         return startGame(chatId);
-    }
 
-    //рестарт игры
-    if (data === '/infogame') {
+    } else if (data === '/infogame') {
+
         lc = data;
         await bot.deleteMessage(
             chatId, 
@@ -2256,10 +2280,9 @@ bot.on('callback_query', async msg => {
             `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, 
             resetOptions
         ); 
-    }
 
-    //сброс результатов игры
-    if(data === '/reset') {
+    } else if(data === '/reset') {
+
         lc = data;
         await bot.deleteMessage(
             chatId, 
@@ -2277,10 +2300,9 @@ bot.on('callback_query', async msg => {
             `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, 
             againOptions
         );
-    }
 
-    //запись результата игры в БД
-    if (lc === '/game' || lc === '/again') {
+    } else if (lc === '/game' || lc === '/again') {
+
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save(chatId);
@@ -2316,7 +2338,7 @@ bot.on('callback_query', async msg => {
         );
     }
 
-})
+});
 
 }
 
