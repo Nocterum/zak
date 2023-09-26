@@ -1485,7 +1485,7 @@ bot.onText(/\/settings/, async msg => {
 
 bot.onText(/\/getfile/, (msg) => {
     const chatId = msg.chat.id;
-    const folderPath = 'root/zak/xl';
+    const folderPath = '/root/zak/xl';
   
     // Получение списка файлов в папке
     fs.readdir(folderPath, (err, files) => {
@@ -1505,7 +1505,7 @@ bot.onText(/\/getfile/, (msg) => {
 bot.onText(/\/getfile (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     const fileName = match[1];
-    const filePath = path.join('root/zak/xl', fileName);
+    const filePath = path.join('/root/zak/xl', fileName);
   
     // Проверка существования файла
     fs.access(filePath, fs.constants.F_OK, (err) => {
