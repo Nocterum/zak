@@ -1603,7 +1603,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `<b>Бренд найден</b>\n<u>ВАЖНО: Уточняйте наличие каталога. Без каталога в наличии, продажа запрещена!</u>\n${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\n<u>ВАЖНО: Уточняйте наличие каталога. Без каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
