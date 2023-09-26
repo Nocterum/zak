@@ -1806,9 +1806,10 @@ bot.on('message', async msg => {
 
         // Заглушка на все случаи жизни
         if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && !text.startsWith('/getfile')) || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
-            return bot.sendSticker(
-                chatId, 
-                'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
+            return bot.sendMessage(
+                chatId,
+                `Для начала работы перейдите в Главное меню: <b>/mainmenu</b> и нажмите кнопку <b>"Запрос: остатки+сроки+резерв"</b>.`,
+                { parse_mode: 'HTML' }
             );
         }
 
