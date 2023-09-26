@@ -992,6 +992,16 @@ async function findDecorDelux(chatId) {
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         )
+                    } else {
+                        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        return bot.sendMessage(
+                            chatId,
+                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_делюкс" не найденны.`
+                        );
                     }
                 }
             };
@@ -1097,6 +1107,15 @@ async function findDecorRus(chatId) {
                           chatId, 
                           message,
                           startFindOptions
+                        );
+                    } else {
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        };
+                        return bot.sendMessage(
+                            chatId,
+                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.`
                         );
                     }
                 }
@@ -1221,6 +1240,15 @@ async function findBautex(chatId) {
                             message,
                             startFindOptions
                         );
+                    } else {
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        return bot.sendMessage(
+                            chatId,
+                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_баутекс" не найденны.`
+                        );
                     }
                 }
             });
@@ -1238,7 +1266,7 @@ async function findBautex(chatId) {
 };
 
 // ======================================================================================================================================
-// Функция поиска остатков по поставщику Баутекс
+// Функция поиска остатков по поставщику Лоймина
 // ======================================================================================================================================
 
 async function findLoymina(chatId) {
@@ -1336,6 +1364,15 @@ async function findLoymina(chatId) {
                             message,
                             startFindOptions
                         );
+                    } else {
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        return bot.sendMessage(
+                            chatId,
+                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_лоймина" не найденны.`
+                        );
                     }
                 }
             };
@@ -1356,7 +1393,7 @@ async function findLoymina(chatId) {
 
 
 // ======================================================================================================================================
-//СТАРТ РАБОТЫ ПРОГРАММЫ=============================================================================================================
+//СТАРТ РАБОТЫ ПРОГРАММЫ=================================================================================================================
 // ======================================================================================================================================
 
 const start = async () => {
@@ -1859,7 +1896,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@mander.ru`
+                    `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@manders.ru`
                 );
             }
         }
