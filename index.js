@@ -1603,7 +1603,7 @@ bot.on('message', async msg => {
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `<b>Бренд найден</b>\n<u>ВАЖНО: Уточняйте наличие каталога. Без каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\n<b>ВАЖНО:</b> <u>Уточняйте наличие каталога.\тБез каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
@@ -1808,7 +1808,7 @@ bot.on('message', async msg => {
         if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && !text.startsWith('/getfile')) || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendMessage(
                 chatId,
-                `Для начала работы перейдите в Главное меню: <b>/mainmenu</b> и нажмите кнопку <b>"Запрос: остатки+сроки+резерв"</b>.`,
+                `Для начала работы перейдите в Главное меню: <b>/mainmenu</b>\nи нажмите кнопку <b>"Запрос: остатки+сроки+резерв"</b>.`,
                 { parse_mode: 'HTML' }
             );
         }
