@@ -1490,8 +1490,8 @@ bot.onText(/\/getfile/, (msg) => {
     // Получение списка файлов в папке
     fs.readdir(folderPath, (err, files) => {
         if (err) {
-            bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
-            return;
+            console.log(err);
+            return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
         }
   
         // Отправка списка файлов
@@ -1805,7 +1805,7 @@ bot.on('message', async msg => {
         }
 
         // Заглушка на все случаи жизни
-        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== 'getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendSticker(
                 chatId, 
                 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
