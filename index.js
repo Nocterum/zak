@@ -1497,7 +1497,7 @@ bot.onText(/\/files/, (msg) => {
         // Отправка списка файлов
         bot.sendMessage(chatId, 'Список файлов:');
         files.forEach((file) => {
-            bot.sendMessage(chatId, file);
+            bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
         });
     });
 });
@@ -1853,8 +1853,8 @@ bot.on('message', async msg => {
                         bot.sendMessage(
                             chatId, 
                             `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                            {parse_mode: 'HTML'
-                        });
+                            {parse_mode: 'HTML'}
+                        );
                     });
                 });
                 return;
