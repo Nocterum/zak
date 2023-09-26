@@ -1483,7 +1483,7 @@ bot.onText(/\/settings/, async msg => {
     );
 });
 
-bot.onText(/\/getfile/, (msg) => {
+bot.onText(/\/files/, (msg) => {
     const chatId = msg.chat.id;
     const folderPath = '/root/zak/xl';
   
@@ -1805,7 +1805,7 @@ bot.on('message', async msg => {
         }
 
         // Заглушка на все случаи жизни
-        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && !text.startsWith('/getfile')) || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
             return bot.sendSticker(
                 chatId, 
                 'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
