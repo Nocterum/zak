@@ -512,7 +512,7 @@ async function findOrac(chatId) {
 
     let vendorCode = user.vendorCode;
     const findResult1C = await startRequest1C(chatId, vendorCode);
-    messageORAC = `В 1С:\n${findResult1C.messageResult1C}\n\n`;
+    messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
     
     if (filePathMSK) {
         try {
@@ -1894,9 +1894,7 @@ bot.on('message', async msg => {
                     return startFind(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1911,9 +1909,7 @@ bot.on('message', async msg => {
                     return findDecorDelux(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ДЕКОРРУС')) {
+            } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1928,9 +1924,7 @@ bot.on('message', async msg => {
                     return findDecorRus(chatId);
                 }
 
-            }
-
-            if (formatedUserVendor.includes('БАУТЕКС')) {
+            } else if (formatedUserVendor.includes('БАУТЕКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1945,9 +1939,7 @@ bot.on('message', async msg => {
                     return findBautex(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ЛОЙМИНА')) {
+            } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1962,16 +1954,12 @@ bot.on('message', async msg => {
                     return findLoymina(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ОРАК')) {
+            } else if (formatedUserVendor.includes('ОРАК')) {
 
                 lc === '/oracСheck';
                 return findOrac(chatId);
 
-            }
-            
-            if (formatedUserVendor.includes('СИРПИ')) {
+            } else if (formatedUserVendor.includes('СИРПИ')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
