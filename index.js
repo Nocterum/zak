@@ -978,12 +978,13 @@ async function findDecorDelux(chatId) {
 
             let foundMatch = false;
 
-            for (let cellAddress in firstWorksheet) {
+            for (let cell of Object.values(firstWorksheet)) {
                 if (cellAddress[0] === '!') continue;
         
-                const cellValue = firstWorksheet[cellAddress].v;
+                const cellValue = cell.v;
+                const columnIndex = cellAddress.substring(0, 1);
         
-                if (cellValue !== null) {
+                if (columnIndex === 'F' && cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
         
@@ -1013,21 +1014,21 @@ async function findDecorDelux(chatId) {
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
-                        )
-                    } else {
-                        
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_делюкс" не найденны.`
                         );
                     }
                 }
-            };
-            return;
+            }
+            
+            if (!foundMatch) {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_делюкс" не найденны.`
+                );
+            }
 
         } catch (e) {
             console.log(e);
