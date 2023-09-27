@@ -1531,6 +1531,7 @@ async function findBrink(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
+            let message = '';
 
             for (let cellAddress in firstWorksheet) {
                 
@@ -1549,19 +1550,18 @@ async function findBrink(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
-                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v;                    // Артикул
-                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v;                    // Номенкулатура
-                        const cCell = firstWorksheet['C' + cellAddress.substring(1)];                       // Ячейка EAN штрихкода 
-                            let cValue = {};                                                                // EAN штрихкод 
+                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v;    // Номенкулатура
+                        const cCell = firstWorksheet['C' + cellAddress.substring(1)];   // Ячейка EAN штрихкода 
+                            let cValue = {};    // EAN штрихкод 
 
                             if (cCell && cCell.v !== undefined) {
-                                cValue = cCell.v.toString();                                                // EAN штрихкод 
+                                cValue = cCell.v.toString();    // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
 
-                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v;                    // Свободный остаток в наличии на складе
-                        let fDate = firstWorksheet['F1'].v.split(" ")[3];                                   // Дата свободного остатка
+                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v;    // Свободный остаток в наличии на складе
+                        let fDate = firstWorksheet['F1'].v.split(" ")[3];   // Дата свободного остатка
 
                             if ( !isNaN(fDate) ) {
                                 const year = fDate.substring(0, 4);
@@ -1569,8 +1569,10 @@ async function findBrink(chatId) {
                                 const day = fDate.substring(6, 8);
                                 fDate = `${day}.${month}.${year}`;
                             }
-                            
-                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];                         // Дата следующей поставки
+
+                        message += `Остаток <b>${bValue}</b> на <b>${fDate}</b>:\nEAN: ${cValue}\n\nСвободный остаток на складе: ${fValue}\n\n`;
+
+                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];   // Дата следующей поставки
                             let gValue = {};
 
                             if (gCell && gCell.v !== undefined) {
@@ -1579,6 +1581,7 @@ async function findBrink(chatId) {
                                 gValue = 'неизвестна';
                             }
 
+                        message += `Дата следующей поставки: ${gValue}\n`;
 
                             if ( !isNaN(gValue) ) {
                                 const year = gValue.substring(0, 4);
@@ -1587,22 +1590,23 @@ async function findBrink(chatId) {
                                 gValue = `${day}.${month}.${year}`;
                             }
 
-                        const hCell = firstWorksheet['H' + cellAddress.substring(1)];                     // Ячейка свободного остатка товара в пути
+                        const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
                             if (hCell !== undefined) {
-                                hValue = hCell.v.toString();                                                  // Свободный остаток товаров в пути 
-                            } else {
-                                hValue = '0';
+                                hValue = hCell.v.toString();    // Свободный остаток товаров в пути 
+                                message += `Свободный остаток товара в пути: ${hValue} ед.\n`;
                             }
-        
+                        
+                        message += `\n<i>можете ввести следующий артикул для поиска</i>`
+                        
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `Остаток <b>${bValue}</b> на <b>${fDate}</b>:\nEAN: ${cValue}\n\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gValue}\nСвободный остаток товара в пути: ${hValue} ед.\n\n<i>можете ввести следующий артикул для поиска</i>`,
+                            message,
                             startFindOptions
                         );
                     }
