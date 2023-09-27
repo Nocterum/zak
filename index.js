@@ -1549,19 +1549,19 @@ async function findBrink(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
-                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Артикул
-                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Номенкулатура
-                        const cCell= firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка EAN штрихкода 
-                            let cValue = {};    // EAN штрихкод 
+                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v;                    // Артикул
+                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v;                    // Номенкулатура
+                        const cCell = firstWorksheet['C' + cellAddress.substring(1)];                       // Ячейка EAN штрихкода 
+                            let cValue = {};                                                                // EAN штрихкод 
 
-                            if (cCell && cCell.v !== undefined && cCell.v !== null) {
-                                let cValue = `${cCell.v.toString()} ед.`; // EAN штрихкод 
+                            if (cCell !== undefined) {
+                                cValue = `${cCell.v.toString()} ед.`;                                   // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
-
-                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
-                        let fDate = firstWorksheet['F1'].v.split(" ")[3]; // дата свободного остатка
+                        console.log(cCell, cValue);
+                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v;                    // Свободный остаток в наличии на складе
+                        let fDate = firstWorksheet['F1'].v.split(" ")[3];                                   // Дата свободного остатка
 
                             if ( !isNaN(fDate) ) {
                                 const year = fDate.substring(0, 4);
@@ -1570,17 +1570,22 @@ async function findBrink(chatId) {
                                 fDate = `${day}.${month}.${year}`;
                             }
                             
-                        let gDate = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
-                            let date = new Date(gDate);
-                            gDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+                        let gDate = firstWorksheet['G' + cellAddress.substring(1)].toString();              // Дата следующей поставки
+
+                            if ( !isNaN(fDate) ) {
+                                const year = fDate.substring(0, 4);
+                                const month = fDate.substring(4, 6);
+                                const day = fDate.substring(6, 8);
+                                fDate = `${day}.${month}.${year}`;
+                            }
 
                         console.log(fDate, gDate);
 
-                        const hCell = firstWorksheet['H' + cellAddress.substring(1)].v; // Ячейка свободного остатка товара в пути
+                        const hCell = firstWorksheet['H' + cellAddress.substring(1)].v;                     // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
-                            if (hCell && hCell.v !== undefined) {
-                                hValue = `${hCell.v} ед.`; // Свободный остаток товаров в пути 
+                            if (hCell !== undefined) {
+                                hValue = `${hCell.v} ед.`;                                                  // Свободный остаток товаров в пути 
                             } else {
                                 hValue = '0';
                             }
