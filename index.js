@@ -1561,16 +1561,16 @@ async function findBrink(chatId) {
                                 cValue = 'нет';
                             }
 
-                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
-                        let f1Value = firstWorksheet['F1'].v.split(" ")[3]; // дата свободного остатка
+                        // const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
+                        let fDate = new Date(firstWorksheet['F1'].v.split(" ")[3]); // дата свободного остатка
                             if ( !isNaN(f1Value) ) {
                                 let f1Value = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
                             }
                         
-                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
+                        const gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
                             let gValue = {};
 
-                            if (gCell && gCell.v !== undefined && gCell.v !== null) {
+                            if (gCell && gCell.v !== undefined && gCell.v !== null && !isNAN(gCell.v)) {
                                 gValue = gCell.vtoLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });; // дата следующей поставки
                             }
 
@@ -2071,7 +2071,7 @@ bot.on('message', async msg => {
 
             }
             
-            if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
+            if (formatedUserVendor.includes('BRINK&CAPMAN')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
