@@ -1118,7 +1118,7 @@ async function findDecorRus(chatId) {
                                 if (currentCCell === undefined || currentCCell === null) {
                                     currentCCell = 0;
                                 }
-                                const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell.v} ед.`;
+                                const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell} ед.`;
                                 message += `<code>${currentValue}</code>\n`;
                             } else {
                               break;
@@ -1552,13 +1552,36 @@ async function findBrink(chatId) {
 
                         const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Артикул
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Номенкулатура
-                        const cCell= firstWorksheet['C' + cellAddress.substring(1)].v; // EAN штрихкод 
-                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Продается не кратно коробкам
-                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Цена базовая
-                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v; // Валюта
-                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v; // Цена РРЦ
-                        const lValue = firstWorksheet['L' + cellAddress.substring(1)].v; // Валюта РРЦ
+                        const cCell= firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка EAN штрихкода 
+                            let cValue = {};    // EAN штрихкод 
 
+                            if (cCell && cCell.v !== undefined && cCell.v !== null) {
+                                let cValue = `${cCell.v} ед.`; // EAN штрихкод 
+                            } else {
+                                cValue = 'нет';
+                            }
+
+                        const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
+                        let f1Value = firstWorksheet['F1'].v.split(" ")[3]; // дата свободного остатка
+                            if ( !isNaN(f1Value) ) {
+                                let f1Value = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                            }
+                        
+                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
+                            let gValue = {};
+
+                            if (gCell && gCell.v !== undefined && gCell.v !== null) {
+                                gValue = gCell.vtoLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });; // дата следующей поставки
+                            }
+
+                        const hCell = firstWorksheet['H' + cellAddress.substring(1)].v; // Ячейка свободного остатка товара в пути
+                            let hValue = {};
+
+                            if (hCell && hCell.v !== undefined && hCell.v !== null) {
+                                let hValue = `${hCell.v} ед.`; // Свободный остаток товаров в пути 
+                            } else {
+                                hValue = '0';
+                            }
         
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
@@ -1566,7 +1589,7 @@ async function findBrink(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `Остаток артикула: <b>${aValue}</b> на <b>${f1Value}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gValue}\nСвободный остаток товара в пути: ${hValue}\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
