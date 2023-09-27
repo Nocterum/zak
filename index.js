@@ -1554,8 +1554,8 @@ async function findBrink(chatId) {
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)];                       // Ячейка EAN штрихкода 
                             let cValue = {};                                                                // EAN штрихкод 
 
-                            if (cCell !== undefined) {
-                                cValue = cCell.toString();                                   // EAN штрихкод 
+                            if (cCell.v !== undefined) {
+                                cValue = cCell.v.toString();                                                // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
@@ -1570,19 +1570,27 @@ async function findBrink(chatId) {
                                 fDate = `${day}.${month}.${year}`;
                             }
                             
-                        let gDate = firstWorksheet['G' + cellAddress.substring(1)];              // Дата следующей поставки
-                        console.log(fDate, gDate);
-                        gDate = gDate.toString();
-                        console.log(fDate, gDate);
+                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];                         // Дата следующей поставки
+                            let gValue = {};
+                        console.log(gCell, gValue);
 
-                            if ( !isNaN(gDate) ) {
-                                const year = gDate.substring(0, 4);
-                                const month = gDate.substring(4, 6);
-                                const day = gDate.substring(6, 8);
-                                fDate = `${day}.${month}.${year}`;
+                            if (gCell.v !== undefined) {
+                                gValue = gCell.v.toString();                                   
+                            } else {
+                                gValue = 'нет';
                             }
 
-                        console.log(fDate, gDate);
+                        console.log(gCell, gValue);
+
+                            if ( !isNaN(gValue) ) {
+                                const year = gValue.substring(0, 4);
+                                const month = gValue.substring(4, 6);
+                                const day = gValue.substring(6, 8);
+                                gValue = `${day}.${month}.${year}`;
+                            }
+
+                        console.log(gCell, gValue);
+
 
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)].v;                     // Ячейка свободного остатка товара в пути
                             let hValue = {};
