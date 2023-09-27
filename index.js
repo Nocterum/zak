@@ -1570,21 +1570,17 @@ async function findBrink(chatId) {
                                 fDate = `${day}.${month}.${year}`;
                             }
                             
-                            let gDate = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
-                            
-                            if ( !isNaN(gDate) ) {
-                                const year = gDate.substring(0, 4);
-                                const month = gDate.substring(4, 6);
-                                const day = gDate.substring(6, 8);
-                                gDate = `${day}.${month}.${year}`;
-                            }
+                        let gDate = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
+                            let date = new Date(gDate);
+                            gDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+
                         console.log(fDate, gDate);
 
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)].v; // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
-                            if (hCell && hCell.v !== undefined && hCell.v !== null) {
-                                let hValue = `${hCell.v} ед.`; // Свободный остаток товаров в пути 
+                            if (hCell && hCell.v !== undefined) {
+                                hValue = `${hCell.v} ед.`; // Свободный остаток товаров в пути 
                             } else {
                                 hValue = '0';
                             }
