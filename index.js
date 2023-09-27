@@ -1561,23 +1561,24 @@ async function findBrink(chatId) {
                             }
 
                         const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
-                        let fDate1 = new Date(firstWorksheet['F1'].v.split(" ")[3]); // дата свободного остатка
-                        let fDate = new Date(firstWorksheet['F1'].v.substring(13)); // дата свободного остатка
-                        console.log(fDate1,fDate);
-                        
-                        if ( !isNaN(fDate) ) {
-                            let day = fDate.getDate().toString().padStart(2, '0');
-                            let month = (fDate.getMonth() + 1).toString().padStart(2, '0');
-                            let year = fDate.getFullYear().toString();
-                            fDate = `${day}.${month}.${year}`;
-                        }
-                        
-                        let gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
-                            // let gValue = {};
+                        let fDate = firstWorksheet['F1'].v.split(" ")[3]; // дата свободного остатка
 
-                            if (gDate && gDate.v !== undefined && gDate.v !== null && !isNAN(gDate.v)) {
-                                gDate = gDate.vtoLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });; // дата следующей поставки
+                            if ( !isNaN(fDate) ) {
+                                const year = fDate.substring(0, 4);
+                                const month = fDate.substring(4, 6);
+                                const day = fDate.substring(6, 8);
+                                fDate = `${day}.${month}.${year}`;
                             }
+                            
+                            let gDate = firstWorksheet['G' + cellAddress.substring(1)];    // Дата следующей поставки
+                            
+                            if ( !isNaN(gDate) ) {
+                                const year = gDate.substring(0, 4);
+                                const month = gDate.substring(4, 6);
+                                const day = gDate.substring(6, 8);
+                                gDate = `${day}.${month}.${year}`;
+                            }
+                        console.log(fDate, gDate);
 
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)].v; // Ячейка свободного остатка товара в пути
                             let hValue = {};
