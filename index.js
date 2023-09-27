@@ -1573,7 +1573,7 @@ async function findBrink(chatId) {
                         const gCell = firstWorksheet['G' + cellAddress.substring(1)];                         // Дата следующей поставки
                             let gValue = {};
 
-                            if (cCell && gCell.v !== undefined) {
+                            if (gCell && gCell.v !== undefined) {
                                 gValue = gCell.v.toString();                                   
                             } else {
                                 gValue = 'нет';
