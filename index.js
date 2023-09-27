@@ -992,7 +992,7 @@ async function findDecorDelux(chatId) {
                     if (isNaN(formatedCellValue)) {
                       formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedCellValue , formatedUserVC);
+
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
                     
@@ -1011,7 +1011,7 @@ async function findDecorDelux(chatId) {
                           bot.deleteMessage(chatId, botMsgIdx);
                           botMsgIdx = null;
                         }
-                        await bot.sendMessage(
+                        return bot.sendMessage(
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
@@ -1127,24 +1127,26 @@ async function findDecorRus(chatId) {
                             botMsgIdx = null;
                         }
                         
-                        await bot.sendMessage(
+                        return bot.sendMessage(
                           chatId, 
                           message,
                           startFindOptions
                         );
-                    } else {
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        };
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.`
-                        );
                     }
+
                 }
             };
-            return;
+
+            if (!foundMatch) {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                };
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.`
+                );
+            }
 
         } catch (e) {
             console.log(e);
