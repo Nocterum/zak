@@ -1555,7 +1555,7 @@ async function findBrink(chatId) {
                             let cValue = {};                                                                // EAN штрихкод 
 
                             if (cCell !== undefined) {
-                                cValue = cCell.v.toString();                                   // EAN штрихкод 
+                                cValue = cCell.toString();                                   // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
@@ -1570,7 +1570,10 @@ async function findBrink(chatId) {
                                 fDate = `${day}.${month}.${year}`;
                             }
                             
-                        let gDate = firstWorksheet['G' + cellAddress.substring(1)].toString();              // Дата следующей поставки
+                        let gDate = firstWorksheet['G' + cellAddress.substring(1)];              // Дата следующей поставки
+                        console.log(fDate, gDate);
+                        gDate = gDate.toString();
+                        console.log(fDate, gDate);
 
                             if ( !isNaN(gDate) ) {
                                 const year = gDate.substring(0, 4);
