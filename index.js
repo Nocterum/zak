@@ -981,7 +981,7 @@ async function findDecorDelux(chatId) {
             for (let cellAddress in firstWorksheet) {
                 if (cellAddress[0] === '!') continue;
               
-                const cellValue = cell.v;
+                const cellValue = firstWorksheet[cellAddress].v;
 
                 console.log(cellAddress)
 
