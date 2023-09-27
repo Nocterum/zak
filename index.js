@@ -1585,7 +1585,7 @@ async function findBrink(chatId) {
                             let hValue = {};
 
                             if (hCell !== undefined) {
-                                hValue = hCell.v.toString();                                                  // Свободный остаток товаров в пути 
+                                hValue = hCell.toString();                                                  // Свободный остаток товаров в пути 
                             } else {
                                 hValue = '0';
                             }
