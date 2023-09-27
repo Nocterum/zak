@@ -1011,6 +1011,7 @@ async function findDecorDelux(chatId) {
                           bot.deleteMessage(chatId, botMsgIdx);
                           botMsgIdx = null;
                         }
+
                         return bot.sendMessage(
                             chatId, 
                             `<strong>${gValue}</strong>\nПартия: ${hValue}\n${iValue} шт в свободном остатке\n<i>можете ввести следующий артикул для поиска</i>`,
@@ -1027,7 +1028,7 @@ async function findDecorDelux(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
                 );
             }
 
@@ -1090,7 +1091,7 @@ async function findDecorRus(chatId) {
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Ячейка: Свободный остаток в ед. хранения остатков
                         let cValue = {};
                         
-                        if (cCell && cCell.v !== undefined) {
+                        if (cCell && cCell.v !== undefined && cCell.v !== null) {
                             cValue = `${cCell.v} ед.`; // Свободный остаток в ед. хранения остатков
                         } else {
                             cValue = '0';
@@ -1099,7 +1100,7 @@ async function findDecorRus(chatId) {
                         const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // Ячейка: Цена (руб.)
                         let dValue = {};
                         
-                        if (dCell && dCell.v !== undefined) {
+                        if (dCell && dCell.v !== undefined && dCell.v !== null) {
                             dValue = `${dCell.v} руб.`; // Цена (руб.)
                         } else {
                             dValue = 'неизвестно';
@@ -1144,7 +1145,7 @@ async function findDecorRus(chatId) {
                 };
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.`
+                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
                 );
             }
 
@@ -1274,7 +1275,7 @@ async function findBautex(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
                 );
             }
 
@@ -1324,7 +1325,6 @@ async function findLoymina(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedCellValue, formatedUserVC);
         
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
@@ -1395,7 +1395,7 @@ async function findLoymina(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
                 );
             }
 
@@ -1439,22 +1439,20 @@ async function findSirpi(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
-            let cellAddress = '';
-            
-            for (let cell of Object.values(firstWorksheet)) {
+
+            for (let cellAddress in firstWorksheet) {
+                
                 if (cellAddress[0] === '!') continue;
 
-                const cellValue = cell.v;
-                const columnIndex = cellAddress.substring(0, 1);
+                const cellValue = firstWorksheet[cellAddress].v;
         
-                if (columnIndex === 'A' && cellValue !== null) {
+                if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
                     const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
         
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedCellValue, formatedUserVC);
 
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
@@ -1475,7 +1473,7 @@ async function findSirpi(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}`,
+                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
@@ -1489,7 +1487,7 @@ async function findSirpi(chatId) {
             }
             return bot.sendMessage(
                 chatId,
-                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
+                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
             );
         }
 
@@ -1505,7 +1503,7 @@ async function findSirpi(chatId) {
 }
 
 // ======================================================================================================================================
-// Функция поиска остатков по поставщику Лоймина
+// Функция поиска остатков по поставщику Brink&Campman
 // ======================================================================================================================================
 
 
@@ -1516,8 +1514,83 @@ async function findBrink(chatId) {
     const result = await findExcelFile(fileNameBrink);
     const filePath = result.fileNameBrink;
     console.log(filePath);
-}
 
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        try {
+
+            const workbook = XLSX.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let foundMatch = false;
+
+            for (let cellAddress in firstWorksheet) {
+                
+                if (cellAddress[0] === '!') continue;
+
+                const cellValue = firstWorksheet[cellAddress].v;
+        
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
+        
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toUpperCase();
+                    }
+
+                    if (formatedCellValue.includes(formatedUserVC)) {
+                        foundMatch = true;
+
+                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Артикул
+                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Номенкулатура
+                        const cCell= firstWorksheet['C' + cellAddress.substring(1)].v; // EAN штрихкод 
+                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Продается не кратно коробкам
+                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Цена базовая
+                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v; // Валюта
+                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v; // Цена РРЦ
+                        const lValue = firstWorksheet['L' + cellAddress.substring(1)].v; // Валюта РРЦ
+
+        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        return bot.sendMessage(
+                            chatId, 
+                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            startFindOptions
+                        );
+                    }
+                }
+            }
+
+        if (!foundMatch) {
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId,
+                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+            );
+        }
+
+        } catch (e) {
+            console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
+        }
+    }
+}
 
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=================================================================================================================
