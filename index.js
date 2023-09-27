@@ -1440,14 +1440,13 @@ async function findSirpi(chatId) {
 
             let foundMatch = false;
 
-            for (let row = 2; ; row++) {
-                
-                const cellAddress = 'A' + row;
-                const cellValue = firstWorksheet[cellAddress]?.v;
-            
-                if (!cellValue) break;
+            for (let cell of Object.values(firstWorksheet)) {
+                if (cellAddress[0] === '!') continue;
+
+                const cellValue = cell.v;
+                const columnIndex = cellAddress.substring(0, 1);
         
-                if (cellValue !== null) {
+                if (columnIndex === 'A' && cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
                     const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
         
