@@ -978,7 +978,7 @@ async function findDecorDelux(chatId) {
 
             let foundMatch = false;
             let cellAddress = '';
-            
+
             for (let cell of Object.values(firstWorksheet)) {
                 if (cellAddress[0] === '!') continue;
         
@@ -1027,7 +1027,7 @@ async function findDecorDelux(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_делюкс" не найденны.`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.`
                 );
             }
 
