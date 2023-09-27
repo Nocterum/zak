@@ -977,16 +977,15 @@ async function findDecorDelux(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
-            let cellAddress = '';
 
-            for (let cell of Object.values(firstWorksheet)) {
+            for (let cellAddress in firstWorksheet) {
                 if (cellAddress[0] === '!') continue;
               
                 const cellValue = cell.v;
-                const columnIndex = cellAddress.substring(0, 1);
+
                 console.log(cellAddress)
-                
-                if (columnIndex === 'C' && cellValue !== null && cellAddress.substring(1) === '6') {
+
+                if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
               
