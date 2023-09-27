@@ -1582,7 +1582,7 @@ bot.on('message', async msg => {
         
         if (msg.document) {
             let file_name = msg.document.file_name;
-            
+
             if (file_name.toLowerCase().includes('каталоги') ||
                 file_name.toLowerCase().includes('прайслистов')
                 ) {
@@ -1623,7 +1623,12 @@ bot.on('message', async msg => {
                         file_name.toLowerCase().includes('bautex') || 
                         file_name.toLowerCase().includes('баутекс') ||
                         file_name.toLowerCase().includes('loymina') ||
-                        file_name.toLowerCase().includes('лоймина')
+                        file_name.toLowerCase().includes('лоймина') ||
+                        file_name.toLowerCase().includes('sirpi') ||
+                        file_name.toLowerCase().includes('сирпи') ||
+                        file_name.toLowerCase().includes('brink') ||
+                        file_name.toLowerCase().includes('campman') 
+
                     ) {
 
                     let fileName = {};
