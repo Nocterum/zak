@@ -1771,7 +1771,7 @@ bot.on('message', async msg => {
             } else if (user.brand === 'RASCH') {
                 return bot.sendMessage(
                     chatId,
-                    `Возможность продажи уточнить у Юлии Скрибник!`
+                    `Возможность продажи бренда Rasch уточнить у Юлии Скрибник!`
                 )
             } else {
                 return bot.sendMessage(
