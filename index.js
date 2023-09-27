@@ -1327,6 +1327,7 @@ async function findLoymina(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
+                    console.log(formatedCellValue, formatedUserVC);
         
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
