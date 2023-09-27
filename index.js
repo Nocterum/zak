@@ -1563,8 +1563,8 @@ async function findBrink(chatId) {
 
                         // const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
                         let fDate = new Date(firstWorksheet['F1'].v.split(" ")[3]); // дата свободного остатка
-                            if ( !isNaN(f1Value) ) {
-                                let f1Value = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                            if ( !isNaN(fDate) ) {
+                                fDate = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
                             }
                         
                         const gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
@@ -1589,7 +1589,7 @@ async function findBrink(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `Остаток артикула: <b>${aValue}</b> на <b>${f1Value}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gValue}\nСвободный остаток товара в пути: ${hValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `Остаток артикула: <b>${aValue}</b> на <b>${fDate}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gValue}\nСвободный остаток товара в пути: ${hValue}\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
