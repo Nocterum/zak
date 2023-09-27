@@ -1434,13 +1434,13 @@ async function findSirpi(chatId) {
         try {
 
             const workbook = XLSX.readFile(filePath);
-            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]][B];
 
             let foundMatch = false;
 
             for (let cellAddress in firstWorksheet) {
                 
-                // if (cellAddress[0] === '!') continue;
+                if (cellAddress[0] === '!') continue;
         
                 const cellValue = firstWorksheet[cellAddress].v;
         
@@ -1483,7 +1483,7 @@ async function findSirpi(chatId) {
                         }
                         return bot.sendMessage(
                             chatId,
-                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_brink&campman" не найденны.`
+                            `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
                         );
                     }
                 }
