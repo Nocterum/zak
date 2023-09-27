@@ -1439,7 +1439,8 @@ async function findSirpi(chatId) {
             let foundMatch = false;
 
             for (let cellAddress in firstWorksheet) {
-                if (cellAddress[0] === '!') continue;
+                
+                // if (cellAddress[0] === '!') continue;
         
                 const cellValue = firstWorksheet[cellAddress].v;
         
