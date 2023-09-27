@@ -981,36 +981,35 @@ async function findDecorDelux(chatId) {
 
             for (let cell of Object.values(firstWorksheet)) {
                 if (cellAddress[0] === '!') continue;
-        
+              
                 const cellValue = cell.v;
                 const columnIndex = cellAddress.substring(0, 1);
-        
+              
                 if (columnIndex === 'F' && cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
-        
+              
                     if (isNaN(formatedCellValue)) {
-                        formatedCellValue = formatedCellValue.toUpperCase();
+                      formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    
-                    console.log(formatedCellValue, formatedUserVC);
-                    if (formatedCellValue.includes(formatedUserVC)) {
+              
+                    if (formatedCellValue === formatedUserVC) {
                         foundMatch = true;
-
+                    
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
                         const hValue = firstWorksheet['H' + cellAddress.substring(1)].v; // Серия\Партия
                         const iCell = firstWorksheet['I' + cellAddress.substring(1)];   // Ячейка: Свободный остаток
                         let iValue = {};
-
+                    
                         if (iCell && iCell.v !== undefined) {
-                            iValue = iCell.v; // Свободный остаток
+                          iValue = iCell.v; // Свободный остаток
                         } else {
-                            iValue = '0';
+                          iValue = '0';
                         }
-        
+                    
                         if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
+                          bot.deleteMessage(chatId, botMsgIdx);
+                          botMsgIdx = null;
                         }
                         await bot.sendMessage(
                             chatId, 
