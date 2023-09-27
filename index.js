@@ -1434,11 +1434,11 @@ async function findSirpi(chatId) {
         try {
 
             const workbook = XLSX.readFile(filePath);
-            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]][B];
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
 
-            for (let cellAddress in firstWorksheet) {
+            for (let cellAddress of Object.keys(firstWorksheet)) {
                 
                 if (cellAddress[0] === '!') continue;
         
