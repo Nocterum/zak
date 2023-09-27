@@ -1439,7 +1439,8 @@ async function findSirpi(chatId) {
             const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
 
             let foundMatch = false;
-
+            let cellAddress = '';
+            
             for (let cell of Object.values(firstWorksheet)) {
                 if (cellAddress[0] === '!') continue;
 
