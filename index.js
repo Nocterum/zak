@@ -360,9 +360,7 @@ async function findExcelFile(
     fileNameDecorDelux = '',
     fileNameDecorRus = '',
     fileNameBautex = '',
-    fileNameLoymina = '',
-    fileNameSirpi = '',
-
+    fileNameLoymina = ''
     ) {
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
@@ -384,47 +382,38 @@ async function findExcelFile(
                 fileNameDecorDelux,
                 fileNameDecorRus,
                 fileNameBautex,
-                fileNameLoymina,
-                fileNameSirpi,
-                fileNameBrink
+                fileNameLoymina
                 );
 
             if (result.fileNameWallpaper) {
                 fileNameWallpaper = result.fileNameWallpaper;
-
-            } else if (result.fileNameTextile) {
+            }
+            if (result.fileNameTextile) {
                 fileNameTextile = result.fileNameTextile;
-
-            } else if (result.fileNamePricelist) {
+            }
+            if (result.fileNamePricelist) {
                 fileNamePricelist = result.fileNamePricelist;
-
-            } else if (result.fileNameOracMSK) {
+            }
+            if (result.fileNameOracMSK) {
                 fileNameOracMSK = result.fileNameOracMSK;
-
-            } else if (result.fileNameOracSPB) {
+            }
+            if (result.fileNameOracSPB) {
                 fileNameOracSPB = result.fileNameOracSPB;
-
-            } else if (result.fileNameVendor) {
+            }
+            if (result.fileNameVendor) {
                 fileNameVendor = result.fileNameVendor;
-
-            } else if (result.fileNameDecorDelux) {
+            }
+            if (result.fileNameDecorDelux) {
                 fileNameDecorDelux = result.fileNameDecorDelux;
-
-            } else if (result.fileNameDecorRus) {
+            }
+            if (result.fileNameDecorRus) {
                 fileNameDecorRus = result.fileNameDecorRus;
-
-            } else if (result.fileNameBautex) {
+            }
+            if (result.fileNameBautex) {
                 fileNameBautex = result.fileNameBautex;
-
-            } else if (result.fileNameLoymina) {
+            }
+            if (result.fileNameLoymina) {
                 fileNameLoymina = result.fileNameLoymina;
-
-            } else if (result.fileNameSirpi) {
-                fileNameSirpi = result.fileNameSirpi;
-
-            } else if (result.fileNameBrink) {
-                fileNameBrink = result.fileNameBrink;
-
             }
 
         } else if (path.extname(file) === '.xlsx') {
@@ -443,19 +432,16 @@ async function findExcelFile(
                 fileNameVendor = filePath;
             } else if (file.toLowerCase().includes('баутекс')) {
                 fileNameBautex = filePath;
-            } else if (file.toLowerCase().includes('brink&campman')) {
-                fileNameBrink = filePath;
             }
         } else if (path.extname(file) === '.xls') {
 
             if (file.toLowerCase().includes('декор_делюкс')) {
                 fileNameDecorDelux = filePath;
-            } else if (file.toLowerCase().includes('декор_рус')) {
+            }
+            if (file.toLowerCase().includes('декор_рус')) {
                 fileNameDecorRus = filePath;
             } else if (file.toLowerCase().includes('лоймина')) {
                 fileNameLoymina = filePath;
-            } else if (file.toLowerCase().includes('сирпи')) {
-                fileNameSirpi = filePath;
             }
         }
         if (fileNameWallpaper && 
@@ -467,9 +453,7 @@ async function findExcelFile(
             fileNameDecorDelux && 
             fileNameDecorRus &&
             fileNameBautex &&
-            fileNameLoymina &&
-            fileNameSirpi &&
-            fileNameBrink
+            fileNameLoymina
             ) {
             break;
         }
@@ -484,9 +468,7 @@ async function findExcelFile(
         fileNameDecorDelux,
         fileNameDecorRus,
         fileNameBautex,
-        fileNameLoymina,
-        fileNameSirpi,
-        fileNameBrink
+        fileNameLoymina
     };
 }
 
@@ -726,11 +708,7 @@ async function findCatalogWallpaper(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(
-                                chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`,
-                                {parse_mode: 'HTML'}
-                            );
+                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
                         }
                     }
                 }
@@ -1327,7 +1305,6 @@ async function findLoymina(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedCellValue, formatedUserVC);
         
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
@@ -1412,116 +1389,7 @@ async function findLoymina(chatId) {
     }
 };
 
-// ======================================================================================================================================
-// Функция поиска остатков по поставщику Лоймина
-// ======================================================================================================================================
 
-async function findSirpi(chatId) {
-
-    let fileNameSirpi = 'остатки_сирпи';
-
-    const result = await findExcelFile(fileNameSirpi);
-    const filePath = result.fileNameSirpi;
-    console.log(filePath);
-
-    if (filePath) {
-
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-        });
-
-        try {
-
-            const workbook = XLSX.readFile(filePath);
-            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-
-            let foundMatch = false;
-
-            for (let cellAddress of Object.keys(firstWorksheet)) {
-                
-                if (cellAddress[0] === '!') continue;
-
-                const column = cellAddress.substring(0, 1);
-                const row = cellAddress.substring(1);
-            
-                if (column === 'B') {
-                    const cellValue = firstWorksheet[cellAddress].v;
-                
-                // const cellValue = firstWorksheet[cellAddress].v;
-        
-                if (cellValue !== null) {
-                    let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
-                    const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
-        
-                    if (isNaN(formatedCellValue)) {
-                        formatedCellValue = formatedCellValue.toUpperCase();
-                    }
-                    console.log(formatedCellValue, formatedUserVC);
-
-                    if (formatedCellValue.includes(formatedUserVC)) {
-                        foundMatch = true;
-
-                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Номенкулатура
-                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Артикул
-                        const cValue = firstWorksheet['C' + cellAddress.substring(1)].v; // В коробе 
-                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Продается не кратно коробкам
-                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Цена базовая
-                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v; // Валюта
-                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v; // Цена РРЦ
-                        const lValue = firstWorksheet['L' + cellAddress.substring(1)].v; // Валюта РРЦ
-
-        
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        await bot.sendMessage(
-                            chatId, 
-                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}`,
-                            startFindOptions
-                        )
-                    } else {
-                        
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
-                        );
-                    }
-                    }
-                }
-            };
-            return;
-
-        } catch (e) {
-            console.log(e);
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
-        }
-    }
-}
-
-// ======================================================================================================================================
-// Функция поиска остатков по поставщику Лоймина
-// ======================================================================================================================================
-
-
-async function findBrink(chatId) {
-
-    let fileNameBrink = 'остатки_brink&campman';
-
-    const result = await findExcelFile(fileNameBrink);
-    const filePath = result.fileNameBrink;
-    console.log(filePath);
-}
 
 
 // ======================================================================================================================================
@@ -1615,21 +1483,21 @@ bot.onText(/\/settings/, async msg => {
     );
 });
 
-bot.onText(/\/files/, (msg) => {
+bot.onText(/\/getfile/, (msg) => {
     const chatId = msg.chat.id;
-    const folderPath = '/root/zak/xl';
+    const folderPath = 'root/zak/xl';
   
     // Получение списка файлов в папке
     fs.readdir(folderPath, (err, files) => {
         if (err) {
-            console.log(err);
-            return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+            bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+            return;
         }
   
         // Отправка списка файлов
         bot.sendMessage(chatId, 'Список файлов:');
         files.forEach((file) => {
-            bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
+            bot.sendMessage(chatId, file);
         });
     });
 });
@@ -1637,7 +1505,7 @@ bot.onText(/\/files/, (msg) => {
 bot.onText(/\/getfile (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     const fileName = match[1];
-    const filePath = path.join('/root/zak/xl', fileName);
+    const filePath = path.join('root/zak/xl', fileName);
   
     // Проверка существования файла
     fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -1651,149 +1519,22 @@ bot.onText(/\/getfile (.+)/, (msg, match) => {
   });
 
 //слушатель сообщений==========================================================================================
-
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
-    
+
     console.log(msg)
-    
+
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         }
     });
-    
+
     try {
         
-        if (msg.document) {
-            let file_name = msg.document.file_name;
-
-            if (file_name.toLowerCase().includes('каталоги') ||
-                file_name.toLowerCase().includes('прайслистов')
-                ) {
-
-                let fileName = {};
-                if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
-                    fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
-                }
-                if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
-                    fileName = `текстиль_каталоги_распределение_в_салоны.xlsx`;
-                }
-                if (file_name.toLowerCase().includes('прайслистов')) {
-                    fileName = `список_прайслистов.xlsx`;
-                }
-
-                await bot.getFile(msg.document.file_id).then((file) => {
-
-                    const fileStream = bot.getFileStream(file.file_id);
-                    fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
-                    
-                    fileStream.on('end', () => {
-                        bot.sendMessage(
-                            chatId, 
-                            `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                            {parse_mode: 'HTML'}
-                        );
-                    });
-                });
-                return;
-
-            // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
-            } else if (file_name.toLowerCase().includes('orac') || 
-                        file_name.toLowerCase().includes('brink') ||
-                        file_name.toLowerCase().includes('орак') ||
-                        file_name.toLowerCase().includes('делюкс') ||
-                        file_name.toLowerCase().includes('рус') ||
-                        file_name.toLowerCase().includes('баутекс') ||
-                        file_name.toLowerCase().includes('лоймина') ||
-                        file_name.toLowerCase().includes('сирпи') ||
-                        file_name.toLowerCase().includes('delux') ||
-                        file_name.toLowerCase().includes('rus') ||
-                        file_name.toLowerCase().includes('bautex') || 
-                        file_name.toLowerCase().includes('loymina') ||
-                        file_name.toLowerCase().includes('sirpi') ||
-                        file_name.toLowerCase().includes('campman') 
-                    ) {
-
-                    let fileName = {};
-                    file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
-                    let file_format = file_name.split(".")[1];  // определение формата файла
-                    
-                    if ( (file_name.toLowerCase().includes('orac') || 
-                            file_name.toLowerCase().includes('орак')) &&
-                        (file_name.toLowerCase().includes('msk') || 
-                            file_name.toLowerCase().includes('мск')) 
-                    ) {
-                        fileName = `orac_мск.${file_format}`;
-
-                    } else if ( (file_name.toLowerCase().includes('orac') || 
-                                    file_name.toLowerCase().includes('орак')) &&
-                                (file_name.toLowerCase().includes('spb') || 
-                                    file_name.toLowerCase().includes('спб')) 
-                    ) {
-                        fileName = `orac_спб.${file_format}`;
-
-                    } else if ( (file_name.toLowerCase().includes('decor') || 
-                                    file_name.toLowerCase().includes('декор')) &&
-                                (file_name.toLowerCase().includes('delux') || 
-                                    file_name.toLowerCase().includes('делюкс')) 
-                    ) {
-                        fileName = `остатки_декор_делюкс.${file_format}`;
-
-                    } else if ( (file_name.toLowerCase().includes('декор') || 
-                                    file_name.toLowerCase().includes('decor')) &&
-                                (file_name.toLowerCase().includes('рус') || 
-                                    file_name.toLowerCase().includes('rus')) 
-                    ) {
-                        fileName = `остатки_декор_рус.${file_format}`;
-
-                    } else if (file_name.toLowerCase().includes( 'баутекс' ) || 
-                                file_name.toLowerCase().includes( 'bautex' ) 
-                    ) {
-                        fileName = `остатки_баутекс.${file_format}`;
-
-                    } else if (file_name.toLowerCase().includes( 'лоймина' ) || 
-                                file_name.toLowerCase().includes( 'loymina' ) 
-                    ) {
-                        fileName = `остатки_лоймина.${file_format}`;
-
-                    } else if (file_name.toLowerCase().includes( 'brink' ) || 
-                                file_name.toLowerCase().includes( 'campman' ) 
-                    ) {
-                        fileName = `остатки_brink&campman.${file_format}`;
-
-                    } else if (file_name.toLowerCase().includes( 'sirpi' ) || 
-                                file_name.toLowerCase().includes( 'сирпи' ) 
-                    ) {
-                        fileName = `остатки_сирпи.${file_format}`;
-
-                    }
-
-                    await bot.getFile(msg.document.file_id).then((file) => {
-
-                        const fileStream = bot.getFileStream(file.file_id);
-                        fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
-                        
-                        fileStream.on('end', () => {
-                            bot.sendMessage(
-                                chatId, 
-                                `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                {parse_mode: 'HTML'}
-                            );
-                        });
-                    });
-                    return;
-
-            } else {
-                return bot.sendMessage(
-                    chatId, 
-                    `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@manders.ru`
-                );
-            }
-            
-        } else if (password === false) {
-
+        //Проверка ввода пароля
+        if (password === false) {
             if (text === '111QWER!!!') {
                 password = 'true';
 
@@ -1815,36 +1556,40 @@ bot.on('message', async msg => {
                     `В доступе отказано.`
                 );
             }
+        };
 
-        } else if (text === '/mainmenu') {
-
+        //главное меню 
+        if (text === '/mainmenu') {
             lc = null;
             return bot.sendMessage(
                 chatId, 
                 `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
                 mainMenuOptions
             ); 
+        }
 
-        } else if (lc === '/editEmail') {
-
+        //Записываем email в ячейку БД
+        if (lc === '/editEmail') {
             await user.update({email: text.toLowerCase()});
             return bot.sendMessage(
                 chatId, 
                 `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите email повторно)</i>`, 
                 beginWorkOptions
             );
-
-        } else if (lc === '/editNickname') {
-
+        }            
+            
+        //Записываем Nickname в ячейку БД
+        if (lc === '/editNickname') {
             await user.update({nickname: text});
             return bot.sendMessage(
                 chatId, 
                 `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<i>(для перезаписи введите никнейм повторно)</i>`, 
                 mainMenuReturnOptions
             );
+        }
 
-        } else if (lc === '/enterBrand') {
-
+        //Записываем название бренда в ячейку БД
+        if (lc === '/enterBrand') {
             await user.update({brand: text.toUpperCase()});
 
             let cValue = text;
@@ -1855,20 +1600,17 @@ bot.on('message', async msg => {
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
                 );
-            } else if (user.brand === 'RASCH') {
-                return bot.sendMessage(
-                    chatId,
-                    `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
-                )
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `<b>Бренд найден</b>\n<b>ВАЖНО:</b> <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\n<u>ВАЖНО: Уточняйте наличие каталога. Без каталога в наличии, продажа запрещена!</u>\n${PricelistLink.messagePrice}`,
                     checkVendorOptions
                 );
             }
+        }
 
-        } else if (lc === '/enterVC') {
+        //Записываем артикул в ячейку БД и начинаем поиск на сайте\отправку email
+        if (lc === '/enterVC') {
             if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
             } else {
@@ -1894,9 +1636,7 @@ bot.on('message', async msg => {
                     return startFind(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1911,9 +1651,7 @@ bot.on('message', async msg => {
                     return findDecorDelux(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ДЕКОРРУС')) {
+            } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1928,9 +1666,7 @@ bot.on('message', async msg => {
                     return findDecorRus(chatId);
                 }
 
-            }
-
-            if (formatedUserVendor.includes('БАУТЕКС')) {
+            } else if (formatedUserVendor.includes('БАУТЕКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1942,12 +1678,11 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
+
                     return findBautex(chatId);
                 }
 
-            }
-            
-            if (formatedUserVendor.includes('ЛОЙМИНА')) {
+            } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1961,49 +1696,10 @@ bot.on('message', async msg => {
                 } else {
                     return findLoymina(chatId);
                 }
-
-            }
-            
-            if (formatedUserVendor.includes('ОРАК')) {
+            } else if (formatedUserVendor.includes('ОРАК')) {
 
                 lc === '/oracСheck';
                 return findOrac(chatId);
-
-            }
-            
-            if (formatedUserVendor.includes('СИРПИ')) {
-
-                if (user.vendorCode.length < 4) {
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-                    return bot.sendMessage(
-                        chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
-                    );
-
-                } else {
-                    return findSirpi(chatId);
-                }
-
-            }
-            
-            if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
-
-                if (user.vendorCode.length < 4) {
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-                    return bot.sendMessage(
-                        chatId,
-                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
-                    );
-
-                } else {
-                    // return findBrink(chatId);
-                }
 
             } else {
 
@@ -2018,8 +1714,10 @@ bot.on('message', async msg => {
                     { parse_mode: 'HTML' }
                 );
             }
+        }
 
-        } else if (lc === '/request1C') {
+        // Поиск в базе 1С
+        if (lc === '/request1C') {
             await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
@@ -2030,8 +1728,10 @@ bot.on('message', async msg => {
                 `${findResult1C.messageResult1C}`,
                 { parse_mode: 'HTML'}
             );
+        }
 
-        } else if (lc === '/enterReserveNumber') {
+        //Вводится Партия и колличество для резерва по поставщику ОПУС
+        if (lc === '/enterReserveNumber') {
             await user.update({reserveNumber: text});
 
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
@@ -2047,9 +1747,10 @@ bot.on('message', async msg => {
                     enterReserveNumberOptions
                 );
             }
+        }
 
-        } else if (lc === '/enterNumberofVC') {
-
+        // Ввод колличества запрашиваемого артикула
+        if (lc === '/enterNumberofVC') {
             lc = null;
             await user.update({reserveNumber: text});
             return bot.sendMessage(
@@ -2057,51 +1758,57 @@ bot.on('message', async msg => {
                 `Отлично!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
                 startFind2Options
             );
-
-        } else if (lc === '/catalogСheck') {
-
+        }
+            
+        //Записываем артикул каталога
+        if (lc === '/catalogСheck') {
             await user.update({catalog: text});
 
             await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
             botMsgIdx = msg.message_id += 1; 
             return findCatalogWallpaper(chatId);
-
-        } else if (lc === '/oracСheck') {
-
+        }
+         
+        // Ввод артикула Orac для поиска
+        if (lc === '/oracСheck') {
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
             botMsgIdx = msg.message_id += 1; 
             return findOrac(chatId);
-
-        } else if (text === '/infowork') {
-
+        }
+                    
+        //вывод информации
+        if (text === '/infowork') {
             return bot.sendMessage(
                 chatId, 
                 `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
                 resetInfoWorkOptions
             );
+        }
 
-        } else if (text === '/infogame') {
-
+        // Результаты в игре
+        if (text === '/infogame') {
             lc = null;
             return bot.sendMessage(
                 chatId, 
                 `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions
             );
+        }   
 
-        } else if (text.toLowerCase().includes('привет')) {
+        // Приветствие 
+        if (text.toLowerCase().includes('привет')) {
 
             return bot.sendSticker(
                 chatId, 
                 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
             );
+        }
 
-        } else {
-            
-            return bot.sendMessage(
-                chatId,
-                `Для начала работы перейдите в Главное меню: <b>/mainmenu</b>\nи нажмите кнопку <b>"Запрос: остатки+сроки+резерв"</b>.`,
-                { parse_mode: 'HTML' }
+        // Заглушка на все случаи жизни
+        if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== 'getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck') ) {
+            return bot.sendSticker(
+                chatId, 
+                'https://tlgrm.ru/_/stickers/ccd/a8d/ccda8d5d-d492-4393-8bb7-e33f77c24907/12.webp'
             );
         }
 
@@ -2110,7 +1817,128 @@ bot.on('message', async msg => {
     }
 
 
-}); 
+}) 
+//СЛУШАТЕЛЬ ДОКУМЕНТОВ========================================================================================================================================
+
+bot.on('message', async msg => {
+
+    try {
+        let file_name = msg.document.file_name;
+        const chatId = msg.chat.id;
+        
+        // Сохранение стабильных файлов
+        if (msg.document) {
+
+            if (file_name.toLowerCase().includes('каталоги') ||
+                file_name.toLowerCase().includes('прайслистов')
+                ) {
+
+                let fileName = {};
+                if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
+                    fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
+                }
+                if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
+                    fileName = `текстиль_каталоги_распределение_в_салоны.xlsx`;
+                }
+                if (file_name.toLowerCase().includes('прайслистов')) {
+                    fileName = `список_прайслистов.xlsx`;
+                }
+
+                await bot.getFile(msg.document.file_id).then((file) => {
+
+                    const fileStream = bot.getFileStream(file.file_id);
+                    fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                    
+                    fileStream.on('end', () => {
+                        bot.sendMessage(
+                            chatId, 
+                            `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                            {parse_mode: 'HTML'
+                        });
+                    });
+                });
+                return;
+
+            // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
+            } else if (file_name.toLowerCase().includes('orac') || 
+                        file_name.toLowerCase().includes('орак') ||
+                        file_name.toLowerCase().includes('delux') ||
+                        file_name.toLowerCase().includes('делюкс') ||
+                        file_name.toLowerCase().includes('rus') ||
+                        file_name.toLowerCase().includes('рус') ||
+                        file_name.toLowerCase().includes('bautex') || 
+                        file_name.toLowerCase().includes('баутекс') ||
+                        file_name.toLowerCase().includes('loymina') ||
+                        file_name.toLowerCase().includes('лоймина')
+                    ) {
+
+                    let fileName = {};
+                    file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
+                    let file_format = file_name.split(".")[1];  // определение формата файла
+                    
+                    if ( (file_name.toLowerCase().includes('orac') || file_name.toLowerCase().includes('орак')) &&
+                    (file_name.toLowerCase().includes('msk') || file_name.toLowerCase().includes('мск')) 
+                    ) {
+                        fileName = `orac_мск.${file_format}`;
+                    }
+
+                    if ( (file_name.toLowerCase().includes('orac') || file_name.toLowerCase().includes('орак')) &&
+                    (file_name.toLowerCase().includes('spb') || file_name.toLowerCase().includes('спб')) 
+                    ) {
+                        fileName = `orac_спб.${file_format}`;
+                    }
+
+                    if ( (file_name.toLowerCase().includes('decor') || file_name.toLowerCase().includes('декор')) &&
+                    (file_name.toLowerCase().includes('delux') || file_name.toLowerCase().includes('делюкс')) 
+                    ) {
+                        fileName = `остатки_декор_делюкс.${file_format}`;
+                    }
+
+                    if ( (file_name.toLowerCase().includes('декор') || file_name.toLowerCase().includes('decor')) &&
+                    (file_name.toLowerCase().includes('рус') || file_name.toLowerCase().includes('rus')) 
+                    ) {
+                        fileName = `остатки_декор_рус.${file_format}`;
+                    }
+
+                    if (file_name.toLowerCase().includes( 'баутекс' ) || 
+                    file_name.toLowerCase().includes( 'bautex' ) 
+                    ) {
+                        fileName = `остатки_баутекс.${file_format}`;
+                    }
+
+                    if (file_name.toLowerCase().includes( 'лоймина' ) || 
+                    file_name.toLowerCase().includes( 'loymina' ) 
+                    ) {
+                        fileName = `остатки_лоймина.${file_format}`;
+                    }
+
+                    await bot.getFile(msg.document.file_id).then((file) => {
+
+                        const fileStream = bot.getFileStream(file.file_id);
+                        fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                        
+                        fileStream.on('end', () => {
+                            bot.sendMessage(
+                                chatId, 
+                                `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                                {parse_mode: 'HTML'}
+                            );
+                        });
+                    });
+                    return;
+
+            } else {
+                return bot.sendMessage(
+                    chatId, 
+                    `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@manders.ru`
+                );
+            }
+        }
+    } catch {
+        console.log('Cработал слушатель сообщений.')
+    }
+
+});
 
 //слушатель колбэков==========================================================================================================================================
 
@@ -2139,8 +1967,8 @@ bot.on('callback_query', async msg => {
 
     try {
 
+    //главное меню 
     if (data === '/mainmenu') {
-
         if (lc === '/game' || lc === '/again' || lc === '/reset') {
             await bot.deleteMessage(
                 chatId, 
@@ -2153,8 +1981,10 @@ bot.on('callback_query', async msg => {
             `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
             mainMenuOptions
         ); 
+    }
 
-    } else if (data === '/beginwork') {
+    //начало работы
+    if (data === '/beginwork') {
 
         if (!user.email) {
             await editEmail(chatId);
@@ -2166,8 +1996,10 @@ bot.on('callback_query', async msg => {
             );
         } 
         return; 
+    }
 
-    } else if (data === '/beginwork1') {
+    //начало работы
+    if (data === '/beginwork1') {
 
         if (!user.email) {
             await editEmail(chatId);
@@ -2179,17 +2011,20 @@ bot.on('callback_query', async msg => {
             );
         } 
         return; 
+    }
 
-    } else if (data === '/editNickname') {
-
+    //изменить Nickname
+    if (data === '/editNickname') {
         return editNickname(chatId);
+    }
 
-    } else if (data === '/editEmail') {
-
+    //изменить email
+    if (data === '/editEmail') {
         return editEmail(chatId);
+    }
 
-    } else if (data === '/resetInfoWork') {
-
+    //сброс искомых параметров
+    if (data === '/resetInfoWork') {
         await user.update({catalog: null});
         await user.update({brand: null});
         await user.update({vendorCode: null});
@@ -2198,9 +2033,10 @@ bot.on('callback_query', async msg => {
             chatId,
             `Искомые параметры сброшенны.`
         );
+    }
 
-    } else if (data === '/checkVendor') {
-
+    //Проверяем поставщика по бренду
+    if (data === '/checkVendor') {
         lc = '/enterVC';
         if (user.vendor !== null) {
 
@@ -2251,14 +2087,11 @@ bot.on('callback_query', async msg => {
                     {parse_mode: 'HTML'}
                 );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
-                        formatedUserVendor.includes('ОРАК') ||
                         formatedUserVendor.includes('ДЕКОРРУС') ||
                         formatedUserVendor.includes('БАУТЕКС') ||
                         formatedUserVendor.includes('ЛОЙМИНА') ||
-                        formatedUserVendor.includes('СИРПИ') ||
-                        formatedUserVendor.includes('BRINK&CAMPMAN')
+                        formatedUserVendor.includes('ОРАК')
                     ) {
-
                 await bot.sendMessage(
                     chatId,
                     `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
@@ -2280,25 +2113,29 @@ bot.on('callback_query', async msg => {
             );
         }
             
-    } else if(data === '/enterBrand') {
+    }
 
+    //ввод бренда 
+    if(data === '/enterBrand') {
         lc = data;
 
         return bot.sendMessage(
             chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
             {parse_mode: 'HTML'}
         );
+    }
 
-    } else if (data === '/enterReserveNumber') {
-
+    //начало резервирования
+    if (data === '/enterReserveNumber') {
         lc = data;
         return bot.sendMessage(
             chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только колличество</i>`,
             { parse_mode: "HTML" }
         );
+    }
 
-    } else if (data === '/preSendEmail') {
-
+    //подтверждение резервирования
+    if (data === '/preSendEmail') {
         lc = data;
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
@@ -2313,11 +2150,10 @@ bot.on('callback_query', async msg => {
         }
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
-            sendReserveOptions
-        );
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, sendReserveOptions);
+    }
 
-    } else if (data === '/preSendEmailReserveYes') {
+    if (data === '/preSendEmailReserveYes') {
 
         subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
@@ -2327,8 +2163,9 @@ bot.on('callback_query', async msg => {
             `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
             sendReserveOptions
         );
+    }
 
-    } else if (data === '/preSendEmailReserveNo') {
+    if (data === '/preSendEmailReserveNo') {
 
         subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
         textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
@@ -2339,67 +2176,75 @@ bot.on('callback_query', async msg => {
             sendReserveOptions
         );
 
-    } else if (data === '/sendReserveEmail') {
+    }
 
+    //отправка сообщения с запросом резервирования
+    if (data === '/sendReserveEmail') {
         lc = data;
         return sendReserveEmail(chatId);
+    }
 
-    } else if (data === '/catalogСheck') {
-
+    //проверка каталога в наличии в салоне
+    if (data === '/catalogСheck') {
         lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
             {parse_mode: 'HTML'}
         );
+    }
 
-    } else if (data === '/oracСheck') {
-
+    //проверка наличия артикула ORAC в салоне
+    if (data === '/oracСheck') {
         lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
             {parse_mode: 'HTML'}
         );
+    }
 
-    } else if (data === '/request1C') {
-
+    if (data === '/request1C') {
         lc = '/request1C';
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
             {parse_mode: 'HTML'}
         );
+    }
 
-    } else if (data === '/work2') {
-
+    //превью фото
+    if (data === '/work2') {
         lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
             mainMenuReturnOptions
         );
+    }
 
-    } else if (data === '/work3') {
-
+    //добавить в заказ
+    if (data === '/work3') {
         lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
             mainMenuReturnOptions
         );
+    }
 
-    } else if (data === '/again') {
-
+    //рестарт игры
+    if (data === '/again') {
         lc = data;
         await bot.deleteMessage(
             chatId, 
             msg.message.message_id
         );
         return startGame(chatId);
+    }
 
-    } else if (data === '/infogame') {
-
+    //рестарт игры
+    if (data === '/infogame') {
         lc = data;
         await bot.deleteMessage(
             chatId, 
@@ -2410,9 +2255,10 @@ bot.on('callback_query', async msg => {
             `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, 
             resetOptions
         ); 
+    }
 
-    } else if(data === '/reset') {
-
+    //сброс результатов игры
+    if(data === '/reset') {
         lc = data;
         await bot.deleteMessage(
             chatId, 
@@ -2430,9 +2276,10 @@ bot.on('callback_query', async msg => {
             `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, 
             againOptions
         );
+    }
 
-    } else if (lc === '/game' || lc === '/again') {
-
+    //запись результата игры в БД
+    if (lc === '/game' || lc === '/again') {
         if (data == chats[chatId]) {
             user.right += 1;
             await user.save(chatId);
@@ -2468,7 +2315,7 @@ bot.on('callback_query', async msg => {
         );
     }
 
-});
+})
 
 }
 
