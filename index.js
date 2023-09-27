@@ -1554,7 +1554,7 @@ async function findBrink(chatId) {
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)];                       // Ячейка EAN штрихкода 
                             let cValue = {};                                                                // EAN штрихкод 
 
-                            if (cCell.v !== undefined) {
+                            if (cCell && cCell.v !== undefined) {
                                 cValue = cCell.v.toString();                                                // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
@@ -1573,7 +1573,7 @@ async function findBrink(chatId) {
                         const gCell = firstWorksheet['G' + cellAddress.substring(1)];                         // Дата следующей поставки
                             let gValue = {};
 
-                            if (gCell.v !== undefined) {
+                            if (cCell && gCell.v !== undefined) {
                                 gValue = gCell.v.toString();                                   
                             } else {
                                 gValue = 'нет';
