@@ -2071,7 +2071,7 @@ bot.on('message', async msg => {
 
             }
             
-            if (formatedUserVendor.includes('BRINK&CAPMAN')) {
+            if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
