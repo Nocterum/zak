@@ -1266,23 +1266,19 @@ async function findBautex(chatId) {
                             message,
                             startFindOptions
                         );
-                    } else {
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_баутекс" не найденны.`
-                        );
                     }
                 }
             });
 
             if (!foundMatch) {
-                user.update({vendor: null});
-                vendor = null;
-                messagePrice += `<b>${user.vendorCode}</b> в файле остатков не найден.\nЗапросите информацию в отделе закупок.`;
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.`
+                );
             }
 
         } catch (error) {
@@ -1391,19 +1387,20 @@ async function findLoymina(chatId) {
                             message,
                             startFindOptions
                         );
-                    } else {
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_лоймина" не найденны.`
-                        );
-                    }
+                    };
                 }
-            };
-            return;
+            }
+
+            if (!foundMatch) {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.`
+                );
+            }
 
         } catch (e) {
             console.log(e);
@@ -1411,10 +1408,13 @@ async function findLoymina(chatId) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
             }
-            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
+            return bot.sendMessage(
+                chatId, 
+                `Ошибка при чтении файла ${filePath}.`
+            );
         }
     }
-};
+}
 
 // ======================================================================================================================================
 // Функция поиска остатков по поставщику Лоймина
@@ -1485,22 +1485,22 @@ async function findSirpi(chatId) {
                             chatId, 
                             `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}`,
                             startFindOptions
-                        )
-                    } else {
-                        
-                        if (botMsgIdx !== null) {
-                            bot.deleteMessage(chatId, botMsgIdx);
-                            botMsgIdx = null;
-                        }
-                        return bot.sendMessage(
-                            chatId,
-                            `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
                         );
                     }
-                    }
                 }
-            };
-            return;
+            }
+        }
+
+        if (!foundMatch) {
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId,
+                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
+            );
+        }
 
         } catch (e) {
             console.log(e);
