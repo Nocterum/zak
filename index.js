@@ -1567,11 +1567,11 @@ async function findBrink(chatId) {
                                 fDate = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
                             }
                         
-                        const gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
-                            let gValue = {};
+                        let gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
+                            // let gValue = {};
 
-                            if (gCell && gCell.v !== undefined && gCell.v !== null && !isNAN(gCell.v)) {
-                                gValue = gCell.vtoLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });; // дата следующей поставки
+                            if (gDate && gDate.v !== undefined && gDate.v !== null && !isNAN(gDate.v)) {
+                                gDate = gDate.vtoLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });; // дата следующей поставки
                             }
 
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)].v; // Ячейка свободного остатка товара в пути
