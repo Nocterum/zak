@@ -993,8 +993,8 @@ async function findDecorDelux(chatId) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
                     
-                    console.log(formatedCellValue, formatedUserVC)
-                    if (formatedCellValue === formatedUserVC) {
+                    console.log(formatedCellValue, formatedUserVC);
+                    if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
