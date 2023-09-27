@@ -2096,7 +2096,12 @@ bot.on('message', async msg => {
                 'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
             );
 
-        } else if ( (text !== '/game' && text !== '/start' && text !== '/settings' && text !== '/files' && text !== '/getfile') || (lc ==='/catalogСheck') || (lc === '/oracСheck')  ) {
+        } else if ( (text !== '/game' && 
+                        text !== '/start' && 
+                        text !== '/settings' && 
+                        text !== '/files' && 
+                        !text.startsWith('/getfile'))  
+                    ) {
             
             return bot.sendMessage(
                 chatId,
