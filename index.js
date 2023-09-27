@@ -1587,11 +1587,11 @@ async function findBrink(chatId) {
                                 gValue = `${day}.${month}.${year}`;
                             }
 
-                        const hCell = firstWorksheet['H' + cellAddress.substring(1)].v;                     // Ячейка свободного остатка товара в пути
+                        const hCell = firstWorksheet['H' + cellAddress.substring(1)];                     // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
                             if (hCell !== undefined) {
-                                hValue = hCell.toString();                                                  // Свободный остаток товаров в пути 
+                                hValue = hCell.v.toString();                                                  // Свободный остаток товаров в пути 
                             } else {
                                 hValue = '0';
                             }
