@@ -1768,7 +1768,7 @@ bot.on('message', async msg => {
                     chatId, 
                     `Такой бренд не найден, проверьте написание бренда.`
                 );
-            } else if (PricelistLink.vendor === 'RASCH') {
+            } else if (user.brand === 'RASCH') {
                 return bot.sendMessage(
                     chatId,
                     `Возможность продажи уточнить у Юлии Скрибник!`
