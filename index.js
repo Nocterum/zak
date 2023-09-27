@@ -1555,11 +1555,11 @@ async function findBrink(chatId) {
                             let cValue = {};                                                                // EAN штрихкод 
 
                             if (cCell !== undefined) {
-                                cValue = `${cCell.v.toString()} ед.`;                                   // EAN штрихкод 
+                                cValue = cCell.v.toString();                                   // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
-                        console.log(cCell, cValue);
+
                         const fValue = firstWorksheet['F' + cellAddress.substring(1)].v;                    // Свободный остаток в наличии на складе
                         let fDate = firstWorksheet['F1'].v.split(" ")[3];                                   // Дата свободного остатка
 
@@ -1572,10 +1572,10 @@ async function findBrink(chatId) {
                             
                         let gDate = firstWorksheet['G' + cellAddress.substring(1)].toString();              // Дата следующей поставки
 
-                            if ( !isNaN(fDate) ) {
-                                const year = fDate.substring(0, 4);
-                                const month = fDate.substring(4, 6);
-                                const day = fDate.substring(6, 8);
+                            if ( !isNaN(gDate) ) {
+                                const year = gDate.substring(0, 4);
+                                const month = gDate.substring(4, 6);
+                                const day = gDate.substring(6, 8);
                                 fDate = `${day}.${month}.${year}`;
                             }
 
@@ -1585,7 +1585,7 @@ async function findBrink(chatId) {
                             let hValue = {};
 
                             if (hCell !== undefined) {
-                                hValue = `${hCell.v} ед.`;                                                  // Свободный остаток товаров в пути 
+                                hValue = hCell.v.toString();                                                  // Свободный остаток товаров в пути 
                             } else {
                                 hValue = '0';
                             }
@@ -1596,7 +1596,7 @@ async function findBrink(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `Остаток артикула: <b>${aValue}</b> на <b>${fDate}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gDate}\nСвободный остаток товара в пути: ${hValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `Остаток артикула: <b>${aValue}</b> на <b>${fDate}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gDate}\nСвободный остаток товара в пути: ${hValue} ед.\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
