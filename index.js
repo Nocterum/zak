@@ -1441,8 +1441,14 @@ async function findSirpi(chatId) {
             for (let cellAddress of Object.keys(firstWorksheet)) {
                 
                 if (cellAddress[0] === '!') continue;
-        
-                const cellValue = firstWorksheet[cellAddress].v;
+
+                const column = cellAddress.substring(0, 1);
+                const row = cellAddress.substring(1);
+            
+                if (column === 'B') {
+                    const cellValue = firstWorksheet[cellAddress].v;
+                
+                // const cellValue = firstWorksheet[cellAddress].v;
         
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
@@ -1485,6 +1491,7 @@ async function findSirpi(chatId) {
                             chatId,
                             `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.`
                         );
+                    }
                     }
                 }
             };
