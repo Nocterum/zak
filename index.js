@@ -1569,19 +1569,20 @@ bot.onText(/\/getfile (.+)/, (msg, match) => {
 bot.on('message', async msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
-    let file_name = msg.document.file_name;
-
+    
     console.log(msg)
-
+    
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         }
     });
-
+    
     try {
-
+        
         if (msg.document) {
+            let file_name = msg.document.file_name;
+            
             if (file_name.toLowerCase().includes('каталоги') ||
                 file_name.toLowerCase().includes('прайслистов')
                 ) {
