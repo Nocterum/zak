@@ -1415,7 +1415,7 @@ async function findLoymina(chatId) {
 // Функция поиска остатков по поставщику Лоймина
 // ======================================================================================================================================
 
-async function findBrink(chatId) {
+async function findSirpi(chatId) {
 
     let fileNameBrink = 'остатки_brink&campman';
 
@@ -1503,7 +1503,8 @@ async function findBrink(chatId) {
 // Функция поиска остатков по поставщику Лоймина
 // ======================================================================================================================================
 
-async function findSirpi(chatId) {
+
+async function findBrink(chatId) {
 
     let fileNameSirpi = 'остатки_сирпи';
 
@@ -1961,7 +1962,7 @@ bot.on('message', async msg => {
                     );
 
                 } else {
-                    // return findDecorRus(chatId);
+                    return findSirpi(chatId);
                 }
 
             } else if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
@@ -1977,7 +1978,7 @@ bot.on('message', async msg => {
                     );
 
                 } else {
-                    return findBrink(chatId);
+                    // return findBrink(chatId);
                 }
 
             } else {
