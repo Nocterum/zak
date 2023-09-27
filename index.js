@@ -1417,7 +1417,7 @@ async function findLoymina(chatId) {
 
 async function findSirpi(chatId) {
 
-    let fileNameBrink = 'остатки_brink&campman';
+    let fileNameSirpi = 'остатки_сирпи';
 
     const result = await findExcelFile(fileNameBrink);
     const filePath = result.fileNameBrink;
@@ -1506,7 +1506,7 @@ async function findSirpi(chatId) {
 
 async function findBrink(chatId) {
 
-    let fileNameSirpi = 'остатки_сирпи';
+    let fileNameBrink = 'остатки_brink&campman';
 
     const result = await findExcelFile(fileNameSirpi);
     const filePath = result.fileNameSirpi;
@@ -2227,11 +2227,14 @@ bot.on('callback_query', async msg => {
                     {parse_mode: 'HTML'}
                 );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
+                        formatedUserVendor.includes('ОРАК') ||
                         formatedUserVendor.includes('ДЕКОРРУС') ||
                         formatedUserVendor.includes('БАУТЕКС') ||
                         formatedUserVendor.includes('ЛОЙМИНА') ||
-                        formatedUserVendor.includes('ОРАК')
+                        formatedUserVendor.includes('СИРПИ') ||
+                        formatedUserVendor.includes('BRINK&CAMPMAN')
                     ) {
+
                 await bot.sendMessage(
                     chatId,
                     `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
