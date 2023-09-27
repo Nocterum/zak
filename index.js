@@ -985,7 +985,7 @@ async function findDecorDelux(chatId) {
                 const cellValue = cell.v;
                 const columnIndex = cellAddress.substring(0, 1);
               
-                if (columnIndex === 'F' && cellValue !== null) {
+                if (columnIndex === 'C' && cellValue !== null && cellAddress.substring(1) === '6') {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
               
@@ -993,7 +993,7 @@ async function findDecorDelux(chatId) {
                       formatedCellValue = formatedCellValue.toUpperCase();
                     }
               
-                    if (formatedCellValue === formatedUserVC) {
+                    if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
                     
                         const gValue = firstWorksheet['G' + cellAddress.substring(1)].v; // Номенкулатура
