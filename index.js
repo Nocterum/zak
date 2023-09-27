@@ -2084,7 +2084,7 @@ bot.on('message', async msg => {
                     );
 
                 } else {
-                    // return findBrink(chatId);
+                    return findBrink(chatId);
                 }
 
             } else {
