@@ -992,7 +992,8 @@ async function findDecorDelux(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-        
+                    
+                    console.log(formatedCellValue, formatedUserVC)
                     if (formatedCellValue === formatedUserVC) {
                         foundMatch = true;
 
