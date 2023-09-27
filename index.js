@@ -1440,17 +1440,9 @@ async function findSirpi(chatId) {
 
             let foundMatch = false;
 
-            for (let cellAddress of Object.keys(firstWorksheet)) {
+            for (let cellAddress in firstWorksheet) {
                 
                 if (cellAddress[0] === '!') continue;
-
-                const column = cellAddress.substring(0, 1);
-                const row = cellAddress.substring(1);
-            
-                if (column === 'B') {
-                    const cellValue = firstWorksheet[cellAddress].v;
-                
-                // const cellValue = firstWorksheet[cellAddress].v;
         
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
@@ -1486,7 +1478,6 @@ async function findSirpi(chatId) {
                     }
                 }
             }
-        }
 
         if (!foundMatch) {
             if (botMsgIdx !== null) {
