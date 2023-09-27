@@ -1422,6 +1422,81 @@ async function findBrink(chatId) {
     const result = await findExcelFile(fileNameBrink);
     const filePath = result.fileNameBrink;
     console.log(filePath);
+
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        try {
+
+            const workbook = XLSX.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let foundMatch = false;
+
+            for (let cellAddress in firstWorksheet) {
+                if (cellAddress[0] === '!') continue;
+        
+                const cellValue = firstWorksheet[cellAddress].v;
+        
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
+        
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toUpperCase();
+                    }
+        
+                    if (formatedCellValue === formatedUserVC) {
+                        foundMatch = true;
+
+                        const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Номенкулатура
+                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Артикул
+                        const cValue = firstWorksheet['C' + cellAddress.substring(1)].v; // В коробе 
+                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Продается не кратно коробкам
+                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Цена базовая
+                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v; // Валюта
+                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v; // Цена РРЦ
+                        const lValue = firstWorksheet['L' + cellAddress.substring(1)].v; // Валюта РРЦ
+
+        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        await bot.sendMessage(
+                            chatId, 
+                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}`,
+                            startFindOptions
+                        )
+                    } else {
+                        
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+                        return bot.sendMessage(
+                            chatId,
+                            `Совпадения с артикулом ${formatedUserVC} в файле "остатки_brink&campman" не найденны.`
+                        );
+                    }
+                }
+            };
+            return;
+
+        } catch (e) {
+            console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
+        }
+    }
 }
 
 // ======================================================================================================================================
@@ -1615,18 +1690,18 @@ bot.on('message', async msg => {
 
             // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
             } else if (file_name.toLowerCase().includes('orac') || 
-                        file_name.toLowerCase().includes('орак') ||
-                        file_name.toLowerCase().includes('delux') ||
-                        file_name.toLowerCase().includes('делюкс') ||
-                        file_name.toLowerCase().includes('rus') ||
-                        file_name.toLowerCase().includes('рус') ||
-                        file_name.toLowerCase().includes('bautex') || 
-                        file_name.toLowerCase().includes('баутекс') ||
-                        file_name.toLowerCase().includes('loymina') ||
-                        file_name.toLowerCase().includes('лоймина') ||
-                        file_name.toLowerCase().includes('sirpi') ||
-                        file_name.toLowerCase().includes('сирпи') ||
                         file_name.toLowerCase().includes('brink') ||
+                        file_name.toLowerCase().includes('орак') ||
+                        file_name.toLowerCase().includes('делюкс') ||
+                        file_name.toLowerCase().includes('рус') ||
+                        file_name.toLowerCase().includes('баутекс') ||
+                        file_name.toLowerCase().includes('лоймина') ||
+                        file_name.toLowerCase().includes('сирпи') ||
+                        file_name.toLowerCase().includes('delux') ||
+                        file_name.toLowerCase().includes('rus') ||
+                        file_name.toLowerCase().includes('bautex') || 
+                        file_name.toLowerCase().includes('loymina') ||
+                        file_name.toLowerCase().includes('sirpi') ||
                         file_name.toLowerCase().includes('campman') 
 
                     ) {
