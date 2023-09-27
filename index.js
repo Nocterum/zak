@@ -1924,7 +1924,9 @@ bot.on('message', async msg => {
                     return findDecorRus(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('БАУТЕКС')) {
+            }
+
+            if (formatedUserVendor.includes('БАУТЕКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1939,7 +1941,9 @@ bot.on('message', async msg => {
                     return findBautex(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('ЛОЙМИНА')) {
+            }
+            
+            if (formatedUserVendor.includes('ЛОЙМИНА')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1959,7 +1963,9 @@ bot.on('message', async msg => {
                 lc === '/oracСheck';
                 return findOrac(chatId);
 
-            } else if (formatedUserVendor.includes('СИРПИ')) {
+            }
+            
+            if (formatedUserVendor.includes('СИРПИ')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
