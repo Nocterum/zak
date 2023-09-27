@@ -1480,7 +1480,7 @@ async function findSirpi(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `<b>${aValue}</b>\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
@@ -1594,7 +1594,7 @@ async function findBrink(chatId) {
                             }
                             
                         message += `Дата следующей поставки: ${gValue}\n`;
-                        
+
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
