@@ -1028,7 +1028,8 @@ async function findDecorDelux(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    {parse_mode: 'HTML'}
                 );
             }
 
@@ -1148,7 +1149,8 @@ async function findDecorRus(chatId) {
                 };
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    {parse_mode: 'HTML'}
                 );
             }
 
@@ -1278,7 +1280,8 @@ async function findBautex(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    {parse_mode: 'HTML'}
                 );
             }
 
@@ -1398,7 +1401,8 @@ async function findLoymina(chatId) {
                 }
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    {parse_mode: 'HTML'}
                 );
             }
 
@@ -1490,7 +1494,8 @@ async function findSirpi(chatId) {
             }
             return bot.sendMessage(
                 chatId,
-                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                {parse_mode: 'HTML'}
             );
         }
 
@@ -1581,15 +1586,15 @@ async function findBrink(chatId) {
                                 gValue = 'неизвестна';
                             }
 
-                        message += `Дата следующей поставки: ${gValue}\n`;
-
                             if ( !isNaN(gValue) ) {
                                 const year = gValue.substring(0, 4);
                                 const month = gValue.substring(4, 6);
                                 const day = gValue.substring(6, 8);
                                 gValue = `${day}.${month}.${year}`;
                             }
-
+                            
+                        message += `Дата следующей поставки: ${gValue}\n`;
+                        
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
                             let hValue = {};
 
@@ -1620,7 +1625,8 @@ async function findBrink(chatId) {
             }
             return bot.sendMessage(
                 chatId,
-                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`
+                `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                {parse_mode: 'HTML'}
             );
         }
 
