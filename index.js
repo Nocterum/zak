@@ -1230,29 +1230,26 @@ async function findBautex(chatId) {
 
                         if (mValue !== null && mValue.formula) {
                             mValue = mValue.result;
-                            // mValue = mValue.evaluateFormula();
                             message += `${m8Value}\n${mValue} ${nValue}\n\n`;
 
                         } else if (mValue !== null) {
-                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
+                            message += `${m8Value}\n${mValue} ${lValue}\n\n`;
                         }
 
                         if (oValue !== null && oValue.formula) {
                             oValue = oValue.result;
-                            // oValue = oValue.evaluateFormula();
                             message += `${o8Value}\n${oValue} ${qValue}\n\n`;
 
                         } else if (oValue !== null) {
-                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
+                            message += `${o8Value}\n${oValue} ${lValue}\n\n`;
                         }
 
                         if (rValue !== null && rValue.formula) {
                             rValue = rValue.result;
-                            // rValue = rValue.evaluateFormula();
                             message += `${r8Value}\n${rValue} ${sValue}\n\n`;
 
                         } else if (rValue !== null) {
-                            message += `${j8Value}\n${jValue} ${lValue}\n\n`;
+                            message += `${r8Value}\n${rValue} ${lValue}\n\n`;
                         }
 
                         message += `<i>можете ввести следующий артикул для поиска</i>\n\n`;
