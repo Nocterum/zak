@@ -1703,59 +1703,60 @@ bot.on('message', async msg => {
                         file_name.toLowerCase().includes('loymina') ||
                         file_name.toLowerCase().includes('sirpi') ||
                         file_name.toLowerCase().includes('campman') 
-
                     ) {
 
                     let fileName = {};
                     file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
                     let file_format = file_name.split(".")[1];  // определение формата файла
                     
-                    if ( (file_name.toLowerCase().includes('orac') || file_name.toLowerCase().includes('орак')) &&
-                    (file_name.toLowerCase().includes('msk') || file_name.toLowerCase().includes('мск')) 
+                    if ( (file_name.toLowerCase().includes('orac') || 
+                            file_name.toLowerCase().includes('орак')) &&
+                        (file_name.toLowerCase().includes('msk') || 
+                            file_name.toLowerCase().includes('мск')) 
                     ) {
                         fileName = `orac_мск.${file_format}`;
-                    }
 
-                    if ( (file_name.toLowerCase().includes('orac') || file_name.toLowerCase().includes('орак')) &&
-                    (file_name.toLowerCase().includes('spb') || file_name.toLowerCase().includes('спб')) 
+                    } else if ( (file_name.toLowerCase().includes('orac') || 
+                                    file_name.toLowerCase().includes('орак')) &&
+                                (file_name.toLowerCase().includes('spb') || 
+                                    file_name.toLowerCase().includes('спб')) 
                     ) {
                         fileName = `orac_спб.${file_format}`;
-                    }
 
-                    if ( (file_name.toLowerCase().includes('decor') || file_name.toLowerCase().includes('декор')) &&
-                    (file_name.toLowerCase().includes('delux') || file_name.toLowerCase().includes('делюкс')) 
+                    } else if ( (file_name.toLowerCase().includes('decor') || 
+                                    file_name.toLowerCase().includes('декор')) &&
+                                (file_name.toLowerCase().includes('delux') || 
+                                    file_name.toLowerCase().includes('делюкс')) 
                     ) {
                         fileName = `остатки_декор_делюкс.${file_format}`;
-                    }
 
-                    if ( (file_name.toLowerCase().includes('декор') || file_name.toLowerCase().includes('decor')) &&
-                    (file_name.toLowerCase().includes('рус') || file_name.toLowerCase().includes('rus')) 
+                    } else if ( (file_name.toLowerCase().includes('декор') || 
+                                    file_name.toLowerCase().includes('decor')) &&
+                                (file_name.toLowerCase().includes('рус') || 
+                                    file_name.toLowerCase().includes('rus')) 
                     ) {
                         fileName = `остатки_декор_рус.${file_format}`;
-                    }
 
-                    if (file_name.toLowerCase().includes( 'баутекс' ) || 
-                    file_name.toLowerCase().includes( 'bautex' ) 
+                    } else if (file_name.toLowerCase().includes( 'баутекс' ) || 
+                                file_name.toLowerCase().includes( 'bautex' ) 
                     ) {
                         fileName = `остатки_баутекс.${file_format}`;
-                    }
 
-                    if (file_name.toLowerCase().includes( 'лоймина' ) || 
-                    file_name.toLowerCase().includes( 'loymina' ) 
+                    } else if (file_name.toLowerCase().includes( 'лоймина' ) || 
+                                file_name.toLowerCase().includes( 'loymina' ) 
                     ) {
                         fileName = `остатки_лоймина.${file_format}`;
-                    }
 
-                    if (file_name.toLowerCase().includes( 'brink' ) || 
-                    file_name.toLowerCase().includes( 'campman' ) 
+                    } else if (file_name.toLowerCase().includes( 'brink' ) || 
+                                file_name.toLowerCase().includes( 'campman' ) 
                     ) {
                         fileName = `остатки_brink&campman.${file_format}`;
-                    }
 
-                    if (file_name.toLowerCase().includes( 'sirpi' ) || 
-                    file_name.toLowerCase().includes( 'сирпи' ) 
+                    } else if (file_name.toLowerCase().includes( 'sirpi' ) || 
+                                file_name.toLowerCase().includes( 'сирпи' ) 
                     ) {
                         fileName = `остатки_сирпи.${file_format}`;
+
                     }
 
                     await bot.getFile(msg.document.file_id).then((file) => {
@@ -1941,10 +1942,43 @@ bot.on('message', async msg => {
                 } else {
                     return findLoymina(chatId);
                 }
+
             } else if (formatedUserVendor.includes('ОРАК')) {
 
                 lc === '/oracСheck';
                 return findOrac(chatId);
+
+            } else if (formatedUserVendor.includes('СИРПИ')) {
+
+                if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                    );
+
+                } else {
+                    // return findDecorRus(chatId);
+                }
+
+            } else if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
+
+                if (user.vendorCode.length < 4) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                    );
+
+                } else {
+                    return findBrink(chatId);
+                }
 
             } else {
 
