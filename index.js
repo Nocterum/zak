@@ -1419,8 +1419,8 @@ async function findSirpi(chatId) {
 
     let fileNameSirpi = 'остатки_сирпи';
 
-    const result = await findExcelFile(fileNameBrink);
-    const filePath = result.fileNameBrink;
+    const result = await findExcelFile(fileNameSirpi);
+    const filePath = result.fileNameSirpi;
     console.log(filePath);
 
     if (filePath) {
@@ -1451,7 +1451,7 @@ async function findSirpi(chatId) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
                     console.log(formatedCellValue, formatedUserVC);
-                    
+
                     if (formatedCellValue === formatedUserVC) {
                         foundMatch = true;
 
@@ -1509,8 +1509,8 @@ async function findBrink(chatId) {
 
     let fileNameBrink = 'остатки_brink&campman';
 
-    const result = await findExcelFile(fileNameSirpi);
-    const filePath = result.fileNameSirpi;
+    const result = await findExcelFile(fileNameBrink);
+    const filePath = result.fileNameBrink;
     console.log(filePath);
 }
 
