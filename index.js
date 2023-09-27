@@ -1452,7 +1452,7 @@ async function findSirpi(chatId) {
                     }
                     console.log(formatedCellValue, formatedUserVC);
 
-                    if (formatedCellValue === formatedUserVC) {
+                    if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
                         const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Номенкулатура
