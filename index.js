@@ -984,7 +984,8 @@ async function findDecorDelux(chatId) {
               
                 const cellValue = cell.v;
                 const columnIndex = cellAddress.substring(0, 1);
-              
+                console.log(cellAddress)
+                
                 if (columnIndex === 'C' && cellValue !== null && cellAddress.substring(1) === '6') {
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
@@ -992,7 +993,7 @@ async function findDecorDelux(chatId) {
                     if (isNaN(formatedCellValue)) {
                       formatedCellValue = formatedCellValue.toUpperCase();
                     }
-              
+                    console.log(formatedCellValue , formatedUserVC);
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
                     
