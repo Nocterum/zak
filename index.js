@@ -1894,7 +1894,9 @@ bot.on('message', async msg => {
                     return startFind(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
+            }
+            
+            if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1909,7 +1911,9 @@ bot.on('message', async msg => {
                     return findDecorDelux(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('ДЕКОРРУС')) {
+            }
+            
+            if (formatedUserVendor.includes('ДЕКОРРУС')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
@@ -1958,7 +1962,9 @@ bot.on('message', async msg => {
                     return findLoymina(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('ОРАК')) {
+            }
+            
+            if (formatedUserVendor.includes('ОРАК')) {
 
                 lc === '/oracСheck';
                 return findOrac(chatId);
@@ -1981,7 +1987,9 @@ bot.on('message', async msg => {
                     return findSirpi(chatId);
                 }
 
-            } else if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
+            }
+            
+            if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
 
                 if (user.vendorCode.length < 4) {
                     if (botMsgIdx !== null) {
