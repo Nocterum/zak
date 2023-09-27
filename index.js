@@ -1472,7 +1472,7 @@ async function findSirpi(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        await bot.sendMessage(
+                        return bot.sendMessage(
                             chatId, 
                             `${aValue}\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}`,
                             startFindOptions
