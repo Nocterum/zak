@@ -1620,16 +1620,16 @@ bot.onText(/\/files/, (msg) => {
     const folderPath = '/root/zak/xl';
   
     // Получение списка файлов в папке
-    fs.readdir(folderPath, (err, files) => {
+    fs.readdir(folderPath, async (err, files) => {
         if (err) {
             console.log(err);
             return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
         }
   
         // Отправка списка файлов
-        bot.sendMessage(chatId, 'Список файлов:');
+        await bot.sendMessage(chatId, 'Список файлов:');
         files.forEach((file) => {
-            bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
+            return bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
         });
     });
 });
