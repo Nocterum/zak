@@ -1572,7 +1572,6 @@ async function findBrink(chatId) {
                             
                         const gCell = firstWorksheet['G' + cellAddress.substring(1)];                         // Дата следующей поставки
                             let gValue = {};
-                        console.log(gCell, gValue);
 
                             if (gCell.v !== undefined) {
                                 gValue = gCell.v.toString();                                   
@@ -1580,7 +1579,6 @@ async function findBrink(chatId) {
                                 gValue = 'нет';
                             }
 
-                        console.log(gCell, gValue);
 
                             if ( !isNaN(gValue) ) {
                                 const year = gValue.substring(0, 4);
@@ -1588,9 +1586,6 @@ async function findBrink(chatId) {
                                 const day = gValue.substring(6, 8);
                                 gValue = `${day}.${month}.${year}`;
                             }
-
-                        console.log(gCell, gValue);
-
 
                         const hCell = firstWorksheet['H' + cellAddress.substring(1)].v;                     // Ячейка свободного остатка товара в пути
                             let hValue = {};
@@ -1607,7 +1602,7 @@ async function findBrink(chatId) {
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `Остаток артикула: <b>${aValue}</b> на <b>${fDate}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gDate}\nСвободный остаток товара в пути: ${hValue} ед.\n<i>можете ввести следующий артикул для поиска</i>`,
+                            `Остаток артикула: <b>${aValue}</b> на <b>${fDate}</b>\n\n<b>${bValue}</b>\nEAN: ${cValue}\nСвободный остаток на складе: ${fValue}\n\nДата следующей поставки: ${gValue}\nСвободный остаток товара в пути: ${hValue} ед.\n<i>можете ввести следующий артикул для поиска</i>`,
                             startFindOptions
                         );
                     }
