@@ -1516,7 +1516,6 @@ async function findBrink(chatId) {
 
     const result = await findExcelFile(fileNameBrink);
     const filePath = result.fileNameBrink;
-    console.log(filePath);
 
     if (filePath) {
 
@@ -1556,16 +1555,22 @@ async function findBrink(chatId) {
                             let cValue = {};    // EAN штрихкод 
 
                             if (cCell && cCell.v !== undefined && cCell.v !== null) {
-                                let cValue = `${cCell.v} ед.`; // EAN штрихкод 
+                                let cValue = `${cCell.v.toString()} ед.`; // EAN штрихкод 
                             } else {
                                 cValue = 'нет';
                             }
 
                         const fValue = firstWorksheet['F' + cellAddress.substring(1)].v; // Свободный остаток в наличии на складе
-                        let fDate = new Date(firstWorksheet['F1'].v.split(" ")[3]); // дата свободного остатка
-                            if ( !isNaN(fDate) ) {
-                                fDate = fDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                            }
+                        let fDate1 = new Date(firstWorksheet['F1'].v.split(" ")[3]); // дата свободного остатка
+                        let fDate = new Date(firstWorksheet['F1'].v.substring(13)); // дата свободного остатка
+                        console.log(fDate1,fDate);
+                        
+                        if ( !isNaN(fDate) ) {
+                            let day = fDate.getDate().toString().padStart(2, '0');
+                            let month = (fDate.getMonth() + 1).toString().padStart(2, '0');
+                            let year = fDate.getFullYear().toString();
+                            fDate = `${day}.${month}.${year}`;
+                        }
                         
                         let gDate = new Date(firstWorksheet['G' + cellAddress.substring(1)]);    // Дата следующей поставки
                             // let gValue = {};
