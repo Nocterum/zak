@@ -297,20 +297,7 @@ const startFindOpus = async (chatId) => {
    
 }
 
-async function getProductData() {
-    //Формируем URL для поиска
-    const searchUrl = `https://dealer.decaro.ru/catalog/?q=${user.vendorCode}&s=Найти`;
-    console.log('сформированна ссылка');
-    //Отправляем запрос на сайт
-    const response = await axios.get(searchUrl);
-    const $ = cheerio.load(response.data);
-    console.log('запрос на сайт отправлен');
-    
-    const firstProductLink = $('div.item-title a').attr('href');
-    const productResponse = `await axios.get(https://dealer.decaro.ru${firstProductLink})`;
-    console.log(productResponse.data);
-    return productResponse.data;
-}
+
 // ======================================================================================================================================
 // Функция html запроса по данным из БД на сайт поставщика ДЕКОР ТРЕЙД
 // ======================================================================================================================================
@@ -339,12 +326,12 @@ const startFindDecaro = async (chatId, msg) => {
 
         if (firstProductLink) {
 
-            await getProductData();
-            // const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+
+            const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
 
             setTimeout( async () => {
 
-            await getProductData();
+            console.log(productResponse.data);
             let $$ = cheerio.load(productResponse.data);
             
             const inner_props = $$('div.inner_props div.prop');
