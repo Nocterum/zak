@@ -325,10 +325,13 @@ const startFindDecaro = async (chatId, msg) => {
         if (firstProductLink) {
 
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+            await new Promise(resolve => setTimeout(resolve, 5000));
             const $$ = cheerio.load(productResponse.data);
-            console.log('успешно зашёл на страницу товара');
 
+            console.log('успешно зашёл на страницу товара');
+            
             const inner_props = $$('div.inner_props div.prop');
+            const availabilityTable = $$('div.availability-table');
   
             let chars = '';
 
@@ -358,15 +361,12 @@ const startFindDecaro = async (chatId, msg) => {
                 { parse_mode: "HTML" }
             );
 
-            await bot.sendMessage(
-                chatId,
-                `Ожидаю ответ от сервера по остаткам . . .`,
-                { parse_mode: "HTML" }
-            );
-            botMsgIdx = msg.message_id += 2; 
-
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            const availabilityTable = $$('div.availability-table');
+            // await bot.sendMessage(
+            //     chatId,
+            //     `Ожидаю ответ от сервера по остаткам . . .`,
+            //     { parse_mode: "HTML" }
+            // );
+            // botMsgIdx = msg.message_id += 2; 
 
             const availabilityTableValue = availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
