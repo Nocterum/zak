@@ -325,8 +325,10 @@ const startFindDecaro = async (chatId, msg) => {
         if (firstProductLink) {
 
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`,
-            { responseType: 'stream', timeout: 6000 });
-            
+            { responseType: 'stream' });
+
+            setTimeout( async () => {
+
             let $$ = cheerio.load(productResponse.data);
             
             const inner_props = $$('div.inner_props div.prop');
@@ -346,6 +348,7 @@ const startFindDecaro = async (chatId, msg) => {
             propsData.forEach((item) => {
                 chars += `${item.name}: ${item.value}\n`;
             });
+
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
@@ -403,8 +406,10 @@ const startFindDecaro = async (chatId, msg) => {
                 chars,
                 { parse_mode: "HTML" }
             );
+        }, 5000);
 
         } else {
+
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
