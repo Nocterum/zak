@@ -324,8 +324,7 @@ const startFindDecaro = async (chatId, msg) => {
 
         if (firstProductLink) {
 
-            const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`,
-            { responseType: 'stream' });
+            const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
 
             setTimeout( async () => {
 
