@@ -336,14 +336,14 @@ const startFindDecaro = async (chatId) => {
                 const rowsNames = $$(element).find('span');
                 const rowsValue = $$(element).find('div.char_value');
                 return {
-                    name: rowsNames.text(),
-                    value: rowsValue.text()
+                    name: rowsNames.text().trim(),
+                    value: rowsValue.text().trim()
                 }
             }).get(); // преобразуем объект Cheerio в обычный массив
 
             // выводим данные из каждого элемента массива propsData
             propsData.forEach((item) => {
-                chars += `${item.name}: ${item.value}`;
+                chars += `${item.name}: ${item.value}\n`;
             });
 
             return bot.sendMessage(
