@@ -326,54 +326,45 @@ const startFindDecaro = async (chatId, msg) => {
 
             const productResponse = axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
-
-            const $$ = cheerio.load(productResponse.data.toString());
-
-            console.log('успешно зашёл на страницу товара');
-            
-            const inner_props = $$('div.inner_props div.prop');
-            const availabilityTable = $$('div.availability-table');
-            let chars = '';
-
-            // обрабатываем поток данных по мере их поступления
             productResponse.data.on('data', async (chunk) => {
-                // обновляем данные в объекте Cheerio при получении новых данных
-                $$ = cheerio.load(chunk);
+                productResponse.data.on('end', async () => {
+                
+                    const $$ = cheerio.load(productResponse.data.toString());
 
-                // создаем массив объектов с данными из каждого элемента prop
-                const propsData = inner_props.map((index, element) => {
-                    const rowsNames = $$(element).find('span');
-                    const rowsValue = $$(element).find('div.char_value');
-                    return {
-                        name: rowsNames.text().trim(),
-                        value: rowsValue.text().trim()
+                    const inner_props = $$('div.inner_props div.prop');
+                    const availabilityTable = $$('div.availability-table');
+                    let chars = '';
+
+
+                    // обновляем данные в объекте Cheerio при получении новых данных
+                    $$ = cheerio.load(chunk);
+
+                    // создаем массив объектов с данными из каждого элемента prop
+                    const propsData = inner_props.map((index, element) => {
+                        const rowsNames = $$(element).find('span');
+                        const rowsValue = $$(element).find('div.char_value');
+                        return {
+                            name: rowsNames.text().trim(),
+                            value: rowsValue.text().trim()
+                        }
+                    }).get(); // преобразуем объект Cheerio в обычный массив
+
+                    // выводим данные из каждого элемента массива propsData
+                    propsData.forEach((item) => {
+                        chars += `${item.name}: ${item.value}\n`;
+                    });
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
                     }
-                }).get(); // преобразуем объект Cheerio в обычный массив
 
-                // выводим данные из каждого элемента массива propsData
-                propsData.forEach((item) => {
-                    chars += `${item.name}: ${item.value}\n`;
-                });
+                    await bot.sendMessage(
+                        chatId,
+                        chars,
+                        { parse_mode: "HTML" }
+                    );
 
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-
-                await bot.sendMessage(
-                    chatId,
-                    chars,
-                    { parse_mode: "HTML" }
-                );
-
-                // await bot.sendMessage(
-                //     chatId,
-                //     `Ожидаю ответ от сервера по остаткам . . .`,
-                //     { parse_mode: "HTML" }
-                // );
-                // botMsgIdx = msg.message_id += 2; 
-
-                productResponse.data.on('end', () => {
                     const availabilityTableValue = availabilityTable.map((index, element) => {
                         const rowsStatus = $$(element).find('div.status');
                         const rowsDays = $$(element).find('div.days');
@@ -381,7 +372,7 @@ const startFindDecaro = async (chatId, msg) => {
                         const rowsQty = $$(element).find('div.qty');
                         const rowsUnit = $$(element).find('div.unit');
                         const rowsOther = $$(element).find('small');
-    
+                    
                         return {
                             status: rowsStatus.text().trim(),
                             days: rowsDays.text().trim(),
@@ -391,9 +382,9 @@ const startFindDecaro = async (chatId, msg) => {
                             other: rowsOther.text().trim()
                         }
                     }).get(); // преобразуем объект Cheerio в обычный массив
-    
+                
                     chars = '';
-    
+                
                     // выводим данные из каждого элемента массива propsData
                     availabilityTableValue.forEach((item) => {
                         chars += `<b>${item.status}: </b>`;
@@ -411,12 +402,12 @@ const startFindDecaro = async (chatId, msg) => {
                         }
                         chars += `${item.other}\n`
                     });
-    
+                
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
-    
+                
                     return bot.sendMessage(
                         chatId,
                         chars,
