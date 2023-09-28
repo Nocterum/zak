@@ -328,12 +328,12 @@ const startFindDecaro = async (chatId, msg) => {
             { responseType: 'stream' });
             
             setTimeout(() => {
-                productResponse.end();
+                // productResponse.end();
             }, 5000);
 
             const $$ = cheerio.load(productResponse.data);
 
-                productResponse.data.on('end', async () => {
+                // productResponse.data.on('end', async () => {
                 
                     const inner_props = $$('div.inner_props div.prop');
                     const availabilityTable = $$('div.availability-table');
@@ -417,7 +417,7 @@ const startFindDecaro = async (chatId, msg) => {
                         chars,
                         { parse_mode: "HTML" }
                     );
-                });
+                // });
             
 
         } else {
