@@ -327,13 +327,12 @@ const startFindDecaro = async (chatId, msg) => {
         if (firstProductLink) {
 
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
-            console.log(productResponse.data);
+
             let $$ = cheerio.load(productResponse.data);
             
             const inner_props = $$('div.inner_props div.prop');
-            const availabilityTable = $$('div.availability-table');
             let chars = ''; 
-
+            
             // создаем массив объектов с данными из каждого элемента prop
             const propsData = inner_props.map((index, element) => {
                 const rowsNames = $$(element).find('span');
@@ -348,21 +347,23 @@ const startFindDecaro = async (chatId, msg) => {
             propsData.forEach((item) => {
                 chars += `${item.name}: ${item.value}\n`;
             });
-
+            
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
             }
-
+            
             await bot.sendMessage(
                 chatId,
                 chars,
                 { parse_mode: "HTML" }
-            );
-
-            setTimeout(() => {
-
+                );
+                
+                setTimeout(() => {
+                    
                 let $$ = cheerio.load(productResponse.data);
+                const availabilityTable = $$('div.availability-table');
+                console.log(availabilityTable);
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
                     const rowsStatus = $$(element).find('div.status');
