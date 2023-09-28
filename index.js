@@ -327,7 +327,7 @@ const startFindDecaro = async (chatId, msg) => {
             const productResponse = axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
 
-            const $$ = cheerio.load(productResponse.data);
+            const $$ = cheerio.load(productResponse.data.toString());
 
             console.log('успешно зашёл на страницу товара');
             
