@@ -327,20 +327,22 @@ const startFindDecaro = async (chatId, msg) => {
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
             
-            // await setTimeout(() => {
-            //     productResponse.end();
-            // }, 5000);
 
             let $$ = cheerio.load(productResponse.data);
 
-            productResponse.data.on('data', (chunk) => {
+            productResponse.data.on('data', async (chunk) => {
 
                 // обновляем данные в объекте Cheerio при получении новых данных
                 $$ = cheerio.load(chunk);
 
-                productResponse.data.on('end', async () => {
+                setTimeout(() => {
+                    productResponse.data.end();
+    
+                    // обновляем данные в объекте Cheerio при получении новых данных
+                    $$ = cheerio.load(productResponse.data);
+                    
+                }, 5000);
                 
-
                     const inner_props = $$('div.inner_props div.prop');
                     const availabilityTable = $$('div.availability-table');
                     let chars = '';
@@ -420,7 +422,6 @@ const startFindDecaro = async (chatId, msg) => {
                         { parse_mode: "HTML" }
                     );
                 });
-            });
 
         } else {
             if (botMsgIdx !== null) {
