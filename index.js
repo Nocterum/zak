@@ -1927,10 +1927,14 @@ bot.on('message', async msg => {
                 ) {
 
                 let fileName = {};
-                if (file_name.toLowerCase().includes('26.09.19')) {
+                if (file_name.toLowerCase().includes('26') && 
+                    file_name.toLowerCase().includes('каталоги')
+                    ) {
                     fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
                 }
-                if (file_name.toLowerCase().includes('текстиль')) {
+                if (file_name.toLowerCase().includes('текстиль') &&
+                    file_name.toLowerCase().includes('каталоги')
+                    ) {
                     fileName = `текстиль_каталоги_распределение_в_салоны.xlsx`;
                 }
                 if (file_name.toLowerCase().includes('прайслистов')) {
