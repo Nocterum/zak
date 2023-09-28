@@ -333,7 +333,7 @@ const startFindDecaro = async (chatId, msg) => {
             
             const inner_props = $$('div.inner_props div.prop');
             const availabilityTable = $$('div.availability-table');
-            let chars = '';
+            let chars = ''; 
 
             // создаем массив объектов с данными из каждого элемента prop
             const propsData = inner_props.map((index, element) => {
