@@ -374,6 +374,7 @@ const startFindDecaro = async (chatId) => {
     }
    
 }
+
 // ======================================================================================================================================
 // Функция отправки email с запросом на резервирование
 // ======================================================================================================================================
@@ -2086,6 +2087,22 @@ bot.on('message', async msg => {
                     );
                 } else {
                     return startFindOpus(chatId);
+                }
+
+            } else if (formatedUserVendor === 'ДЕКОРТРЕЙД') {
+
+                if (user.vendorCode.length < 4) {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                    );
+                } else {
+                    return startFindDecaro(chatId);
                 }
 
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
