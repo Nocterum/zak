@@ -397,7 +397,7 @@ const startFindDecaro = async (chatId, msg) => {
                         .catch(error => {
                             console.log(error);
                         });
-                    }, 1000);
+                    }, 6000);
                 }
             })
             .catch(error => {
