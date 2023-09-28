@@ -365,7 +365,8 @@ const startFindDecaro = async (chatId, msg) => {
             // );
             // botMsgIdx = msg.message_id += 1; 
 
-            const availabilityTableValue = availabilityTable.map((index, element) => {
+
+            const availabilityTableValue = await availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
                 const rowsDays = $$(element).find('div.days');
                 const rowsArticul = $$(element).find('div.articul');
