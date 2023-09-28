@@ -326,6 +326,10 @@ const startFindDecaro = async (chatId, msg) => {
 
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
+            
+            setTimeout(() => {
+                productResponse.end();
+            }, 5000);
 
             const $$ = cheerio.load(productResponse.data);
 
