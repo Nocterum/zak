@@ -326,11 +326,12 @@ const startFindDecaro = async (chatId, msg) => {
 
             const productResponse = axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
+
             let $$ = cheerio.load(productResponse.data);
 
                 productResponse.data.on('end', async () => {
                 
-                    $$ = cheerio.load(productResponse.data.toString());
+                    $$ = cheerio.load(JSON.stringify(productResponse.data));
 
                     const inner_props = $$('div.inner_props div.prop');
                     const availabilityTable = $$('div.availability-table');
