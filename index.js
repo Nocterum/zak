@@ -329,7 +329,7 @@ const startFindDecaro = async (chatId, msg) => {
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`, 
             {
                 timeout: 6000,
-                responseType: 'json'
+                transformResponse: text
             });
 
             let $$ = cheerio.load(productResponse.data);
@@ -363,9 +363,8 @@ const startFindDecaro = async (chatId, msg) => {
                 { parse_mode: "HTML" }
                 );
                 
-                setTimeout(() => {
-                    
-                let $$ = cheerio.load(productResponse.data);
+
+
                 const availabilityTable = $$('div.availability-table');
                 console.log(availabilityTable);
 
@@ -418,7 +417,6 @@ const startFindDecaro = async (chatId, msg) => {
                     { parse_mode: "HTML" }
                 );
 
-            }, 10000);
             
 
         } else {
