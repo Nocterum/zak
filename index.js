@@ -358,13 +358,14 @@ const startFindDecaro = async (chatId, msg) => {
                 { parse_mode: "HTML" }
             );
 
-            // await bot.sendMessage(
-            //     chatId,
-            //     `Ожидаю ответ от сервера по остаткам . . .`,
-            //     { parse_mode: "HTML" }
-            // );
-            // botMsgIdx = msg.message_id += 1; 
+            await bot.sendMessage(
+                chatId,
+                `Ожидаю ответ от сервера по остаткам . . .`,
+                { parse_mode: "HTML" }
+            );
+            botMsgIdx = msg.message_id += 1; 
 
+            await new Promise(resolve => setTimeout(resolve, 5000));
 
             const availabilityTableValue = await availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
@@ -2165,7 +2166,7 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
-                    return startFindDecaro(chatId);
+                    return startFindDecaro(chatId, msg);
                 }
 
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
