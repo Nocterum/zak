@@ -331,7 +331,7 @@ const startFindDecaro = async (chatId, msg) => {
 
             let $$ = cheerio.load(productResponse.data);
             productResponse.data.end();
-            
+
             const inner_props = $$('div.inner_props div.prop');
             const availabilityTable = $$('div.availability-table');
             let chars = ''; 
@@ -1927,10 +1927,10 @@ bot.on('message', async msg => {
                 ) {
 
                 let fileName = {};
-                if (file_name.toLowerCase().includes('Каталоги  распределение в салоны 26.09.19')) {
+                if (file_name.toLowerCase().includes('26.09.19')) {
                     fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
                 }
-                if (file_name.toLowerCase().includes('Текстиль Каталоги  распределение в салоны')) {
+                if (file_name.toLowerCase().includes('текстиль')) {
                     fileName = `текстиль_каталоги_распределение_в_салоны.xlsx`;
                 }
                 if (file_name.toLowerCase().includes('прайслистов')) {
