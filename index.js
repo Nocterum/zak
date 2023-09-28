@@ -329,7 +329,7 @@ const startFindDecaro = async (chatId, msg) => {
             console.log('успешно зашёл на страницу товара');
 
             const inner_props = $$('div.inner_props div.prop');
-            const availabilityTable = $$('div.availability-table')
+  
             let chars = '';
 
             // создаем массив объектов с данными из каждого элемента prop
@@ -365,7 +365,8 @@ const startFindDecaro = async (chatId, msg) => {
             );
             botMsgIdx = msg.message_id += 2; 
 
-            await new Promise(resolve => setTimeout(resolve, 7000));
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            const availabilityTable = $$('div.availability-table');
 
             const availabilityTableValue = availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
