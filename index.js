@@ -326,7 +326,7 @@ const startFindDecaro = async (chatId, msg) => {
 
             const productResponse = axios.get(`https://dealer.decaro.ru${firstProductLink}`,
             { responseType: 'stream' });
-            productResponse.data.on('data', async (chunk) => {
+
                 productResponse.data.on('end', async () => {
                 
                     const $$ = cheerio.load(productResponse.data.toString());
@@ -414,7 +414,7 @@ const startFindDecaro = async (chatId, msg) => {
                         { parse_mode: "HTML" }
                     );
                 });
-            });
+            
 
         } else {
             if (botMsgIdx !== null) {
