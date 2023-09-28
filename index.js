@@ -300,7 +300,7 @@ const startFindOpus = async (chatId) => {
 // Функция html запроса по данным из БД на сайт поставщика ДЕКОР ТРЕЙД
 // ======================================================================================================================================
 
-const startFindDecaro = async (chatId) => {
+const startFindDecaro = async (chatId, msg) => {
     lc = '/enterVC';
 
     const user = await UserModel.findOne({
@@ -358,12 +358,12 @@ const startFindDecaro = async (chatId) => {
                 { parse_mode: "HTML" }
             );
 
-            await bot.sendMessage(
-                chatId,
-                `Ожидаю ответ от сервера по остаткам . . .`,
-                { parse_mode: "HTML" }
-            );
-            botMsgIdx = msg.message_id += 1; 
+            // await bot.sendMessage(
+            //     chatId,
+            //     `Ожидаю ответ от сервера по остаткам . . .`,
+            //     { parse_mode: "HTML" }
+            // );
+            // botMsgIdx = msg.message_id += 1; 
 
             const availabilityTableValue = availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
