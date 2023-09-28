@@ -330,7 +330,6 @@ const startFindDecaro = async (chatId, msg) => {
             setTimeout( async () => {
 
             let $$ = cheerio.load(productResponse.data);
-            productResponse.data.end();
 
             const inner_props = $$('div.inner_props div.prop');
             const availabilityTable = $$('div.availability-table');
