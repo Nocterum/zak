@@ -325,11 +325,13 @@ const startFindDecaro = async (chatId, msg) => {
         const firstProductLink = $('div.item-title a').attr('href');
 
         if (firstProductLink) {
-  
+            
+            let $$;
+            
             axios.get(`https://dealer.decaro.ru${firstProductLink}`, {timeout: 6000})
             .then(response => {
                 console.log(response.data.toString());
-                let $$ = cheerio.load(response.data.toString());
+                $$ = cheerio.load(response.data.toString());
             })
 
             const inner_props = $$('div.inner_props div.prop');
