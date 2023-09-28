@@ -363,11 +363,11 @@ const startFindDecaro = async (chatId, msg) => {
                 `Ожидаю ответ от сервера по остаткам . . .`,
                 { parse_mode: "HTML" }
             );
-            botMsgIdx = msg.message_id += 1; 
+            botMsgIdx = msg.message_id += 2; 
 
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            await new Promise(resolve => setTimeout(resolve, 7000));
 
-            const availabilityTableValue = await availabilityTable.map((index, element) => {
+            const availabilityTableValue = availabilityTable.map((index, element) => {
                 const rowsStatus = $$(element).find('div.status');
                 const rowsDays = $$(element).find('div.days');
                 const rowsArticul = $$(element).find('div.articul');
