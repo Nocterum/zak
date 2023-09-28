@@ -2413,8 +2413,7 @@ bot.on('callback_query', async msg => {
             if (formatedUserVendor.includes('РИКСОР') ||
                 formatedUserVendor.includes('ЛЕВАНТИН') ||
                 formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-                formatedUserVendor.includes('ОРАК') ||
-                formatedUserVendor.includes('ДЕКОРТРЕЙД') 
+                formatedUserVendor.includes('ОРАК')
                 // formatedUserVendor.includes('КАДО') ||
                 // formatedUserVendor.includes('АКУРА') ||
                 // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
@@ -2445,13 +2444,19 @@ bot.on('callback_query', async msg => {
             ) {
                 return bot.sendMessage(
                     chatId, 
-                    `Чтобы <b>отправить email</b> с запросом:\nостатков,\nсрока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
+                    `Чтобы <b>отправить email\n</b> с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if (formatedUserVendor.includes('ОПУС')) {
                 return bot.sendMessage(
                     chatId, 
                     `Чтобы <b>посмотреть остатки</b> на сайте "https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                    {parse_mode: 'HTML'}
+                );
+            } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Чтобы <b>посмотреть остатки</b> на сайте "https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
