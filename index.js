@@ -157,10 +157,10 @@ const startRequest1C = async (chatId, vendorCode) => {
 }
 
 // ======================================================================================================================================
-// Функция html запроса по данным из БД
+// Функция html запроса по данным из БД на сайт поставщика ОПУС
 // ======================================================================================================================================
 
-const startFind = async (chatId) => {
+const startFindOpus = async (chatId) => {
     lc = '/enterVC';
 
     const user = await UserModel.findOne({
@@ -214,14 +214,14 @@ const startFind = async (chatId) => {
                 rowsValueAV.each((index, rowValue) => {
                     const cells = $$(rowValue).find('td');
                 
-                // Присваиваим переменным соответствующие наименования
-                availabilityContent += 'Наличие на складе:\n';
-                availabilityContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
-                availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
-                availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
-                availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
+                    // Присваиваим переменным соответствующие наименования
+                    availabilityContent += 'Наличие на складе:\n';
+                    availabilityContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
+                    availabilityContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                    availabilityContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                    availabilityContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
+                });
             });
-        });
 
             //Итерируем по строкам таблицу 
             expectedArrivalTable.each((index, row) => {
@@ -232,14 +232,14 @@ const startFind = async (chatId) => {
                 rowsValueEX.each((index, rowValue) => {
                     const cells = $$(rowValue).find('td');
                 
-                // Присваиваим переменным соответствующие наименования
-                expectedArrivalContent += `Ожидаемое поступление:\n`;
-                expectedArrivalContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
-                expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
-                expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
-                expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
+                    // Присваиваим переменным соответствующие наименования
+                    expectedArrivalContent += `Ожидаемое поступление:\n`;
+                    expectedArrivalContent += `${$$(names[0]).text()}: <code>${$$(cells[0]).text()}</code>\n`;
+                    expectedArrivalContent += `${$$(names[1]).text()}: ${$$(cells[1]).text()}\n`;
+                    expectedArrivalContent += `${$$(names[2]).text()}: ${$$(cells[2]).text()}\n`;
+                    expectedArrivalContent += `${$$(names[3]).text()}: ${$$(cells[3]).text()}\n\n`;
+                });
             });
-        });
 
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
@@ -296,7 +296,84 @@ const startFind = async (chatId) => {
     }
    
 }
+// ======================================================================================================================================
+// Функция html запроса по данным из БД на сайт поставщика ДЕКОР ТРЕЙД
+// ======================================================================================================================================
 
+const startFindDecaro = async (chatId) => {
+    lc = '/enterVC';
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+
+    try {
+
+        //Формируем URL для поиска
+        const searchUrl = `https://dealer.decaro.ru/catalog/?q=${user.vendorCode}&s=Найти`;
+        console.log('сформированна ссылка');
+
+        //Отправляем запрос на сайт
+        const response = await axios.get(searchUrl);
+        const $ = cheerio.load(response.data);
+        console.log('запрос на сайт отправлен');
+        
+        const firstProductLink = $('div.item-title a').attr('href');
+
+        if (firstProductLink) {
+
+            const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+            const $$ = cheerio.load(productResponse.data);
+            console.log('успешно зашёл на страницу товара');
+
+            const inner_props = $$('div.inner_props div.prop');
+            let chars = '';
+
+            // создаем массив объектов с данными из каждого элемента prop
+            const propsData = inner_props.map((index, element) => {
+                const rowsNames = $$(element).find('span');
+                const rowsValue = $$(element).find('div.char_value');
+                return {
+                    name: rowsNames.text(),
+                    value: rowsValue.text()
+                }
+            }).get(); // преобразуем объект Cheerio в обычный массив
+
+            // выводим данные из каждого элемента массива propsData
+            propsData.forEach((item) => {
+                chars += `${item.name}: ${item.value}`;
+            });
+
+            return bot.sendMessage(
+                chatId,
+                chars,
+                { parse_mode: "HTML" }
+            );
+
+        } else {
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Проверьте правильное написание артикула.', 
+                startFind1Options
+            );
+        }
+
+    } catch (e) {
+        console.log('Ошибка при выполнении запроса', e);
+        if (botMsgIdx !== null) {
+            bot.deleteMessage(chatId, botMsgIdx);
+            botMsgIdx = null;
+        }
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
+    }
+   
+}
 // ======================================================================================================================================
 // Функция отправки email с запросом на резервирование
 // ======================================================================================================================================
@@ -2008,7 +2085,7 @@ bot.on('message', async msg => {
                         `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
                     );
                 } else {
-                    return startFind(chatId);
+                    return startFindOpus(chatId);
                 }
 
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
