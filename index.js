@@ -1907,9 +1907,6 @@ bot.onText(/\/x/, async msg => {
         })
         console.log(availabilityTable);
     })
-})
-.catch(function (error) {
-    console.log(error);
 });
 
 
