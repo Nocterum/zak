@@ -1855,7 +1855,8 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'}); // добавляем опцию responseType: 'stream'
+    const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'});
+    productResponse.data.toString();
     const $$ = cheerio.load(productResponse.data);
     const availabilityTable = $$('div.availability-table');
 
