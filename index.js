@@ -315,18 +315,16 @@ const startFindDecaro = async (chatId, msg) => {
 
         //Формируем URL для поиска
         const searchUrl = `https://dealer.decaro.ru/catalog/?q=${user.vendorCode}&s=Найти`;
-        console.log('сформированна ссылка');
 
         //Отправляем запрос на сайт
         const response = await axios.get(searchUrl);
         const $ = cheerio.load(response.data);
-        console.log('запрос на сайт отправлен');
-        
+
         const firstProductLink = $('div.item-title a').attr('href');
 
         if (firstProductLink) {
             
-            const productResponse = axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+            const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
             const $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
             let chars = ''; 
