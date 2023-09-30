@@ -1867,6 +1867,8 @@ bot.onText(/\/x/, async msg => {
           .then(function (response) {
             console.log(response.data);
 
+            const $$ = cheerio.load(response.data);
+            
             const availabilityTable = $$('div.availability-table-section');
             
                 const availabilityTableValue = availabilityTable.map((index, element) => {
