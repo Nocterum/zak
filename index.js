@@ -1856,10 +1856,9 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        const productResponse = await axios.request(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`);
-        productResponse.data.toString();
+        const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`);
         const $$ = cheerio.load(productResponse.data);
-        const availabilityTable = $$('div.availability-table');
+        const availabilityTable = $$('div.availability-table-section');
 
         if (availabilityTable.length === 0) {
             // Если информация не найдена, ждем 3 секунды и вызываем функцию снова
@@ -1880,15 +1879,17 @@ bot.onText(/\/x/, async msg => {
 
         // форматируем данные в строку
         availabilityTable.each((index, element) => {
+
             const rowsStatus = $$(element).find('div.status');
             const rowsDays = $$(element).find('div.days');
             chars += `<b>${rowsStatus.text().trim()}: </b>`;
+
             if (rowsDays !== null && rowsDays !== undefined) {
                 chars += `${rowsDays.text().trim()}`;
             }
         });
 
-        // отправляем данные в чат бота
+        // отправляем данные
         bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
     };
 
