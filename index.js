@@ -1881,10 +1881,10 @@ bot.onText(/\/x/, async msg => {
             }
         })
         console.log(responseQty);
-        const responseData = JSON.parse(responseQty.data.data);
+        const responseData = (responseQty.data.data);
         const status = responseData.status;
-        console.log(status); // выводит "ok
-        let $ = cheerio.load(responseQty.data);
+        console.log(responseData); // выводит "ok
+        let $ = cheerio.load(responseData);
 
 });
 
