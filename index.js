@@ -372,7 +372,7 @@ const startFindDecaro = async (chatId, msg) => {
                 })
 
                 console.log(responseQty.data); 
-                let $ = cheerio.load(responseQty.data);
+                let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
