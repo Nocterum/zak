@@ -1857,37 +1857,37 @@ bot.onText(/\/x/, async msg => {
 
     const getProductData = async () => {
         const productResponse = await axios.get(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php`, {params: {id: 439954}})
-            .then(response => {
-                const $$ = cheerio.load(response.data);
-                console.log($$('div.availability-table').text()); 
+            // .then(response => {
+                const $$ = cheerio.load(productResponse.data);
+                console.log($$.text()); 
 
-                const availabilityTable = $$('div.availability-table-section');
-                const availabilityTableValue = availabilityTable.map((index, element) => {
-                    const rowsStatus = $$(element).find('div.status');
-                    const rowsDays = $$(element).find('div.days');
-                    return {
-                        status: rowsStatus.text().trim(),
-                        days: rowsDays.text().trim()
-                    }
-                }).get();
+                // const availabilityTable = $$('div.availability-table-section');
+                // const availabilityTableValue = availabilityTable.map((index, element) => {
+                //     const rowsStatus = $$(element).find('div.status');
+                //     const rowsDays = $$(element).find('div.days');
+                //     return {
+                //         status: rowsStatus.text().trim(),
+                //         days: rowsDays.text().trim()
+                //     }
+                // }).get();
 
-                let chars = '';
+                // let chars = '';
         
-                // форматируем данные в строку
-                availabilityTable.each((index, element) => {
+                // // форматируем данные в строку
+                // availabilityTable.each((index, element) => {
         
-                    const rowsStatus = $$(element).find('div.status');
-                    const rowsDays = $$(element).find('div.days');
-                    chars += `<b>${rowsStatus.text().trim()}: </b>`;
+                //     const rowsStatus = $$(element).find('div.status');
+                //     const rowsDays = $$(element).find('div.days');
+                //     chars += `<b>${rowsStatus.text().trim()}: </b>`;
         
-                    if (rowsDays !== null && rowsDays !== undefined) {
-                        chars += `${rowsDays.text().trim()}`;
-                    }
-                });
+                //     if (rowsDays !== null && rowsDays !== undefined) {
+                //         chars += `${rowsDays.text().trim()}`;
+                //     }
+                // });
         
-                // отправляем данные
-                bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
-            });
+                // // отправляем данные
+                // bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
+            // });
     };
 
     // Запускаем функцию получения данных
