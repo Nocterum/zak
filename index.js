@@ -1873,21 +1873,21 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+    const response = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
         "id": 439954
       }, {
         "headers": {
           "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
         }
       })
-      .then(function (response) {
+
           
         console.log(response.data); 
         let $ = cheerio.load(response.data);
 
-        let availabilityTable = '';
-
+        
         $('.availability-table-section').each((index, element) => {
+            let availabilityTable = '';
                     
             const rowStatus = $(element).find('.status');
             const rowDays = $(element).find('.days');
@@ -1906,7 +1906,7 @@ bot.onText(/\/x/, async msg => {
             });
         })
         console.log(availabilityTable);
-    })
+
 });
 
 
