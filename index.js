@@ -1881,6 +1881,9 @@ bot.onText(/\/x/, async msg => {
             }
         })
         console.log(responseQty);
+        const responseData = JSON.parse(responseQty.data.data);
+        const status = responseData.status;
+        console.log(status); // выводит "ok
         let $ = cheerio.load(responseQty.data);
 
 });
