@@ -1859,9 +1859,8 @@ bot.onText(/\/x/, async msg => {
         const payload = {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
-            view: 'parsed',
-            id: 'id=439954',
-            action: 'getProductQuantity'
+            view: 'source',
+            id: '439954',
         }
 
         await axios.request('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
