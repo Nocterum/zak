@@ -1882,7 +1882,7 @@ bot.onText(/\/x/, async msg => {
         })
 
 
-    const $ = cheerio.load(response.html());
+    const $ = cheerio.load(response.html);
     console.log($); 
     const message = $('.availability-table').text().trim();
     await bot.sendMessage(chatId, formatedData);
