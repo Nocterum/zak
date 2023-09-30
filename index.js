@@ -325,6 +325,7 @@ const startFindDecaro = async (chatId, msg) => {
         if (firstProductLink) {
             
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+            console.log(productResponse);
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
             const dataId = $$('div.availability-table').toString().trim();
@@ -371,7 +372,6 @@ const startFindDecaro = async (chatId, msg) => {
                     }
                 })
 
-                console.log(responseQty.data); 
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
 
@@ -447,7 +447,6 @@ const startFindDecaro = async (chatId, msg) => {
         }
         return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
     }
-   
 }
 
 // ======================================================================================================================================
@@ -1872,19 +1871,6 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-
-    const responseQty = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
-        "id": 439954
-        }, {
-            "headers": {
-            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-            }
-        })
-        console.log(responseQty);
-        const responseData = (responseQty.data.data);
-        const status = responseData.status;
-        console.log(responseData); // выводит "ok
-        let $ = cheerio.load(responseData);
 
 });
 
