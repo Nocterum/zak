@@ -326,9 +326,9 @@ const startFindDecaro = async (chatId, msg) => {
             
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
             console.log(productResponse);
-            let $$ = cheerio.load(productResponse.data);
+            let $$ = cheerio.load(productResponse.data.data);
             const inner_props = $$('div.inner_props div.prop');
-            const dataId = $$('div.availability-table').toString().trim();
+            const dataId = $$('div.availability-table')[0].getAttribute('data-id');
             let chars = ''; 
             console.log(dataId);
             
@@ -365,7 +365,7 @@ const startFindDecaro = async (chatId, msg) => {
             botMsgIdx = msg.message_id += 2;
             
             const responseQty = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
-                    "id": `439954`
+                    "id": `${dataId}`
                 }, {
                     "headers": {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
