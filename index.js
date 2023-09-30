@@ -1881,7 +1881,7 @@ bot.onText(/\/x/, async msg => {
             }
         })
 
-    const formatedData = response.data.toString();  
+    const formatedData = response.data;  
     const $ = cheerio.load(formatedData);
     console.log(formatedData); 
     let message = "";
