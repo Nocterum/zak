@@ -1856,57 +1856,52 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        // const payload = {
-        //     method: 'post',
-        //     headers: {'Content-Type': 'application/json'},
-        //     view: 'source',
-        //     id: '439954',
-        // }
 
         axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
             "id": 439954
           }, {
             "headers": {
-            //   "accept": "application/json, text/javascript, */*; q=0.01",
               "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             }
           })
           .then(function (response) {
-            console.log(response.data); // Вывод ответа от сервера
-          })
-          .catch(function (error) {
+            console.log(response.data);
+
+            const availabilityTable = $$('div.availability-table-section');
+            
+                const availabilityTableValue = availabilityTable.map((index, element) => {
+                    const rowsStatus = $$(element).find('div.status');
+                    const rowsDays = $$(element).find('div.days');
+                    return {
+                        status: rowsStatus.text().trim(),
+                        days: rowsDays.text().trim()
+                    }
+                }).get();
+
+                let chars = '';
+        
+                // форматируем данные в строку
+                availabilityTable.each((index, element) => {
+        
+                    const rowsStatus = $$(element).find('div.status');
+                    const rowsDays = $$(element).find('div.days');
+                    chars += `<b>${rowsStatus.text().trim()}: </b>`;
+        
+                    if (rowsDays !== null && rowsDays !== undefined) {
+                        chars += `${rowsDays.text().trim()}`;
+                    }
+                });
+        
+                // отправляем данные
+                bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
+            })
+            .catch(function (error) {
             console.log(error);
         });
     };
 
 
-                // const availabilityTable = $$('div.availability-table-section');
-                // const availabilityTableValue = availabilityTable.map((index, element) => {
-                //     const rowsStatus = $$(element).find('div.status');
-                //     const rowsDays = $$(element).find('div.days');
-                //     return {
-                //         status: rowsStatus.text().trim(),
-                //         days: rowsDays.text().trim()
-                //     }
-                // }).get();
-
-                // let chars = '';
-        
-                // // форматируем данные в строку
-                // availabilityTable.each((index, element) => {
-        
-                //     const rowsStatus = $$(element).find('div.status');
-                //     const rowsDays = $$(element).find('div.days');
-                //     chars += `<b>${rowsStatus.text().trim()}: </b>`;
-        
-                //     if (rowsDays !== null && rowsDays !== undefined) {
-                //         chars += `${rowsDays.text().trim()}`;
-                //     }
-                // });
-        
-                // // отправляем данные
-                // bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
-            // });
+                
 
     // Запускаем функцию получения данных
     getProductData();
