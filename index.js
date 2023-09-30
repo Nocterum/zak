@@ -1877,31 +1877,24 @@ bot.onText(/\/x/, async msg => {
         "id": 439954
         }, {
             "headers": {
-            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "content-type": "application/json; charset=UTF-8",
             }
         })
 
-        const data = JSON.parse(response.data);
 
-        console.log(data.status); // Выводит 'ok'
-        console.log(data.exec_time); // Выводит 3.8805179595947266
-        console.log(data.data); // Выводит HTML-код таблицы доступности товара
-        
-        // const $ = cheerio.load(response.data);
+    const $ = cheerio.load(response.data);
 
+    console.log($); 
+    const message = $('.availability-table').text().trim();
+    await bot.sendMessage(chatId, formatedData);
 
-    // const $ = cheerio.load(response.html);
-    // console.log($); 
-    // const message = $('.availability-table').text().trim();
-    // await bot.sendMessage(chatId, formatedData);
-
-    // $(".availability-table-section").each((i, element) => {
-    //     let status = $(element).find(".status").text();
-    //     let days = $(element).find(".days").text();
-    //     let small = $(element).find("small").text();
-    //     message += `${status} ${days}\n${small}\n`;
-    // });
-    // console.log(message);
+    $(".availability-table-section").each((i, element) => {
+        let status = $(element).find(".status").text();
+        let days = $(element).find(".days").text();
+        let small = $(element).find("small").text();
+        message += `${status} ${days}\n${small}\n`;
+    });
+    console.log(message);
 });
 
 
