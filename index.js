@@ -1856,22 +1856,22 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        const productResponse = await axios.post(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php`, {
-            view: 'parsed',
-            id: '439954'
-          });
-            // .then(response => {
-                const $$ = cheerio.load(productResponse.data);
-                console.log($$.text()); 
+        // const productResponse = await axios.request(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php`, {
+        //     view: 'parsed',
+        //     id: '439954'
+        //   });
+        //     // .then(response => {
+        //         const $$ = cheerio.load(productResponse.data);
+        //         console.log($$.text()); 
 
-                // Параметры запроса
-                const payload = {
-                    view: 'parsed',
-                    id: '439954'
-                  };
+        //         // Параметры запроса
+        //         const payload = {
+        //             view: 'parsed',
+        //             id: '439954'
+        //           };
 
                   // Отправка запроса
-                  axios.post('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
+                  await axios.request('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
                     .then(function (response) {
                       console.log(response.data); // Вывод ответа от сервера
                     })
