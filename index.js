@@ -1881,14 +1881,14 @@ bot.onText(/\/x/, async msg => {
             }
         })
 
-        const $ = cheerio.load(response.data);
+        const data = JSON.parse(response.data);
 
-        // Ищем элементы с классами "status" и "days" и сохраняем их значения в переменные
-        const status = $('.status').text();
-        const days = $('.days').text();
+        console.log(data.status); // Выводит 'ok'
+        console.log(data.exec_time); // Выводит 3.8805179595947266
+        console.log(data.data); // Выводит HTML-код таблицы доступности товара
         
-        console.log(status); // Выводит "Под заказ*"
-        console.log(days); // Выводит "65 дней"
+        // const $ = cheerio.load(response.data);
+
 
     // const $ = cheerio.load(response.html);
     // console.log($); 
