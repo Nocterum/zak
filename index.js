@@ -1862,7 +1862,8 @@ bot.onText(/\/x/, async msg => {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             view: 'parsed',
-            id: '439954'
+            id: '439954',
+            action: 'getProductQuantity'
         }
 
         // Отправка запроса
