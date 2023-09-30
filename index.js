@@ -1873,40 +1873,25 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const response = await axios.get("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+    const response = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
         "id": 439954
-      }, {
-        "headers": {
-          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        }
-      })
-
-          
-        console.log(response.data); 
-        let $ = cheerio.load(response.data);
-
-        
-        let availabilityTable = '';
-        $('.availability-table-section').each((index, element) => {
-                    
-            const rowStatus = $(element).find('.status');
-            const rowDays = $(element).find('.days');
-            const rowArticul = $(element).find('.articul');
-            const rowQty = $(element).find('.qty');
-            const rowUnit = $(element).find('.unit');
-            const rowCondition = $(element).find('small');
-    
-            availabilityTable.push({
-                status: rowStatus.text().trim(),
-                days: rowDays.text().trim(),
-                articul: rowArticul.text().trim(),
-                qty: rowQty.text().trim(),
-                unit: rowUnit.text().trim(),
-                other: rowCondition.text().trim()
-            });
+        }, {
+            "headers": {
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            }
         })
-        console.log(availabilityTable);
-
+          
+    const $ = cheerio.load(response.data);
+    console.log(response.data); 
+    let message = "";
+    
+    $(".availability-table-section").each((i, element) => {
+        let status = `$(element).find(".status").text()`;
+        let days = `$(element).find(".days").text()`;
+        let small = `$(element).find("small").text()`;
+        message += `${status} ${days}\n${small}\n`;
+    });
+    console.log(message);
 });
 
 
