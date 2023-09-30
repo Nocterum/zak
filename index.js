@@ -354,7 +354,9 @@ const startFindDecaro = async (chatId, msg) => {
                 chars,
                 { parse_mode: "HTML" }
             );
-                
+            
+            // const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
+            // const $$ = cheerio.load(productResponse.data);
             //     const availabilityTable = $$('div.availability-table');
 
             //     const availabilityTableValue = availabilityTable.map((index, element) => {
@@ -1852,6 +1854,53 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
+
+    const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'}); // добавляем опцию responseType: 'stream'
+    const $$ = cheerio.load(productResponse.data);
+    const availabilityTable = $$('div.availability-table');
+
+    const availabilityTableValue = availabilityTable.map((index, element) => {
+        const rowsStatus = $$(element).find('div.status');
+        const rowsDays = $$(element).find('div.days');
+        return {
+            status: rowsStatus.text().trim(),
+            days: rowsDays.text().trim()
+        }
+    }).get();
+
+    let chars = '';
+
+    // создаем поток для записи данных из запроса
+    const writer = fs.createWriteStream('product.html');
+
+    // записываем данные из потока в файл
+    productResponse.data.pipe(writer);
+
+    // при завершении записи данных из потока в файл, вызываем функцию обратного вызова
+    writer.on('finish', () => {
+        // читаем данные из файла
+        const productData = fs.readFileSync('product.html', 'utf8');
+        // загружаем данные в cheerio
+        const $$ = cheerio.load(productData);
+        // находим необходимые элементы
+        const availabilityTable = $$('div.availability-table');
+        // форматируем данные в строку
+        availabilityTable.each((index, element) => {
+            const rowsStatus = $$(element).find('div.status');
+            const rowsDays = $$(element).find('div.days');
+            chars += `<b>${rowsStatus.text().trim()}: </b>`;
+            if (rowsDays !== null && rowsDays !== undefined) {
+                chars += `${rowsDays.text().trim()}`;
+            }
+        });
+        // отправляем данные в чат бота
+        return bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
+    });
+
+    // при возникновении ошибки в потоке, выводим ее в консоль
+    writer.on('error', (err) => {
+        console.log(err);
+    });
 });
 
 bot.onText(/\/settings/, async msg => {
