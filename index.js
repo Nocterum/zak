@@ -327,7 +327,7 @@ const startFindDecaro = async (chatId, msg) => {
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
-            const dataId = $$('.data-id').toString().trim();
+            const dataId = $$('div.availability-table data-id').toString().trim();
             let chars = ''; 
             console.log(dataId);
             
