@@ -1884,11 +1884,11 @@ bot.onText(/\/x/, async msg => {
     const $ = cheerio.load(response.data);
     console.log(response.data); 
     let message = "";
-    
+
     $(".availability-table-section").each((i, element) => {
-        let status = `$(element).find(".status").text()`;
-        let days = `$(element).find(".days").text()`;
-        let small = `$(element).find("small").text()`;
+        let status = $(element).find(".status").text();
+        let days = $(element).find(".days").text();
+        let small = $(element).find("small").text();
         message += `${status} ${days}\n${small}\n`;
     });
     console.log(message);
