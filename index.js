@@ -1873,7 +1873,7 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const response = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+    const responseQty = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
         "id": 439954
         }, {
             "headers": {
@@ -1882,18 +1882,49 @@ bot.onText(/\/x/, async msg => {
         })
 
 
-    const $ = cheerio.load(response.data);
+        let $ = cheerio.load(responseQty.data);
+        const availabilityTable = $('div.availability-table-section');
 
-    console.log($); 
-    const message = $('.availability-table').text().trim();
+        const availabilityTableValue = availabilityTable.map((index, element) => {
 
-    $(".availability-table-section").each((i, element) => {
-        let status = $(element).find(".status").text();
-        let days = $(element).find(".days").text();
-        let small = $(element).find("small").text();
-        message += `${status} ${days}\n${small}\n`;
-    });
-    console.log(message);
+            const rowsStatus = $(element).find('div.status');
+            const rowsDays = $(element).find('div.days');
+            const rowsArticul = $(element).find('div.articul');
+            const rowsQty = $(element).find('div.qty');
+            const rowsUnit = $(element).find('div.unit');
+            const rowsOther = $(element).find('small');
+    
+            return {
+                status: rowsStatus.text().trim(),
+                days: rowsDays.text().trim(),
+                articul: rowsArticul.text().trim(),
+                qty: rowsQty.text().trim(),
+                unit: rowsUnit.text().trim(),
+                other: rowsOther.text().trim()
+            }
+        }).get(); // преобразуем объект Cheerio в обычный массив
+    
+        chars = '';
+    
+        // выводим данные из каждого элемента массива propsData
+        availabilityTableValue.forEach((item) => {
+            chars += `<b>${item.status}: </b>`;
+
+            if (item.days !== null && item.days !== undefined) {
+                chars += `${item.days}`;
+            }
+            if (item.articul !== null && item.articul !== undefined) {
+                chars += `${item.articul} `;
+            }
+            if (item.qty !== null && item.qty !== undefined) {
+                chars += `${item.qty} `;
+            }
+            if (item.unit !== null && item.unit !== undefined) {
+                chars += `${item.unit}\n`;
+            }
+            chars += `${item.other}\n`
+        });
+        console.log(chars);
 });
 
 
