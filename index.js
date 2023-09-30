@@ -1868,8 +1868,8 @@ bot.onText(/\/x/, async msg => {
           }, {
             "headers": {
               "accept": "application/json, text/javascript, */*; q=0.01",
-              "accept-language": "ru,ru-RU;q=0.9,en-US;q=0.8,en;q=0.7",
-            //   "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            //   "accept-language": "ru,ru-RU;q=0.9,en-US;q=0.8,en;q=0.7",
+              "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             }
           })
           .then(function (response) {
