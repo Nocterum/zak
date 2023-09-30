@@ -1873,7 +1873,7 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const response = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+    const response = await axios.get("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
         "id": 439954
       }, {
         "headers": {
