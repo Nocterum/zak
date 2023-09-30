@@ -1886,47 +1886,25 @@ bot.onText(/\/x/, async msg => {
         let $ = cheerio.load(response.data);
         console.log($.toString()); 
 
-        const availabilityTable = $.map((index, element) => {
+        $('.availability-table-section').each((index, element) => {
                     
-            const rowStatus = $(element).find('div.status');
-            const rowDays = $(element).find('div.days');
-            const rowArticul = $(element).find('div.articul');
-            const rowQty = $(element).find('div.qty');
-            const rowUnit = $(element).find('div.unit');
+            const rowStatus = $(element).find('.status');
+            const rowDays = $(element).find('.days');
+            const rowArticul = $(element).find('.articul');
+            const rowQty = $(element).find('.qty');
+            const rowUnit = $(element).find('.unit');
             const rowCondition = $(element).find('small');
     
-            return {
+            availabilityTable.push({
                 status: rowStatus.text().trim(),
                 days: rowDays.text().trim(),
                 articul: rowArticul.text().trim(),
                 qty: rowQty.text().trim(),
                 unit: rowUnit.text().trim(),
                 other: rowCondition.text().trim()
-            }
-        }).get(); // преобразуем объект Cheerio в обычный массив
-
-        let chars = '';
-            
-        // выводим данные из каждого элемента массива propsData
-        availabilityTable.forEach((item) => {
-            chars += `<b>${item.status}: </b>`;
-
-            if (item.days !== null && item.days !== undefined) {
-                chars += `${item.days}`;
-            }
-            if (item.articul !== null && item.articul !== undefined) {
-                chars += `${item.articul} `;
-            }
-            if (item.qty !== null && item.qty !== undefined) {
-                chars += `${item.qty} `;
-            }
-            if (item.unit !== null && item.unit !== undefined) {
-                chars += `${item.unit}\n`;
-            }
-            chars += `${item.other}\n`
-        });
-
-        console.log(chars);
+            });
+        })
+        console.log(availabilityTable);
     });
 });
 
