@@ -1855,59 +1855,53 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const getProductData = async () => {
-
-        axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
-            "id": 439954
-          }, {
-            "headers": {
-              "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-            }
-          })
-          .then(function (response) {
-            console.log(response.data);
-
-            const $$ = cheerio.load(response.data);
-            
-            const availabilityTable = $$('div.availability-table-section');
-            
-                const availabilityTableValue = availabilityTable.map((index, element) => {
-                    const rowsStatus = $$(element).find('div.status');
-                    const rowsDays = $$(element).find('div.days');
-                    return {
-                        status: rowsStatus.text().trim(),
-                        days: rowsDays.text().trim()
-                    }
-                }).get();
-
-                let chars = '';
-        
-                // форматируем данные в строку
-                availabilityTable.each((index, element) => {
-        
-                    const rowsStatus = $$(element).find('div.status');
-                    const rowsDays = $$(element).find('div.days');
-                    chars += `<b>${rowsStatus.text().trim()}: </b>`;
-        
-                    if (rowsDays !== null && rowsDays !== undefined) {
-                        chars += `${rowsDays.text().trim()}`;
-                    }
-                });
-        
-                // отправляем данные
-                bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
-            })
-            .catch(function (error) {
-            console.log(error);
-        });
-    };
-
-
-                
-
-    // Запускаем функцию получения данных
-    getProductData();
+    axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+        "id": 439954
+      }, {
+        "headers": {
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        }
+      })
+      .then(function (response) {
+        console.log(response.data); 
+    });
 });
+
+            // const $$ = cheerio.load(response.data);
+
+            // const availabilityTable = $$('div.availability-table-section');
+            
+            //     const availabilityTableValue = availabilityTable.map((index, element) => {
+
+            //         const rowsStatus = $$(element).find('div.status');
+            //         const rowsDays = $$(element).find('div.days');
+            //         return {
+            //             status: rowsStatus.text().trim(),
+            //             days: rowsDays.text().trim()
+            //         }
+            //     }).get();
+
+            //     let chars = '';
+        
+            //     // форматируем данные в строку
+            //     availabilityTable.each((index, element) => {
+        
+            //         const rowsStatus = $$(element).find('div.status');
+            //         const rowsDays = $$(element).find('div.days');
+            //         chars += `<b>${rowsStatus.text().trim()}: </b>`;
+        
+            //         if (rowsDays !== null && rowsDays !== undefined) {
+            //             chars += `${rowsDays.text().trim()}`;
+            //         }
+            //     });
+        
+            //     // отправляем данные
+            //     bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
+            // })
+            // .catch(function (error) {
+            // console.log(error);
+
+
 
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
