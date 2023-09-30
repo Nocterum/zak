@@ -1881,9 +1881,10 @@ bot.onText(/\/x/, async msg => {
             }
         })
 
-    const formatedData = response.data();  
+    const formatedData = response.data;  
     const $ = cheerio.load(formatedData);
     console.log(formatedData); 
+    await bot.sendMessage(chatId, formatedData);
     let message = "";
 
     $(".availability-table-section").each((i, element) => {
