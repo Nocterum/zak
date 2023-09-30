@@ -364,7 +364,7 @@ const startFindDecaro = async (chatId, msg) => {
             botMsgIdx = msg.message_id += 2;
             
             await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
-                "id": `${dataId}`
+                "id": `439954`
               }, {
                 "headers": {
                   "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
