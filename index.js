@@ -1886,8 +1886,8 @@ bot.onText(/\/x/, async msg => {
         let $ = cheerio.load(response.data);
 
         
+        let availabilityTable = '';
         $('.availability-table-section').each((index, element) => {
-            let availabilityTable = '';
                     
             const rowStatus = $(element).find('.status');
             const rowDays = $(element).find('.days');
