@@ -1880,51 +1880,9 @@ bot.onText(/\/x/, async msg => {
             "content-type": "application/json; charset=UTF-8",
             }
         })
-
-
+        console.log(responseQty);
         let $ = cheerio.load(responseQty.data);
-        const availabilityTable = $('div.availability-table-section');
 
-        const availabilityTableValue = availabilityTable.map((index, element) => {
-
-            const rowsStatus = $(element).find('div.status');
-            const rowsDays = $(element).find('div.days');
-            const rowsArticul = $(element).find('div.articul');
-            const rowsQty = $(element).find('div.qty');
-            const rowsUnit = $(element).find('div.unit');
-            const rowsOther = $(element).find('small');
-    
-            return {
-                status: rowsStatus.text().trim(),
-                days: rowsDays.text().trim(),
-                articul: rowsArticul.text().trim(),
-                qty: rowsQty.text().trim(),
-                unit: rowsUnit.text().trim(),
-                other: rowsOther.text().trim()
-            }
-        }).get(); // преобразуем объект Cheerio в обычный массив
-    
-        chars = '';
-    
-        // выводим данные из каждого элемента массива propsData
-        availabilityTableValue.forEach((item) => {
-            chars += `<b>${item.status}: </b>`;
-
-            if (item.days !== null && item.days !== undefined) {
-                chars += `${item.days}`;
-            }
-            if (item.articul !== null && item.articul !== undefined) {
-                chars += `${item.articul} `;
-            }
-            if (item.qty !== null && item.qty !== undefined) {
-                chars += `${item.qty} `;
-            }
-            if (item.unit !== null && item.unit !== undefined) {
-                chars += `${item.unit}\n`;
-            }
-            chars += `${item.other}\n`
-        });
-        console.log(chars);
 });
 
 
