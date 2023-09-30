@@ -1881,35 +1881,34 @@ bot.onText(/\/x/, async msg => {
         }
       })
       .then(function (response) {
+          
         console.log(response.data); 
-
         let $ = cheerio.load(response.data);
-        const availabilityTable = $('availability-table');
-        console.log(availabilityTable.toString());
+        console.log($.toString()); 
 
-        const availabilityTableValue = availabilityTable.map((index, element) => {
+        const availabilityTable = $.map((index, element) => {
                     
-            const rowsStatus = $(element).find('div.status');
-            const rowsDays = $(element).find('div.days');
-            const rowsArticul = $(element).find('div.articul');
-            const rowsQty = $(element).find('div.qty');
-            const rowsUnit = $(element).find('div.unit');
-            const rowsOther = $(element).find('small');
+            const rowStatus = $(element).find('div.status');
+            const rowDays = $(element).find('div.days');
+            const rowArticul = $(element).find('div.articul');
+            const rowQty = $(element).find('div.qty');
+            const rowUnit = $(element).find('div.unit');
+            const rowCondition = $(element).find('small');
     
             return {
-                status: rowsStatus.text().trim(),
-                days: rowsDays.text().trim(),
-                articul: rowsArticul.text().trim(),
-                qty: rowsQty.text().trim(),
-                unit: rowsUnit.text().trim(),
-                other: rowsOther.text().trim()
+                status: rowStatus.text().trim(),
+                days: rowDays.text().trim(),
+                articul: rowArticul.text().trim(),
+                qty: rowQty.text().trim(),
+                unit: rowUnit.text().trim(),
+                other: rowCondition.text().trim()
             }
         }).get(); // преобразуем объект Cheerio в обычный массив
 
         let chars = '';
             
         // выводим данные из каждого элемента массива propsData
-        availabilityTableValue.forEach((item) => {
+        availabilityTable.forEach((item) => {
             chars += `<b>${item.status}: </b>`;
 
             if (item.days !== null && item.days !== undefined) {
