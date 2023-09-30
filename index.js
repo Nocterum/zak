@@ -376,6 +376,7 @@ const startFindDecaro = async (chatId, msg) => {
                 const availabilityTable = $('div.availability-table-section');
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
+
                     const rowsStatus = $(element).find('div.status');
                     const rowsDays = $(element).find('div.days');
                     const rowsArticul = $(element).find('div.articul');
@@ -1872,7 +1873,7 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+    await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
         "id": 439954
       }, {
         "headers": {
@@ -1881,6 +1882,56 @@ bot.onText(/\/x/, async msg => {
       })
       .then(function (response) {
         console.log(response.data); 
+
+        let $ = cheerio.load(responseQty.data);
+        const availabilityTable = $('div.availability-table-section');
+        console.log(availabilityTable.toString());
+
+        const availabilityTableValue = availabilityTable.map((index, element) => {
+                    
+            const rowsStatus = $(element).find('div.status');
+            const rowsDays = $(element).find('div.days');
+            const rowsArticul = $(element).find('div.articul');
+            const rowsQty = $(element).find('div.qty');
+            const rowsUnit = $(element).find('div.unit');
+            const rowsOther = $(element).find('small');
+    
+            return {
+                status: rowsStatus.text().trim(),
+                days: rowsDays.text().trim(),
+                articul: rowsArticul.text().trim(),
+                qty: rowsQty.text().trim(),
+                unit: rowsUnit.text().trim(),
+                other: rowsOther.text().trim()
+            }
+        }).get(); // преобразуем объект Cheerio в обычный массив
+
+        let chars = '';
+            
+        // выводим данные из каждого элемента массива propsData
+        availabilityTableValue.forEach((item) => {
+            chars += `<b>${item.status}: </b>`;
+
+            if (item.days !== null && item.days !== undefined) {
+                chars += `${item.days}`;
+            }
+            if (item.articul !== null && item.articul !== undefined) {
+                chars += `${item.articul} `;
+            }
+            if (item.qty !== null && item.qty !== undefined) {
+                chars += `${item.qty} `;
+            }
+            if (item.unit !== null && item.unit !== undefined) {
+                chars += `${item.unit}\n`;
+            }
+            chars += `${item.other}\n`
+        });
+
+    return bot.sendMessage(
+        chatId,
+        chars,
+        { parse_mode: "HTML" }
+    );
     });
 });
 
