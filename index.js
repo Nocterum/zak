@@ -1860,35 +1860,34 @@ bot.onText(/\/x/, async msg => {
             .then(response => {
                 const $$ = cheerio.load(response.data);
                 console.log($$('div.availability-table').text()); 
+
+                const availabilityTable = $$('div.availability-table-section');
+                const availabilityTableValue = availabilityTable.map((index, element) => {
+                    const rowsStatus = $$(element).find('div.status');
+                    const rowsDays = $$(element).find('div.days');
+                    return {
+                        status: rowsStatus.text().trim(),
+                        days: rowsDays.text().trim()
+                    }
+                }).get();
+
+                let chars = '';
+        
+                // форматируем данные в строку
+                availabilityTable.each((index, element) => {
+        
+                    const rowsStatus = $$(element).find('div.status');
+                    const rowsDays = $$(element).find('div.days');
+                    chars += `<b>${rowsStatus.text().trim()}: </b>`;
+        
+                    if (rowsDays !== null && rowsDays !== undefined) {
+                        chars += `${rowsDays.text().trim()}`;
+                    }
+                });
+        
+                // отправляем данные
+                bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
             });
-
-        const availabilityTable = $$('div.availability-table-section');
-
-        const availabilityTableValue = availabilityTable.map((index, element) => {
-            const rowsStatus = $$(element).find('div.status');
-            const rowsDays = $$(element).find('div.days');
-            return {
-                status: rowsStatus.text().trim(),
-                days: rowsDays.text().trim()
-            }
-        }).get();
-
-        let chars = '';
-
-        // форматируем данные в строку
-        availabilityTable.each((index, element) => {
-
-            const rowsStatus = $$(element).find('div.status');
-            const rowsDays = $$(element).find('div.days');
-            chars += `<b>${rowsStatus.text().trim()}: </b>`;
-
-            if (rowsDays !== null && rowsDays !== undefined) {
-                chars += `${rowsDays.text().trim()}`;
-            }
-        });
-
-        // отправляем данные
-        bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
     };
 
     // Запускаем функцию получения данных
