@@ -1884,10 +1884,9 @@ bot.onText(/\/x/, async msg => {
           
         console.log(response.data); 
         let $ = cheerio.load(response.data);
-        console.log($.toString()); 
 
-        const availabilityTable = [];
-        
+        let availabilityTable = [];
+
         $('.availability-table-section').each((index, element) => {
                     
             const rowStatus = $(element).find('.status');
@@ -1907,7 +1906,10 @@ bot.onText(/\/x/, async msg => {
             });
         })
         console.log(availabilityTable);
-    });
+    })
+})
+.catch(function (error) {
+    console.log(error);
 });
 
 
