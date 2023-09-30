@@ -1856,11 +1856,28 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        const productResponse = await axios.post(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php`, {params: {id: 439954}})
+        const productResponse = await axios.post(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php`, {
+            view: 'parsed',
+            id: '439954'
+          });
             // .then(response => {
                 const $$ = cheerio.load(productResponse.data);
                 console.log($$.text()); 
 
+                // Параметры запроса
+                const payload = {
+                    view: 'parsed',
+                    id: '439954'
+                  };
+
+                  // Отправка запроса
+                  axios.post('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
+                    .then(function (response) {
+                      console.log(response.data); // Вывод ответа от сервера
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                    });
                 // const availabilityTable = $$('div.availability-table-section');
                 // const availabilityTableValue = availabilityTable.map((index, element) => {
                 //     const rowsStatus = $$(element).find('div.status');
