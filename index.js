@@ -1886,7 +1886,6 @@ bot.onText(/\/x/, async msg => {
 
     console.log($); 
     const message = $('.availability-table').text().trim();
-    await bot.sendMessage(chatId, formatedData);
 
     $(".availability-table-section").each((i, element) => {
         let status = $(element).find(".status").text();
