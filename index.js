@@ -321,7 +321,8 @@ const startFindDecaro = async (chatId, msg) => {
         const $ = cheerio.load(response.data);
 
         const firstProductLink = $('div.item-title a').attr('href');
-        const dataId = firstProductLink.split("/")[4];
+        const dataId = firstProductLink.split("/")[5];
+        console.log(dataId, firstProductLink);
 
         if (firstProductLink) {
             
@@ -330,7 +331,7 @@ const startFindDecaro = async (chatId, msg) => {
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
             let chars = ''; 
-            console.log(dataId);
+
             
             // создаем массив объектов с данными из каждого элемента prop
             const propsData = inner_props.map((index, element) => {
