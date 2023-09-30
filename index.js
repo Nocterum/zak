@@ -1856,8 +1856,9 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`);
+        const productResponse = await axios.get(`/local/components/whatasoft/product.quantity/ajax.php`, {params: {id: 439954}});
         const $$ = cheerio.load(productResponse.data);
+        console.log(productResponse.data);
         const availabilityTable = $$('div.availability-table-section');
 
         if (availabilityTable.length === 0) {
