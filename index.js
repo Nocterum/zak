@@ -1856,7 +1856,7 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-        const productResponse = await axios.get(`/local/components/whatasoft/product.quantity/ajax.php`, {params: {id: 439954}});
+        const productResponse = await axios.get(`https://dealer.decaro.ru/local/components/whatasoft/product.quantity/templates/.default/script.js?1594100849636`);
         const $$ = cheerio.load(productResponse.data);
         console.log(productResponse.data);
         const availabilityTable = $$('div.availability-table-section');
