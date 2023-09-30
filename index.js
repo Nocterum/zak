@@ -1864,11 +1864,11 @@ bot.onText(/\/x/, async msg => {
         //         const $$ = cheerio.load(productResponse.data);
         //         console.log($$.text()); 
 
-        //         // Параметры запроса
-        //         const payload = {
-        //             view: 'parsed',
-        //             id: '439954'
-        //           };
+                // Параметры запроса
+                const payload = {
+                    view: 'parsed',
+                    id: '439954'
+                  };
 
                   // Отправка запроса
                   await axios.request('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
