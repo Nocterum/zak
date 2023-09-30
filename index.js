@@ -327,7 +327,7 @@ const startFindDecaro = async (chatId, msg) => {
             const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
-            const dataId = $$('div.availability-table data-id').toString().trim();
+            const dataId = $$('div.availability-table').toString().trim();
             let chars = ''; 
             console.log(dataId);
             
@@ -363,27 +363,26 @@ const startFindDecaro = async (chatId, msg) => {
             );
             botMsgIdx = msg.message_id += 2;
             
-            await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
-                "id": `439954`
-              }, {
-                "headers": {
-                  "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                }
-              })
-              .then(function (response) {
-                console.log(response.data); 
-                $$ = cheerio.load(response.data);
+            const responseQty = await axios.post("https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php", {
+                    "id": `439954`
+                }, {
+                    "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    }
+                })
 
-                const availabilityTable = $$('.availability-table-section');
+                console.log(responseQty.data); 
+                let $ = cheerio.load(responseQty.data);
+                const availabilityTable = $('div.availability-table-section');
 
-                    const availabilityTableValue = availabilityTable.map((index, element) => {
-                        const rowsStatus = $$(element).find('div.status');
-                        const rowsDays = $$(element).find('div.days');
-                        const rowsArticul = $$(element).find('div.articul');
-                        const rowsQty = $$(element).find('div.qty');
-                        const rowsUnit = $$(element).find('div.unit');
-                        const rowsOther = $$(element).find('small');
-                
+                const availabilityTableValue = availabilityTable.map((index, element) => {
+                    const rowsStatus = $(element).find('div.status');
+                    const rowsDays = $(element).find('div.days');
+                    const rowsArticul = $(element).find('div.articul');
+                    const rowsQty = $(element).find('div.qty');
+                    const rowsUnit = $(element).find('div.unit');
+                    const rowsOther = $(element).find('small');
+            
                     return {
                         status: rowsStatus.text().trim(),
                         days: rowsDays.text().trim(),
@@ -414,7 +413,6 @@ const startFindDecaro = async (chatId, msg) => {
                     }
                     chars += `${item.other}\n`
                 });
-            })
 
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
