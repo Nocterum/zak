@@ -1855,7 +1855,7 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const productResponse = await axios.get(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'});
+    const productResponse = await axios.request(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'});
     productResponse.data.toString();
     const $$ = cheerio.load(productResponse.data);
     const availabilityTable = $$('div.availability-table');
@@ -1889,11 +1889,14 @@ bot.onText(/\/x/, async msg => {
         availabilityTable.each((index, element) => {
             const rowsStatus = $$(element).find('div.status');
             const rowsDays = $$(element).find('div.days');
+
             chars += `<b>${rowsStatus.text().trim()}: </b>`;
+
             if (rowsDays !== null && rowsDays !== undefined) {
                 chars += `${rowsDays.text().trim()}`;
             }
         });
+
         // отправляем данные в чат бота
         return bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
     });
