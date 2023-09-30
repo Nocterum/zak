@@ -1877,7 +1877,7 @@ bot.onText(/\/x/, async msg => {
         "id": 439954
         }, {
             "headers": {
-            "content-type": "application/json",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             }
         })
         console.log(responseQty);
