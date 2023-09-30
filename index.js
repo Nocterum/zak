@@ -1856,24 +1856,22 @@ bot.onText(/\/x/, async msg => {
     lc = null; 
 
     const getProductData = async () => {
-
-        // Параметры запроса
         const payload = {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             view: 'parsed',
-            id: '439954',
+            id: 'id=439954',
             action: 'getProductQuantity'
         }
 
-        // Отправка запроса
         await axios.request('https://dealer.decaro.ru/local/components/whatasoft/product.quantity/ajax.php', payload)
           .then(function (response) {
             console.log(response.data); // Вывод ответа от сервера
           })
           .catch(function (error) {
             console.log(error);
-          });
+        });
+    };
                 // const availabilityTable = $$('div.availability-table-section');
                 // const availabilityTableValue = availabilityTable.map((index, element) => {
                 //     const rowsStatus = $$(element).find('div.status');
@@ -1901,7 +1899,6 @@ bot.onText(/\/x/, async msg => {
                 // // отправляем данные
                 // bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
             // });
-    };
 
     // Запускаем функцию получения данных
     getProductData();
