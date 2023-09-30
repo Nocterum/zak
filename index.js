@@ -1870,8 +1870,7 @@ bot.onText(/\/x/, async msg => {
               "accept": "application/json, text/javascript, */*; q=0.01",
               "accept-language": "ru,ru-RU;q=0.9,en-US;q=0.8,en;q=0.7",
               "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-              "x-requested-with": "XMLHttpRequest",
-            //   "Referer": "https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/",
+            //   "x-requested-with": "XMLHttpRequest",
             }
           })
           .then(function (response) {
