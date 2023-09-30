@@ -1881,19 +1881,27 @@ bot.onText(/\/x/, async msg => {
             }
         })
 
+        const $ = cheerio.load(response.data);
 
-    const $ = cheerio.load(response.html);
-    console.log($); 
-    const message = $('.availability-table').text().trim();
-    await bot.sendMessage(chatId, formatedData);
+        // Ищем элементы с классами "status" и "days" и сохраняем их значения в переменные
+        const status = $('.status').text();
+        const days = $('.days').text();
+        
+        console.log(status); // Выводит "Под заказ*"
+        console.log(days); // Выводит "65 дней"
 
-    $(".availability-table-section").each((i, element) => {
-        let status = $(element).find(".status").text();
-        let days = $(element).find(".days").text();
-        let small = $(element).find("small").text();
-        message += `${status} ${days}\n${small}\n`;
-    });
-    console.log(message);
+    // const $ = cheerio.load(response.html);
+    // console.log($); 
+    // const message = $('.availability-table').text().trim();
+    // await bot.sendMessage(chatId, formatedData);
+
+    // $(".availability-table-section").each((i, element) => {
+    //     let status = $(element).find(".status").text();
+    //     let days = $(element).find(".days").text();
+    //     let small = $(element).find("small").text();
+    //     message += `${status} ${days}\n${small}\n`;
+    // });
+    // console.log(message);
 });
 
 
