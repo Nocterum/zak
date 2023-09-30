@@ -355,6 +355,18 @@ const startFindDecaro = async (chatId, msg) => {
                 { parse_mode: "HTML" }
             );
             
+        } else {
+
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Проверьте правильное написание артикула.', 
+                startFind1Options
+            );
+        }
             // const productResponse = await axios.get(`https://dealer.decaro.ru${firstProductLink}`);
             // const $$ = cheerio.load(productResponse.data);
             //     const availabilityTable = $$('div.availability-table');
@@ -408,18 +420,6 @@ const startFindDecaro = async (chatId, msg) => {
             //         { parse_mode: "HTML" }
             //     );
 
-        } else {
-
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            return bot.sendMessage(
-                chatId, 
-                'Товары не найдены. Проверьте правильное написание артикула.', 
-                startFind1Options
-            );
-        }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
@@ -1855,56 +1855,45 @@ bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
 
-    const productResponse = await axios.request(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`, {responseType: 'stream'}, 6000);
-    productResponse.data.toString();
-    const $$ = cheerio.load(productResponse.data);
-    const availabilityTable = $$('div.availability-table');
-
-    const availabilityTableValue = availabilityTable.map((index, element) => {
-        const rowsStatus = $$(element).find('div.status');
-        const rowsDays = $$(element).find('div.days');
-        return {
-            status: rowsStatus.text().trim(),
-            days: rowsDays.text().trim()
-        }
-    }).get();
-
-    let chars = '';
-
-    // создаем поток для записи данных из запроса
-    const writer = fs.createWriteStream('product.html');
-
-    // записываем данные из потока в файл
-    productResponse.data.pipe(writer);
-
-    // при завершении записи данных из потока в файл, вызываем функцию обратного вызова
-    writer.on('finish', () => {
-        // читаем данные из файла
-        const productData = fs.readFileSync('product.html', 'utf8');
-        // загружаем данные в cheerio
-        const $$ = cheerio.load(productData);
-        // находим необходимые элементы
+    const getProductData = async () => {
+        const productResponse = await axios.request(`https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/`);
+        productResponse.data.toString();
+        const $$ = cheerio.load(productResponse.data);
         const availabilityTable = $$('div.availability-table');
+
+        if (availabilityTable.length === 0) {
+            // Если информация не найдена, ждем 3 секунды и вызываем функцию снова
+            setTimeout(getProductData, 3000);
+            return;
+        }
+
+        const availabilityTableValue = availabilityTable.map((index, element) => {
+            const rowsStatus = $$(element).find('div.status');
+            const rowsDays = $$(element).find('div.days');
+            return {
+                status: rowsStatus.text().trim(),
+                days: rowsDays.text().trim()
+            }
+        }).get();
+
+        let chars = '';
+
         // форматируем данные в строку
         availabilityTable.each((index, element) => {
             const rowsStatus = $$(element).find('div.status');
             const rowsDays = $$(element).find('div.days');
-
             chars += `<b>${rowsStatus.text().trim()}: </b>`;
-
             if (rowsDays !== null && rowsDays !== undefined) {
                 chars += `${rowsDays.text().trim()}`;
             }
         });
 
         // отправляем данные в чат бота
-        return bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
-    });
+        bot.sendMessage(chatId, chars, { parse_mode: "HTML" });
+    };
 
-    // при возникновении ошибки в потоке, выводим ее в консоль
-    writer.on('error', (err) => {
-        console.log(err);
-    });
+    // Запускаем функцию получения данных
+    getProductData();
 });
 
 bot.onText(/\/settings/, async msg => {
