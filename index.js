@@ -1871,9 +1871,7 @@ bot.onText(/\/x/, async msg => {
               "accept-language": "ru,ru-RU;q=0.9,en-US;q=0.8,en;q=0.7",
               "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
               "x-requested-with": "XMLHttpRequest",
-            //   "cookie": "_ym_uid=1695715560628039726; _ym_d=1695715560; _ym_debug=null; BITRIX_SM_LOGIN=eremin%40manders.ru; BITRIX_SM_SOUND_LOGIN_PLAYED=Y; BITRIX_CONVERSION_CONTEXT_s1=%7B%22ID%22%3A1%2C%22EXPIRE%22%3A1696107540%2C%22UNIQUE%22%3A%5B%22conversion_visit_day%22%5D%7D; _ym_isad=2; BITRIX_SM_SALE_UID=610f3389ad507dc6dc603d3baba6f9bd; PHPSESSID=5d65842601fe52f48eede63c43f9f503; _ym_visorc=w",
-              "Referer": "https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/",
-            //   "Referrer-Policy": "strict-origin-when-cross-origin"
+            //   "Referer": "https://dealer.decaro.ru/catalog/oboi/texam/sustainable/439954/",
             }
           })
           .then(function (response) {
