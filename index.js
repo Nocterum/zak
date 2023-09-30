@@ -1880,9 +1880,10 @@ bot.onText(/\/x/, async msg => {
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             }
         })
-          
-    const $ = cheerio.load(response.data);
-    console.log(response.data); 
+
+    const formatedData = response.toString();  
+    const $ = cheerio.load(formatedData);
+    console.log(formatedData); 
     let message = "";
 
     $(".availability-table-section").each((i, element) => {
