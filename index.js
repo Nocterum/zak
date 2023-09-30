@@ -328,7 +328,9 @@ const startFindDecaro = async (chatId, msg) => {
             console.log(productResponse);
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
-            const dataId = $$('div.availability-table')[0].getAttribute('data-id');
+            const elements = Array.from($$('div.availability-table'));
+            const dataId = elements[0].getAttribute('data-id');
+            // const dataId = $$('div.availability-table')[0].getAttribute('data-id');
             let chars = ''; 
             console.log(dataId);
             
