@@ -1883,7 +1883,7 @@ bot.onText(/\/x/, async msg => {
       .then(function (response) {
         console.log(response.data); 
 
-        let $ = cheerio.load(responseQty.data);
+        let $ = cheerio.load(response.data);
         const availabilityTable = $('div.availability-table-section');
         console.log(availabilityTable.toString());
 
@@ -2440,6 +2440,7 @@ bot.on('message', async msg => {
                         text !== '/start' && 
                         text !== '/settings' && 
                         text !== '/files' && 
+                        text !== '/x' &&
                         !text.startsWith('/getfile'))  
                     ) {
             
