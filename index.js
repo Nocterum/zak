@@ -321,15 +321,6 @@ const startFindDecaro = async (chatId, msg) => {
         const $ = cheerio.load(response.data);
 
         const firstProductLink = $('div.item-title a').attr('href');
-        const splitLink = firstProductLink.split('/');
-        let dataId;
-        for (let i = 0; i < splitLink.length; i++) {
-            const element = splitLink[i];
-            if (!isNaN(element)) {
-                dataId = element;
-            }
-        }
-        console.log(dataId, firstProductLink);
 
         if (firstProductLink) {
             
@@ -337,6 +328,8 @@ const startFindDecaro = async (chatId, msg) => {
 
             let $$ = cheerio.load(productResponse.data);
             const inner_props = $$('div.inner_props div.prop');
+            const dataId = $$('div.availability-table').split('"')[3];
+            console.log(dataId);
             let chars = ''; 
 
             
