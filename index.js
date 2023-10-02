@@ -505,9 +505,7 @@ const startFindLevantin = async (chatId, msg) => {
             $$('.row.collapse .small-12 medium-8 columns').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
                 
-                if (row !== null && row !== undefined) {
-                    message += `${row}\n`;
-                }
+                message += `${row}\n`;
             })
            
             message += `${availability} м.п.\n`;
@@ -2641,19 +2639,19 @@ bot.on('callback_query', async msg => {
             } else if (formatedUserVendor.includes('ОПУС')) {
                 return bot.sendMessage(
                     chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте "https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                    `Чтобы <b>посмотреть остатки</b> на сайте\n"https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
                 return bot.sendMessage(
                     chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте "https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                    `Чтобы <b>посмотреть остатки</b> на сайте\n"https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
                 return bot.sendMessage(
                     chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте "http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                    `Чтобы <b>посмотреть остатки</b> на сайте\n"http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
