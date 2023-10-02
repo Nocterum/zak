@@ -1898,7 +1898,7 @@ bot.onText(/\/x/, async msg => {
             console.log(responseProduct.data);
 
             const $ = cheerio.load(responseProduct.data);
-            const firstProductLink = $('a.small-6 medium-3 large-2 columns a').attr('href');
+            const firstProductLink = $('div.row.catalog a').attr('href');
 
             console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
