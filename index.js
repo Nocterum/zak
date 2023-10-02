@@ -1897,9 +1897,8 @@ bot.onText(/\/x/, async msg => {
                     backurl: `/ajax/auth.php`,
                     AUTH_FORM: 'Y',
                     TYPE: 'AUTH',
-                    USER_LOGIN: login,
-                    USER_PASSWORD: password
-                      
+                    USER_LOGIN: `Manders`,
+                    USER_PASSWORD: `Manders`
                 });
 
                 console.log(`перешел по ссылке на первый товар`);
