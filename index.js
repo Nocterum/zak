@@ -499,7 +499,7 @@ const startFindLevantin = async (chatId, msg) => {
             const availability = $$('.catalog-detail__available b').text().trim();
             let message;
 
-            const element = $('.catalog-detail__text');
+            console.log(responseProductPage.data);
 
             // Извлекаем нужные строки
             $$('.row.collapse .small-12 medium-8 columns').each((index, element) => {
