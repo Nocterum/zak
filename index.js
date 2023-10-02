@@ -497,12 +497,19 @@ const startFindLevantin = async (chatId, msg) => {
 
             const $$ = cheerio.load(responseProductPage.data);
             const availability = $$('.catalog-detail__available b').text().trim();
-            let message;
+            let message = '';
 
             console.log(responseProductPage.data);
 
             // Извлекаем нужные строки
             $$('.row.collapse .small-12.medium-8.columns').each((index, element) => {
+                const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
+                
+                message += `${row}\n`;
+            })
+
+            // Извлекаем нужные строки
+            $$('.row.collapse .row').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
                 
                 message += `${row}\n`;
