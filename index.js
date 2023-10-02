@@ -1898,7 +1898,7 @@ bot.onText(/\/x/, async msg => {
             console.log(`запрос на поиск каталога с токеном отправлен`);
 
             const $ = cheerio.load(responseProduct.data);
-            const firstProductLink = $('small-6 medium-3 large-2 columns a').attr('href');
+            const firstProductLink = $('a.small-6 medium-3 large-2 columns a').attr('href');
 
             console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
