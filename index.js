@@ -1881,17 +1881,6 @@ bot.onText(/\/x/, async msg => {
 
     try {
 
-        //Формируем URL для получения hittoken
-        // const gettokkenUr = `https://mc.yandex.ru/watch/94641437?wmode=7&page-url=http%3A%2F%2Fwww.galleriaarben.ru%2Fcatalog%2Fexists%2Fcloth%2F4752_salsi_611_%2F%3FELEMENT_CODE%3D4752_salsi_611_&charset=utf-8&uah=che%0A0&browser-info=pv%3A1%3Avf%3A3qm6qq813ycbml9sb64xkgv%3Afp%3A354%3Afu%3A1%3Aen%3Autf-8%3Ala%3Aru%3Av%3A1120%3Acn%3A1%3Adp%3A0%3Als%3A105592022340%3Ahid%3A856984572%3Az%3A180%3Ai%3A20231002152709%3Aet%3A1696249630%3Ac%3A1%3Arn%3A808063032%3Arqn%3A55%3Au%3A1695891581170130108%3Aw%3A1007x900%3As%3A1920x1080x24%3Ask%3A1%3Awv%3A2%3Ads%3A0%2C0%2C138%2C0%2C12%2C0%2C%2C219%2C64%2C%2C%2C%2C377%3Aco%3A0%3Acpf%3A1%3Antf%3A1%3Ans%3A1696249629457%3Aadb%3A2%3Arqnl%3A1%3Ast%3A1696249630%3At%3A4752%20SALSI%20611%20*&t=gdpr(14)clc(0-0-0)rqnt(1)aw(1)ti(2)`;
-        
-        // const searchUrl = `http://www.galleriaarben.ru/`;
-        // // Отправляем запрос на сайт
-        // const response = await axios.post(searchUrl, {
-        //         USER_LOGIN: 'Manders',
-        //         USER_PASSWORD: 'Manders',
-        //         submit: 'Submit'
-        //     })
-        //     console.log(response.data);
 
             const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`);
 
@@ -1905,10 +1894,11 @@ bot.onText(/\/x/, async msg => {
             if (firstProductLink) {
                 
                 const responseProductPage = await axios.post(`http://www.galleriaarben.ru${firstProductLink}`, {
-                        AUTH_FORM: 'Y',
-                        TYPE: 'AUTH',
-                        USER_LOGIN: login,
-                        USER_PASSWORD: password
+                    backurl: `/ajax/auth.php`,
+                    AUTH_FORM: 'Y',
+                    TYPE: 'AUTH',
+                    USER_LOGIN: login,
+                    USER_PASSWORD: password
                       
                 });
 
