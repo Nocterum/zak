@@ -1881,75 +1881,71 @@ bot.onText(/\/x/, async msg => {
 
     try {
 
-            //Формируем URL для поиска
-            const searchUrl = `http://www.galleriaarben.ru/personal/`;
+        //Формируем URL для поиска
+        const searchUrl = `http://www.galleriaarben.ru/personal/`;
+        //Отправляем запрос на сайт
+        const response = await axios.post(searchUrl, {
+            auth: {
+                login: `Manders`,
+                password: `Manders`
+            }
+        });
+        console.log(`попытка аутентификации`);
+        
+        const $ = cheerio.load(response.data);
+        const token = $(`hittoken`).text();
+        console.log(`выделяю токен из ответа о аутентификации:`);
+        console.log(token);
 
-            //Отправляем запрос на сайт
-            const response = await axios.post(searchUrl, {
-                auth: {
-                    login: `Manders`,
-                    password: `Manders`
+        if (token) {
+
+            console.log(`токен найден!`);
+            // Используем hittoken в GET-запросе
+            const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`, {
+                headers: {
+                    'Cookie': `hittoken=${token}` // Передаем hittoken в заголовке Cookie
                 }
+
             });
-            console.log(`попытка аутентификации`);
-            
-            const $ = cheerio.load(response.data);
-            const token = $(`hittoken`).text();
-            console.log(`выделяю токен из ответа о аутентификации:`);
 
-            console.log(token);
+            console.log(`запрос на поиск каталога с токеном отправлен`);
+            const $$ = cheerio.load(responseProduct.data);
+            const firstProductLink = $$('small-6 medium-3 large-2 columns a').attr('href');
+            console.log(`ссылка на первый товар найдена`);
 
-            if (token) {
-                console.log(`токен найден!`);
-
-                // Используем hittoken в GET-запросе
-                const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`, {
+            if (firstProductLink) {
+                
+                const responseProductPage = await axios.get(`http://www.galleriaarben.ru/${firstProductLink}`, {
                     headers: {
                         'Cookie': hittoken=`${token}` // Передаем hittoken в заголовке Cookie
                     }
                 });
-                console.log(`запрос на поиск каталога с токеном отправлен`);
-
-                const $$ = cheerio.load(responseProduct.data);
-                const firstProductLink = $$('small-6 medium-3 large-2 columns a').attr('href');
-                console.log(`ссылка на первый товар найдена`);
-
-                if (firstProductLink) {
-                    
-                    const responseProductPage = await axios.get(`http://www.galleriaarben.ru/${firstProductLink}`, {
-                        headers: {
-                            'Cookie': hittoken=`${token}` // Передаем hittoken в заголовке Cookie
-                        }
-                    });
-
-                    console.log(`перешел по ссылке на первый товар`);
-
-                    const $$$ = cheerio.load(responseProductPage.data);
-                    const availability = $$$('.catalog-detail__available b').text();
-                    console.log(`Наличие найденно: ${availability}`);
-
-                } else {
-                
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-                return bot.sendMessage(
-                    chatId, 
-                    'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                    startFind1Options
-                );
-                }
-            }
-
-        } catch (e) {
-            console.log('Ошибка при выполнении запроса', e);
+                console.log(`перешел по ссылке на первый товар`);
+                const $$$ = cheerio.load(responseProductPage.data);
+                const availability = $$$('.catalog-detail__available b').text();
+                console.log(`Наличие найденно: ${availability}`);
+            } else {
+            
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
             }
-            return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                startFind1Options
+            );
+            }
         }
+
+    } catch (e) {
+        console.log('Ошибка при выполнении запроса', e);
+        if (botMsgIdx !== null) {
+            bot.deleteMessage(chatId, botMsgIdx);
+            botMsgIdx = null;
+        }
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
+    }
 });
 
 
