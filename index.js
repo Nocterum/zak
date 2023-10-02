@@ -1902,12 +1902,18 @@ bot.onText(/\/x/, async msg => {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 }
             });
+            const cookies = responseAuth.headers['set-cookie'];
             console.log(`${responseAuth.data}`);
             
-            const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`);
+            const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
+                headers: {
+                  Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
+                }
+              });
             const $$ = cheerio.load(responseProductPage.data);
             const availability = $$('.catalog-detail__available b').text();
             console.log(`Наличие найденно: ${availability}`);
+
         } else {
         
             // if (botMsgIdx !== null) {
