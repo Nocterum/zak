@@ -1892,7 +1892,7 @@ bot.onText(/\/x/, async msg => {
         // });
 
         const response = await axios.get(searchUrl, {cookie: "yabs-sid=291519221679386846; i=Lcnbpydt6gPyMzV9yGP8uVuJtDtcTwk3mD239magGzv12VA+a6R71okPvmt2YDmkvcfvlnfMPxDkdBiTJSpVVItPQ9o=; yandexuid=6575202421679386846; yuidss=6575202421679386846; ymex=1994746846.yrts.1679386846#1994746846.yrtsi.1679386846; is_gdpr=0; _ym_uid=168076896985296147; is_gdpr_b=CI7aQhDpsgEoAg==; yandex_login=master.of.colours; Session_id=3:1696159905.5.0.1680767227821:QXO-Ww:3e.1.2:1|1511298772.-1.2.3:1680767227|1717758489.-1.0.2:3473920.3:1684241147|3:10276555.431969.xiGOxO-RFDe4gJNpKCny5ouSLcg; sessionid2=3:1696159905.5.0.1680767227821:QXO-Ww:3e.1.2:1|1511298772.-1.2.3:1680767227|1717758489.-1.0.2:3473920.3:1684241147|3:10276555.431969.fakesign0000000000000000000; ys=udn.cDptYXN0ZXIub2YuY29sb3Vycw%3D%3D#wprid.1696234405036743-9537856322474424555-vla1-2505-vla-l7-balancer-exp-8080-BAL-4597#c_chck.3110758942; _ym_d=1696234406; yp=2011594406.pcs.1#1725568464.p_sw.1694032464#2007610955.udn.cDptYXN0ZXIub2YuY29sb3Vycw%3D%3D#1714034627.stltp.serp_bk-map_1_1682498627#1721671245.p_cl.1690135245#1999601147.multib.1#1725083828.p_undefined.1693547828#1698912806.hdrc.0#1696679400.szm.1%3A1920x1080%3A917x927; bh=EjwiQ2hyb21pdW0iO3Y9IjExNiIsICJOb3QpQTtCcmFuZCI7dj0iMjQiLCAiT3BlcmEgR1giO3Y9IjEwMiIaBSJ4ODYiIg8iMTAyLjAuNDg4MC42NCIqAj8wMgIiIjoJIldpbmRvd3MiQggiMTAuMC4wIkoEIjY0IlJWIkNocm9taXVtIjt2PSIxMTYuMC41ODQ1LjE4MCIsIk5vdClBO0JyYW5kIjt2PSIyNC4wLjAuMCIsIk9wZXJhIEdYIjt2PSIxMDIuMC40ODgwLjY0IiI="}); 
-        console.log(`попытка аутентификации, ${response.data}`);
+        console.log(`попытка аутентификации, ${response}`);
         
         const $ = cheerio.load(response.data);
         const token = $(`hittoken`).text();
