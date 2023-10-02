@@ -469,7 +469,6 @@ const startFindLevantin = async (chatId, msg) => {
         const $ = cheerio.load(responseProduct.data);
 
         const firstProductLink = $('div.row.catalog a').attr('href');
-        console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
         if (firstProductLink) { 
 
@@ -487,7 +486,7 @@ const startFindLevantin = async (chatId, msg) => {
             });
 
             const cookies = responseAuth.headers['set-cookie'];
-            console.log(`${responseAuth.data}`);
+            console.log(`${responseAuth.data.trim()}`);
             
             const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
                 headers: {
@@ -499,11 +498,9 @@ const startFindLevantin = async (chatId, msg) => {
             const availability = $$('.catalog-detail__available b').text().trim();
             let message = '';
 
-            console.log(responseProductPage.data);
-
             // Извлекаем нужные строки
             $$('.row.collapse .small-12.medium-8.columns').each((index, element) => {
-                const row = $(index).text().trim().replace(/\s+/g, ' '); // Получаем текст строки и удаляем лишние пробелы
+                const row = $(element).text().trim().replace(/\s+/g, ' '); // Получаем текст строки и удаляем лишние пробелы
                 if (row !== null) {
                     message += `${row}\n`;
                 }
@@ -511,7 +508,7 @@ const startFindLevantin = async (chatId, msg) => {
 
             // Извлекаем нужные строки
             $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns').each((index, element) => {
-                const row = $(index).text().trim().replace(/\s+/g, ' '); // Получаем текст строки и удаляем лишние пробелы
+                const row = $(element).text().trim().replace(/\s+/g, ' '); // Получаем текст строки и удаляем лишние пробелы
                 if (row !== null) {
                     message += `${row}\n`;
                 }
