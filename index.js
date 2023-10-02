@@ -513,26 +513,18 @@ const startFindLevantin = async (chatId, msg) => {
             }
 
             // Извлекаем нужные строки из Блока характеристик 1
-            // const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns');
-            const charsBlock1 = $$('.small-12.columns.medium-7.large-12');
+            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns');
             charsBlock1.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
             })
 
-            const charsBlock2 = $$('.row .small-12.columns');
+            // Извлекаем нужные строки из Блока характеристик 2
+            const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
             charsBlock2.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
             })
-           
-            // Извлекаем нужные строки из Блока характеристик 2
-            // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
-            // const charsBlock3 = $$('.catalog-detail__hr');
-            // charsBlock3.each((index, element) => {
-            //     const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-            //     message += `${row}\n`;
-            // })
 
             message += `<b>В наличии: ${availability.replace(/\s+/g, '')} м.п.</b>\n\n`;
             message += `<i>можете ввести следующий артикул для поиска</i>`;
