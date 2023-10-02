@@ -451,6 +451,140 @@ const startFindDecaro = async (chatId, msg) => {
 }
 
 // ======================================================================================================================================
+// Функция html запроса по данным из БД на сайт поставщика ДЕКОР ТРЕЙД
+// ======================================================================================================================================
+
+const startFindLevantin = async (chatId, msg) => {
+    lc = '/enterVC';
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+
+    try {
+
+        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${user.vendorCode}&set_filter=Y`);
+        const $ = cheerio.load(responseProduct.data);
+
+        const firstProductLink = $('div.row.catalog a').attr('href');
+        console.log(`ссылка на первый товар найдена ${firstProductLink}`);
+
+        if (firstProductLink) { 
+
+            const responseAuth = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
+                backurl: `/ajax/auth.php`,
+                AUTH_FORM: `Y`,
+                TYPE: `AUTH`,
+                Login: `Войти`,
+                USER_LOGIN: `Manders`,
+                USER_PASSWORD: `Manders`
+            },{
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                }
+            });
+
+            const cookies = responseAuth.headers['set-cookie'];
+            console.log(`${responseAuth.data}`);
+            
+            const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
+                headers: {
+                  Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
+                }
+            });
+
+            const $$ = cheerio.load(responseProductPage.data);
+            const availability = $$('.catalog-detail__available b').text().trim();
+            let message;
+
+            const element = $('.catalog-detail__text');
+
+            // Извлекаем нужные строки
+            const collection = element.find('.catalog-detail__header').text().trim();
+            const title = element.find('.catalog-detail__title').text().trim();
+            const width = element.find('div:contains("Ширина ткани (см) / направление рисунка:")').next().text().trim();
+            const fabric_type = element.find('div:contains("Тип ткани:")').next().text().trim();
+            const horizontal_rapport = element.find('div:contains("Раппорт горизонтальный, см:")').next().text().trim();
+            const vertical_rapport = element.find('div:contains("Раппорт вертикальный, см:")').next().text().trim();
+            const composition = element.find('div:contains("Состав ткани:")').next().text().trim();
+            const category = element.find('div:contains("Категория ткани:")').next().text().trim();
+            const pattern_type = element.find('div:contains("Тип рисунка:")').next().text().trim();
+            const fabric_style = element.find('div:contains("Стиль ткани:")').next().text().trim();
+            const color_group = element.find('div:contains("Цветовая группа:")').next().text().trim();
+
+            if (collection !== null && collection !== undefined) {
+                message += `${collection}\n`;
+            }
+            if (title !== null && title !== undefined) {
+                message += `${title}\n`;
+            }
+            if (width !== null && width !== undefined) {
+                message += `${width}\n`;
+            }
+            if (fabric_type !== null && fabric_type !== undefined) {
+                message += `${fabric_type}\n`;
+            }
+            if (horizontal_rapport !== null && horizontal_rapport !== undefined) {
+                message += `${horizontal_rapport}\n`;
+            }
+            if (vertical_rapport !== null && vertical_rapport !== undefined) {
+                message += `${vertical_rapport}\n`;
+            }
+            if (composition !== null && composition !== undefined) {
+                message += `${composition}\n`;
+            }
+            if (category !== null && category !== undefined) {
+                message += `${category}\n`;
+            }
+            if (pattern_type !== null && pattern_type !== undefined) {
+                message += `${pattern_type}\n`;
+            }
+            if (fabric_style !== null && fabric_style !== undefined) {
+                message += `${fabric_style}\n`;
+            }
+            if (color_group !== null && color_group !== undefined) {
+                message += `${color_group}\n`;
+            }
+            message += `${availability}\n`;
+            message += `<i>можете ввести следующий артикул для поиска</i>`;
+
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                message, 
+                startFind1Options
+            );
+
+        } else {
+        
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                startFind1Options
+            );
+        }
+
+    } catch (e) {
+
+        console.log('Ошибка при выполнении запроса', e);
+        if (botMsgIdx !== null) {
+            bot.deleteMessage(chatId, botMsgIdx);
+            botMsgIdx = null;
+        }
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
+    }
+}
+
+// ======================================================================================================================================
 // Функция отправки email с запросом на резервирование
 // ======================================================================================================================================
 
@@ -1872,72 +2006,7 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
     lc = null; 
-
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        }
-    });
-
-    try {
-
-        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`);
-        console.log(responseProduct.data);
-        const $ = cheerio.load(responseProduct.data);
-
-        const firstProductLink = $('div.row.catalog a').attr('href');
-        console.log(`ссылка на первый товар найдена ${firstProductLink}`);
-
-        if (firstProductLink) { 
-
-            const responseAuth = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
-                backurl: `/ajax/auth.php`,
-                AUTH_FORM: `Y`,
-                TYPE: `AUTH`,
-                Login: `Войти`,
-                USER_LOGIN: `Manders`,
-                USER_PASSWORD: `Manders`
-            },{
-                "headers": {
-                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                }
-            });
-            const cookies = responseAuth.headers['set-cookie'];
-            console.log(`${responseAuth.data}`);
-            
-            const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
-                headers: {
-                  Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
-                }
-              });
-            const $$ = cheerio.load(responseProductPage.data);
-            const availability = $$('.catalog-detail__available b').text();
-            console.log(`Наличие найденно: ${availability}`);
-
-        } else {
-        
-            // if (botMsgIdx !== null) {
-            //     bot.deleteMessage(chatId, botMsgIdx);
-            //     botMsgIdx = null;
-            // }
-            return bot.sendMessage(
-                chatId, 
-                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                startFind1Options
-            );
-        }
-
-    } catch (e) {
-
-        console.log('Ошибка при выполнении запроса', e);
-        if (botMsgIdx !== null) {
-            bot.deleteMessage(chatId, botMsgIdx);
-            botMsgIdx = null;
-        }
-        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
-    }
 });
-
 
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
@@ -2249,6 +2318,22 @@ bot.on('message', async msg => {
                     return startFindDecaro(chatId, msg);
                 }
 
+            } else if (formatedUserVendor === 'ЛЕВАНТИН') {
+
+                if (user.vendorCode.length < 4) {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                    );
+                } else {
+                    return startFindLevantin(chatId);
+                }
+
             } else if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
 
                 if (user.vendorCode.length < 4) {
@@ -2329,7 +2414,6 @@ bot.on('message', async msg => {
                 } else {
                     return findSirpi(chatId);
                 }
-
             }
             
             if (formatedUserVendor.includes('BRINK&CAMPMAN')) {
