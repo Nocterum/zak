@@ -1891,14 +1891,20 @@ bot.onText(/\/x/, async msg => {
 
             console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
-            if (firstProductLink) {
+            if (firstProductLink) { 
                 
-                const responseProductPage = await axios.post(`http://www.galleriaarben.ru${firstProductLink}`, {
+                const responseProductPage = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
+                    // const responseProductPage = await axios.post(`http://www.galleriaarben.ru${firstProductLink}`, {
                     backurl: `/ajax/auth.php`,
-                    AUTH_FORM: 'Y',
-                    TYPE: 'AUTH',
+                    AUTH_FORM: `Y`,
+                    TYPE: `AUTH`,
+                    Login: `Войти`,
                     USER_LOGIN: `Manders`,
                     USER_PASSWORD: `Manders`
+                },{
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    }
                 });
 
                 console.log(`перешел по ссылке на первый товар`);
