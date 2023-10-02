@@ -2640,7 +2640,6 @@ bot.on('callback_query', async msg => {
             const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
             if (formatedUserVendor.includes('РИКСОР') ||
-                formatedUserVendor.includes('ЛЕВАНТИН') ||
                 formatedUserVendor.includes('ИНТЕРДЕКОР') ||
                 formatedUserVendor.includes('ОРАК')
                 // formatedUserVendor.includes('КАДО') ||
