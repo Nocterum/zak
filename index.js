@@ -1890,7 +1890,7 @@ bot.onText(/\/x/, async msg => {
                 password: `Manders`
             }
         });
-        console.log(`попытка аутентификации`);
+        console.log(`попытка аутентификации, ${response.data}`);
         
         const $ = cheerio.load(response.data);
         const token = $(`hittoken`).text();
