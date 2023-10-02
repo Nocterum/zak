@@ -1881,50 +1881,45 @@ bot.onText(/\/x/, async msg => {
 
     try {
 
+        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`);
+        console.log(responseProduct.data);
+        const $ = cheerio.load(responseProduct.data);
 
-            const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`);
+        const firstProductLink = $('div.row.catalog a').attr('href');
+        console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
-            console.log(responseProduct.data);
+        if (firstProductLink) { 
 
-            const $ = cheerio.load(responseProduct.data);
-            const firstProductLink = $('div.row.catalog a').attr('href');
-
-            console.log(`ссылка на первый товар найдена ${firstProductLink}`);
-
-            if (firstProductLink) { 
-                
-                const responseProductPage = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
-                    // const responseProductPage = await axios.post(`http://www.galleriaarben.ru${firstProductLink}`, {
-                    backurl: `/ajax/auth.php`,
-                    AUTH_FORM: `Y`,
-                    TYPE: `AUTH`,
-                    Login: `Войти`,
-                    USER_LOGIN: `Manders`,
-                    USER_PASSWORD: `Manders`
-                },{
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    }
-                });
-
-                console.log(`перешел по ссылке на первый товар`);
-                const $$ = cheerio.load(responseProductPage.data);
-                const availability = $$('.catalog-detail__available b').text();
-                console.log(`Наличие найденно: ${availability} ${responseProductPage.data}`);
-
-            } else {
+            const responseAuth = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
+                backurl: `/ajax/auth.php`,
+                AUTH_FORM: `Y`,
+                TYPE: `AUTH`,
+                Login: `Войти`,
+                USER_LOGIN: `Manders`,
+                USER_PASSWORD: `Manders`
+            },{
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                }
+            });
+            console.log(`${responseAuth.data}`);
             
-                // if (botMsgIdx !== null) {
-                //     bot.deleteMessage(chatId, botMsgIdx);
-                //     botMsgIdx = null;
-                // }
-
-                return bot.sendMessage(
-                    chatId, 
-                    'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                    startFind1Options
-                );
-            }
+            const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`);
+            const $$ = cheerio.load(responseProductPage.data);
+            const availability = $$('.catalog-detail__available b').text();
+            console.log(`Наличие найденно: ${availability}`);
+        } else {
+        
+            // if (botMsgIdx !== null) {
+            //     bot.deleteMessage(chatId, botMsgIdx);
+            //     botMsgIdx = null;
+            // }
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                startFind1Options
+            );
+        }
 
     } catch (e) {
 
