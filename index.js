@@ -504,51 +504,12 @@ const startFindLevantin = async (chatId, msg) => {
             // Извлекаем нужные строки
             $$('.row.collapse .small-12 medium-8 columns').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
+                
+                if (row !== null && row !== undefined) {
+                    message += `${row}\n`;
+                }
             })
-
-            // const width = element.find('div:contains("Ширина ткани (см) / направление рисунка:")').next().text().trim();
-            // const fabric_type = element.find('div:contains("Тип ткани:")').next().text().trim();
-            // const horizontal_rapport = element.find('div:contains("Раппорт горизонтальный, см:")').next().text().trim();
-            // const vertical_rapport = element.find('div:contains("Раппорт вертикальный, см:")').next().text().trim();
-            // const composition = element.find('div:contains("Состав ткани:")').next().text().trim();
-            // const category = element.find('div:contains("Категория ткани:")').next().text().trim();
-            // const pattern_type = element.find('div:contains("Тип рисунка:")').next().text().trim();
-            // const fabric_style = element.find('div:contains("Стиль ткани:")').next().text().trim();
-            // const color_group = element.find('div:contains("Цветовая группа:")').next().text().trim();
-
-            if (row !== null && row !== undefined) {
-                message += `${row}\n`;
-            }
-            // if (title !== null && title !== undefined) {
-            //     message += `${title}\n`;
-            // }
-            // if (width !== null && width !== undefined) {
-            //     message += `${width}\n`;
-            // }
-            // if (fabric_type !== null && fabric_type !== undefined) {
-            //     message += `${fabric_type}\n`;
-            // }
-            // if (horizontal_rapport !== null && horizontal_rapport !== undefined) {
-            //     message += `${horizontal_rapport}\n`;
-            // }
-            // if (vertical_rapport !== null && vertical_rapport !== undefined) {
-            //     message += `${vertical_rapport}\n`;
-            // }
-            // if (composition !== null && composition !== undefined) {
-            //     message += `${composition}\n`;
-            // }
-            // if (category !== null && category !== undefined) {
-            //     message += `${category}\n`;
-            // }
-            // if (pattern_type !== null && pattern_type !== undefined) {
-            //     message += `${pattern_type}\n`;
-            // }
-            // if (fabric_style !== null && fabric_style !== undefined) {
-            //     message += `${fabric_style}\n`;
-            // }
-            // if (color_group !== null && color_group !== undefined) {
-            //     message += `${color_group}\n`;
-            // }
+           
             message += `${availability} м.п.\n`;
             message += `<i>можете ввести следующий артикул для поиска</i>`;
 
