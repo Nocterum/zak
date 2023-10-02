@@ -504,15 +504,17 @@ const startFindLevantin = async (chatId, msg) => {
             // Извлекаем нужные строки
             $$('.row.collapse .small-12.medium-8.columns').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
-                
-                message += `${row}\n`;
+                if (row !== null) {
+                    message += `${row.trim()}\n`;
+                }
             })
 
             // Извлекаем нужные строки
             $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
-                
-                message += `${row}\n`;
+                if (row !== null) {
+                    message += `${row.trim()}\n`;
+                }
             })
            
             message += `${availability} м.п.\n`;
