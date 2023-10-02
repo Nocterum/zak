@@ -1913,7 +1913,7 @@ bot.onText(/\/x/, async msg => {
                 console.log(`перешел по ссылке на первый товар`);
                 const $$ = cheerio.load(responseProductPage.data);
                 const availability = $$('.catalog-detail__available b').text();
-                console.log(`Наличие найденно: ${availability}`);
+                console.log(`Наличие найденно: ${availability} ${responseProductPage.data}`);
 
             } else {
             
