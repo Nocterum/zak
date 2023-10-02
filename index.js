@@ -1882,14 +1882,16 @@ bot.onText(/\/x/, async msg => {
     try {
 
         //Формируем URL для поиска
-        const searchUrl = `http://www.galleriaarben.ru/personal/`;
+        const searchUrl = `https://mc.yandex.ru/watch/94641437?wmode=7&page-url=http%3A%2F%2Fwww.galleriaarben.ru%2Fcatalog%2Fexists%2Fcloth%2F4752_salsi_611_%2F%3FELEMENT_CODE%3D4752_salsi_611_&charset=utf-8&uah=che%0A0&browser-info=pv%3A1%3Avf%3A3qm6qq813ycbml9sb64xkgv%3Afp%3A354%3Afu%3A1%3Aen%3Autf-8%3Ala%3Aru%3Av%3A1120%3Acn%3A1%3Adp%3A0%3Als%3A105592022340%3Ahid%3A856984572%3Az%3A180%3Ai%3A20231002152709%3Aet%3A1696249630%3Ac%3A1%3Arn%3A808063032%3Arqn%3A55%3Au%3A1695891581170130108%3Aw%3A1007x900%3As%3A1920x1080x24%3Ask%3A1%3Awv%3A2%3Ads%3A0%2C0%2C138%2C0%2C12%2C0%2C%2C219%2C64%2C%2C%2C%2C377%3Aco%3A0%3Acpf%3A1%3Antf%3A1%3Ans%3A1696249629457%3Aadb%3A2%3Arqnl%3A1%3Ast%3A1696249630%3At%3A4752%20SALSI%20611%20*&t=gdpr(14)clc(0-0-0)rqnt(1)aw(1)ti(2)`;
         //Отправляем запрос на сайт
-        const response = await axios.post(searchUrl, {
-            auth: {
-                login: `Manders`,
-                password: `Manders`
-            }
-        });
+        // const response = await axios.post(searchUrl, {
+        //     auth: {
+        //         login: `Manders`,
+        //         password: `Manders`
+        //     }
+        // });
+
+        const response = await axios.get(searchUrl, {cookie: "yabs-sid=291519221679386846; i=Lcnbpydt6gPyMzV9yGP8uVuJtDtcTwk3mD239magGzv12VA+a6R71okPvmt2YDmkvcfvlnfMPxDkdBiTJSpVVItPQ9o=; yandexuid=6575202421679386846; yuidss=6575202421679386846; ymex=1994746846.yrts.1679386846#1994746846.yrtsi.1679386846; is_gdpr=0; _ym_uid=168076896985296147; is_gdpr_b=CI7aQhDpsgEoAg==; yandex_login=master.of.colours; Session_id=3:1696159905.5.0.1680767227821:QXO-Ww:3e.1.2:1|1511298772.-1.2.3:1680767227|1717758489.-1.0.2:3473920.3:1684241147|3:10276555.431969.xiGOxO-RFDe4gJNpKCny5ouSLcg; sessionid2=3:1696159905.5.0.1680767227821:QXO-Ww:3e.1.2:1|1511298772.-1.2.3:1680767227|1717758489.-1.0.2:3473920.3:1684241147|3:10276555.431969.fakesign0000000000000000000; ys=udn.cDptYXN0ZXIub2YuY29sb3Vycw%3D%3D#wprid.1696234405036743-9537856322474424555-vla1-2505-vla-l7-balancer-exp-8080-BAL-4597#c_chck.3110758942; _ym_d=1696234406; yp=2011594406.pcs.1#1725568464.p_sw.1694032464#2007610955.udn.cDptYXN0ZXIub2YuY29sb3Vycw%3D%3D#1714034627.stltp.serp_bk-map_1_1682498627#1721671245.p_cl.1690135245#1999601147.multib.1#1725083828.p_undefined.1693547828#1698912806.hdrc.0#1696679400.szm.1%3A1920x1080%3A917x927; bh=EjwiQ2hyb21pdW0iO3Y9IjExNiIsICJOb3QpQTtCcmFuZCI7dj0iMjQiLCAiT3BlcmEgR1giO3Y9IjEwMiIaBSJ4ODYiIg8iMTAyLjAuNDg4MC42NCIqAj8wMgIiIjoJIldpbmRvd3MiQggiMTAuMC4wIkoEIjY0IlJWIkNocm9taXVtIjt2PSIxMTYuMC41ODQ1LjE4MCIsIk5vdClBO0JyYW5kIjt2PSIyNC4wLjAuMCIsIk9wZXJhIEdYIjt2PSIxMDIuMC40ODgwLjY0IiI="}); 
         console.log(`попытка аутентификации, ${response.data}`);
         
         const $ = cheerio.load(response.data);
