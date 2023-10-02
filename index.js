@@ -1891,44 +1891,42 @@ bot.onText(/\/x/, async msg => {
                 USER_PASSWORD: 'Manders',
                 submit: 'Submit'
             })
-            console.log(response, response.data);
+            console.log(response.data);
 
-
-
-            const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`, {
-                headers: {
-                    'Cookie': `hittoken=${token}` // Передаем hittoken в заголовке Cookie
-                }
-
-            });
+            const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=4752+SALSI+611&set_filter=Y`);
 
             console.log(`запрос на поиск каталога с токеном отправлен`);
-            const $$ = cheerio.load(responseProduct.data);
-            const firstProductLink = $$('small-6 medium-3 large-2 columns a').attr('href');
+
+            const $ = cheerio.load(responseProduct.data);
+            const firstProductLink = $('small-6 medium-3 large-2 columns a').attr('href');
+
             console.log(`ссылка на первый товар найдена`);
 
             if (firstProductLink) {
                 
                 const responseProductPage = await axios.get(`http://www.galleriaarben.ru/${firstProductLink}`, {
-                    headers: {
-                        'Cookie': hittoken=`${token}` // Передаем hittoken в заголовке Cookie
-                    }
+                    USER_LOGIN: 'Manders',
+                    USER_PASSWORD: 'Manders',
+                    submit: 'Submit'
                 });
+
                 console.log(`перешел по ссылке на первый товар`);
-                const $$$ = cheerio.load(responseProductPage.data);
-                const availability = $$$('.catalog-detail__available b').text();
+                const $$ = cheerio.load(responseProductPage.data);
+                const availability = $$('.catalog-detail__available b').text();
                 console.log(`Наличие найденно: ${availability}`);
+
             } else {
             
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            return bot.sendMessage(
-                chatId, 
-                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                startFind1Options
-            );
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+
+                return bot.sendMessage(
+                    chatId, 
+                    'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                    startFind1Options
+                );
             }
 
     } catch (e) {
