@@ -405,7 +405,7 @@ const startFindDecaro = async (chatId, msg) => {
                         chars += `${item.days}`;
                     }
                     if (item.articul !== null && item.articul !== undefined) {
-                        chars += `${item.articul} - `;
+                        chars += `<pre>${item.articul}</pre> `;
                     }
                     if (item.qty !== null && item.qty !== undefined) {
                         chars += ` ${item.qty} `;
@@ -424,7 +424,7 @@ const startFindDecaro = async (chatId, msg) => {
             return bot.sendMessage(
                 chatId,
                 chars,
-                { parse_mode: "HTML" }
+                startFindOptions
             );
 
         } else {
@@ -435,7 +435,7 @@ const startFindDecaro = async (chatId, msg) => {
             }
             return bot.sendMessage(
                 chatId, 
-                'Товары не найдены. Проверьте правильное написание артикула.', 
+                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
                 startFind1Options
             );
         }
