@@ -405,7 +405,7 @@ const startFindDecaro = async (chatId, msg) => {
                         chars += `${item.days}`;
                     }
                     if (item.articul !== null && item.articul !== undefined) {
-                        chars += `<pre>${item.articul}</pre> `;
+                        chars += `<code>${item.articul}</code> `;
                     }
                     if (item.qty !== null && item.qty !== undefined) {
                         chars += ` ${item.qty} `;
