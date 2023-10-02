@@ -502,7 +502,7 @@ const startFindLevantin = async (chatId, msg) => {
             console.log(responseProductPage.data);
 
             // Извлекаем нужные строки
-            $$('.row.collapse .small-12 medium-8 columns').each((index, element) => {
+            $$('.row.collapse .small-12.medium-8.columns').each((index, element) => {
                 const row = $(element).text().trim(); // Получаем текст строки и удаляем лишние пробелы
                 
                 message += `${row}\n`;
