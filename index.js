@@ -1904,10 +1904,12 @@ bot.onText(/\/x/, async msg => {
 
             if (firstProductLink) {
                 
-                const responseProductPage = await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
-                    USER_LOGIN: 'Manders',
-                    USER_PASSWORD: 'Manders',
-                    submit: 'Submit'
+                const responseProductPage = await axios.post(`http://www.galleriaarben.ru${firstProductLink}`, {
+                        AUTH_FORM: 'Y',
+                        TYPE: 'AUTH',
+                        USER_LOGIN: login,
+                        USER_PASSWORD: password
+                      
                 });
 
                 console.log(`перешел по ссылке на первый товар`);
