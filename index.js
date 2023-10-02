@@ -498,15 +498,19 @@ const startFindLevantin = async (chatId, msg) => {
             const availability = $$('.catalog-detail__available b').text().trim();
             let message = '';
 
-            const uniqueRows = []; // массив для хранения уникальных строк
-
-            $$('.row.collapse .small-12.medium-8.columns').each((index, element) => {
-                const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-                if (row !== null && !uniqueRows.includes(row)) { // проверяем наличие строки в массиве
-                    uniqueRows.push(row); // добавляем новую строку в массив
-                    message += `${row}\n`;
-                }
-            });
+            // Извлекаем нужные строки
+            const collection =  $$('.catalog-detail__header').text().trim();
+            const title =  $$('.catalog-detail__title').eq(0).text().trim();
+            const price =  $$('.catalog-detail__title').eq(1).text().trim();
+            if (collection !== null) {
+                message += `${collection}\n`;
+            }
+            if (title !== null) {
+                message += `<b>${title}</b>\n`;
+            }
+            if (price !== null) {
+                message += `${price}\n`;
+            }
 
             // Извлекаем нужные строки
             const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row').eq(0);
