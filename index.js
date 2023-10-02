@@ -509,16 +509,16 @@ const startFindLevantin = async (chatId, msg) => {
                 message += `<b>${title}</b>\n`;
             }
             if (price !== null) {
-                message += `${price}\n`;
+                message += `${price}\n\n`;
             }
 
             // Извлекаем нужные строки
             const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row').eq(1);
             charsBlock.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' '); // Получаем текст строки и удаляем лишние пробелы
-                if (row !== null) {
-                    message += `${row}\n`;
-                }
+
+                message += `${row}\n`;
+
             })
            
             message += `${availability.replace(/\s+/g, '')} м.п.\n`;
