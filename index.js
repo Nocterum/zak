@@ -1900,11 +1900,11 @@ bot.onText(/\/x/, async msg => {
             const $ = cheerio.load(responseProduct.data);
             const firstProductLink = $('small-6 medium-3 large-2 columns a').attr('href');
 
-            console.log(`ссылка на первый товар найдена`);
+            console.log(`ссылка на первый товар найдена ${firstProductLink}`);
 
             if (firstProductLink) {
                 
-                const responseProductPage = await axios.get(`http://www.galleriaarben.ru/${firstProductLink}`, {
+                const responseProductPage = await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
                     USER_LOGIN: 'Manders',
                     USER_PASSWORD: 'Manders',
                     submit: 'Submit'
@@ -1930,6 +1930,7 @@ bot.onText(/\/x/, async msg => {
             }
 
     } catch (e) {
+
         console.log('Ошибка при выполнении запроса', e);
         if (botMsgIdx !== null) {
             bot.deleteMessage(chatId, botMsgIdx);
