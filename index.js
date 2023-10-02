@@ -2687,6 +2687,12 @@ bot.on('callback_query', async msg => {
                     `Чтобы <b>посмотреть остатки</b> на сайте "https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
                     {parse_mode: 'HTML'}
                 );
+            } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
+                return bot.sendMessage(
+                    chatId, 
+                    `Чтобы <b>посмотреть остатки</b> на сайте "http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                    {parse_mode: 'HTML'}
+                );
             } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
                         formatedUserVendor.includes('ОРАК') ||
                         formatedUserVendor.includes('ДЕКОРРУС') ||
