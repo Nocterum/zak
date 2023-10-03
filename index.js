@@ -170,7 +170,7 @@ const startCheckVendor = async (chatId, msg) => {
         where: {
             chatId: chatId
         },
-        attributes: ['lastCommand', 'brand', 'vendor']
+        attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendor']
     });
 
     await user.update({lastCommand: '/enterVC'}, {
