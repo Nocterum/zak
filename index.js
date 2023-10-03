@@ -495,7 +495,7 @@ const startFindLevantin = async (chatId, msg) => {
             });
 
             const $$ = cheerio.load(responseProductPage.data);
-            const availability = $$('.catalog-detail__available b').text().trim();
+            const availability = $$('.catalog-detail__available').text().trim();
             let message = '';
 
             // Извлекаем нужные строки
@@ -530,7 +530,7 @@ const startFindLevantin = async (chatId, msg) => {
                 message += `${row}\n`;
             })
 
-            message += `<b>В наличии: ${availability.replace(/\s+/g, '')} м.п.</b>\n\n`;
+            message += `В наличии: ${availability.replace(/\s+/g, '')}\n\n`;
             message += `<i>можете ввести следующий артикул для поиска</i>`;
 
             if (botMsgIdx !== null) {
