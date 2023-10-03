@@ -518,14 +518,14 @@ const startFindLevantin = async (chatId, msg) => {
             const charsBlock2 = charsBlock.find('.row').eq(2);
 
 
-            charsBlock1.each((index, element) => {
-                const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-                message += `${row}\n\n`;
+            charsBlock1.each((row, index, element) => {
+                const everyRow = $(row).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
+                message += `${everyRow}\n`;
             })
-
-            charsBlock2.each((index, element) => {
-                const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-                message += `${row}\n`;
+            message += `\n`;
+            charsBlock2.each((row, index, element) => {
+                const everyRow = $(row).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
+                message += `${everyRow}\n`;
             })
 
             message += `\n`;
