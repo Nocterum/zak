@@ -56,7 +56,15 @@ bot.setMyCommands([
 
 // Функция ввода email
 const editEmail = async (chatId) => {
-    lc = '/editEmail'
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['lastCommand']
+    });
+    await user.update({lastCommand: '/editEmail'})
+    
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий email:`)
 }
 
@@ -154,6 +162,99 @@ const startRequest1C = async (chatId, vendorCode) => {
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
     }
+}
+
+const startCheckVendor = async (chatId, msg) => {
+    
+    lc = '/enterVC';
+    if (user.vendor !== null) {
+
+        const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+
+        if (formatedUserVendor.includes('РИКСОР') ||
+            formatedUserVendor.includes('ИНТЕРДЕКОР') ||
+            formatedUserVendor.includes('ОРАК')
+            // formatedUserVendor.includes('КАДО') ||
+            // formatedUserVendor.includes('АКУРА') ||
+            // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
+            // formatedUserVendor.includes('ГАЙДАРЬ') ||
+            // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
+            // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
+            // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+            // formatedUserVendor.includes('АВТ') ||
+            // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
+            // formatedUserVendor.includes('ФАБРИКДЕКО') ||
+            // formatedUserVendor.includes('ШИЛИН') ||
+            // formatedUserVendor.includes('ENGLISCHDECOR') ||
+            // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
+            // formatedUserVendor.includes('ШЕВЧЕНКО') ||
+            // formatedUserVendor.includes('ФОРПОСТ') ||
+            // formatedUserVendor.includes('HOUSEOFJAB') ||
+            // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
+            // formatedUserVendor.includes('БУНТИНА') ||
+            // formatedUserVendor.includes('RUBELLI') ||
+            // formatedUserVendor.includes('ОКНАРОСТА') ||
+            // formatedUserVendor.includes('ЛОЙМИНА') ||
+            // formatedUserVendor.includes('ЛИСОХМАРА') ||
+            // formatedUserVendor.includes('ПОДРЕЗ') ||
+            // formatedUserVendor.includes('РОБЕРТС') ||
+            // formatedUserVendor.includes('ЮГАРТ') ||
+            // formatedUserVendor.includes('ПРОТОС') ||
+            // formatedUserVendor.includes('РУАЛЬЯНС') 
+        ) {
+            return bot.sendMessage(
+                chatId, 
+                `Чтобы <b>отправить email\n</b> с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
+                {parse_mode: 'HTML'}
+            );
+        } else if (formatedUserVendor.includes('ОПУС')) {
+            return bot.sendMessage(
+                chatId, 
+                `Чтобы <b>посмотреть остатки</b> на сайте\n"https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                {parse_mode: 'HTML'}
+            );
+        } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
+            return bot.sendMessage(
+                chatId, 
+                `Чтобы <b>посмотреть остатки</b> на сайте\n"https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                {parse_mode: 'HTML'}
+            );
+        } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
+            return bot.sendMessage(
+                chatId, 
+                `Чтобы <b>посмотреть остатки</b> на сайте\n"http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                {parse_mode: 'HTML'}
+            );
+        } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
+                    formatedUserVendor.includes('ОРАК') ||
+                    formatedUserVendor.includes('ДЕКОРРУС') ||
+                    formatedUserVendor.includes('БАУТЕКС') ||
+                    formatedUserVendor.includes('ЛОЙМИНА') ||
+                    formatedUserVendor.includes('СИРПИ') ||
+                    formatedUserVendor.includes('BRINK&CAMPMAN')
+                ) {
+
+            await bot.sendMessage(
+                chatId,
+                `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
+                { parse_mode: 'HTML' }
+            );
+            botMsgIdx = msg.message.message_id += 1;
+            return;
+        } else {
+            return bot.sendMessage(
+                chatId, 
+                `К сожалению, мне ещё не разрешили работать с поставщиком бренда <b>${user.brand}</b>.`,
+                {parse_mode: 'HTML'}
+            );
+        }
+    } else {
+        return bot.sendMessage(
+            chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`,
+            { parse_mode: 'HTML' }
+        );
+    }
+        
 }
 
 // ======================================================================================================================================
@@ -451,7 +552,7 @@ const startFindDecaro = async (chatId, msg) => {
 }
 
 // ======================================================================================================================================
-// Функция html запроса по данным из БД на сайт поставщика ДЕКОР ТРЕЙД
+// Функция html запроса по данным из БД на сайт поставщика ЛЕВАНТИН
 // ======================================================================================================================================
 
 const startFindLevantin = async (chatId, msg) => {
@@ -1029,7 +1130,7 @@ async function findCatalogTextile(chatId) {
                     const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                 
                     if (formatedCellValue.includes(formatedUserCatalog)) {
-                        console.log(formatedCellValue, formatedUserCatalog)
+
                         foundMatchTextile = true;
                         let message = '';
 
@@ -1553,11 +1654,9 @@ async function findLoymina(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedUserVC);
 
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
-                        console.log(formatedCellValue, formatedUserVC);
 
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
                         let dValue = '';
@@ -2185,11 +2284,13 @@ bot.on('message', async msg => {
                     `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
                 )
             } else {
-                return bot.sendMessage(
-                    chatId, 
-                    `<b>Бренд найден</b>\n<b>ВАЖНО:</b> <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
-                    checkVendorOptions
-                );
+                return startCheckVendor(chatId, msg);
+
+                // return bot.sendMessage(
+                //     chatId, 
+                //     `<b>Бренд найден</b>\n<b>ВАЖНО:</b> <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
+                //     checkVendorOptions
+                // );
             }
 
         } else if (lc === '/enterVC') {
@@ -2467,7 +2568,7 @@ bot.on('callback_query', async msg => {
     const data = msg.data;
     const chatId = msg.message.chat.id;
 
-    console.log(msg)
+    console.log(msg);
 
     //функция перезапуска игры
     const startGame = async (chatId) => {
@@ -2550,95 +2651,8 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/checkVendor') {
 
-        lc = '/enterVC';
-        if (user.vendor !== null) {
+        return startCheckVendor(chatId, msg);
 
-            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
-
-            if (formatedUserVendor.includes('РИКСОР') ||
-                formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-                formatedUserVendor.includes('ОРАК')
-                // formatedUserVendor.includes('КАДО') ||
-                // formatedUserVendor.includes('АКУРА') ||
-                // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
-                // formatedUserVendor.includes('ГАЙДАРЬ') ||
-                // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-                // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
-                // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-                // formatedUserVendor.includes('АВТ') ||
-                // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
-                // formatedUserVendor.includes('ФАБРИКДЕКО') ||
-                // formatedUserVendor.includes('ШИЛИН') ||
-                // formatedUserVendor.includes('ENGLISCHDECOR') ||
-                // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
-                // formatedUserVendor.includes('ШЕВЧЕНКО') ||
-                // formatedUserVendor.includes('ФОРПОСТ') ||
-                // formatedUserVendor.includes('HOUSEOFJAB') ||
-                // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
-                // formatedUserVendor.includes('БУНТИНА') ||
-                // formatedUserVendor.includes('RUBELLI') ||
-                // formatedUserVendor.includes('ОКНАРОСТА') ||
-                // formatedUserVendor.includes('ЛОЙМИНА') ||
-                // formatedUserVendor.includes('ЛИСОХМАРА') ||
-                // formatedUserVendor.includes('ПОДРЕЗ') ||
-                // formatedUserVendor.includes('РОБЕРТС') ||
-                // formatedUserVendor.includes('ЮГАРТ') ||
-                // formatedUserVendor.includes('ПРОТОС') ||
-                // formatedUserVendor.includes('РУАЛЬЯНС') 
-            ) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Чтобы <b>отправить email\n</b> с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
-                    {parse_mode: 'HTML'}
-                );
-            } else if (formatedUserVendor.includes('ОПУС')) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте\n"https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                    {parse_mode: 'HTML'}
-                );
-            } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте\n"https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                    {parse_mode: 'HTML'}
-                );
-            } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Чтобы <b>посмотреть остатки</b> на сайте\n"http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                    {parse_mode: 'HTML'}
-                );
-            } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
-                        formatedUserVendor.includes('ОРАК') ||
-                        formatedUserVendor.includes('ДЕКОРРУС') ||
-                        formatedUserVendor.includes('БАУТЕКС') ||
-                        formatedUserVendor.includes('ЛОЙМИНА') ||
-                        formatedUserVendor.includes('СИРПИ') ||
-                        formatedUserVendor.includes('BRINK&CAMPMAN')
-                    ) {
-
-                await bot.sendMessage(
-                    chatId,
-                    `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
-                    { parse_mode: 'HTML' }
-                );
-                botMsgIdx = msg.message.message_id += 1;
-                return;
-            } else {
-                return bot.sendMessage(
-                    chatId, 
-                    `К сожалению, мне ещё не разрешили работать с поставщиком бренда <b>${user.brand}</b>.`,
-                    {parse_mode: 'HTML'}
-                );
-            }
-        } else {
-            return bot.sendMessage(
-                chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`,
-                { parse_mode: 'HTML' }
-            );
-        }
-            
     } else if(data === '/enterBrand') {
 
         lc = data;
