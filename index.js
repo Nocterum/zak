@@ -2997,7 +2997,7 @@ bot.on('callback_query', async msg => {
         //     attributes: ['id', 'chatId', 'lastCommand']
         // });
     
-        await user.update({lastCommand: 'request1C'}, {
+        await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
             }
