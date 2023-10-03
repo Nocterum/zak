@@ -711,7 +711,7 @@ const startFindLevantin = async (chatId, msg) => {
             bot.deleteMessage(chatId, botMsgIdx);
             botMsgIdx = null;
         }
-        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFind1Options);
+        return bot.sendMessage(chatId, 'Произошла ошибка при выполнении запроса.', startFindOptions);
     }
 }
 
@@ -2395,7 +2395,8 @@ bot.on('message', async msg => {
             } else {
                 await bot.sendMessage(
                     chatId,
-                    `Бренд найден\nВАЖНО: Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!\bСсылка на папку с прайс-листом бренда ${user.brand}:\n${PricelistLink.messagePrice}`
+                    `Бренд найден\nВАЖНО: Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!\bСсылка на папку с прайс-листом бренда ${user.brand}:\n${PricelistLink.messagePrice}`,
+                    { parse_mode: 'HTML' }
                 )
                 return startCheckVendor(chatId, msg);
             }
