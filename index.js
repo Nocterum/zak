@@ -918,8 +918,9 @@ async function findCatalogWallpaper(chatId) {
 
                     const formatedCellValue = cellValue.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                     const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
-                    console.log(formatedCellValue, formatedUserCatalog)
+                    
                     if (formatedCellValue.includes(formatedUserCatalog)) {
+                        console.log(formatedCellValue, formatedUserCatalog)
                         foundMatchWallpaper = true;
                         let message = '';
                         
@@ -1551,9 +1552,10 @@ async function findLoymina(chatId) {
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    console.log(formatedCellValue, formatedUserVC);
+                    console.log(formatedUserVC);
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
+                        console.log(formatedCellValue, formatedUserVC);
 
                         const aValueCell = firstWorksheet['A' + cellAddress.substring(1)];
 
