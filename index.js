@@ -688,7 +688,7 @@ const startFindLevantin = async (chatId, msg) => {
             return bot.sendMessage(
                 chatId, 
                 message, 
-                startFind1Options
+                startFindOptions
             );
 
         } else {
