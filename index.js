@@ -2182,8 +2182,11 @@ bot.onText(/\/whoiswho/, (msg) => {
     UserModel.findAll().then((users) => {
 
       users.forEach((user) => {
-        const message = `ID: ${user.chatId}\nEmail: ${user.email}\nNickname: ${user.nickname}`;
-        bot.sendMessage(msg.chat.id, message);
+        const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
+        bot.sendMessage(msg.chat.id,
+            message,
+            { parse_mode: 'HTML' }
+        );
       });
     }).catch((error) => {
       console.error('Error retrieving users:', error);
