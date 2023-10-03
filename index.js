@@ -1560,17 +1560,20 @@ async function findLoymina(chatId) {
                         console.log(formatedCellValue, formatedUserVC);
 
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
+                        let dValue = '';
                         const kValueCell = firstWorksheet['K' + cellAddress.substring(1)];
+                        let kValue = '';
                         const jValueCell = firstWorksheet['J' + cellAddress.substring(1)];
+                        let jValue = '';
 
                         if (dValueCell !== null && dValueCell !== undefined) {
-                            const dValue = dValueCell.v;    // Партия
+                            dValue = dValueCell.v;    // Партия
                         }
                         if (kValueCell !== null && kValueCell !== undefined) {
-                            const kValue = kValueCell.v     // Колличество
+                            kValue = kValueCell.v     // Колличество
                         }
                         if (jValueCell !== null && jValueCell !== undefined) {
-                            const jValue = jValueCell.v     // Ед. измерения
+                            jValue = jValueCell.v     // Ед. измерения
                         }
 
                         let message = '';
