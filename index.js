@@ -2175,8 +2175,20 @@ bot.onText(/\/getfile (.+)/, (msg, match) => {
         // Отправка файла
         bot.sendDocument(chatId, filePath);
     });
-  });
+});
 
+bot.onText(/\/whoiswho/, (msg) => {
+
+    UserModel.findAll().then((users) => {
+
+      users.forEach((user) => {
+        const message = `ID: ${user.chatId}\nEmail: ${user.email}\nNickname: ${user.nickname}`;
+        bot.sendMessage(msg.chat.id, message);
+      });
+    }).catch((error) => {
+      console.error('Error retrieving users:', error);
+    });
+  });
 //слушатель сообщений==========================================================================================
 
 bot.on('message', async msg => {
@@ -2618,13 +2630,13 @@ bot.on('message', async msg => {
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> ед.изм?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> ед.изм?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             }
@@ -2843,13 +2855,13 @@ bot.on('callback_query', async msg => {
 
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
-            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт, по запросу ${chatId}`;
-            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
+            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         } else {
 
-            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} шт, по запросу ${chatId}`;
-            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} шт.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
+            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         }
         return bot.sendMessage(
