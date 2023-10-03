@@ -172,7 +172,12 @@ const startCheckVendor = async (chatId, msg) => {
         },
         attributes: ['lastCommand', 'brand', 'vendor']
     });
-    await user.update({lastCommand: '/enterVC'})
+    
+    await user.update({lastCommand: '/enterVC'}, {
+        where: {
+            id: user.id
+        }
+    })
 
     lc = '/enterVC';
     if (user.vendor !== null) {
