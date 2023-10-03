@@ -1025,10 +1025,11 @@ async function findCatalogTextile(chatId) {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
 
-                    const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
-                    const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
+                    const formatedCellValue = cellValue.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
+                    const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                 
                     if (formatedCellValue.includes(formatedUserCatalog)) {
+                        console.log(formatedCellValue, formatedUserCatalog)
                         foundMatchTextile = true;
                         let message = '';
 
