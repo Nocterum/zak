@@ -1560,15 +1560,23 @@ async function findLoymina(chatId) {
                         console.log(formatedCellValue, formatedUserVC);
 
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
+                        const kValueCell = firstWorksheet['K' + cellAddress.substring(1)];
+                        const jValueCell = firstWorksheet['J' + cellAddress.substring(1)];
 
-                        // if (!dValueCell || !dValueCell.v) {
-                        //     break; // Выходим из цикла, если aValue равно undefined или null
-                        // }
-
-                        const dValue = dValueCell.v;    // дизайн
+                        if (dValueCell !== null && dValueCell !== undefined) {
+                            const dValue = dValueCell.v;    // Партия
+                        }
+                        if (kValueCell !== null && kValueCell !== undefined) {
+                            const kValue = kValueCell.v     // Колличество
+                        }
+                        if (jValueCell !== null && jValueCell !== undefined) {
+                            const jValue = jValueCell.v     // Ед. измерения
+                        }
 
                         let message = '';
                         message += `<b>${dValue}</b>\n`;
+                        message += `<b>${kValue}</b>`;
+                        message += `<b>${jValue}</b>\n`;
                         
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
