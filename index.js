@@ -513,7 +513,7 @@ const startFindLevantin = async (chatId, msg) => {
             }
 
             // Извлекаем нужные строки из Блока характеристик 1
-            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns');
+            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
             const charsBlock2 = charsBlock1.find('.row').eq(1);
             const charsBlock3 = charsBlock1.find('.row').eq(2);
 
