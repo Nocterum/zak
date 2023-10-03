@@ -1596,8 +1596,8 @@ async function findLoymina(chatId) {
                 const cellValue = firstWorksheet[cellAddress].v;
 
                 if (cellValue !== null) {
-                    let formatedCellValue = cellValue.toString().trim();
-                    const formatedUserVC = user.vendorCode.toString().trim();
+                    let formatedCellValue = cellValue.toString().trim().replace(/\s,/g, '');
+                    const formatedUserVC = user.vendorCode.toString().trim().replace(/\s,/g, '');
         
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
