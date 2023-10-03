@@ -512,25 +512,24 @@ const startFindLevantin = async (chatId, msg) => {
                 message += `${price}\n\n`;
             }
 
-            // Извлекаем нужные строки из Блока характеристик 1
+            // Извлекаем нужные строки из Блока характеристик
             const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
             const charsBlock1 = charsBlock.find('.row').eq(1);
             const charsBlock2 = charsBlock.find('.row').eq(2);
 
 
-            // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
             charsBlock1.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-                message += `${row}\n`;
+                message += `${row}\n\n`;
             })
 
-            // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
             charsBlock2.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
             })
 
-            message += `В наличии: ${availability.replace(/\s+/g, '')}\n\n`;
+            message += `\n`;
+            message += `<b>В наличии:</b> ${availability.replace(/\s+/g, '')}\n\n`;
             message += `<i>можете ввести следующий артикул для поиска</i>`;
 
             if (botMsgIdx !== null) {
