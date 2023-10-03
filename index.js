@@ -513,10 +513,12 @@ const startFindLevantin = async (chatId, msg) => {
             }
 
             // Извлекаем нужные строки из Блока характеристик 1
-            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
-            const charsBlock2 = charsBlock1.find('.row').eq(1);
-            const charsBlock3 = charsBlock1.find('.row').eq(2);
+            const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
+            const charsBlock1 = charsBlock.find('.row').eq(1);
+            const charsBlock2 = charsBlock.find('.row').eq(2);
 
+
+            // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
             charsBlock1.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
@@ -524,12 +526,6 @@ const startFindLevantin = async (chatId, msg) => {
 
             // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
             charsBlock2.each((index, element) => {
-                const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
-                message += `${row}\n`;
-            })
-
-            // const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
-            charsBlock3.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
             })
