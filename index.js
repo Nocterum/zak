@@ -2395,7 +2395,7 @@ bot.on('message', async msg => {
             } else {
                 await bot.sendMessage(
                     chatId,
-                    `Бренд найден\nВАЖНО: Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!\bСсылка на папку с прайс-листом бренда ${user.brand}:\n${PricelistLink.messagePrice}`,
+                    `<b>Бренд найден</b>\nВАЖНО: <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!</u>\n\nСсылка на папку с прайс-листом бренда ${user.brand}:\n${PricelistLink.messagePrice}`,
                     { parse_mode: 'HTML' }
                 )
                 return startCheckVendor(chatId, msg);
