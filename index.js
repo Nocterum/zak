@@ -232,7 +232,7 @@ const startCheckVendor = async (chatId, msg) => {
         ) {
             return bot.sendMessage(
                 chatId, 
-                `Чтобы <b>отправить email\n</b> с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
+                `Чтобы <b>отправить email</b>\n с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
                 {parse_mode: 'HTML'}
             );
         } else if (formatedUserVendor.includes('ОПУС')) {
@@ -944,7 +944,7 @@ async function findOrac(chatId) {
             
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
-                const formatedCellValue = cellValue.toString().trim();
+                const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
                 const formatedUserVC = user.vendorCode.toString().trim();
                 
                 if (formatedCellValue === formatedUserVC) {
@@ -992,7 +992,7 @@ async function findOrac(chatId) {
 
             firstWorksheetSPB.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('A').value; //Артикул
-                const formatedCellValue = cellValue.toString().trim();
+                const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
                 const formatedUserVC = user.vendorCode.toString().trim();
                 
                 if (formatedCellValue === formatedUserVC) {
