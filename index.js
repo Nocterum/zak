@@ -611,7 +611,7 @@ const startFindLevantin = async (chatId, msg) => {
     })
 
     const formatedVendorCode = user.vendorCode.replace(/galleria|arben/gi, '');
-
+    console.log(formatedVendorCode)
     try {
 
         const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${formatedVendorCode}&set_filter=Y`);
