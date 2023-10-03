@@ -514,19 +514,19 @@ const startFindLevantin = async (chatId, msg) => {
 
             // Извлекаем нужные строки из Блока характеристик
             const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
-            const charsBlock1 = charsBlock.find('.row').eq(1);
+            const charsBlock1 = charsBlock.find('.row').eq(1).find('small-12.columns');
             const charsBlock2 = charsBlock.find('.row').eq(2);
 
-
-            charsBlock1.eachRow((row, index, element) => {
-                const everyRow = $(row).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
+            
+            charsBlock1.each((index, element) => {
+                const everyRow = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${everyRow}\n`;
             })
 
             message += `\n`;
-            
-            charsBlock2.eachRow((row, index, element) => {
-                const everyRow = $(row).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
+
+            charsBlock2.each((row, index, element) => {
+                const everyRow = $(index).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${everyRow}\n`;
             })
 
