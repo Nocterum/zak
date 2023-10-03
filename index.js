@@ -267,7 +267,7 @@ const startCheckVendor = async (chatId, msg) => {
                 `Введите <b>артикул</b> или <b>наименование</b> искомого вами объекта:`,
                 { parse_mode: 'HTML' }
             );
-            botMsgIdx = msg.message.message_id += 1;
+            botMsgIdx = msg.message_id += 1;
             return;
         } else {
             return bot.sendMessage(
