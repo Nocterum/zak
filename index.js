@@ -611,9 +611,11 @@ const startFindLevantin = async (chatId, msg) => {
     })
 
     let formatedVendorCode = user.vendorCode.replace(/,/g, '').replace(/galleria|arben/gi, '');
+    let counter = 0;
 
-    while (formatedVendorCode.includes("  ")) {
-        formatedVendorCode = user.vendorCode.replace(/\s\s/g, ' ').replace(/galleria|arben/gi, '');
+    while (formatedVendorCode.includes("  ") && counter < 3) {
+      formatedVendorCode = formatedVendorCode.replace(/\s\s/g, ' ');
+      counter++;
     }
 
     console.log(formatedVendorCode)
