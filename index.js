@@ -916,9 +916,9 @@ async function findCatalogWallpaper(chatId) {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
 
-                    const formatedCellValue = cellValue.toString().replace(/\s/g, '').toLowerCase();
-                    const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
-                    
+                    const formatedCellValue = cellValue.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
+                    const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
+                    console.log(formatedCellValue, formatedUserCatalog)
                     if (formatedCellValue.includes(formatedUserCatalog)) {
                         foundMatchWallpaper = true;
                         let message = '';
@@ -947,37 +947,11 @@ async function findCatalogWallpaper(chatId) {
                             mValue !== null || 
                             nValue !== null
                             ) {
-                                // const h1Value = firstWorksheet.getCell('H1').value;
-                                // const i1Value = firstWorksheet.getCell('I1').value;
-                                // const j1Value = firstWorksheet.getCell('J1').value;
-                                // const k1Value = firstWorksheet.getCell('K1').value;
-                                // const m1Value = firstWorksheet.getCell('M1').value;
-                                // const n1Value = firstWorksheet.getCell('N1').value;
                                 const o1Value = firstWorksheet.getCell('O1').value;
                                 const p1Value = firstWorksheet.getCell('P1').value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
-                            // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
 
-                            
-                            // if (hValue !== null) {
-                            //     message += `${h1Value}: ${hValue}\n`;
-                            // }
-                            // if (iValue !== null) {
-                            //     message += `${i1Value}: ${iValue}\n`;
-                            // }
-                            // if (jValue !== null) {
-                            //     message += `${j1Value}: ${jValue}\n`;
-                            // }
-                            // if (kValue !== null) {
-                            //     message += `${k1Value}: ${kValue}\n`;
-                            // }
-                            // if (mValue !== null) {
-                            //     message += `${m1Value}: ${mValue}\n`;
-                            // }
-                            // if (nValue !== null) {
-                            //     message += `${n1Value}: ${nValue}\n`;
-                            // }
                             if (oValue !== null) {
                                 message += `${o1Value}: ${oValue}\n`;
                             }
@@ -1079,35 +1053,10 @@ async function findCatalogTextile(chatId) {
                             nValue !== null || 
                             oValue !== null
                             ) {
-
-                                // const i1Value = firstWorksheet.getCell('I1').value;
-                                // const j1Value = firstWorksheet.getCell('J1').value;
-                                // const k1Value = firstWorksheet.getCell('K1').value;
-                                // const l1Value = firstWorksheet.getCell('L1').value;
-                                // const n1Value = firstWorksheet.getCell('N1').value;
-                                // const o1Value = firstWorksheet.getCell('O1').value;
                                 const p1Value = firstWorksheet.getCell(`P1`).value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
-                            // message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в следующих магазинах:\n`;
-                            // if (iValue !== null) {
-                            //     message += `${i1Value}: ${iValue}\n`;
-                            // }
-                            // if (jValue !== null) {
-                            //     message += `${j1Value}: ${jValue}\n`;
-                            // }
-                            // if (kValue !== null) {
-                            //     message += `${k1Value}: ${kValue}\n`;
-                            // }
-                            // if (lValue !== null) {
-                            //     message += `${l1Value}: ${lValue}\n`;
-                            // }
-                            // if (nValue !== null) {
-                            //     message += `${n1Value}: ${nValue}\n`;
-                            // }
-                            // if (oValue !== null) {
-                            //   message += `${o1Value}: ${oValue}\n`;
-                            // }
+
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
@@ -1596,13 +1545,13 @@ async function findLoymina(chatId) {
                 const cellValue = firstWorksheet[cellAddress].v;
 
                 if (cellValue !== null) {
-                    let formatedCellValue = cellValue.toString().trim().replace(/\s,/g, '');
-                    const formatedUserVC = user.vendorCode.toString().trim().replace(/\s,/g, '');
+                    let formatedCellValue = cellValue.toString().trim().replace(/[\s\u00A0,]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s\u00A0,]/g, '');
         
                     if (isNaN(formatedCellValue)) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
-        
+                    console.log(formatedCellValue, formatedUserVC);
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
