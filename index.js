@@ -1561,9 +1561,9 @@ async function findLoymina(chatId) {
 
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
 
-                        if (!dValueCell || !dValueCell.v) {
-                            break; // Выходим из цикла, если aValue равно undefined или null
-                        }
+                        // if (!dValueCell || !dValueCell.v) {
+                        //     break; // Выходим из цикла, если aValue равно undefined или null
+                        // }
 
                         const dValue = dValueCell.v;    // дизайн
 
