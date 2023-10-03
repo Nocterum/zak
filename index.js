@@ -514,12 +514,10 @@ const startFindLevantin = async (chatId, msg) => {
 
             // Извлекаем нужные строки из Блока характеристик
             const charsBlock = $$('.small-12.medium-6.large-8.columns.catalog-detail__text');
-            const charsBlock0 = charsBlock.find('.row').eq(1)
-            const charsBlock1 = charsBlock.find('.row').eq(1).find('small-12 columns');
-            const charsBlock2 = charsBlock.find('.row').eq(2);
-            console.log(charsBlock0, charsBlock1, charsBlock2);
 
-            
+            const charsBlock1 = charsBlock.find('.row').eq(1);
+            const charsBlock2 = charsBlock.find('.row').eq(2);
+
             charsBlock1.each((index, element) => {
                 const everyRow = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${everyRow}\n`;
