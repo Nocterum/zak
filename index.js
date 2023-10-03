@@ -610,9 +610,11 @@ const startFindLevantin = async (chatId, msg) => {
         }
     })
 
+    const formatedVendorCode = user.vendorCode.replace(/[\s]/g, '').replace(/galleria|arben/gi, '')
+
     try {
 
-        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${user.vendorCode}&set_filter=Y`);
+        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${formatedVendorCode}&set_filter=Y`);
         const $ = cheerio.load(responseProduct.data);
 
         const firstProductLink = $('div.row.catalog a').attr('href');
@@ -2609,13 +2611,13 @@ bot.on('message', async msg => {
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> шт?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             } else {
                 return bot.sendMessage(
                     chatId, 
-                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(для перезаписи введите информацию повторно)</i>`, 
+                    `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> шт?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
                     enterReserveNumberOptions
                 );
             }
