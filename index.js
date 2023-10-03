@@ -1554,20 +1554,21 @@ async function findLoymina(chatId) {
                         formatedCellValue = formatedCellValue.toUpperCase();
                     }
                     console.log(formatedUserVC);
+
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
                         console.log(formatedCellValue, formatedUserVC);
 
-                        const aValueCell = firstWorksheet['A' + cellAddress.substring(1)];
+                        const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
 
-                        if (!aValueCell || !aValueCell.v) {
+                        if (!dValueCell || !dValueCell.v) {
                             break; // Выходим из цикла, если aValue равно undefined или null
                         }
 
-                        const aValue = aValueCell.v;    // дизайн
+                        const dValue = dValueCell.v;    // дизайн
 
                         let message = '';
-                        message += `<b>${aValue}</b>\n`;
+                        message += `<b>${dValue}</b>\n`;
                         
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
