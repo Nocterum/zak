@@ -36,7 +36,7 @@ const nodemailer = require('./nodemailer');
 password = {};
 chats = {};
 
-lc = {};    //последняя команда
+// lc = {};    //последняя команда
 findCatalogIndex = {};   //состояние: нужно ли зайдествовать функцию поиска каталога текстиля.
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
@@ -56,21 +56,37 @@ bot.setMyCommands([
 
 // Функция ввода email
 const editEmail = async (chatId) => {
-
+    // lc = /enterVC
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         },
-        attributes: ['lastCommand']
+        attributes: ['id', 'chatId', 'lastCommand']
     });
-    await user.update({lastCommand: '/editEmail'})
 
+    await user.update({lastCommand: '/enterVC'}, {
+        where: {
+            chatId: chatId
+        }
+    })
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий email:`)
 }
 
 // Функция ввода никнейма
 const editNickname = async (chatId) => {
-    lc = '/editNickname'
+    // lc = '/editNickname'
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand']
+    });
+
+    await user.update({lastCommand: '/editNickname'}, {
+        where: {
+            chatId: chatId
+        }
+    })
     return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
 }
 
@@ -165,7 +181,7 @@ const startRequest1C = async (chatId, vendorCode) => {
 }
 
 const startCheckVendor = async (chatId, msg) => {
-
+    // lc = '/enterVC';
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
@@ -179,7 +195,6 @@ const startCheckVendor = async (chatId, msg) => {
         }
     })
 
-    lc = '/enterVC';
     if (user.vendor !== null) {
 
         const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
@@ -275,13 +290,19 @@ const startCheckVendor = async (chatId, msg) => {
 // ======================================================================================================================================
 
 const startFindOpus = async (chatId) => {
-    lc = '/enterVC';
-
+    // lc = '/enterVC';
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
-        }
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode']
     });
+
+    await user.update({lastCommand: '/enterVC'}, {
+        where: {
+            chatId: chatId
+        }
+    })
 
     try {
 
@@ -417,13 +438,19 @@ const startFindOpus = async (chatId) => {
 // ======================================================================================================================================
 
 const startFindDecaro = async (chatId, msg) => {
-    lc = '/enterVC';
-
+    // lc = '/enterVC';
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
-        }
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'vendorCode']
     });
+
+    await user.update({lastCommand: '/enterVC'}, {
+        where: {
+            chatId: chatId
+        }
+    })
 
     try {
 
@@ -569,13 +596,19 @@ const startFindDecaro = async (chatId, msg) => {
 // ======================================================================================================================================
 
 const startFindLevantin = async (chatId, msg) => {
-    lc = '/enterVC';
-
+    // lc = '/enterVC';
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
-        }
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'vendorCode']
     });
+
+    await user.update({lastCommand: '/enterVC'}, {
+        where: {
+            chatId: chatId
+        }
+    })
 
     try {
 
@@ -1987,7 +2020,13 @@ bot.onText(/\/start/, async msg => {
 
         //главное меню
         if (user) {
-            lc = null;
+            // lc = null
+            await user.update({lastCommand: null}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
             return bot.sendMessage(
                 chatId, 
                 `И снова здравствуйте, ${user.nickname}!\nВы в главном меню:`,
@@ -2001,7 +2040,14 @@ bot.onText(/\/start/, async msg => {
                 firstName: msg.from.first_name, 
                 lastName: msg.from.last_name, 
             });
-            lc = '/editNickname';
+            
+            // lc = '/editNickname';
+            await user.update({lastCommand: '/editNickname'}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
             return bot.sendMessage(
                 chatId, 
                 `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
@@ -2021,7 +2067,21 @@ bot.onText(/\/start/, async msg => {
 
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
-    lc = '/game';
+
+    // lc = '/game';
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand']
+    });
+
+    await user.update({lastCommand: '/game'}, {
+        where: {
+            chatId: chatId
+        }
+    })
+
     const randomNumber = Math.floor(Math.random() * 10)
     chats[chatId] = randomNumber;
     return bot.sendMessage(
@@ -2033,12 +2093,38 @@ bot.onText(/\/game/, async msg => {
 
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
-    lc = null; 
+
+    // lc = null; 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand']
+    });
+
+    await user.update({lastCommand: null}, {
+        where: {
+            chatId: chatId
+        }
+    })
 });
 
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
-    lc = null; 
+
+    // lc = null; 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand']
+    });
+
+    await user.update({lastCommand: null}, {
+        where: {
+            chatId: chatId
+        }
+    })
 
     return bot.sendMessage(
         chatId, 
@@ -2239,7 +2325,19 @@ bot.on('message', async msg => {
                     firstName: msg.from.first_name, 
                     lastName: msg.from.last_name, 
                 });
-                lc = '/editNickname';
+                // lc = '/editNickname';
+                // const user = await UserModel.findOne({
+                //     where: {
+                //         chatId: chatId
+                //     },
+                //     attributes: ['id', 'chatId', 'lastCommand']
+                // });
+            
+                await user.update({lastCommand: '/editNickname'}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
                 return bot.sendMessage(
                     chatId, 
                     `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
@@ -2254,14 +2352,26 @@ bot.on('message', async msg => {
 
         } else if (text === '/mainmenu') {
 
-            lc = null;
+            // lc = null;
+            // const user = await UserModel.findOne({
+            //     where: {
+            //         chatId: chatId
+            //     },
+            //     attributes: ['id', 'chatId', 'lastCommand', 'nickname']
+            // });
+        
+            await user.update({lastCommand: null}, {
+                where: {
+                    chatId: chatId
+                }
+            })
             return bot.sendMessage(
                 chatId, 
                 `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
                 mainMenuOptions
             ); 
 
-        } else if (lc === '/editEmail') {
+        } else if (user.lastCommand === '/editEmail') {
 
             await user.update({email: text.toLowerCase()});
             return bot.sendMessage(
@@ -2270,7 +2380,7 @@ bot.on('message', async msg => {
                 beginWorkOptions
             );
 
-        } else if (lc === '/editNickname') {
+        } else if (user.lastCommand === '/editNickname') {
 
             await user.update({nickname: text});
             return bot.sendMessage(
@@ -2279,7 +2389,7 @@ bot.on('message', async msg => {
                 mainMenuReturnOptions
             );
 
-        } else if (lc === '/enterBrand') {
+        } else if (user.lastCommand === '/enterBrand') {
 
             await user.update({brand: text.toUpperCase()});
 
@@ -2298,15 +2408,10 @@ bot.on('message', async msg => {
                 )
             } else {
                 return startCheckVendor(chatId, msg);
-
-                // return bot.sendMessage(
-                //     chatId, 
-                //     `<b>Бренд найден</b>\n<b>ВАЖНО:</b> <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена!\nВозможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
-                //     checkVendorOptions
-                // );
             }
 
-        } else if (lc === '/enterVC') {
+        } else if (user.lastCommand === '/enterVC') {
+
             if (isNaN(user.vendorCode)) {
                 await user.update({vendorCode: text.toUpperCase()});
             } else {
@@ -2426,7 +2531,19 @@ bot.on('message', async msg => {
 
             } else if (formatedUserVendor.includes('ОРАК')) {
 
-                lc === '/oracСheck';
+                // lc === '/oracCheck';
+                const user = await UserModel.findOne({
+                    where: {
+                        chatId: chatId
+                    },
+                    attributes: ['id', 'chatId', 'lastCommand']
+                });
+            
+                await user.update({lastCommand: '/oracCheck'}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
                 return findOrac(chatId);
 
             } else if (formatedUserVendor.includes('СИРПИ')) {
@@ -2464,7 +2581,20 @@ bot.on('message', async msg => {
 
             } else {
 
-                lc = '/enterNumberofVC';
+                // lc = '/enterNumberofVC';
+                // const user = await UserModel.findOne({
+                //     where: {
+                //         chatId: chatId
+                //     },
+                //     attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode']
+                // });
+            
+                await user.update({lastCommand: '/enterNumberofVC'}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
@@ -2476,7 +2606,8 @@ bot.on('message', async msg => {
                 );
             }
 
-        } else if (lc === '/request1C') {
+        } else if (user.lastCommand === '/request1C') {
+
             await user.update({vendorCode: text});
             await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
             const vendorCode = user.vendorCode;
@@ -2488,7 +2619,7 @@ bot.on('message', async msg => {
                 { parse_mode: 'HTML'}
             );
 
-        } else if (lc === '/enterReserveNumber') {
+        } else if (user.lastCommand === '/enterReserveNumber') {
             await user.update({reserveNumber: text});
 
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
@@ -2505,9 +2636,21 @@ bot.on('message', async msg => {
                 );
             }
 
-        } else if (lc === '/enterNumberofVC') {
+        } else if (user.lastCommand === '/enterNumberofVC') {
 
-            lc = null;
+            // lc = null;
+            // const user = await UserModel.findOne({
+            //     where: {
+            //         chatId: chatId
+            //     },
+            //     attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode', 'reserveNumber']
+            // });
+        
+            await user.update({lastCommand: null}, {
+                where: {
+                    chatId: chatId
+                }
+            })
             await user.update({reserveNumber: text});
             return bot.sendMessage(
                 chatId, 
@@ -2515,7 +2658,7 @@ bot.on('message', async msg => {
                 startFind2Options
             );
 
-        } else if (lc === '/catalogСheck') {
+        } else if (user.lastCommand === '/catalogСheck') {
 
             await user.update({catalog: text});
 
@@ -2523,7 +2666,7 @@ bot.on('message', async msg => {
             botMsgIdx = msg.message_id += 1; 
             return findCatalogWallpaper(chatId);
 
-        } else if (lc === '/oracСheck') {
+        } else if (user.lastCommand === '/oracCheck') {
 
             await user.update({vendorCode: text.toUpperCase()});
             await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
@@ -2540,7 +2683,20 @@ bot.on('message', async msg => {
 
         } else if (text === '/infogame') {
 
-            lc = null;
+            // lc = null;
+            // const user = await UserModel.findOne({
+            //     where: {
+            //         chatId: chatId
+            //     },
+            //     attributes: ['id', 'chatId', 'lastCommand', 'wrong', 'right']
+            // });
+        
+            await user.update({lastCommand: null}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
             return bot.sendMessage(
                 chatId, 
                 `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions
@@ -2604,13 +2760,25 @@ bot.on('callback_query', async msg => {
 
     if (data === '/mainmenu') {
 
-        if (lc === '/game' || lc === '/again' || lc === '/reset') {
+        if (user.lastCommand === '/game' || user.lastCommand === '/again' || user.lastCommand === '/reset') {
             await bot.deleteMessage(
                 chatId, 
                 msg.message.message_id
             );
         }
-        lc = null;
+        // lc = null;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand', 'nickname']
+        // });
+    
+        await user.update({lastCommand: '/null'}, {
+            where: {
+                chatId: chatId
+            }
+        })
         return bot.sendMessage(
             chatId, 
             `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
@@ -2667,8 +2835,19 @@ bot.on('callback_query', async msg => {
         return startCheckVendor(chatId, msg);
 
     } else if(data === '/enterBrand') {
-
-        lc = data;
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
         return bot.sendMessage(
             chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
@@ -2676,8 +2855,20 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/enterReserveNumber') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         return bot.sendMessage(
             chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только колличество</i>`,
             { parse_mode: "HTML" }
@@ -2685,7 +2876,20 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/preSendEmail') {
 
-        lc = data;
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand', 'reserveNumber', 'vendorCode', 'brand', 'vendorEmail', 'email']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
+
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
             subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} шт, по запросу ${chatId}`;
@@ -2726,22 +2930,58 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/sendReserveEmail') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         return sendReserveEmail(chatId);
 
     } else if (data === '/catalogСheck') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
             {parse_mode: 'HTML'}
         );
 
-    } else if (data === '/oracСheck') {
+    } else if (data === '/oracCheck') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
@@ -2749,8 +2989,20 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/request1C') {
+        // lc = '/request1C';
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: 'request1C'}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = '/request1C';
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
@@ -2758,8 +3010,20 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/work2') {
+        // lc = null;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: null}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
@@ -2767,8 +3031,20 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/work3') {
+        // lc = null;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: null}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = null;
         return bot.sendMessage(
             chatId, 
             sorry, 
@@ -2776,8 +3052,20 @@ bot.on('callback_query', async msg => {
         );
 
     } else if (data === '/again') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         await bot.deleteMessage(
             chatId, 
             msg.message.message_id
@@ -2785,8 +3073,20 @@ bot.on('callback_query', async msg => {
         return startGame(chatId);
 
     } else if (data === '/infogame') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         await bot.deleteMessage(
             chatId, 
             msg.message.message_id
@@ -2798,8 +3098,20 @@ bot.on('callback_query', async msg => {
         ); 
 
     } else if(data === '/reset') {
+        // lc = data;
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'lastCommand', 'right', 'wrong']
+        // });
+    
+        await user.update({lastCommand: data}, {
+            where: {
+                chatId: chatId
+            }
+        })
 
-        lc = data;
         await bot.deleteMessage(
             chatId, 
             msg.message.message_id
@@ -2817,7 +3129,7 @@ bot.on('callback_query', async msg => {
             againOptions
         );
 
-    } else if (lc === '/game' || lc === '/again') {
+    } else if (user.lastCommand === '/game' || user.lastCommand === '/again') {
 
         if (data == chats[chatId]) {
             user.right += 1;
