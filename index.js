@@ -64,7 +64,7 @@ const editEmail = async (chatId) => {
         attributes: ['lastCommand']
     });
     await user.update({lastCommand: '/editEmail'})
-    
+
     return bot.sendMessage(chatId, `Можете ввести Ваш рабочий email:`)
 }
 
@@ -165,7 +165,15 @@ const startRequest1C = async (chatId, vendorCode) => {
 }
 
 const startCheckVendor = async (chatId, msg) => {
-    
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['lastCommand', 'brand', 'vendor']
+    });
+    await user.update({lastCommand: '/enterVC'})
+
     lc = '/enterVC';
     if (user.vendor !== null) {
 
