@@ -610,11 +610,16 @@ const startFindLevantin = async (chatId, msg) => {
         }
     })
 
-    const formatedVendorCode = user.vendorCode.replace(/\s+/g, '+').replace(/galleria|arben/gi, '');
+    let formatedVendorCode = user.vendorCode.replace(/galleria|arben/gi, '');
+
+    while (formatedVendorCode.includes("  ")) {
+        formatedVendorCode = user.vendorCode.replace(/\s\s/g, ' ').replace(/galleria|arben/gi, '');
+    }
+    
     console.log(formatedVendorCode)
     try {
 
-        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${formatedVendorCode}&set_filter=Y`);
+        const responseProduct = await axios.get(`http://www.galleriaarben.ru/catalog/exists/all/?arrFilterName=${formatedVendorCode.trim()}&set_filter=Y`);
         const $ = cheerio.load(responseProduct.data);
 
         const firstProductLink = $('div.row.catalog a').attr('href');
