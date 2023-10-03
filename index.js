@@ -916,7 +916,7 @@ async function findCatalogWallpaper(chatId) {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
 
-                    const formatedCellValue = cellValue.toString().split("/")[0].replace(/\s/g, '').toLowerCase();
+                    const formatedCellValue = cellValue.toString().replace(/\s/g, '').toLowerCase();
                     const formatedUserCatalog = user.catalog.toString().replace(/\s/g, '').toLowerCase();
                     
                     if (formatedCellValue.includes(formatedUserCatalog)) {
