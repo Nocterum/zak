@@ -1578,40 +1578,8 @@ async function findLoymina(chatId) {
 
                         let message = '';
                         message += `<b>${dValue}</b>\n`;
-                        message += `<b>${kValue}</b>`;
+                        message += `В наличии: <b>${kValue}</b> `;
                         message += `<b>${jValue}</b>\n`;
-                        
-                        // Проверяем каждую ячейку после bValue на наличие пробела
-                        for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
-
-                            const currentDCell = firstWorksheet['D' + i];
-                            
-                                if (currentDCell && currentDCell.v) {
-                                    const currentDCell = firstWorksheet['D' + i];   // Партия
-                                    const currentKCell = firstWorksheet['K' + i];   // Колличество
-                                    const currentJCell = firstWorksheet['J' + i];   // Ед. измерения
-
-                                    const currentValue = `<code>${currentDCell.v}</code>\t\t<u><b>${currentKCell.v}</b> ${currentJCell.v}</u>`;
-                                    message += `${currentValue}\n`;
-
-                                    // Проверяем, является ли текущая итерация кратной 10
-                                    if (i % 10 === 0) {
-
-                                        // Отправляем сообщение пользователю
-                                        await bot.sendMessage(
-                                        chatId,
-                                        message,
-                                        { parse_mode: 'HTML' }
-                                        );
-                                    
-                                        // Обнуляем переменную message
-                                        message = '';
-                                    }
-                                } else {
-                                    break;
-                                }
-                            }
-                            
                             
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
