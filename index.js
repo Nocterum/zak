@@ -2393,6 +2393,10 @@ bot.on('message', async msg => {
                     `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
                 )
             } else {
+                await bot.sendMessage(
+                    chatId,
+                    `Бренд найден\nВАЖНО: Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!\bСсылка на папку с прайс-листом бренда ${user.brand}:\n${PricelistLink.messagePrice}`
+                )
                 return startCheckVendor(chatId, msg);
             }
 
