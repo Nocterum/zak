@@ -513,11 +513,12 @@ const startFindLevantin = async (chatId, msg) => {
             }
 
             // Извлекаем нужные строки из Блока характеристик 1
-            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns');
+            const charsBlock1 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .small-12.columns').eq(1);
             charsBlock1.each((index, element) => {
                 const row = $(element).text().trim().replace(/\s+/g, ' ').replace(/\n+/g, '\n'); // Получаем текст строки и удаляем лишние пробелы
                 message += `${row}\n`;
             })
+            
 
             // Извлекаем нужные строки из Блока характеристик 2
             const charsBlock2 = $$('.small-12.medium-6.large-8.columns.catalog-detail__text .row .catalog-detail__hr');
