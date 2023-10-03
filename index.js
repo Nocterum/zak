@@ -2326,13 +2326,6 @@ bot.on('message', async msg => {
                     lastName: msg.from.last_name, 
                 });
                 // lc = '/editNickname';
-                // const user = await UserModel.findOne({
-                //     where: {
-                //         chatId: chatId
-                //     },
-                //     attributes: ['id', 'chatId', 'lastCommand']
-                // });
-            
                 await user.update({lastCommand: '/editNickname'}, {
                     where: {
                         chatId: chatId
@@ -2353,13 +2346,6 @@ bot.on('message', async msg => {
         } else if (text === '/mainmenu') {
 
             // lc = null;
-            // const user = await UserModel.findOne({
-            //     where: {
-            //         chatId: chatId
-            //     },
-            //     attributes: ['id', 'chatId', 'lastCommand', 'nickname']
-            // });
-        
             await user.update({lastCommand: null}, {
                 where: {
                     chatId: chatId
@@ -2582,13 +2568,6 @@ bot.on('message', async msg => {
             } else {
 
                 // lc = '/enterNumberofVC';
-                // const user = await UserModel.findOne({
-                //     where: {
-                //         chatId: chatId
-                //     },
-                //     attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode']
-                // });
-            
                 await user.update({lastCommand: '/enterNumberofVC'}, {
                     where: {
                         chatId: chatId
@@ -2639,13 +2618,6 @@ bot.on('message', async msg => {
         } else if (user.lastCommand === '/enterNumberofVC') {
 
             // lc = null;
-            // const user = await UserModel.findOne({
-            //     where: {
-            //         chatId: chatId
-            //     },
-            //     attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode', 'reserveNumber']
-            // });
-        
             await user.update({lastCommand: null}, {
                 where: {
                     chatId: chatId
@@ -2684,13 +2656,6 @@ bot.on('message', async msg => {
         } else if (text === '/infogame') {
 
             // lc = null;
-            // const user = await UserModel.findOne({
-            //     where: {
-            //         chatId: chatId
-            //     },
-            //     attributes: ['id', 'chatId', 'lastCommand', 'wrong', 'right']
-            // });
-        
             await user.update({lastCommand: null}, {
                 where: {
                     chatId: chatId
@@ -2767,13 +2732,6 @@ bot.on('callback_query', async msg => {
             );
         }
         // lc = null;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand', 'nickname']
-        // });
-    
         await user.update({lastCommand: '/null'}, {
             where: {
                 chatId: chatId
@@ -2836,13 +2794,6 @@ bot.on('callback_query', async msg => {
 
     } else if(data === '/enterBrand') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2856,13 +2807,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/enterReserveNumber') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2877,13 +2821,6 @@ bot.on('callback_query', async msg => {
     } else if (data === '/preSendEmail') {
 
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand', 'reserveNumber', 'vendorCode', 'brand', 'vendorEmail', 'email']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2931,13 +2868,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/sendReserveEmail') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2948,13 +2878,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/catalogСheck') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2969,13 +2892,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/oracCheck') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -2990,13 +2906,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/request1C') {
         // lc = '/request1C';
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -3011,13 +2920,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/work2') {
         // lc = null;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: null}, {
             where: {
                 chatId: chatId
@@ -3032,13 +2934,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/work3') {
         // lc = null;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: null}, {
             where: {
                 chatId: chatId
@@ -3053,13 +2948,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/again') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -3074,13 +2962,6 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/infogame') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
@@ -3099,13 +2980,6 @@ bot.on('callback_query', async msg => {
 
     } else if(data === '/reset') {
         // lc = data;
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'lastCommand', 'right', 'wrong']
-        // });
-    
         await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
