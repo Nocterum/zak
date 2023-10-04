@@ -2028,7 +2028,7 @@ bot.onText(/\/start/, async msg => {
     const chatId = msg.chat.id;
     try {
 
-        let user = await UserModel.findOne({
+        const user = await UserModel.findOne({
             where: {
                 chatId: chatId
             }
