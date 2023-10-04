@@ -530,23 +530,19 @@ const startFindDecaro = async (chatId, msg) => {
                     var other = item.find('.other').text;
 
                         if (status === 'На складе') {
-                            message += `<b>${status}:</b>`;
-
-                            if (days !== null && days !== undefined) {
-                                message += `${days}`;
-                            }
-                            if (articul !== null && articul !== undefined) {
-                                message += `<code>${articul}</code> `;
-                            }
-                            if (qty !== null && qty !== undefined) {
-                                message += ` ${qty} `;
-                            }
-                            if (unit !== null && unit !== undefined) {
-                                message += `${unit}\n`;
-                            }
-
-                        } else {
-                            message += `<b>${status}:</b> ${days}\n`;
+                            message += `<b>${status}:</b>`;   
+                        }
+                        if (days !== null && days !== undefined) {
+                            message += `${days}`;
+                        }
+                        if (articul !== null && articul !== undefined) {
+                            message += `<code>${articul}</code> `;
+                        }
+                        if (qty !== null && qty !== undefined) {
+                            message += ` ${qty} `;
+                        }
+                        if (unit !== null && unit !== undefined) {
+                            message += `${unit}\n`;
                         }
                         message += `${other}\n\n`
                 });
