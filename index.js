@@ -516,37 +516,11 @@ const startFindDecaro = async (chatId, msg) => {
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section .item');
 
-                // let availabilityTableValue = [];
-                // availabilityTable.each((index, element) => {
-
-                //     const rowsStatus = $(element).find('div.status');
-                //     const rowsDays = $(element).find('div.days');
-                //     const rowsArticul = $(element).find('div.articul');
-                //     const rowsQty = $(element).find('div.qty');
-                //     const rowsUnit = $(element).find('div.unit');
-                //     const rowsOther = $(element).find('small');
-                
-                //     const statusArr = rowsStatus.text().trim().split(' ');
-                
-                //     statusArr.forEach(status => {
-                //         availabilityTableValue.push({
-                //             status: status,
-                //             days: rowsDays.text().trim(),
-                //             articul: rowsArticul.text().trim(),
-                //             qty: rowsQty.text().trim(),
-                //             unit: rowsUnit.text().trim(),
-                //             other: rowsOther.text().trim()
-                //         });
-                //     });
-                // });
-                
-                // преобразуем объект Cheerio в обычный массив
-                // availabilityTableValue = availabilityTableValue.get();
-
                 const availabilityTableValue = availabilityTable.map((index, element) => {
 
                     const rowsStatus = $(element).find('div.status');
                     const rowsDays = $(element).find('div.days');
+                    const rowsData = $(element).find('div.data');
                     const rowsArticul = $(element).find('div.articul');
                     const rowsQty = $(element).find('div.qty');
                     const rowsUnit = $(element).find('div.unit');
@@ -557,6 +531,7 @@ const startFindDecaro = async (chatId, msg) => {
                     return {
                         status: rowsStatus.text().trim(),
                         days: rowsDays.text().trim(),
+                        days: rowsData.text().trim(),
                         articul: rowsArticul.text().trim(),
                         qty: rowsQty.text().trim(),
                         unit: rowsUnit.text().trim(),
@@ -570,25 +545,23 @@ const startFindDecaro = async (chatId, msg) => {
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
 
-                    if (item.status === 'На складе') {
-                        chars += `<b>${item.status}:</b>`;
-
-                        if (item.days !== null && item.days !== undefined) {
-                            chars += `${item.days}`;
-                        }
-                        if (item.articul !== null && item.articul !== undefined) {
-                            chars += `<code>${item.articul}</code> `;
-                        }
-                        if (item.qty !== null && item.qty !== undefined) {
-                            chars += ` ${item.qty} `;
-                        }
-                        if (item.unit !== null && item.unit !== undefined) {
-                            chars += `${item.unit}\n`;
-                        }
-
-                    } else {
-                        chars += `<b>${item.status}:</b> ${item.days}\n`;
+                    chars += `<b>${item.status}:</b> `;
+                    if (item.days !== null && item.days !== undefined) {
+                        chars += `${item.days}`;
+                    }                    
+                    if (item.data !== null && item.data !== undefined) {
+                        chars += `${item.data}`;
                     }
+                    if (item.articul !== null && item.articul !== undefined) {
+                        chars += `<code>${item.articul}</code> `;
+                    }
+                    if (item.qty !== null && item.qty !== undefined) {
+                        chars += ` ${item.qty} `;
+                    }
+                    if (item.unit !== null && item.unit !== undefined) {
+                        chars += `${item.unit}\n`;
+                    }
+
                     chars += `${item.other}\n`
                 });
 
