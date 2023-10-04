@@ -2046,17 +2046,20 @@ bot.onText(/\/start/, async msg => {
         } else {
 
             const newUser = await UserModel.create({chatId});
+
+            await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
+
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
             await user.update({
                 firstName: msg.from.first_name, 
                 lastName: msg.from.last_name, 
                 nickname: '/password',
             });
-            let user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                }
-            });
+
             return bot.sendMessage(
                 chatId, 
                 `Введите пароль:`
