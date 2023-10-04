@@ -520,7 +520,7 @@ const startFindDecaro = async (chatId, msg) => {
 
                     const rowsStatus = $(element).find('div.status');
                     const rowsDays = $(element).find('div.days');
-                    const rowsData = $(element).find('div.data');
+                    const rowsDate = $(element).find('div.date');
                     const rowsArticul = $(element).find('div.articul');
                     const rowsQty = $(element).find('div.qty');
                     const rowsUnit = $(element).find('div.unit');
@@ -529,7 +529,7 @@ const startFindDecaro = async (chatId, msg) => {
                     return {
                         status: rowsStatus.text().trim(),
                         days: rowsDays.text().trim(),
-                        data: rowsData.text().trim(),
+                        date: rowsDate.text().trim(),
                         articul: rowsArticul.text().trim(),
                         qty: rowsQty.text().trim(),
                         unit: rowsUnit.text().trim(),
