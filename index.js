@@ -1498,13 +1498,17 @@ async function findDecorRus(chatId) {
                         // Проверяем каждую ячейку после bValue на наличие пробела
                         for (let i = parseInt(cellAddress.substring(1)) + 1; ; i++) {
                           const currentBCell = firstWorksheet['B' + i];
+                            let currentCCell = firstWorksheet['C' + i];
 
                             if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
-                                let currentCCell = firstWorksheet['C' + i];
+
+                                // if (currentCCell && currentCCell.v !== undefined && currentCCell.v !== null) {
+                                //     currentCCell = `0`;
+                                // }
                                 if (currentCCell === undefined || currentCCell === null) {
-                                    currentCCell = 0;
+                                    currentCCell = `0`;
                                 }
-                                const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell} ед.`;
+                                const currentValue = `Партия: ${currentBCell.v}\t\t${currentCCell.v} ед.`;
                                 message += `<code>${currentValue}</code>\n`;
                             } else {
                               break;
