@@ -540,19 +540,26 @@ const startFindDecaro = async (chatId, msg) => {
             
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
-                    chars += `<b>${item.status}: </b>`;
 
-                    if (item.days !== null && item.days !== undefined) {
-                        chars += `${item.days}`;
-                    }
-                    if (item.articul !== null && item.articul !== undefined) {
-                        chars += `<code>${item.articul}</code> `;
-                    }
-                    if (item.qty !== null && item.qty !== undefined) {
-                        chars += ` ${item.qty} `;
-                    }
-                    if (item.unit !== null && item.unit !== undefined) {
-                        chars += `${item.unit}\n`;
+                    if (item.status === 'На складе') {
+
+                        chars += `<b>${item.status}:</b>`;
+
+                        if (item.days !== null && item.days !== undefined) {
+                            chars += `${item.days}`;
+                        }
+                        if (item.articul !== null && item.articul !== undefined) {
+                            chars += `<code>${item.articul}</code> `;
+                        }
+                        if (item.qty !== null && item.qty !== undefined) {
+                            chars += ` ${item.qty} `;
+                        }
+                        if (item.unit !== null && item.unit !== undefined) {
+                            chars += `${item.unit}\n`;
+                        }
+                        
+                    } else {
+                        chars += `<b>${item.status}:</b> ${item.days}\n`;
                     }
                     chars += `${item.other}\n`
                 });
