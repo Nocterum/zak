@@ -519,8 +519,8 @@ const startFindDecaro = async (chatId, msg) => {
                 var message = '';
 
                 items.each(function () {
-                    var item = $(this);
-
+                    var item = $('div.availability-table-section');
+                    
                     // Получаем данные из каждого элемента
                     var status = item.find('.status').text;
                     var articul = item.find('.articul').text;
