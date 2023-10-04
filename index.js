@@ -518,8 +518,8 @@ const startFindDecaro = async (chatId, msg) => {
                 var items = availabilityTable.find('.item');
                 var message = '';
 
-                items.each(function () {
-                    var item = $('div.availability-table-section');
+                items.each(function (item) {
+
                     
                     // Получаем данные из каждого элемента
                     var status = item.find('.status').text;
