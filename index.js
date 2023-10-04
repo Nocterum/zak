@@ -515,7 +515,7 @@ const startFindDecaro = async (chatId, msg) => {
 
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
-                const availabilityTableValue = [];
+                let availabilityTableValue = [];
                 availabilityTable.each((index, element) => {
 
                     const rowsStatus = $(element).find('div.status');
