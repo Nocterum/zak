@@ -112,7 +112,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Зарезервировать', callback_data: '/enterReserveNumber'}],
+                [{text: 'Зарезервировать у поставщика', callback_data: '/enterReserveNumber'}],
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
