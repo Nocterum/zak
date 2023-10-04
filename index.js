@@ -522,10 +522,10 @@ const startFindDecaro = async (chatId, msg) => {
                 items.each(function (item) {
 
                     // Получаем данные из каждого элемента
-                    var status = item.querySelector('.status').textContent;
-                    var articul = item.querySelector('.articul').textContent;
-                    var qty = item.querySelector('.qty').textContent;
-                    var unit = item.querySelector('.unit').textContent;
+                    var status = item.find('.status').textContent;
+                    var articul = item.find('.articul').textContent;
+                    var qty = item.find('.qty').textContent;
+                    var unit = item.find('.unit').textContent;
 
                         if (status === 'На складе') {
                             message += `<b>${status}:</b>`;
