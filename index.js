@@ -2891,18 +2891,18 @@ bot.on('callback_query', async msg => {
         }
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
             sendReserveOptions
         );
 
     } else if (data === '/preSendEmailReserveYes') {
 
         subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
             sendReserveOptions
         );
 
@@ -2913,7 +2913,7 @@ bot.on('callback_query', async msg => {
         
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>${user.vendorEmail}</b>\nКопия: <b>${user.email}</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
             sendReserveOptions
         );
 
