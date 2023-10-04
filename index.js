@@ -2819,9 +2819,21 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/checkVendor') {
 
-        return startCheckVendor(chatId, msg);
+        if (user.vendorCode.length < 4) {
 
-    } else if(data === '/enterBrand') {
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId,
+                `Наименование искомого бренда не может быть короче 4х символов\nвведите бренд заново:`
+                );
+            } else {
+                return startCheckVendor(chatId, msg);
+            }
+
+    } else if (data === '/enterBrand') {
         // lc = data;
         await user.update({lastCommand: data}, {
             where: {
