@@ -2044,7 +2044,7 @@ bot.onText(/\/start/, async msg => {
                 }
             })
 
-        } else if (!user.nickname) {
+        } else {
 
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -2329,7 +2329,7 @@ bot.on('message', async msg => {
                 );
             }
             
-        } else if (!user.nickname) {
+        } else if (!user) {
 
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
