@@ -536,7 +536,8 @@ const startFindDecaro = async (chatId, msg) => {
                 }).get(); // преобразуем объект Cheerio в обычный массив
             
                 chars = '';
-
+                console.log(availabilityTableValue);
+                
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
 
