@@ -540,7 +540,7 @@ const startFindDecaro = async (chatId, msg) => {
                 });
                 
                 // преобразуем объект Cheerio в обычный массив
-                availabilityTableValue = availabilityTableValue.get();
+                // availabilityTableValue = availabilityTableValue.get();
 
                 // const availabilityTableValue = availabilityTable.map((index, element) => {
 
