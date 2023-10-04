@@ -515,11 +515,11 @@ const startFindDecaro = async (chatId, msg) => {
 
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
-                var items = availabilityTable.find('.item');
+
                 var message = '';
 
-                items.each(function (index, element) {
-                    var item = availabilityTable;
+                availabilityTable.each(function (index, element) {
+                    var item = availabilityTable.find('.item');
                     
                     // Получаем данные из каждого элемента
                     var status = item.find('.status').text;
