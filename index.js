@@ -519,13 +519,13 @@ const startFindDecaro = async (chatId, msg) => {
                 var items = availabilityTable.find('.item');
                 var message = '';
 
-                items.each(function (item) {
+                items.each(function () {
 
                     // Получаем данные из каждого элемента
-                    var status = item.find('.status').textContent;
-                    var articul = item.find('.articul').textContent;
-                    var qty = item.find('.qty').textContent;
-                    var unit = item.find('.unit').textContent;
+                    var status = item.find('.status').text;
+                    var articul = item.find('.articul').text;
+                    var qty = item.find('.qty').text;
+                    var unit = item.find('.unit').text;
 
                         if (status === 'На складе') {
                             message += `<b>${status}:</b>`;
