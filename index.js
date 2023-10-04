@@ -2051,14 +2051,8 @@ bot.onText(/\/start/, async msg => {
              await user.update({
                 firstName: msg.from.first_name, 
                 lastName: msg.from.last_name, 
+                nickname: '/password',
             });
-
-            // lc = '/password';
-            await user.update({nickname: '/password'}, {
-                where: {
-                    chatId: chatId
-                }
-            })
 
             return bot.sendMessage(
                 chatId, 
@@ -2335,7 +2329,17 @@ bot.on('message', async msg => {
                 );
             }
             
-        } else if (user.nickname === '/password') {
+        } else if (!user.nickname) {
+
+            user = await UserModel.create({chatId});
+            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+             await user.update({
+                firstName: msg.from.first_name, 
+                lastName: msg.from.last_name, 
+                nickname: '/password',
+            });
+
+        } else if (user.nickname === password) {
 
             if (text === '111QWER!!!') {
 
