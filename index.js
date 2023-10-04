@@ -2026,9 +2026,11 @@ const start = async () => {
 //старт
 bot.onText(/\/start/, async msg => {
     const chatId = msg.chat.id;
+    var user = null;
+    
     try {
 
-        const user = await UserModel.findOne({
+        user = await UserModel.findOne({
             where: {
                 chatId: chatId
             }
@@ -2047,7 +2049,7 @@ bot.onText(/\/start/, async msg => {
 
             const newUser = await UserModel.create({chatId});
 
-            await UserModel.findOne({
+            user = await UserModel.findOne({
                 where: {
                     chatId: chatId
                 }
