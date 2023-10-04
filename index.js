@@ -2044,26 +2044,7 @@ bot.onText(/\/start/, async msg => {
                 }
             })
 
-            return bot.sendMessage(
-                chatId, 
-                `И снова здравствуйте, ${user.nickname}!\nВы в главном меню:`,
-                mainMenuOptions
-            );
-
-        } else if (user.nickname) {
-
-            // lc = '/editNickname';
-            await user.update({lastCommand: '/editNickname'}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
-            );
-        } else if (!user.nickname) {
+        } else if (user.nickname === null) {
 
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -2073,7 +2054,7 @@ bot.onText(/\/start/, async msg => {
             });
 
             // lc = '/password';
-            await user.update({lastCommand: '/password'}, {
+            await user.update({nickname: '/password'}, {
                 where: {
                     chatId: chatId
                 }
@@ -2370,6 +2351,7 @@ bot.on('message', async msg => {
                 );
 
             } else {
+
                 return bot.sendMessage(
                     chatId, 
                     `В доступе отказано.`
@@ -2384,6 +2366,7 @@ bot.on('message', async msg => {
                     chatId: chatId
                 }
             })
+            
             return bot.sendMessage(
                 chatId, 
                 `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
