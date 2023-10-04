@@ -515,7 +515,7 @@ const startFindDecaro = async (chatId, msg) => {
 
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
-
+                const availabilityTableValue = [];
                 availabilityTable.each((index, element) => {
 
                     const rowsStatus = $(element).find('div.status');
@@ -541,7 +541,7 @@ const startFindDecaro = async (chatId, msg) => {
                 
                 // преобразуем объект Cheerio в обычный массив
                 availabilityTableValue = availabilityTableValue.get();
-                
+
                 // const availabilityTableValue = availabilityTable.map((index, element) => {
 
                 //     const rowsStatus = $(element).find('div.status');
