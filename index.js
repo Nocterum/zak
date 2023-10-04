@@ -2650,7 +2650,7 @@ bot.on('message', async msg => {
             );
 
         } else if (user.lastCommand === '/enterReserveNumber') {
-
+            let counter = 0;
             while (text.includes("  ") && counter < 3) {
                 text = text.replace(/\s\s/g, ' ');
                 counter++;
