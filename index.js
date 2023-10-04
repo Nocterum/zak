@@ -2044,7 +2044,7 @@ bot.onText(/\/start/, async msg => {
                 }
             })
 
-        } else if (user.nickname === null) {
+        } else if (!user.nickname) {
 
             user = await UserModel.create({chatId});
             console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
@@ -2351,7 +2351,7 @@ bot.on('message', async msg => {
                 );
 
             } else {
-
+                
                 return bot.sendMessage(
                     chatId, 
                     `В доступе отказано.`
@@ -2366,7 +2366,6 @@ bot.on('message', async msg => {
                     chatId: chatId
                 }
             })
-            
             return bot.sendMessage(
                 chatId, 
                 `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
