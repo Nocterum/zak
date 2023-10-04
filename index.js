@@ -516,77 +516,132 @@ const startFindDecaro = async (chatId, msg) => {
 
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
+                var items = availabilityTable.querySelectorAll('.item');
+                var message = '';
 
-                const availabilityTableValue = availabilityTable.map((index, element) => {
+                items.forEach(function(item) {
+                    // Получаем данные из каждого элемента
+                    var status = item.querySelector('.status').textContent;
+                    var articul = item.querySelector('.articul').textContent;
+                    var qty = item.querySelector('.qty').textContent;
+                    var unit = item.querySelector('.unit').textContent;
 
-                    const rowsStatus = $(element).find('div.status');
-                    const rowsDays = $(element).find('div.days');
-                    const rowsArticul = $(element).find('div.articul');
-                    const rowsQty = $(element).find('div.qty');
-                    const rowsUnit = $(element).find('div.unit');
-                    const rowsOther = $(element).find('small');
-            
-                    return {
-                        status: rowsStatus.text().trim(),
-                        days: rowsDays.text().trim(),
-                        articul: rowsArticul.text().trim(),
-                        qty: rowsQty.text().trim(),
-                        unit: rowsUnit.text().trim(),
-                        other: rowsOther.text().trim()
-                    }
-                }).get(); // преобразуем объект Cheerio в обычный массив
-            
-                chars = '';
-                console.log(availabilityTableValue);
-                
-                // выводим данные из каждого элемента массива propsData
-                availabilityTableValue.forEach((item) => {
+                        if (status === 'На складе') {
+                            message += `<b>${status}:</b>`;
 
-                    if (item.status === 'На складе') {
-                        chars += `<b>${item.status}:</b>`;
+                            if (days !== null && days !== undefined) {
+                                message += `${days}`;
+                            }
+                            if (articul !== null && articul !== undefined) {
+                                message += `<code>${articul}</code> `;
+                            }
+                            if (qty !== null && qty !== undefined) {
+                                message += ` ${qty} `;
+                            }
+                            if (unit !== null && unit !== undefined) {
+                                message += `${unit}\n`;
+                            }
 
-                        if (item.days !== null && item.days !== undefined) {
-                            chars += `${item.days}`;
+                        } else {
+                            message += `<b>${status}:</b> ${days}\n`;
                         }
-                        if (item.articul !== null && item.articul !== undefined) {
-                            chars += `<code>${item.articul}</code> `;
-                        }
-                        if (item.qty !== null && item.qty !== undefined) {
-                            chars += ` ${item.qty} `;
-                        }
-                        if (item.unit !== null && item.unit !== undefined) {
-                            chars += `${item.unit}\n`;
-                        }
-
-                    } else {
-                        chars += `<b>${item.status}:</b> ${item.days}\n`;
-                    }
-                    chars += `${item.other}\n`
+                        message += `${other}\n\n`
                 });
+                
 
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+    
+                return bot.sendMessage(
+                    chatId,
+                    message,
+                    startFindOptions
+                );
+
+            } else {
+
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId, 
+                    'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                    startFind1Options
+                );
             }
 
-            return bot.sendMessage(
-                chatId,
-                chars,
-                startFindOptions
-            );
+                // const availabilityTableValue = availabilityTable.map((index, element) => {
 
-        } else {
+                //     const rowsStatus = $(element).find('div.status');
+                //     const rowsDays = $(element).find('div.days');
+                //     const rowsArticul = $(element).find('div.articul');
+                //     const rowsQty = $(element).find('div.qty');
+                //     const rowsUnit = $(element).find('div.unit');
+                //     const rowsOther = $(element).find('small');
+            
+                //     return {
+                //         status: rowsStatus.text().trim(),
+                //         days: rowsDays.text().trim(),
+                //         articul: rowsArticul.text().trim(),
+                //         qty: rowsQty.text().trim(),
+                //         unit: rowsUnit.text().trim(),
+                //         other: rowsOther.text().trim()
+                //     }
+                // }).get(); // преобразуем объект Cheerio в обычный массив
+            
+                // chars = '';
 
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            return bot.sendMessage(
-                chatId, 
-                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                startFind1Options
-            );
-        }
+                // // выводим данные из каждого элемента массива propsData
+                // availabilityTableValue.forEach((item) => {
+
+                //     if (item.status === 'На складе') {
+                //         chars += `<b>${item.status}:</b>`;
+
+                //         if (item.days !== null && item.days !== undefined) {
+                //             chars += `${item.days}`;
+                //         }
+                //         if (item.articul !== null && item.articul !== undefined) {
+                //             chars += `<code>${item.articul}</code> `;
+                //         }
+                //         if (item.qty !== null && item.qty !== undefined) {
+                //             chars += ` ${item.qty} `;
+                //         }
+                //         if (item.unit !== null && item.unit !== undefined) {
+                //             chars += `${item.unit}\n`;
+                //         }
+
+                //     } else {
+                //         chars += `<b>${item.status}:</b> ${item.days}\n`;
+                //     }
+                //     chars += `${item.other}\n`
+                // });
+
+            // if (botMsgIdx !== null) {
+            //     bot.deleteMessage(chatId, botMsgIdx);
+            //     botMsgIdx = null;
+            // }
+
+            // return bot.sendMessage(
+            //     chatId,
+            //     chars,
+            //     startFindOptions
+            // );
+
+        // } else {
+
+        //     if (botMsgIdx !== null) {
+        //         bot.deleteMessage(chatId, botMsgIdx);
+        //         botMsgIdx = null;
+        //     }
+        //     return bot.sendMessage(
+        //         chatId, 
+        //         'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+        //         startFind1Options
+        //     );
+        // }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
