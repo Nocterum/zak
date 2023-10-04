@@ -516,131 +516,75 @@ const startFindDecaro = async (chatId, msg) => {
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
 
-                var message = '';
+                const availabilityTableValue = availabilityTable.map((index, element) => {
 
-                availabilityTable.each(function (index, element) {
-                    var item = $(element).find('.item');
-                    
-                    // Получаем данные из каждого элемента
-                    var status = item.find('.status').text;
-                    var articul = item.find('.articul').text;
-                    var days = item.find('.days').text;
-                    var qty = item.find('.qty').text;
-                    var unit = item.find('.unit').text;
-                    var other = item.find('.other').text;
+                    const rowsStatus = $(element).find('div.status');
+                    const rowsDays = $(element).find('div.days');
+                    const rowsArticul = $(element).find('div.articul');
+                    const rowsQty = $(element).find('div.qty');
+                    const rowsUnit = $(element).find('div.unit');
+                    const rowsOther = $(element).find('small');
+            
+                    return {
+                        status: rowsStatus.text().trim(),
+                        days: rowsDays.text().trim(),
+                        articul: rowsArticul.text().trim(),
+                        qty: rowsQty.text().trim(),
+                        unit: rowsUnit.text().trim(),
+                        other: rowsOther.text().trim()
+                    }
+                }).get(); // преобразуем объект Cheerio в обычный массив
+            
+                chars = '';
 
-                        if (status === 'На складе') {
-                            message += `<b>${status}:</b>`;   
+                // выводим данные из каждого элемента массива propsData
+                availabilityTableValue.forEach((item) => {
+
+                    if (item.status === 'На складе') {
+                        chars += `<b>${item.status}:</b>`;
+
+                        if (item.days !== null && item.days !== undefined) {
+                            chars += `${item.days}`;
                         }
-                        if (days !== null && days !== undefined) {
-                            message += `${days}`;
+                        if (item.articul !== null && item.articul !== undefined) {
+                            chars += `<code>${item.articul}</code> `;
                         }
-                        if (articul !== null && articul !== undefined) {
-                            message += `<code>${articul}</code> `;
+                        if (item.qty !== null && item.qty !== undefined) {
+                            chars += ` ${item.qty} `;
                         }
-                        if (qty !== null && qty !== undefined) {
-                            message += ` ${qty} `;
+                        if (item.unit !== null && item.unit !== undefined) {
+                            chars += `${item.unit}\n`;
                         }
-                        if (unit !== null && unit !== undefined) {
-                            message += `${unit}\n`;
-                        }
-                        message += `${other}\n\n`
+
+                    } else {
+                        chars += `<b>${item.status}:</b> ${item.days}\n`;
+                    }
+                    chars += `${item.other}\n`
                 });
-                
 
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-    
-                return bot.sendMessage(
-                    chatId,
-                    message,
-                    startFindOptions
-                );
-
-            } else {
-
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-                return bot.sendMessage(
-                    chatId, 
-                    'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-                    startFind1Options
-                );
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
             }
 
-                // const availabilityTableValue = availabilityTable.map((index, element) => {
+            return bot.sendMessage(
+                chatId,
+                chars,
+                startFindOptions
+            );
 
-                //     const rowsStatus = $(element).find('div.status');
-                //     const rowsDays = $(element).find('div.days');
-                //     const rowsArticul = $(element).find('div.articul');
-                //     const rowsQty = $(element).find('div.qty');
-                //     const rowsUnit = $(element).find('div.unit');
-                //     const rowsOther = $(element).find('small');
-            
-                //     return {
-                //         status: rowsStatus.text().trim(),
-                //         days: rowsDays.text().trim(),
-                //         articul: rowsArticul.text().trim(),
-                //         qty: rowsQty.text().trim(),
-                //         unit: rowsUnit.text().trim(),
-                //         other: rowsOther.text().trim()
-                //     }
-                // }).get(); // преобразуем объект Cheerio в обычный массив
-            
-                // chars = '';
+        } else {
 
-                // // выводим данные из каждого элемента массива propsData
-                // availabilityTableValue.forEach((item) => {
-
-                //     if (item.status === 'На складе') {
-                //         chars += `<b>${item.status}:</b>`;
-
-                //         if (item.days !== null && item.days !== undefined) {
-                //             chars += `${item.days}`;
-                //         }
-                //         if (item.articul !== null && item.articul !== undefined) {
-                //             chars += `<code>${item.articul}</code> `;
-                //         }
-                //         if (item.qty !== null && item.qty !== undefined) {
-                //             chars += ` ${item.qty} `;
-                //         }
-                //         if (item.unit !== null && item.unit !== undefined) {
-                //             chars += `${item.unit}\n`;
-                //         }
-
-                //     } else {
-                //         chars += `<b>${item.status}:</b> ${item.days}\n`;
-                //     }
-                //     chars += `${item.other}\n`
-                // });
-
-            // if (botMsgIdx !== null) {
-            //     bot.deleteMessage(chatId, botMsgIdx);
-            //     botMsgIdx = null;
-            // }
-
-            // return bot.sendMessage(
-            //     chatId,
-            //     chars,
-            //     startFindOptions
-            // );
-
-        // } else {
-
-        //     if (botMsgIdx !== null) {
-        //         bot.deleteMessage(chatId, botMsgIdx);
-        //         botMsgIdx = null;
-        //     }
-        //     return bot.sendMessage(
-        //         chatId, 
-        //         'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
-        //         startFind1Options
-        //     );
-        // }
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                'Товары не найдены. Попробуйте ввести бренд вместе с артикулом, через пробел.\nИли введите полное наименование из карточки товара в 1С.', 
+                startFind1Options
+            );
+        }
 
     } catch (e) {
         console.log('Ошибка при выполнении запроса', e);
