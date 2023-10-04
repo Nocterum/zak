@@ -526,12 +526,10 @@ const startFindDecaro = async (chatId, msg) => {
                     const rowsUnit = $(element).find('div.unit');
                     const rowsOther = $(element).find('small');
 
-                    const statusArr = rowsStatus.text().trim().split(' ');
-
                     return {
                         status: rowsStatus.text().trim(),
                         days: rowsDays.text().trim(),
-                        days: rowsData.text().trim(),
+                        data: rowsData.text().trim(),
                         articul: rowsArticul.text().trim(),
                         qty: rowsQty.text().trim(),
                         unit: rowsUnit.text().trim(),
@@ -546,6 +544,7 @@ const startFindDecaro = async (chatId, msg) => {
                 availabilityTableValue.forEach((item) => {
 
                     chars += `<b>${item.status}:</b> `;
+
                     if (item.days !== null && item.days !== undefined) {
                         chars += `${item.days}`;
                     }                    
