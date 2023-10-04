@@ -2054,6 +2054,12 @@ bot.onText(/\/start/, async msg => {
                 nickname: '/password',
             });
 
+            let user = await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
+
             return bot.sendMessage(
                 chatId, 
                 `Введите пароль:`
@@ -2339,7 +2345,13 @@ bot.on('message', async msg => {
                 nickname: '/password',
             });
 
-        } else if (user.nickname === password) {
+            let user = await UserModel.findOne({
+                where: {
+                    chatId: chatId
+                }
+            });
+
+        } else if (user.nickname === '/password') {
 
             if (text === '111QWER!!!') {
 
