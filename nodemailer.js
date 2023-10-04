@@ -6,7 +6,7 @@ module.exports = {
         host: 'post.manders.ru',
         auth: {
             user: 'Manders\\zakupki_bot',
-            pass: '1234qWER',
+            pass: '1244zaazx@%',
         },
         tls: {
             rejectUnauthorized: false
