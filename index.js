@@ -2202,7 +2202,7 @@ bot.onText(/\/whoiswho/, (msg) => {
 //слушатель сообщений==========================================================================================
 
 bot.on('message', async msg => {
-    const text = msg.text;
+    let text = msg.text;
     const chatId = msg.chat.id;
     
     console.log(msg)
