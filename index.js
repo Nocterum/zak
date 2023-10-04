@@ -527,6 +527,7 @@ const startFindDecaro = async (chatId, msg) => {
                     var days = item.find('.days').text;
                     var qty = item.find('.qty').text;
                     var unit = item.find('.unit').text;
+                    var other = item.find('.other').text;
 
                         if (status === 'На складе') {
                             message += `<b>${status}:</b>`;
