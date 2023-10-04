@@ -537,12 +537,12 @@ const startFindDecaro = async (chatId, msg) => {
                 }).get(); // преобразуем объект Cheerio в обычный массив
             
                 chars = '';
-            
+                console.log(availabilityTableValue);
+                
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
 
                     if (item.status === 'На складе') {
-
                         chars += `<b>${item.status}:</b>`;
 
                         if (item.days !== null && item.days !== undefined) {
@@ -557,7 +557,7 @@ const startFindDecaro = async (chatId, msg) => {
                         if (item.unit !== null && item.unit !== undefined) {
                             chars += `${item.unit}\n`;
                         }
-                        
+
                     } else {
                         chars += `<b>${item.status}:</b> ${item.days}\n`;
                     }
