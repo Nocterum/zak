@@ -519,8 +519,8 @@ const startFindDecaro = async (chatId, msg) => {
                 var items = availabilityTable.find('.item');
                 var message = '';
 
-                items.forEach(function (item) {
-                    
+                items.each(function (item) {
+
                     // Получаем данные из каждого элемента
                     var status = item.querySelector('.status').textContent;
                     var articul = item.querySelector('.articul').textContent;
