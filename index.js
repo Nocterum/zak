@@ -33,7 +33,7 @@ const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-password = {};
+// password = {};
 chats = {};
 
 // lc = {};    //последняя команда
@@ -2050,14 +2050,8 @@ bot.onText(/\/start/, async msg => {
                 mainMenuOptions
             );
 
-        } else if (password === 'true') {
-            user = await UserModel.create({chatId});
-            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-             await user.update({
-                firstName: msg.from.first_name, 
-                lastName: msg.from.last_name, 
-            });
-            
+        } else if (user.nickname) {
+
             // lc = '/editNickname';
             await user.update({lastCommand: '/editNickname'}, {
                 where: {
@@ -2069,8 +2063,22 @@ bot.onText(/\/start/, async msg => {
                 chatId, 
                 `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
             );
-        } else if (password !== 'true') {
-            password = false;
+        } else if (!user.nickname) {
+
+            user = await UserModel.create({chatId});
+            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+             await user.update({
+                firstName: msg.from.first_name, 
+                lastName: msg.from.last_name, 
+            });
+
+            // lc = '/password';
+            await user.update({lastCommand: '/password'}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
             return bot.sendMessage(
                 chatId, 
                 `Введите пароль:`
@@ -2346,17 +2354,10 @@ bot.on('message', async msg => {
                 );
             }
             
-        } else if (password === false) {
+        } else if (user.nickname === '/password') {
 
             if (text === '111QWER!!!') {
-                password = 'true';
 
-                let createNewUser = await UserModel.create({chatId});
-                console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-                 await createNewUser.update({
-                    firstName: msg.from.first_name, 
-                    lastName: msg.from.last_name, 
-                });
                 // lc = '/editNickname';
                 await user.update({lastCommand: '/editNickname'}, {
                     where: {
