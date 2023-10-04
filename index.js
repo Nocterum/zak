@@ -2790,7 +2790,7 @@ bot.on('callback_query', async msg => {
             );
         }
         // lc = null;
-        await user.update({lastCommand: '/null'}, {
+        await user.update({lastCommand: data}, {
             where: {
                 chatId: chatId
             }
