@@ -2028,13 +2028,14 @@ bot.onText(/\/start/, async msg => {
     const chatId = msg.chat.id;
     try {
 
-        if (user) {
-            let user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                }
-            });
+        let user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
 
+        if (user) {
+            
             // lc = null
             await user.update({lastCommand: null}, {
                 where: {
@@ -2193,15 +2194,15 @@ bot.on('message', async msg => {
     const chatId = msg.chat.id;
     
     console.log(msg)
-    if (user) {
-
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            }
-        });
-
-        try {
+    
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }
+    });
+    
+    try {
+        if (user) {
 
             if (msg.document) {
                 let file_name = msg.document.file_name;
@@ -2742,9 +2743,9 @@ bot.on('message', async msg => {
                     { parse_mode: 'HTML' }
                 );
             }
-        } catch (e) {
-            console.log('Сработал слушатель документов.', e)
         }
+    } catch (e) {
+        console.log('Сработал слушатель документов.', e)
     }
 }); 
 
