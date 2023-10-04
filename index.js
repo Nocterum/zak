@@ -64,7 +64,7 @@ const editEmail = async (chatId) => {
         attributes: ['id', 'chatId', 'lastCommand']
     });
 
-    await user.update({lastCommand: '/enterVC'}, {
+    await user.update({lastCommand: '/editEmail'}, {
         where: {
             chatId: chatId
         }
@@ -1502,9 +1502,6 @@ async function findDecorRus(chatId) {
 
                             if (currentBCell && currentBCell.v && !currentBCell.v.toString().includes(' ')) {
 
-                                // if (currentCCell && currentCCell.v !== undefined && currentCCell.v !== null) {
-                                //     currentCCell = `0`;
-                                // }
                                 if (currentCCell === undefined || currentCCell === null) {
                                     currentCCell = `0`;
                                 }
@@ -2381,7 +2378,7 @@ bot.on('message', async msg => {
         } else if (text === '/mainmenu') {
 
             // lc = null;
-            await user.update({lastCommand: null}, {
+            await user.update({lastCommand: text}, {
                 where: {
                     chatId: chatId
                 }
