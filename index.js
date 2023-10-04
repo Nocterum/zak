@@ -2405,16 +2405,19 @@ bot.on('message', async msg => {
 
             let cValue = text;
             let PricelistLink = await findPricelistLink(chatId, cValue);
-            if (user.vendorCode.length < 4) {
+
+            if (text.length < 4) {
 
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
+
                 return bot.sendMessage(
                     chatId,
                     `Наименование искомого бренда не может быть короче 4х символов\nвведите бренд заново:`
                     );
+
                 } else {
 
                     if (PricelistLink.vendor === null) {
