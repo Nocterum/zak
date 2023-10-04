@@ -520,10 +520,11 @@ const startFindDecaro = async (chatId, msg) => {
 
                 items.each(function () {
                     var item = $(this);
-                    
+
                     // Получаем данные из каждого элемента
                     var status = item.find('.status').text;
                     var articul = item.find('.articul').text;
+                    var days = item.find('.days').text;
                     var qty = item.find('.qty').text;
                     var unit = item.find('.unit').text;
 
