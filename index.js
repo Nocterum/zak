@@ -2650,6 +2650,11 @@ bot.on('message', async msg => {
             );
 
         } else if (user.lastCommand === '/enterReserveNumber') {
+
+            while (text.includes("  ") && counter < 3) {
+                text = text.replace(/\s\s/g, ' ');
+                counter++;
+            }
             await user.update({reserveNumber: text});
 
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
