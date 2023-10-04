@@ -2405,25 +2405,37 @@ bot.on('message', async msg => {
 
             let cValue = text;
             let PricelistLink = await findPricelistLink(chatId, cValue);
+            if (user.vendorCode.length < 4) {
 
-            if (PricelistLink.vendor === null) {
-                return bot.sendMessage(
-                    chatId, 
-                    `Такой бренд не найден, проверьте написание бренда.`
-                );
-            } else if (user.brand === 'RASCH') {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
                 return bot.sendMessage(
                     chatId,
-                    `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
-                )
-            } else {
-                await bot.sendMessage(
-                    chatId,
-                    `<b>Бренд найден</b>\nВАЖНО: <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
-                    { parse_mode: 'HTML' }
-                )
-                return startCheckVendor(chatId, msg);
-            }
+                    `Наименование искомого бренда не может быть короче 4х символов\nвведите бренд заново:`
+                    );
+                } else {
+
+                    if (PricelistLink.vendor === null) {
+                        return bot.sendMessage(
+                            chatId, 
+                            `Такой бренд не найден, проверьте написание бренда.`
+                        );
+                    } else if (user.brand === 'RASCH') {
+                        return bot.sendMessage(
+                            chatId,
+                            `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
+                        )
+                    } else {
+                        await bot.sendMessage(
+                            chatId,
+                            `<b>Бренд найден</b>\nВАЖНО: <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
+                            { parse_mode: 'HTML' }
+                        )
+                        return startCheckVendor(chatId, msg);
+                    }
+                }
 
         } else if (user.lastCommand === '/enterVC') {
 
@@ -2819,19 +2831,7 @@ bot.on('callback_query', async msg => {
 
     } else if (data === '/checkVendor') {
 
-        if (user.vendorCode.length < 4) {
-
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            return bot.sendMessage(
-                chatId,
-                `Наименование искомого бренда не может быть короче 4х символов\nвведите бренд заново:`
-                );
-            } else {
-                return startCheckVendor(chatId, msg);
-            }
+        return startCheckVendor(chatId, msg);
 
     } else if (data === '/enterBrand') {
         // lc = data;
