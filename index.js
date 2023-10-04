@@ -199,9 +199,9 @@ const startCheckVendor = async (chatId, msg) => {
 
         const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-        if (formatedUserVendor.includes('РИКСОР') ||
-            formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-            formatedUserVendor.includes('ОРАК')
+        if (formatedUserVendor.includes('ОРАК')
+            // formatedUserVendor.includes('ИНТЕРДЕКОР') ||
+            // formatedUserVendor.includes('РИКСОР') 
             // formatedUserVendor.includes('КАДО') ||
             // formatedUserVendor.includes('АКУРА') ||
             // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
@@ -2806,7 +2806,7 @@ bot.on('callback_query', async msg => {
         } else {
             await bot.sendMessage(
                 chatId, 
-                'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвеста возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев когда вы уверенны, что искомый вами артикул возможно заказать у поставщика.', 
+                'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвестна возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев, когда вы уверенны, что искомый вами артикул возможно заказать у поставщика.', 
                 workOptions
             );
         } 
