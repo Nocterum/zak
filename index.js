@@ -516,7 +516,7 @@ const startFindDecaro = async (chatId, msg) => {
                 let $ = cheerio.load(responseQty.data.data);
                 const availabilityTable = $('div.availability-table-section');
 
-                const availabilityTableValue = availabilityTable.map((index, element) => {
+                availabilityTable.each((index, element) => {
 
                     const rowsStatus = $(element).find('div.status');
                     const rowsDays = $(element).find('div.days');
@@ -524,20 +524,48 @@ const startFindDecaro = async (chatId, msg) => {
                     const rowsQty = $(element).find('div.qty');
                     const rowsUnit = $(element).find('div.unit');
                     const rowsOther = $(element).find('small');
-            
-                    return {
-                        status: rowsStatus.text().trim(),
-                        days: rowsDays.text().trim(),
-                        articul: rowsArticul.text().trim(),
-                        qty: rowsQty.text().trim(),
-                        unit: rowsUnit.text().trim(),
-                        other: rowsOther.text().trim()
-                    }
-                }).get(); // преобразуем объект Cheerio в обычный массив
+                
+                    const statusArr = rowsStatus.text().trim().split(' ');
+                
+                    statusArr.forEach(status => {
+                        availabilityTableValue.push({
+                            status: status,
+                            days: rowsDays.text().trim(),
+                            articul: rowsArticul.text().trim(),
+                            qty: rowsQty.text().trim(),
+                            unit: rowsUnit.text().trim(),
+                            other: rowsOther.text().trim()
+                        });
+                    });
+                });
+                
+                // преобразуем объект Cheerio в обычный массив
+                availabilityTableValue = availabilityTableValue.get();
+                
+                // const availabilityTableValue = availabilityTable.map((index, element) => {
+
+                //     const rowsStatus = $(element).find('div.status');
+                //     const rowsDays = $(element).find('div.days');
+                //     const rowsArticul = $(element).find('div.articul');
+                //     const rowsQty = $(element).find('div.qty');
+                //     const rowsUnit = $(element).find('div.unit');
+                //     const rowsOther = $(element).find('small');
+
+                //     const statusArr = rowsStatus.text().trim().split(' ');
+
+                //     return {
+                //         status: rowsStatus.text().trim(),
+                //         days: rowsDays.text().trim(),
+                //         articul: rowsArticul.text().trim(),
+                //         qty: rowsQty.text().trim(),
+                //         unit: rowsUnit.text().trim(),
+                //         other: rowsOther.text().trim()
+                //     }
+                // }).get(); // преобразуем объект Cheerio в обычный массив
             
                 chars = '';
                 console.log(availabilityTableValue);
-                
+
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
 
