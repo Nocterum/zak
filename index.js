@@ -2027,7 +2027,7 @@ const start = async () => {
 bot.onText(/\/start/, async msg => {
     const chatId = msg.chat.id;
     var user = null;
-    
+
     try {
 
         user = await UserModel.findOne({
@@ -2360,9 +2360,9 @@ bot.on('message', async msg => {
                 if (text === '111QWER!!!') {
 
                     // lc = '/editNickname';
-                    await user.update({lastCommand: '/editNickname'}, {
+                    await user.update({lastCommand: '/editNickname', nickname: '/editNickname'}, {
                         where: {
-                            chatId: chatId
+                            chatId: chatId,
                         }
                     })
                     return bot.sendMessage(
