@@ -226,7 +226,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                 if (messageResult1C.length !== 0) {
                     return { messageResult1C };
                 } else {
-                    messageResult1C = `${vendorCode} нигде не числится\n\n`
+                    messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
                     return { messageResult1C };
                 }
             } else {
@@ -1149,12 +1149,6 @@ async function findCatalogWallpaper(chatId) {
                         
                         const bValue = row.getCell('B').value;
                         let cValue = row.getCell('C').value.toString();
-                        const hValue = row.getCell('H').value;
-                        const iValue = row.getCell('I').value;
-                        const jValue = row.getCell('J').value;
-                        const kValue = row.getCell('K').value;
-                        const mValue = row.getCell('M').value;
-                        const nValue = row.getCell('N').value;
                         const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
                         const vendorCode = bValue;
@@ -1163,27 +1157,22 @@ async function findCatalogWallpaper(chatId) {
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
                         
-                        if (
-                            hValue !== null ||
-                            iValue !== null ||
-                            jValue !== null ||
-                            kValue !== null ||
-                            mValue !== null || 
-                            nValue !== null
-                            ) {
-                                const o1Value = firstWorksheet.getCell('O1').value;
-                                const p1Value = firstWorksheet.getCell('P1').value;
+                        if (!findResult1C.toLowerCase().includes('нигде не числится')) {
+
+                            const o1Value = firstWorksheet.getCell('O1').value;
+                            const p1Value = firstWorksheet.getCell('P1').value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
 
                             if (oValue !== null) {
                                 message += `${o1Value}: ${oValue}\n`;
                             }
+
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
                             message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
-                            
+
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
@@ -1191,13 +1180,15 @@ async function findCatalogWallpaper(chatId) {
                             await bot.sendMessage(chatId, message, beginWork3Options);
                         
                         } else {
+
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
+
                             return bot.sendMessage(
                                 chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`,
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
                                 {parse_mode: 'HTML'}
                             );
                         }
@@ -1258,12 +1249,6 @@ async function findCatalogTextile(chatId) {
 
                         const bValue = row.getCell('B').value;
                         let cValue = row.getCell('C').value.toString();
-                        const iValue = row.getCell('I').value;
-                        const jValue = row.getCell('J').value;
-                        const kValue = row.getCell('K').value;
-                        const lValue = row.getCell('L').value;
-                        const nValue = row.getCell('N').value;
-                        const oValue = row.getCell('O').value;
                         const pValue = row.getCell('P').value;
                         const vendorCode = bValue;
 
@@ -1271,14 +1256,8 @@ async function findCatalogTextile(chatId) {
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
 
-                        if (iValue !== null ||
-                            jValue !== null ||
-                            kValue !== null ||
-                            lValue !== null ||
-                            nValue !== null || 
-                            oValue !== null
-                            ) {
-                                const p1Value = firstWorksheet.getCell(`P1`).value;
+                        if (!findResult1C.toLowerCase().includes('нигде не числится')) {
+                            const p1Value = firstWorksheet.getCell(`P1`).value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
 
@@ -1292,13 +1271,24 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            await bot.sendMessage(chatId, message, beginWork3Options);
+
+                            await bot.sendMessage(
+                                chatId, 
+                                message, 
+                                beginWork3Options
+                            );
+
                         } else {
+
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
+                            return bot.sendMessage(
+                                chatId, 
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
+                                {parse_mode: 'HTML'
+                            });
                         }
                     }
                 }
@@ -1309,7 +1299,11 @@ async function findCatalogTextile(chatId) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n`, {parse_mode: 'HTML'});
+                return bot.sendMessage(
+                    chatId, 
+                    `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+                    {parse_mode: 'HTML'
+                });
             }
 
         } catch (error) {
