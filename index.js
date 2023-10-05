@@ -154,8 +154,9 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId, vendorCode) => {
 
     try {
+        
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
-        const response = await axios.get(searchUrl1C);
+        const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
         // Создание виртуального DOM
         const dom = new JSDOM(response.data);
@@ -231,7 +232,7 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                     messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
                     return { messageResult1C };
-                    
+
                 } else {
 
                     messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
