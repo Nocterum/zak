@@ -1253,10 +1253,6 @@ async function findCatalogWallpaper(chatId) {
                 }
             });
 
-            // if (!foundMatchWallpaper) {
-                // return findCatalogTextile(chatId);
-            // }
-
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -1375,20 +1371,6 @@ async function findCatalogTextile(chatId) {
                     }
                 }
             });
-
-            // if (!foundMatchTextile) {
-
-            //     if (botMsgIdx !== null) {
-            //         bot.deleteMessage(chatId, botMsgIdx);
-            //         botMsgIdx = null;
-            //     }
-
-            //     return bot.sendMessage(
-            //         chatId, 
-            //         `Среди каталогов текстиля \nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
-            //         {parse_mode: 'HTML'}
-            //     );
-            // }
 
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -2938,15 +2920,18 @@ bot.on('message', async msg => {
                 botMsgIdx = msg.message_id += 1; 
 
                 const [Textile, Wallpaper] = await Promise.all([findCatalogTextile(chatId), findCatalogWallpaper(chatId)]);
-                // const Textile = await findCatalogTextile(chatId);
-                // const Wallpaper = await findCatalogWallpaper(chatId);
-                
+
                 if (Textile === undefined && Wallpaper === undefined) {
-                    return bot.sendMessage(
-                    chatId, 
-                    `Такого каталога у нас нет\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
-                    {parse_mode: 'HTML'}
-                );
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                        return bot.sendMessage(
+                        chatId, 
+                        `Такого каталога у нас нет\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+                        {parse_mode: 'HTML'}
+                    );
                 }
                 return {Textile, Wallpaper};
 
