@@ -1162,13 +1162,13 @@ async function findCatalogWallpaper(chatId) {
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
+
                 if (cellValue !== null) {
 
                     const formatedCellValue = cellValue.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                     const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                     
                     if (formatedCellValue.includes(formatedUserCatalog)) {
-                        console.log(formatedCellValue, formatedUserCatalog)
                         foundMatchWallpaper = true;
                         let message = '';
                         
@@ -1181,53 +1181,61 @@ async function findCatalogWallpaper(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
-                        let formatedMessageResult1C = '';
+
 
                         if (findResult1C) {
                             
-                            formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
-                        }
-                        console.log(formatedMessageResult1C);
-
-                        if (!formatedMessageResult1C) {
-
-                            const o1Value = firstWorksheet.getCell('O1').value;
-                            const p1Value = firstWorksheet.getCell('P1').value;
-
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n\n`;
-
-                            if (findResult1C.messageResult1C) {
-
-                                message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                            
+                            if (!formatedMessageResult1C) {
+    
+                                const o1Value = firstWorksheet.getCell('O1').value;
+                                const p1Value = firstWorksheet.getCell('P1').value;
+    
+                                message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n\n`;
+    
+                                if (findResult1C.messageResult1C) {
+    
+                                    message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                                }
+    
+                                if (oValue !== null) {
+                                    message += `${o1Value}: ${oValue}\n`;
+                                }
+    
+                                if (pValue !== null) {
+                                    message += `${p1Value}: ${pValue}\n`;
+                                }
+    
+                                message += `\n${PricelistLink.messagePrice}`;
+                                message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
+    
+                                if (botMsgIdx !== null) {
+                                    bot.deleteMessage(chatId, botMsgIdx);
+                                    botMsgIdx = null;
+                                }
+    
+                                return bot.sendMessage(
+                                    chatId, 
+                                    message, 
+                                    beginWork3Options
+                                );
+    
                             } else {
-
-                                message += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+    
+                                if (botMsgIdx !== null) {
+                                    bot.deleteMessage(chatId, botMsgIdx);
+                                    botMsgIdx = null;
+                                }
+    
+                                return bot.sendMessage(
+                                    chatId, 
+                                    `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
+                                    { parse_mode: 'HTML' }
+                                );
                             }
-
-                            if (oValue !== null) {
-                                message += `${o1Value}: ${oValue}\n`;
-                            }
-
-                            if (pValue !== null) {
-                                message += `${p1Value}: ${pValue}\n`;
-                            }
-
-                            message += `\n${PricelistLink.messagePrice}`;
-                            message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
-
-                            if (botMsgIdx !== null) {
-                                bot.deleteMessage(chatId, botMsgIdx);
-                                botMsgIdx = null;
-                            }
-
-                            return bot.sendMessage(
-                                chatId, 
-                                message, 
-                                beginWork3Options
-                            );
-                        
                         } else {
-
+                            
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
@@ -1235,16 +1243,17 @@ async function findCatalogWallpaper(chatId) {
 
                             return bot.sendMessage(
                                 chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
+                                `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`, 
                                 { parse_mode: 'HTML' }
                             );
                         }
+
                     }
                 }
             });
 
             // if (!foundMatchWallpaper) {
-                return findCatalogTextile(chatId);
+                // return findCatalogTextile(chatId);
             // }
 
         } catch (error) {
@@ -1280,17 +1289,16 @@ async function findCatalogTextile(chatId) {
             const firstWorksheet = worksheet.worksheets[0];
 
             let foundMatchTextile = false;
-            let message = '';
 
             firstWorksheet.eachRow( async (row, rowNumber) => {
                 const cellValue = row.getCell('D').value;
+
                 if (cellValue !== null) {
 
                     const formatedCellValue = cellValue.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                     const formatedUserCatalog = user.catalog.toString().replace(/[\s\u00A0]/g, '').toLowerCase();
                 
                     if (formatedCellValue.includes(formatedUserCatalog)) {
-
                         foundMatchTextile = true;
                         let message = '';
 
@@ -1302,45 +1310,53 @@ async function findCatalogTextile(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
-                        let formatedMessageResult1C = '';
 
                         if (findResult1C) {
                             
-                            formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
-                        }
-                        console.log(formatedMessageResult1C);
+                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('нигде не числится');
 
-                        if (!formatedMessageResult1C) {
+                            if (!formatedMessageResult1C) {
+    
+                                const p1Value = firstWorksheet.getCell(`P1`).value;
+    
+                                message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n`;
+    
+                                if (findResult1C.messageResult1C) {
+    
+                                    message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                                }
+    
+                                if (pValue !== null) {
+                                    message += `${p1Value}: ${pValue}\n`;
+                                }
+                                
+                                message += `\n${PricelistLink.messagePrice}`;
+                                message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
+                                
+                                if (botMsgIdx !== null) {
+                                    bot.deleteMessage(chatId, botMsgIdx);
+                                    botMsgIdx = null;
+                                }
+                                
+                                await bot.sendMessage(
+                                    chatId, 
+                                    message, 
+                                    beginWork3Options
+                                );
 
-                            const p1Value = firstWorksheet.getCell(`P1`).value;
-
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n`;
-
-                            if (findResult1C.messageResult1C) {
-
-                                message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
                             } else {
 
-                                message += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
-                            }
+                                if (botMsgIdx !== null) {
+                                    bot.deleteMessage(chatId, botMsgIdx);
+                                    botMsgIdx = null;
+                                }
 
-                            if (pValue !== null) {
-                                message += `${p1Value}: ${pValue}\n`;
-                            }
-                            
-                            if (botMsgIdx !== null) {
-                                bot.deleteMessage(chatId, botMsgIdx);
-                                botMsgIdx = null;
-                            }
-
-                            message += `\n${PricelistLink.messagePrice}`;
-                            message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
-
-                            await bot.sendMessage(
+                                return bot.sendMessage(
                                 chatId, 
-                                message, 
-                                beginWork3Options
-                            );
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
+                                { parse_mode: 'HTML' }
+                                );
+                            }
 
                         } else {
 
@@ -1348,9 +1364,10 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
+
                             return bot.sendMessage(
                                 chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
+                                `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`, 
                                 { parse_mode: 'HTML' }
                             );
                         }
@@ -1358,17 +1375,17 @@ async function findCatalogTextile(chatId) {
                 }
             });
 
-            if (!foundMatchTextile) {
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-                return bot.sendMessage(
-                    chatId, 
-                    `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
-                    {parse_mode: 'HTML'
-                });
-            }
+            // if (!foundMatchTextile) {
+            //     if (botMsgIdx !== null) {
+            //         bot.deleteMessage(chatId, botMsgIdx);
+            //         botMsgIdx = null;
+            //     }
+            //     return bot.sendMessage(
+            //         chatId, 
+            //         `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+            //         {parse_mode: 'HTML'}
+            //     );
+            // }
 
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -2845,13 +2862,22 @@ bot.on('message', async msg => {
                 botMsgIdx = msg.message_id += 1; 
                 let findResult1C = await startRequest1C(chatId, vendorCode); 
 
-                if (findResult1C.messageResult1C) {
+                if (findResult1C) {
             
                     return bot.sendMessage(
                         chatId, 
                         `${findResult1C.messageResult1C}`,
                         { parse_mode: 'HTML' }
                     );
+
+                } else {
+
+                    return bot.sendMessage(
+                        chatId, 
+                        `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`,
+                        { parse_mode: 'HTML' }
+                    );
+
                 }
 
             } else if (user.lastCommand === '/enterReserveNumber') {
@@ -2897,7 +2923,9 @@ bot.on('message', async msg => {
 
                 await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
                 botMsgIdx = msg.message_id += 1; 
-                return findCatalogWallpaper(chatId);
+                const Textile = findCatalogTextile(chatId);
+                const Wallpaper = findCatalogWallpaper(chatId);
+                return {Textile, Wallpaper};
 
             } else if (user.lastCommand === '/oracCheck') {
 
