@@ -1029,7 +1029,7 @@ async function findOrac(chatId) {
         messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
     } else {
 
-        messageORAC += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+        messageORAC += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>\n\n`
     }
 
     
@@ -1253,6 +1253,10 @@ async function findCatalogWallpaper(chatId) {
                 }
             });
 
+            if (!foundMatchWallpaper) {
+                return null;
+            }
+
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -1371,6 +1375,10 @@ async function findCatalogTextile(chatId) {
                     }
                 }
             });
+
+            if (!foundMatchTextile) {
+                return null;
+            }
 
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -2403,7 +2411,12 @@ bot.sendMessage(chatId,
 
 упрощен процесс "знакомства с ботом";
 улучшена система поиска каталогов
-    (теперь бот смотрит только на остатки в 1С);
+    -теперь бот смотрит только на остатки в 1С
+    -функция поиска по каталогам обоев
+    и каталогам текстиля запускаются параллельно
+    -приняты все подстраховочные меры при
+    отстутсвия соединения с 1С (вызывало ошибку);
+    
 упрощенно редактирование емейла и никнейма ;
 отредактирован текст, устранены опечатки;
 ------------------------------------
@@ -2412,14 +2425,7 @@ bot.sendMessage(chatId,
 
 Возобновлен поиск по остаткам брендов:
     Missoni
-    Jannelli & Volpi
--------------------------------------
-<b>Версия 1.0.2.0
-Что нового:</b>
-
-Появились новые пункты в контекстном меню:
-    "Список обновлений"
-    "Актуальные функции бота"`,
+    Jannelli & Volpi`,
         { parse_mode: 'HTML' }
     );
 });
@@ -2921,7 +2927,7 @@ bot.on('message', async msg => {
 
                 const [Textile, Wallpaper] = await Promise.all([findCatalogTextile(chatId), findCatalogWallpaper(chatId)]);
 
-                if (Textile === undefined && Wallpaper === undefined) {
+                if (Textile === null && Wallpaper === null) {
 
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
