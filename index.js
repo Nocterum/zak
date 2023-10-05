@@ -2206,6 +2206,7 @@ bot.onText(/\/abilitys/, (msg) => {
 
 bot.sendMessage(chatId,
 `<b>Что умеет бот сейчас:</b>
+
 Производить поиск остатков на сайтах:
 <pre>opusdeco.ru</pre>
 <pre>dealer.decaro.ru</pre>
@@ -2219,7 +2220,7 @@ Armani Casa*
 <code>Bluebellgray</code>
 <code>BN International</code>
 <code>Brink</code>
-CODE /Sirpi*
+CODE | Sirpi*
 <code>Collins & Company</code>
 <code>Eijffinger</code>
 <code>Holden</code>
