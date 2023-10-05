@@ -1155,9 +1155,10 @@ async function findCatalogWallpaper(chatId) {
 
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
-                        let PricelistLink = await findPricelistLink(chatId, cValue);
+                        const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                        console.log(formatedMessageResult1C);
                         
-                        if (!findResult1C.toLowerCase().includes('нигде не числится')) {
+                        if (!formatedMessageResult1C) {
 
                             const o1Value = firstWorksheet.getCell('O1').value;
                             const p1Value = firstWorksheet.getCell('P1').value;
@@ -1255,8 +1256,9 @@ async function findCatalogTextile(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+                        const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
 
-                        if (!findResult1C.toLowerCase().includes('нигде не числится')) {
+                        if (!formatedMessageResult1C) {
                             const p1Value = firstWorksheet.getCell(`P1`).value;
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
