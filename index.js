@@ -2940,8 +2940,13 @@ bot.on('message', async msg => {
                 const [Textile, Wallpaper] = await Promise.all([findCatalogTextile(chatId), findCatalogWallpaper(chatId)]);
                 // const Textile = await findCatalogTextile(chatId);
                 // const Wallpaper = await findCatalogWallpaper(chatId);
+                
                 if (Textile === undefined && Wallpaper === undefined) {
-                    return "Такой каталог не найден";
+                    return bot.sendMessage(
+                    chatId, 
+                    `Такого каталога у нас нет\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+                    {parse_mode: 'HTML'}
+                );
                 }
                 return {Textile, Wallpaper};
 
