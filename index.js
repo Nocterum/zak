@@ -33,7 +33,6 @@ const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-// password = {};
 chats = {};
 
 // lc = {};    //последняя команда
@@ -55,40 +54,96 @@ bot.setMyCommands([
 
 //ФУНКЦИИ=========================================================================================
 
+// создание нового пользователя
+const createNewUser = async (chatId, msg) => {
+    
+    const newUser = await UserModel.create({chatId});
+    console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'firstName', 'lastName', 'email', 'nickname']
+    });
+
+    return user.update({
+        firstName: msg.from.first_name, 
+        nickname: msg.from.first_name,
+        lastName: msg.from.last_name, 
+        email: '/passwordcheck',
+    });
+}
+
+// Функция проверки пароля
+const chekPassword = async (chatId, msg) => {
+    let text = msg.text;
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        }, 
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
+    });
+
+    if (text === '111QWER!!!') {
+
+        // lc = '/editNickname';
+        await user.update({lastCommand: '/editEmail', email: '/editEmail'}, {
+            where: {
+                chatId: chatId,
+            }
+        })
+
+        return bot.sendMessage(
+            chatId, 
+            `Приветcтвую, ${msg.from.first_name}! Приятно познакомиться!\n<b>Напишите Ваш рабочий email</b>?`
+        );
+
+    } else {
+
+        return bot.sendMessage(
+            chatId, 
+            `В доступе отказано.\nПовторите попытку:`
+        );
+    }
+}
+
 // Функция ввода email
 const editEmail = async (chatId) => {
-    // lc = /enterVC
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         },
         attributes: ['id', 'chatId', 'lastCommand']
     });
-
+    
+    // lc = /editEmail
     await user.update({lastCommand: '/editEmail'}, {
         where: {
             chatId: chatId
         }
     })
-    return bot.sendMessage(chatId, `Можете ввести Ваш рабочий email:`)
+    return bot.sendMessage(chatId, `<b>Напишите Ваш рабочий email</b>`)
 }
 
 // Функция ввода никнейма
 const editNickname = async (chatId) => {
-    // lc = '/editNickname'
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         },
         attributes: ['id', 'chatId', 'lastCommand']
     });
-
+    
+    // lc = '/editNickname'
     await user.update({lastCommand: '/editNickname'}, {
         where: {
             chatId: chatId
         }
     })
-    return bot.sendMessage(chatId, `Можете ввести Ваш никнейм:`)
+    return bot.sendMessage(chatId, `Введите пожалуйста Ваш никнейм\n<i>то как я буду к вам обращаться</i>:`),
+    { parse_mode: 'HTML' }
 }
 
 // Функция поиска в 1С
@@ -2057,29 +2112,45 @@ bot.onText(/\/start/, async msg => {
 
         if (user) {
             
-            // lc = null
-            await user.update({lastCommand: null}, {
-                where: {
-                    chatId: chatId
-                }
-            })
+            if (user.email !== '/passwordcheck') {
+
+                // lc = null
+                await user.update({lastCommand: null}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+    
+                return bot.sendMessage(
+                    chatId, 
+                    `Ты ${user.firstName}, Я - Зак, мы уже знакомы 😅`
+                );
+            } else {
+
+                return bot.sendMessage(
+                    chatId, 
+                    `Введите пароль:`
+                );
+            }
 
         } else {
 
-            const newUser = await UserModel.create({chatId});
+            // const newUser = await UserModel.create({chatId});
 
-            user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                }
-            });
+            // user = await UserModel.findOne({
+            //     where: {
+            //         chatId: chatId
+            //     }
+            // });
 
-            console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-            await user.update({
-                firstName: msg.from.first_name, 
-                lastName: msg.from.last_name, 
-                nickname: '/password',
-            });
+            // console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+            // await user.update({
+            //     firstName: msg.from.first_name, 
+            //     lastName: msg.from.last_name, 
+            //     email: '/passwordcheck',
+            // });
+
+            await createNewUser(chatId, msg);
 
             return bot.sendMessage(
                 chatId, 
@@ -2299,6 +2370,7 @@ bot.on('message', async msg => {
     });
     
     try {
+
         if (user) {
 
             if (msg.document) {
@@ -2431,44 +2503,31 @@ bot.on('message', async msg => {
                     );
                 }
 
-            } else if (!user) {
+            } else if (user.email === '/passwordcheck') {
 
-                const newUser = await UserModel.create({chatId});
-                console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-                 await user.update({
-                    firstName: msg.from.first_name, 
-                    lastName: msg.from.last_name, 
-                    nickname: '/password',
-                });
+                return chekPassword(chatId, msg);
+                
+                // if (text === '111QWER!!!') {
 
-                let user = await UserModel.findOne({
-                    where: {
-                        chatId: chatId
-                    }
-                });
+                //     // lc = '/editNickname';
+                //     await user.update({lastCommand: '/editEmail', email: '/editEmail'}, {
+                //         where: {
+                //             chatId: chatId,
+                //         }
+                //     })
 
-            } else if (user.nickname === '/password') {
+                //     return bot.sendMessage(
+                //         chatId, 
+                //         `Приветcтвую, ${msg.from.first_name}!\nПриятно познакомиться!\n<b>Напишите свой email</b>?`
+                //     );
 
-                if (text === '111QWER!!!') {
+                // } else {
 
-                    // lc = '/editNickname';
-                    await user.update({lastCommand: '/editNickname', nickname: '/editNickname'}, {
-                        where: {
-                            chatId: chatId,
-                        }
-                    })
-                    return bot.sendMessage(
-                        chatId, 
-                        `Приветcтвую, ${msg.from.first_name}! Меня зовут бот Зак.\nПриятно познакомиться!\nЯ могу подсказать наличие каталогов текстиля и обоев в магазинах, показать остатки продукции ORAC на складах в МСК и СПБ, производить поиск остатков на сайте поставщика ОПУС, а так же отправлять запросы в виде email на наличие, сроки поставки и резерв по многим российским поставщикам.\nКак я могу к вам обращаться?`
-                    );
-
-                } else {
-
-                    return bot.sendMessage(
-                        chatId, 
-                        `В доступе отказано.`
-                    );
-                }
+                //     return bot.sendMessage(
+                //         chatId, 
+                //         `В доступе отказано.\nПовторите попытку:`
+                //     );
+                // }
 
             } else if (text === '/mainmenu') {
 
@@ -2486,19 +2545,19 @@ bot.on('message', async msg => {
 
             } else if (user.lastCommand === '/editEmail') {
 
-                await user.update({email: text.toLowerCase()});
+                await user.update({email: text.toLowerCase(), lastCommand: null});
                 return bot.sendMessage(
                     chatId, 
-                    `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(Если емейл введен корректно нажмите на кнопку <b>В главное меню</b>\nЕсли желаете перезаписать: введите емейл повторно)</i>`, 
+                    `Ваш email "<b>${user.email}</b>" успешно сохранён.`, 
                     beginWorkOptions
                 );
 
             } else if (user.lastCommand === '/editNickname') {
 
-                await user.update({nickname: text});
+                await user.update({nickname: text, lastCommand: null});
                 return bot.sendMessage(
                     chatId, 
-                    `Теперь я буду называть вас "<b>${user.nickname}</b>"\n<i>(Если имя вас устраивает нажмите на кнопку <b>В главное меню</b>\nЕсли желаете перезаписать: введите никнейм повторно)</i>`, 
+                    `Теперь я буду называть вас "<b>${user.nickname}</b>".`, 
                     mainMenuReturnOptions
                 );
 
@@ -2843,9 +2902,23 @@ bot.on('message', async msg => {
                     { parse_mode: 'HTML' }
                 );
             }
+
+        } else {
+
+            // const newUser = await UserModel.create({chatId});
+            // console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
+
+            // await user.update({
+            //     firstName: msg.from.first_name, 
+            //     lastName: msg.from.last_name, 
+            //     email: '/passwordcheck',
+            // });
+            await createNewUser(chatId, msg);
+
+            return chekPassword(chatId, msg);
         }
     } catch (e) {
-        console.log('Сработал слушатель документов.', e)
+        console.log('Ошибка в слушателе сообщений.', e)
     }
 }); 
 
@@ -2931,11 +3004,17 @@ bot.on('callback_query', async msg => {
         return editEmail(chatId);
 
     } else if (data === '/resetInfoWork') {
+        await user.update({
+            catalog: null, 
+            brand: null, 
+            vendorCode: null, 
+            reserveNumber: null
+        }, {
+            where: {
+                chatId: chatId,
+            }
+        })
 
-        await user.update({catalog: null});
-        await user.update({brand: null});
-        await user.update({vendorCode: null});
-        await user.update({reserveNumber: null});
         return bot.sendMessage(
             chatId,
             `Искомые параметры сброшенны.`
