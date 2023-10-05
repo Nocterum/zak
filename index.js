@@ -49,7 +49,8 @@ let textMail = {};  //текст письма
 bot.setMyCommands([
     {command: '/mainmenu', description:'Главное меню'},
     {command: '/settings', description:'Настройки'},
-    {command: '/infowork', description:'Проверка введенных параметров'},
+    {command: '/abilitys', description:'Актуальные функции бота'},
+    {command: '/updatelist', description:'Список обновлений'},
 ])
 
 //ФУНКЦИИ=========================================================================================
@@ -2021,7 +2022,7 @@ const start = async () => {
         console.log('Подключение к базе данных сломалось', err);
     }
 
-//слушатель команд======================================================================================
+// команды======================================================================================
 
 //старт
 bot.onText(/\/start/, async msg => {
@@ -2074,6 +2075,7 @@ bot.onText(/\/start/, async msg => {
 
 });
 
+// начать игру
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
@@ -2100,6 +2102,7 @@ bot.onText(/\/game/, async msg => {
     );
 });
 
+// для тестирования
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
 
@@ -2118,6 +2121,7 @@ bot.onText(/\/x/, async msg => {
     })
 });
 
+// настройки пользователя
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
 
@@ -2142,6 +2146,7 @@ bot.onText(/\/settings/, async msg => {
     );
 });
 
+// получение имена файлов 
 bot.onText(/\/files/, (msg) => {
     const chatId = msg.chat.id;
     const folderPath = '/root/zak/xl';
@@ -2161,6 +2166,7 @@ bot.onText(/\/files/, (msg) => {
     });
 });
 
+// получение конкретного файла
 bot.onText(/\/getfile (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     const fileName = match[1];
@@ -2177,21 +2183,83 @@ bot.onText(/\/getfile (.+)/, (msg, match) => {
     });
 });
 
+// получение списка пользователей
 bot.onText(/\/whoiswho/, (msg) => {
 
     UserModel.findAll().then((users) => {
 
-      users.forEach((user) => {
+        users.forEach((user) => {
         const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
-        bot.sendMessage(msg.chat.id,
-            message,
-            { parse_mode: 'HTML' }
-        );
-      });
+            bot.sendMessage(msg.chat.id,
+                message,
+                { parse_mode: 'HTML' }
+            );
+        });
     }).catch((error) => {
-      console.error('Error retrieving users:', error);
+      console.error('Ошибка при получении пользователей.:', error);
     });
-  });
+});
+
+// получение списка пользователей
+bot.onText(/\/abilitys/, (msg) => {
+    const chatId = msg.chat.id;
+
+bot.sendMessage(chatId,
+`<b>Что умеет бот сейчас:</b>
+Производить поиск остатков на сайтах:
+<pre>opusdeco.ru</pre>
+<pre>dealer.decaro.ru</pre>
+<pre>galleriaarben.ru</pre>
+
+Производить поиск по файлам остатков следующих брендов:
+<code>Architects Papers</code>
+Armani Casa*
+<code>ARTE</code>
+<code>Bautex</code>
+<code>Bluebellgray</code>
+<code>BN International</code>
+<code>Brink</code>
+CODE /Sirpi*
+<code>Collins & Company</code>
+<code>Eijffinger</code>
+<code>Holden</code>
+<code>Hookedonwalls</code>
+Jannelli & Volpi*
+<code>Khroma Zoom</code>
+<code>Loymina</code>
+<code>Milassa</code>
+Missoni*
+<code>Nina Hancock</code>
+<code>ORAC</code>
+<code>Swiss Lake</code>
+<code>Ted Beker</code>
+<code>Wedgwood</code>
+<i>*в доработке</i></code>
+
+<b>Отправлять емейлы поставщику</b>
+<b>Подсказывать путь к папке с прайслистами</b>
+<b>Искать каталоги обоев и текстиля</b>
+<b>Искать остатки в 1С*</b>
+<i>*общее колличество</i>`,
+        { parse_mode: 'HTML' }
+    );
+});
+
+// обновления
+bot.onText(/\/updatelist/, (msg) => {
+    const chatId = msg.chat.id;
+
+bot.sendMessage(chatId,
+`<b>Версия 1.0.2
+Что нового:</b>
+
+появились новые пункты в контекстном меню:
+"Последнее обновление"
+"Актуальные функции бота"`,
+        { parse_mode: 'HTML' }
+    );
+});
+
 //слушатель сообщений==========================================================================================
 
 bot.on('message', async msg => {
@@ -2739,6 +2807,9 @@ bot.on('message', async msg => {
                             text !== '/settings' && 
                             text !== '/files' && 
                             text !== '/x' &&
+                            text !== '/whoiswho' &&
+                            text !== '/abilitys' &&
+                            text !== '/updatelist' &&
                             !text.startsWith('/getfile'))  
                         ) {
                         
