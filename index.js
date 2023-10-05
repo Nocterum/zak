@@ -2234,7 +2234,7 @@ Missoni*
 <code>Swiss Lake</code>
 <code>Ted Beker</code>
 <code>Wedgwood</code>
-<i>*в доработке</i></code>
+<i>*в доработке</i>
 
 <b>Отправлять емейлы поставщику</b>
 <b>Подсказывать путь к папке с прайслистами</b>
