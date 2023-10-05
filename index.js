@@ -158,10 +158,11 @@ const startRequest1C = async (chatId, vendorCode) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
-        if (!response) {
+        if (response === undefined) {
 
             let messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
             return { messageResult1C };
+
         } else {
 
             // Создание виртуального DOM
@@ -250,7 +251,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                 console.log('Не найденны строки в таблице');
             }
         }
-        
+
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
     }
