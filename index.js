@@ -104,7 +104,7 @@ const chekPassword = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId, 
-            `В доступе отказано.\nПовторите попытку:`
+            `В доступе отказано.\nВведите пароль:`
         );
     }
 }
