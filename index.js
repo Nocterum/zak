@@ -2489,7 +2489,7 @@ bot.on('message', async msg => {
                 await user.update({email: text.toLowerCase()});
                 return bot.sendMessage(
                     chatId, 
-                    `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(для перезаписи введите email повторно)</i>`, 
+                    `Ваш email "<b>${user.email}</b>" успешно сохранён\n<i>(Если емейл введен корректно нажмите на кнопку <b>Главное меню</b>\nЕсли желаете перезаписать: введите емейл повторно)</i>`, 
                     beginWorkOptions
                 );
 
@@ -2498,7 +2498,7 @@ bot.on('message', async msg => {
                 await user.update({nickname: text});
                 return bot.sendMessage(
                     chatId, 
-                    `Хорошо, "<b>${user.nickname}</b>", я запомню.\n<i>(для перезаписи введите никнейм повторно)</i>`, 
+                    `Теперь я буду называть вас "<b>${user.nickname}</b>"\n<i>(Если имя вас устраивает нажмите на кнопку <b>Главное меню</b>\nЕсли желаете перезаписать: введите никнейм повторно)</i>`, 
                     mainMenuReturnOptions
                 );
 
