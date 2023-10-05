@@ -97,7 +97,8 @@ const chekPassword = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId, 
-            `Приветcтвую, ${msg.from.first_name}! Приятно познакомиться!\n<b>Напишите Ваш рабочий email</b>?`
+            `Приветcтвую, ${msg.from.first_name}! Приятно познакомиться!\n<b>Напишите Ваш рабочий email</b>?`,
+            { parse_mode: 'HTML' }
         );
 
     } else {
@@ -124,7 +125,10 @@ const editEmail = async (chatId) => {
             chatId: chatId
         }
     })
-    return bot.sendMessage(chatId, `<b>Напишите Ваш рабочий email</b>`)
+    return bot.sendMessage(chatId,
+        `<b>Напишите Ваш рабочий email</b>`,
+        { parse_mode: 'HTML' }
+    );
 }
 
 // Функция ввода никнейма
@@ -2125,30 +2129,9 @@ bot.onText(/\/start/, async msg => {
                     chatId, 
                     `Ты ${user.firstName}, Я - Зак, мы уже знакомы 😅`
                 );
-            } else {
-
-                return bot.sendMessage(
-                    chatId, 
-                    `Введите пароль:`
-                );
             }
 
         } else {
-
-            // const newUser = await UserModel.create({chatId});
-
-            // user = await UserModel.findOne({
-            //     where: {
-            //         chatId: chatId
-            //     }
-            // });
-
-            // console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-            // await user.update({
-            //     firstName: msg.from.first_name, 
-            //     lastName: msg.from.last_name, 
-            //     email: '/passwordcheck',
-            // });
 
             await createNewUser(chatId, msg);
 
@@ -2168,27 +2151,30 @@ bot.onText(/\/start/, async msg => {
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
-    // lc = '/game';
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        },
-        attributes: ['id', 'chatId', 'lastCommand']
-    });
+    if (user.email !== '/passwordcheck') {
 
-    await user.update({lastCommand: '/game'}, {
-        where: {
-            chatId: chatId
-        }
-    })
+        // lc = '/game';
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'lastCommand']
+        });
 
-    const randomNumber = Math.floor(Math.random() * 10)
-    chats[chatId] = randomNumber;
-    return bot.sendMessage(
-        chatId, 
-        `Отгадай число😏`, 
-        gameOptions
-    );
+        await user.update({lastCommand: '/game'}, {
+            where: {
+                chatId: chatId
+            }
+        })
+
+        const randomNumber = Math.floor(Math.random() * 10)
+        chats[chatId] = randomNumber;
+        return bot.sendMessage(
+            chatId, 
+            `Отгадай число😏`, 
+            gameOptions
+        );
+    }
 });
 
 // для тестирования
@@ -2214,79 +2200,93 @@ bot.onText(/\/x/, async msg => {
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
 
-    // lc = null; 
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        },
-        attributes: ['id', 'chatId', 'lastCommand']
-    });
+    if (user.email !== '/passwordcheck') {
 
-    await user.update({lastCommand: null}, {
-        where: {
-            chatId: chatId
-        }
-    })
-
-    return bot.sendMessage(
-        chatId, 
-        `Настройки:`, 
-        settingsOptions
-    );
+        // lc = null; 
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'lastCommand']
+        });
+    
+        await user.update({lastCommand: null}, {
+            where: {
+                chatId: chatId
+            }
+        })
+    
+        return bot.sendMessage(
+            chatId, 
+            `Настройки:`, 
+            settingsOptions
+        );
+    }
 });
 
 // получение имена файлов 
 bot.onText(/\/files/, (msg) => {
-    const chatId = msg.chat.id;
-    const folderPath = '/root/zak/xl';
-  
-    // Получение списка файлов в папке
-    fs.readdir(folderPath, async (err, files) => {
-        if (err) {
-            console.log(err);
-            return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
-        }
-  
-        // Отправка списка файлов
-        await bot.sendMessage(chatId, 'Список файлов:');
-        files.forEach((file) => {
-            return bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
+
+    if (user.email !== '/passwordcheck') {
+
+        const chatId = msg.chat.id;
+        const folderPath = '/root/zak/xl';
+        
+        // Получение списка файлов в папке
+        fs.readdir(folderPath, async (err, files) => {
+            if (err) {
+                console.log(err);
+                return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+            }
+        
+            // Отправка списка файлов
+            await bot.sendMessage(chatId, 'Список файлов:');
+            files.forEach((file) => {
+                return bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
+            });
         });
-    });
+    }
 });
 
 // получение конкретного файла
 bot.onText(/\/getfile (.+)/, (msg, match) => {
-    const chatId = msg.chat.id;
-    const fileName = match[1];
-    const filePath = path.join('/root/zak/xl', fileName);
-  
-    // Проверка существования файла
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return bot.sendMessage(chatId, 'Файл не найден.');
-        }
-  
-        // Отправка файла
-        bot.sendDocument(chatId, filePath);
-    });
+
+    if (user.email !== '/passwordcheck') {
+
+        const chatId = msg.chat.id;
+        const fileName = match[1];
+        const filePath = path.join('/root/zak/xl', fileName);
+        
+        // Проверка существования файла
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                return bot.sendMessage(chatId, 'Файл не найден.');
+            }
+        
+            // Отправка файла
+            bot.sendDocument(chatId, filePath);
+        })
+    }
 });
 
 // получение списка пользователей
 bot.onText(/\/whoiswho/, (msg) => {
 
-    UserModel.findAll().then((users) => {
+    if (user.email !== '/passwordcheck') {
 
-        users.forEach((user) => {
-        const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
-            bot.sendMessage(msg.chat.id,
-                message,
-                { parse_mode: 'HTML' }
-            );
+        UserModel.findAll().then((users) => {
+
+            users.forEach((user) => {
+            const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
+                bot.sendMessage(msg.chat.id,
+                    message,
+                    { parse_mode: 'HTML' }
+                );
+            });
+        }).catch((error) => {
+          console.error('Ошибка при получении пользователей.:', error);
         });
-    }).catch((error) => {
-      console.error('Ошибка при получении пользователей.:', error);
-    });
+    }
 });
 
 // получение списка пользователей
@@ -2507,28 +2507,6 @@ bot.on('message', async msg => {
 
                 return chekPassword(chatId, msg);
                 
-                // if (text === '111QWER!!!') {
-
-                //     // lc = '/editNickname';
-                //     await user.update({lastCommand: '/editEmail', email: '/editEmail'}, {
-                //         where: {
-                //             chatId: chatId,
-                //         }
-                //     })
-
-                //     return bot.sendMessage(
-                //         chatId, 
-                //         `Приветcтвую, ${msg.from.first_name}!\nПриятно познакомиться!\n<b>Напишите свой email</b>?`
-                //     );
-
-                // } else {
-
-                //     return bot.sendMessage(
-                //         chatId, 
-                //         `В доступе отказано.\nПовторите попытку:`
-                //     );
-                // }
-
             } else if (text === '/mainmenu') {
 
                 // lc = null;
@@ -2537,6 +2515,7 @@ bot.on('message', async msg => {
                         chatId: chatId
                     }
                 })
+
                 return bot.sendMessage(
                     chatId, 
                     `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
@@ -2905,14 +2884,6 @@ bot.on('message', async msg => {
 
         } else {
 
-            // const newUser = await UserModel.create({chatId});
-            // console.log(`Новый пользователь создан: ${msg.from.first_name} ${msg.from.last_name}`);
-
-            // await user.update({
-            //     firstName: msg.from.first_name, 
-            //     lastName: msg.from.last_name, 
-            //     email: '/passwordcheck',
-            // });
             await createNewUser(chatId, msg);
 
             return chekPassword(chatId, msg);
