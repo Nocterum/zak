@@ -293,25 +293,25 @@ const startCheckVendor = async (chatId, msg) => {
             return bot.sendMessage(
                 chatId, 
                 `Чтобы <b>отправить email</b>\n с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         } else if (formatedUserVendor.includes('ОПУС')) {
             return bot.sendMessage(
                 chatId, 
                 `Чтобы <b>посмотреть остатки</b> на сайте\n"https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
             return bot.sendMessage(
                 chatId, 
                 `Чтобы <b>посмотреть остатки</b> на сайте\n"https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
             return bot.sendMessage(
                 chatId, 
                 `Чтобы <b>посмотреть остатки</b> на сайте\n"http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
                     formatedUserVendor.includes('ОРАК') ||
@@ -333,7 +333,7 @@ const startCheckVendor = async (chatId, msg) => {
             return bot.sendMessage(
                 chatId, 
                 `К сожалению, мне ещё не разрешили работать с поставщиком бренда <b>${user.brand}</b>.`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         }
     } else {
@@ -1155,15 +1155,19 @@ async function findCatalogWallpaper(chatId) {
 
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
+                        let PricelistLink = await findPricelistLink(chatId, cValue);
+
                         const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
                         console.log(formatedMessageResult1C);
-                        
+
                         if (!formatedMessageResult1C) {
 
                             const o1Value = firstWorksheet.getCell('O1').value;
                             const p1Value = firstWorksheet.getCell('P1').value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n\n`;
+
+                            message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
 
                             if (oValue !== null) {
                                 message += `${o1Value}: ${oValue}\n`;
@@ -1172,13 +1176,19 @@ async function findCatalogWallpaper(chatId) {
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
+
+                            message += `\n${PricelistLink.messagePrice}`
 
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            await bot.sendMessage(chatId, message, beginWork3Options);
+
+                            return bot.sendMessage(
+                                chatId, 
+                                message, 
+                                beginWork3Options
+                            );
                         
                         } else {
 
@@ -1190,7 +1200,7 @@ async function findCatalogWallpaper(chatId) {
                             return bot.sendMessage(
                                 chatId, 
                                 `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
-                                {parse_mode: 'HTML'}
+                                { parse_mode: 'HTML' }
                             );
                         }
                     }
@@ -1256,23 +1266,27 @@ async function findCatalogTextile(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+
                         const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
 
                         if (!formatedMessageResult1C) {
+
                             const p1Value = firstWorksheet.getCell(`P1`).value;
 
-                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в магазинах Manders!\n`;
+                            message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n`;
+
+                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n`
 
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
-                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n${PricelistLink.messagePrice}`
                             
-
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
+
+                            message += `\n${PricelistLink.messagePrice}`
 
                             await bot.sendMessage(
                                 chatId, 
@@ -1289,8 +1303,8 @@ async function findCatalogTextile(chatId) {
                             return bot.sendMessage(
                                 chatId, 
                                 `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
-                                {parse_mode: 'HTML'
-                            });
+                                { parse_mode: 'HTML' }
+                            );
                         }
                     }
                 }
@@ -1470,7 +1484,7 @@ async function findDecorDelux(chatId) {
                 return bot.sendMessage(
                     chatId,
                     `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_делюкс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                    {parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
             }
 
@@ -1592,7 +1606,7 @@ async function findDecorRus(chatId) {
                 return bot.sendMessage(
                     chatId,
                     `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                    {parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
             }
 
@@ -1723,7 +1737,7 @@ async function findBautex(chatId) {
                 return bot.sendMessage(
                     chatId,
                     `Совпадения с артикулом ${user.vendorCode} в файле "остатки_баутекс" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                    {parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
             }
 
@@ -1823,7 +1837,7 @@ async function findLoymina(chatId) {
                 return bot.sendMessage(
                     chatId,
                     `Совпадения с артикулом ${user.vendorCode} в файле "остатки_лоймина" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                    {parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
             }
 
@@ -1934,7 +1948,7 @@ async function findSirpi(chatId) {
             return bot.sendMessage(
                 chatId,
                 `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         }
 
@@ -2065,7 +2079,7 @@ async function findBrink(chatId) {
             return bot.sendMessage(
                 chatId,
                 `Совпадения с артикулом ${user.vendorCode} в файле "остатки_сирпи" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
-                {parse_mode: 'HTML'}
+                { parse_mode: 'HTML' }
             );
         }
 
@@ -2238,7 +2252,7 @@ bot.onText(/\/files/, (msg) => {
             // Отправка списка файлов
             await bot.sendMessage(chatId, 'Список файлов:');
             files.forEach((file) => {
-                return bot.sendMessage(chatId, `<code>${file}</code>`, {parse_mode: 'HTML'} );
+                return bot.sendMessage(chatId, `<code>${file}</code>`, { parse_mode: 'HTML' } );
             });
         });
     }
@@ -2400,7 +2414,7 @@ bot.on('message', async msg => {
                             bot.sendMessage(
                                 chatId, 
                                 `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                {parse_mode: 'HTML'}
+                                { parse_mode: 'HTML' }
                             );
                         });
                     });
@@ -2486,7 +2500,7 @@ bot.on('message', async msg => {
                                 bot.sendMessage(
                                     chatId, 
                                     `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                    {parse_mode: 'HTML'}
+                                    { parse_mode: 'HTML' }
                                 );
                             });
                         });
@@ -2776,7 +2790,7 @@ bot.on('message', async msg => {
                 return bot.sendMessage(
                     chatId, 
                     `${findResult1C.messageResult1C}`,
-                    { parse_mode: 'HTML'}
+                    { parse_mode: 'HTML' }
                 );
 
             } else if (user.lastCommand === '/enterReserveNumber') {
@@ -3001,7 +3015,7 @@ bot.on('callback_query', async msg => {
 
         return bot.sendMessage(
             chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
-            {parse_mode: 'HTML'}
+            { parse_mode: 'HTML' }
         );
 
     } else if (data === '/enterReserveNumber') {
@@ -3086,7 +3100,7 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(
             chatId, 
             'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
-            {parse_mode: 'HTML'}
+            { parse_mode: 'HTML' }
         );
 
     } else if (data === '/oracCheck') {
@@ -3100,7 +3114,7 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
-            {parse_mode: 'HTML'}
+            { parse_mode: 'HTML' }
         );
 
     } else if (data === '/request1C') {
@@ -3114,7 +3128,7 @@ bot.on('callback_query', async msg => {
         return bot.sendMessage(
             chatId, 
             'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
-            {parse_mode: 'HTML'}
+            { parse_mode: 'HTML' }
         );
 
     } else if (data === '/work2') {
