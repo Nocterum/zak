@@ -1866,14 +1866,7 @@ async function findSirpi(chatId) {
                             message,
                             startFindOptions
                         );
-                    } else {
-
-                        return bot.sendMessage(
-                            chatId, 
-                            `Совпадения в файле по остаткам поставщика Сирпи.ру не найдены\n<i>можете ввести следующий артикул для поиска</i>`,
-                            startFind1Options
-                        );
-
+                        
                     }
                 }
             }
