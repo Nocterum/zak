@@ -2933,8 +2933,10 @@ bot.on('message', async msg => {
 
                 await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
                 botMsgIdx = msg.message_id += 1; 
-                const Textile = await findCatalogTextile(chatId);
-                const Wallpaper = await findCatalogWallpaper(chatId);
+
+                const [Textile, Wallpaper] = await Promise.all([findCatalogTextile(chatId), findCatalogWallpaper(chatId)]);
+                // const Textile = await findCatalogTextile(chatId);
+                // const Wallpaper = await findCatalogWallpaper(chatId);
                 return {Textile, Wallpaper};
 
             } else if (user.lastCommand === '/oracCheck') {
