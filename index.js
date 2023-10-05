@@ -1829,24 +1829,41 @@ async function findSirpi(chatId) {
 
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
+                        let message = '';
 
                         const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Номенкулатура
-                        const bValue = firstWorksheet['B' + cellAddress.substring(1)].v; // Артикул
-                        const cValue = firstWorksheet['C' + cellAddress.substring(1)].v; // В коробе 
-                        const dValue = firstWorksheet['D' + cellAddress.substring(1)].v; // Продается не кратно коробкам
-                        let iValue = firstWorksheet['I' + cellAddress.substring(1)].v; // Цена базовая
-                        const jValue = firstWorksheet['J' + cellAddress.substring(1)].v; // Валюта
-                        const kValue = firstWorksheet['K' + cellAddress.substring(1)].v; // Цена РРЦ
-                        const lValue = firstWorksheet['L' + cellAddress.substring(1)].v; // Валюта РРЦ
+                        message += `<b>${aValue}</b>\n`;
 
-        
+                        const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Доступно
+                        if (cCell && cCell.v !== null && cCell.v !== undefined) {
+                            message += `${cCell.v}`
+                        }
+
+                        const d1Value = firstWorksheet['D1'].v; // Дата поставки 1
+                        const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // колличество в поставке 1
+                        if (dCell && dCell.v !== null && dCell.v !== undefined) {
+                            message += `${d1Value}\nБудет доступно ${dCell.v}\n`
+                        }
+
+                        let e1Value = firstWorksheet['E1'].v; // Дата поставки 2
+                        const eCell = firstWorksheet['E' + cellAddress.substring(1)]; // колличество в поставке 2
+                        if (eCell && eCell.v !== null && eCell.v !== undefined) {
+                            message += `${e1Value}\nБудет доступно ${eCell.v}\n`
+                        }
+
+                        const f1Value = firstWorksheet['F1'].v; // Дата поставки 2
+                        const fCell = firstWorksheet['F' + cellAddress.substring(1)]; // колличество в поставке 3
+                        if (fCell && fCell.v !== null && fCell.v !== undefined) {
+                            message += `${f1Value}\nБудет доступно ${fCell.v}\n`
+                        }
+
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
                         return bot.sendMessage(
                             chatId, 
-                            `<b>${aValue}</b>\nВ коробе: ${cValue}\nПродается ли кратно коробкам: ${dValue}\nБазовая цена: ${iValue} ${jValue}\nЦена РРЦ: ${kValue} ${lValue}\n\n<i>можете ввести следующий артикул для поиска</i>`,
+                            message,
                             startFindOptions
                         );
                     }
