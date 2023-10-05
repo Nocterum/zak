@@ -224,8 +224,15 @@ const startRequest1C = async (chatId, vendorCode) => {
                 }).join('');
 
                 if (messageResult1C.length !== 0) {
+
                     return { messageResult1C };
+
+                } else if (messageResult1C === undefined) {
+
+                    messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+                    
                 } else {
+
                     messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
                     return { messageResult1C };
                 }
