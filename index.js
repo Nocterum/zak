@@ -1138,7 +1138,7 @@ async function findCatalogWallpaper(chatId) {
                             }
                             return bot.sendMessage(
                                 chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`,
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`,
                                 {parse_mode: 'HTML'}
                             );
                         }
@@ -1239,7 +1239,7 @@ async function findCatalogTextile(chatId) {
                                 bot.deleteMessage(chatId, botMsgIdx);
                                 botMsgIdx = null;
                             }
-                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
+                            return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n${PricelistLink.messagePrice}`, {parse_mode: 'HTML'});
                         }
                     }
                 }
@@ -1250,7 +1250,7 @@ async function findCatalogTextile(chatId) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
                 }
-                return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибника за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n`, {parse_mode: 'HTML'});
+                return bot.sendMessage(chatId, `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n+7 966 321-80-08\n\n`, {parse_mode: 'HTML'});
             }
 
         } catch (error) {
