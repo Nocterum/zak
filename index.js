@@ -1024,7 +1024,7 @@ async function findOrac(chatId) {
     let vendorCode = user.vendorCode;
     const findResult1C = await startRequest1C(chatId, vendorCode);
 
-    if (findResult1C.messageResult1C) {
+    if (findResult1C) {
 
         messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
     } else {
