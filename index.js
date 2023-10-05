@@ -160,8 +160,8 @@ const startRequest1C = async (chatId, vendorCode) => {
 
         if (!response) {
 
-            let messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
-            return { messageResult1C };
+            // let messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+            // return { messageResult1C };
 
         } else {
 
@@ -2853,7 +2853,7 @@ bot.on('message', async msg => {
                         { parse_mode: 'HTML' }
                     );
                 }
-                
+
             } else if (user.lastCommand === '/enterReserveNumber') {
                 let counter = 0;
                 while (text.includes("  ") && counter < 3) {
