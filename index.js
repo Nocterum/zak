@@ -2528,7 +2528,7 @@ bot.on('message', async msg => {
                 return bot.sendMessage(
                     chatId, 
                     `Ваш email "<b>${user.email}</b>" успешно сохранён.`, 
-                    beginWorkOptions
+                    mainMenuReturnOptions
                 );
 
             } else if (user.lastCommand === '/editNickname') {
