@@ -158,93 +158,99 @@ const startRequest1C = async (chatId, vendorCode) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
-        // Создание виртуального DOM
-        const dom = new JSDOM(response.data);
-        const document = dom.window.document;
+        if (!response) {
 
-        // Получение таблицы из DOM
-        const tableElement = document.querySelector("body > table:nth-child(3)");
-
-        // Получение строк таблицы
-        const rows = tableElement.querySelectorAll('tr');
-        // Проверка наличия данных в таблице
-
-        if (rows.length > 0) {
-            let warehouse, quantity, reserve;
-
-            // Форматирование данных построчно
-            const formatedData = Array.from(rows).map((row, index) => {
-                
-                if (!row.querySelector('td.R3C0')) {
-                    const cells = row.querySelectorAll('td');
-                    if (cells[0]) {
-                        warehouse = cells[0].textContent.trim();  // склад
-                    }
-                    if (cells[1] !== '') {
-                        quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
-                    } else {
-                        quantity = '0';
-                    }
-                    if (cells[2] !== '') {
-                        reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
-                    } else {
-                        reserve = '0';
-                    }
-                }
-                return {
-                    warehouse,
-                    quantity,
-                    reserve
-                };
-                
-            });
-
-            // Вывод данных пользователю
-            if (formatedData.length > 0 ) {
-
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
-                }
-                let message = '';
-                let messageResult1C = formatedData.map(obj => {
-                    if (obj.warehouse === undefined) {
-                        return "";
-                    } else {
-                        message = '';
-                        message += `<strong>${obj.warehouse}</strong>\n`
-
-                        if (obj.quantity > 0) {
-                            message += `Количество: ${obj.quantity}\n`
-                        }
-                        if (obj.reserve > 0) {
-                            message += `Резерв: ${obj.reserve}\n`
-                        }
-                        message += `\n`
-                        return message;
-                    }
-                }).join('');
-
-                if (messageResult1C.length !== 0) {
-
-                    return { messageResult1C };
-
-                } else {
-
-                    messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
-                    return { messageResult1C };
-                }
-
-            } else {
-                
-                console.log('В таблице нет данных');
-            }
+            let messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+            return { messageResult1C };
         } else {
 
-            console.log('Не найденны строки в таблице');
-            messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
-            return { messageResult1C };
+            // Создание виртуального DOM
+            const dom = new JSDOM(response.data);
+            const document = dom.window.document;
+    
+            // Получение таблицы из DOM
+            const tableElement = document.querySelector("body > table:nth-child(3)");
+    
+            // Получение строк таблицы
+            const rows = tableElement.querySelectorAll('tr');
+            // Проверка наличия данных в таблице
+    
+            if (rows.length > 0) {
+                let warehouse, quantity, reserve;
+    
+                // Форматирование данных построчно
+                const formatedData = Array.from(rows).map((row, index) => {
+                    
+                    if (!row.querySelector('td.R3C0')) {
+                        const cells = row.querySelectorAll('td');
+                        if (cells[0]) {
+                            warehouse = cells[0].textContent.trim();  // склад
+                        }
+                        if (cells[1] !== '') {
+                            quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
+                        } else {
+                            quantity = '0';
+                        }
+                        if (cells[2] !== '') {
+                            reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
+                        } else {
+                            reserve = '0';
+                        }
+                    }
+                    return {
+                        warehouse,
+                        quantity,
+                        reserve
+                    };
+                    
+                });
+    
+                // Вывод данных пользователю
+                if (formatedData.length > 0 ) {
+    
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    let message = '';
+                    let messageResult1C = formatedData.map(obj => {
+                        if (obj.warehouse === undefined) {
+                            return "";
+                        } else {
+                            message = '';
+                            message += `<strong>${obj.warehouse}</strong>\n`
+    
+                            if (obj.quantity > 0) {
+                                message += `Количество: ${obj.quantity}\n`
+                            }
+                            if (obj.reserve > 0) {
+                                message += `Резерв: ${obj.reserve}\n`
+                            }
+                            message += `\n`
+                            return message;
+                        }
+                    }).join('');
+    
+                    if (messageResult1C.length !== 0) {
+    
+                        return { messageResult1C };
+    
+                    } else {
+    
+                        messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
+                        return { messageResult1C };
+                    }
+    
+                } else {
+    
+                    console.log('В таблице нет данных');
+                }
+            } else {
+    
+                console.log('Не найденны строки в таблице');
+            }
         }
+        
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
     }
