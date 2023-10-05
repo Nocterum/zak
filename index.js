@@ -154,7 +154,7 @@ const editNickname = async (chatId) => {
 const startRequest1C = async (chatId, vendorCode) => {
 
     try {
-        
+
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
@@ -201,6 +201,7 @@ const startRequest1C = async (chatId, vendorCode) => {
 
             // Вывод данных пользователю
             if (formatedData.length > 0 ) {
+
                 if (botMsgIdx !== null) {
                     bot.deleteMessage(chatId, botMsgIdx);
                     botMsgIdx = null;
@@ -228,21 +229,21 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                     return { messageResult1C };
 
-                } else if (messageResult1C === undefined) {
-
-                    messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
-                    return { messageResult1C };
-
                 } else {
 
                     messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
                     return { messageResult1C };
                 }
+
             } else {
+                
                 console.log('В таблице нет данных');
             }
         } else {
+
             console.log('Не найденны строки в таблице');
+            messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+            return { messageResult1C };
         }
     } catch (e) {
         console.log('Ошибка выполенния кода', e);
@@ -2816,6 +2817,7 @@ bot.on('message', async msg => {
                 const vendorCode = user.vendorCode;
                 botMsgIdx = msg.message_id += 1; 
                 let findResult1C = await startRequest1C(chatId, vendorCode); 
+
                 return bot.sendMessage(
                     chatId, 
                     `${findResult1C.messageResult1C}`,
