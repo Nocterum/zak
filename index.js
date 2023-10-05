@@ -1185,7 +1185,7 @@ async function findCatalogWallpaper(chatId) {
 
                         if (findResult1C) {
                             
-                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('нигде не числится');
                             
                             if (!formatedMessageResult1C) {
     
@@ -2864,6 +2864,11 @@ bot.on('message', async msg => {
 
                 if (findResult1C) {
             
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+
                     return bot.sendMessage(
                         chatId, 
                         `${findResult1C.messageResult1C}`,
@@ -2871,6 +2876,11 @@ bot.on('message', async msg => {
                     );
 
                 } else {
+
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
 
                     return bot.sendMessage(
                         chatId, 
@@ -2923,8 +2933,8 @@ bot.on('message', async msg => {
 
                 await bot.sendMessage(chatId, 'Идёт поиск каталога . . .');
                 botMsgIdx = msg.message_id += 1; 
-                const Textile = findCatalogTextile(chatId);
-                const Wallpaper = findCatalogWallpaper(chatId);
+                const Textile = await findCatalogTextile(chatId);
+                const Wallpaper = await findCatalogWallpaper(chatId);
                 return {Textile, Wallpaper};
 
             } else if (user.lastCommand === '/oracCheck') {
