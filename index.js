@@ -1866,6 +1866,14 @@ async function findSirpi(chatId) {
                             message,
                             startFindOptions
                         );
+                    } else {
+
+                        return bot.sendMessage(
+                            chatId, 
+                            `Совпадения в файле по остаткам поставщика Сирпи.ру не найдены\n<i>можете ввести следующий артикул для поиска</i>`,
+                            startFind1Options
+                        );
+
                     }
                 }
             }
@@ -2231,28 +2239,26 @@ bot.sendMessage(chatId,
 
 Производить поиск по файлам остатков следующих брендов:
 <code>Architects Papers</code>
-Armani Casa*
 <code>ARTE</code>
 <code>Bautex</code>
 <code>Bluebellgray</code>
 <code>BN International</code>
 <code>Brink</code>
-CODE | Sirpi*
 <code>Collins & Company</code>
 <code>Eijffinger</code>
 <code>Holden</code>
 <code>Hookedonwalls</code>
-Jannelli & Volpi*
+<code>Jannelli & Volpi</code>
 <code>Khroma Zoom</code>
 <code>Loymina</code>
 <code>Milassa</code>
-Missoni*
+<code>Missoni</code>
 <code>Nina Hancock</code>
 <code>ORAC</code>
 <code>Swiss Lake</code>
 <code>Ted Beker</code>
 <code>Wedgwood</code>
-<i>*в доработке</i>
+
 
 <b>Отправлять емейлы поставщику</b>
 <b>Подсказывать путь к папке с прайслистами</b>
@@ -2268,7 +2274,14 @@ bot.onText(/\/updatelist/, (msg) => {
     const chatId = msg.chat.id;
 
 bot.sendMessage(chatId,
-`<b>Версия 1.0.2
+`<b>Версия 1.0.2.1
+Что нового:</b>
+
+Возобновлен поиск по остаткам брендов:
+Missoni
+Jannelli & Volpi
+-------------------------------------
+<b>Версия 1.0.2
 Что нового:</b>
 
 появились новые пункты в контекстном меню:
