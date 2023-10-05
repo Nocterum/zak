@@ -1234,6 +1234,7 @@ async function findCatalogWallpaper(chatId) {
                                     { parse_mode: 'HTML' }
                                 );
                             }
+
                         } else {
                             
                             if (botMsgIdx !== null) {
@@ -1376,13 +1377,15 @@ async function findCatalogTextile(chatId) {
             });
 
             // if (!foundMatchTextile) {
+
             //     if (botMsgIdx !== null) {
             //         bot.deleteMessage(chatId, botMsgIdx);
             //         botMsgIdx = null;
             //     }
+
             //     return bot.sendMessage(
             //         chatId, 
-            //         `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+            //         `Среди каталогов текстиля \nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
             //         {parse_mode: 'HTML'}
             //     );
             // }
@@ -2937,6 +2940,9 @@ bot.on('message', async msg => {
                 const [Textile, Wallpaper] = await Promise.all([findCatalogTextile(chatId), findCatalogWallpaper(chatId)]);
                 // const Textile = await findCatalogTextile(chatId);
                 // const Wallpaper = await findCatalogWallpaper(chatId);
+                if (Textile === undefined && Wallpaper === undefined) {
+                    return "Такой каталог не найден";
+                }
                 return {Textile, Wallpaper};
 
             } else if (user.lastCommand === '/oracCheck') {
