@@ -1836,7 +1836,7 @@ async function findSirpi(chatId) {
 
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Доступно
                         if (cCell && cCell.v !== null && cCell.v !== undefined) {
-                            message += `${cCell.v}\n`
+                            message += `Доступно сейчас: ${cCell.v}\n`
                         }
 
                         const d1Value = firstWorksheet['D1'].v; // Дата поставки 1
