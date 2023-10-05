@@ -1832,29 +1832,29 @@ async function findSirpi(chatId) {
                         let message = '';
 
                         const aValue = firstWorksheet['A' + cellAddress.substring(1)].v; // Номенкулатура
-                        message += `<b>${aValue}</b>\n`;
+                        message += `<b>${aValue}</b>\n\n`;
 
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)]; // Доступно
                         if (cCell && cCell.v !== null && cCell.v !== undefined) {
-                            message += `${cCell.v}`
+                            message += `${cCell.v}\n`
                         }
 
                         const d1Value = firstWorksheet['D1'].v; // Дата поставки 1
                         const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // колличество в поставке 1
                         if (dCell && dCell.v !== null && dCell.v !== undefined) {
-                            message += `${d1Value}\nБудет доступно ${dCell.v}\n`
+                            message += `Дата след. поставки:\n${d1Value}\n\nБудет доступно ${dCell.v}\n`
                         }
 
                         let e1Value = firstWorksheet['E1'].v; // Дата поставки 2
                         const eCell = firstWorksheet['E' + cellAddress.substring(1)]; // колличество в поставке 2
                         if (eCell && eCell.v !== null && eCell.v !== undefined) {
-                            message += `${e1Value}\nБудет доступно ${eCell.v}\n`
+                            message += `Дата след. поставки:\n${e1Value}\nБудет доступно ${eCell.v}\n`
                         }
 
                         const f1Value = firstWorksheet['F1'].v; // Дата поставки 2
                         const fCell = firstWorksheet['F' + cellAddress.substring(1)]; // колличество в поставке 3
                         if (fCell && fCell.v !== null && fCell.v !== undefined) {
-                            message += `${f1Value}\nБудет доступно ${fCell.v}\n`
+                            message += `Дата след. поставки:\n${f1Value}\nБудет доступно ${fCell.v}\n`
                         }
 
                         if (botMsgIdx !== null) {
