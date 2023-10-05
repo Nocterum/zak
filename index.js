@@ -1156,8 +1156,12 @@ async function findCatalogWallpaper(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+                        let formatedMessageResult1C = '';
 
-                        const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                        if (findResult1C !== undefined) {
+                            
+                            formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                        }
                         console.log(formatedMessageResult1C);
 
                         if (!formatedMessageResult1C) {
@@ -1177,7 +1181,8 @@ async function findCatalogWallpaper(chatId) {
                                 message += `${p1Value}: ${pValue}\n`;
                             }
 
-                            message += `\n${PricelistLink.messagePrice}`
+                            message += `\n${PricelistLink.messagePrice}`;
+                            message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
 
                             if (botMsgIdx !== null) {
                                 bot.deleteMessage(chatId, botMsgIdx);
@@ -1207,9 +1212,9 @@ async function findCatalogWallpaper(chatId) {
                 }
             });
 
-            if (!foundMatchWallpaper) {
+            // if (!foundMatchWallpaper) {
                 return findCatalogTextile(chatId);
-            }
+            // }
 
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
@@ -1266,8 +1271,13 @@ async function findCatalogTextile(chatId) {
                         await user.update({brand: cValue.toUpperCase()});
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
+                        let formatedMessageResult1C = '';
 
-                        const formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                        if (findResult1C !== undefined) {
+                            
+                            formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
+                        }
+                        console.log(formatedMessageResult1C);
 
                         if (!formatedMessageResult1C) {
 
@@ -1286,7 +1296,8 @@ async function findCatalogTextile(chatId) {
                                 botMsgIdx = null;
                             }
 
-                            message += `\n${PricelistLink.messagePrice}`
+                            message += `\n${PricelistLink.messagePrice}`;
+                            message += `<i>при получении нескольких результатов скопируйте полное наименование НУЖНОГО ВАМ каталога и отправьте боту снова</i>`;
 
                             await bot.sendMessage(
                                 chatId, 
