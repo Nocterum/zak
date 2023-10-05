@@ -158,7 +158,7 @@ const startRequest1C = async (chatId, vendorCode) => {
         const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
-        if (response === undefined) {
+        if (!response) {
 
             let messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
             return { messageResult1C };
@@ -1023,7 +1023,15 @@ async function findOrac(chatId) {
 
     let vendorCode = user.vendorCode;
     const findResult1C = await startRequest1C(chatId, vendorCode);
-    messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
+
+    if (findResult1C.messageResult1C) {
+
+        messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
+    } else {
+
+        messageORAC += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+    }
+
     
     if (filePathMSK) {
         try {
@@ -1175,7 +1183,7 @@ async function findCatalogWallpaper(chatId) {
                         let PricelistLink = await findPricelistLink(chatId, cValue);
                         let formatedMessageResult1C = '';
 
-                        if (findResult1C !== undefined) {
+                        if (findResult1C) {
                             
                             formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
                         }
@@ -1188,7 +1196,13 @@ async function findCatalogWallpaper(chatId) {
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n\n`;
 
-                            message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                            if (findResult1C.messageResult1C) {
+
+                                message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                            } else {
+
+                                message += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+                            }
 
                             if (oValue !== null) {
                                 message += `${o1Value}: ${oValue}\n`;
@@ -1290,7 +1304,7 @@ async function findCatalogTextile(chatId) {
                         let PricelistLink = await findPricelistLink(chatId, cValue);
                         let formatedMessageResult1C = '';
 
-                        if (findResult1C !== undefined) {
+                        if (findResult1C) {
                             
                             formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().replace(/\s/g, '').includes('нигде не числится');
                         }
@@ -1302,7 +1316,13 @@ async function findCatalogTextile(chatId) {
 
                             message += `<b>${cellValue.trim()}</b> бренда <b>${cValue.toUpperCase()}</b> имеется в Manders:\n`;
 
-                            message += `\nПо данным 1С:\n${findResult1C.messageResult1C}\n`
+                            if (findResult1C.messageResult1C) {
+
+                                message += `По данным 1С:\n${findResult1C.messageResult1C}\n`
+                            } else {
+
+                                message += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+                            }
 
                             if (pValue !== null) {
                                 message += `${p1Value}: ${pValue}\n`;
@@ -2825,12 +2845,15 @@ bot.on('message', async msg => {
                 botMsgIdx = msg.message_id += 1; 
                 let findResult1C = await startRequest1C(chatId, vendorCode); 
 
-                return bot.sendMessage(
-                    chatId, 
-                    `${findResult1C.messageResult1C}`,
-                    { parse_mode: 'HTML' }
-                );
-
+                if (findResult1C.messageResult1C) {
+            
+                    return bot.sendMessage(
+                        chatId, 
+                        `${findResult1C.messageResult1C}`,
+                        { parse_mode: 'HTML' }
+                    );
+                }
+                
             } else if (user.lastCommand === '/enterReserveNumber') {
                 let counter = 0;
                 while (text.includes("  ") && counter < 3) {
