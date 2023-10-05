@@ -230,6 +230,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                 } else if (messageResult1C === undefined) {
 
                     messageResult1C = `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`
+                    return { messageResult1C };
                     
                 } else {
 
