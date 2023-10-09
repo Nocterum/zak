@@ -2273,7 +2273,7 @@ bot.onText(/\/x/, async msg => {
     async function readConfig() {
         
         try {
-            const data = await readFile('/root/zak/config.cfg', 'utf-8');
+            const data = fs.readFile('/root/zak/config.cfg', 'utf-8');
             const lines = data.split('\n');
             const config = {};
       
