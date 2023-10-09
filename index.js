@@ -2403,7 +2403,7 @@ bot.sendMessage(chatId,
 
 Производить поиск 🔎 остатков на сайтах:
 <strong>opusdeco.ru</strong>
-    ☑<code>1838                  ☑Arlin</code>
+    ✅<code>1838                  ✅Arlin</code>
     ✅<code>Arthouse              ✅Atelier</code>
     ✅<code>Aura                  ✅Lincrusta</code>
     ✅<code>Print 4               ✅Sangiorgio</code>
@@ -2438,7 +2438,7 @@ bot.sendMessage(chatId,
 <b>Отправлять емейлы поставщику</b> 📨
 <b>Подсказывать путь к папке с прайслистами</b> 👓
 <b>Искать каталоги обоев и текстиля</b> 🔎
-<b>Искать остатки в 1С*</b> 🔎
+<b>Искать остатки в 1С*</b> ☑
 <i>*общее колличество</i>`,
         { parse_mode: 'HTML' }
     );
