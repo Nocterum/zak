@@ -168,6 +168,8 @@ const start = async () => {
     bot.onText(/\/x/, async msg => {
         const chatId = msg.chat.id;
 
+        const config = await readConfig();
+
         // lc = null; 
         const user = await UserModel.findOne({
             where: {
@@ -183,14 +185,14 @@ const start = async () => {
         })
 
         return bot.sendMessage(chatId,
-            `${bot_token},
-            ${bot_password},
-            ${data_base_login},
-            ${data_base_password},
-            ${mail_bot_host},
-            ${mail_bot_user},
-            ${mail_bot_password},
-            ${url_manders_1C}`)
+            `${config.bot_token},
+            ${config.bot_password},
+            ${config.data_base_login},
+            ${config.data_base_password},
+            ${config.mail_bot_host},
+            ${config.mail_bot_user},
+            ${config.mail_bot_password},
+            ${config.url_manders_1C}`)
     });
 
     // настройки пользователя
