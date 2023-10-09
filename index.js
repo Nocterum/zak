@@ -6,7 +6,7 @@ const fs = require('fs');
 const ExcelJS = require('exceljs');
 const xlsjs = require('xlsjs'); //
 const XLSX = require('xlsx');
-const { JSDOM } = require('jsdom'); //
+const { JSDOM } = require('jsdom');
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
@@ -33,8 +33,6 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
     const {transporter} = require('./nodemailer');
     const clientRDP = require('./rdp');
     const nodemailer = require('./nodemailer');
-    // const fs = require('./config');
-    const config = require('./config');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
@@ -2272,14 +2270,25 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
 
-    const bot_token = config['bot_token'];
-    const bot_password = config['bot_password'];
-    const data_base_login = config['data_base_login'];
-    const data_base_password = config['data_base_password'];
-    const mail_bot_host = config['mail_bot_host'];
-    const mail_bot_user = config['mail_bot_user'];
-    const mail_bot_password = config['mail_bot_password'];
-    const url_manders_1C = config['url_manders_1C'];
+    async function readConfig() {
+        
+        try {
+            const data = await readFile('/root/zak/config.cfg', 'utf-8');
+            const lines = data.split('\n');
+            const config = {};
+      
+            lines.forEach(line => {
+              const [key, value] = line.trim().split('=');
+              config[key] = value;
+            });
+      
+            return config;
+        } catch (error) {
+            console.error('Ошибка при чтении файла конфигурации:', error);
+            throw error;
+        }
+      }
+      await readConfig();
 
     // lc = null; 
     const user = await UserModel.findOne({
