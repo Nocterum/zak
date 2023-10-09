@@ -17,6 +17,8 @@ const UserModel = sequelize.define( 'user', {
     vendor: {type: DataTypes.TEXT('tiny')},
     vendorEmail: {type: DataTypes.TEXT('tiny')},
     lastCommand: {type: DataTypes.TEXT('tiny')},
+    subject: {type: DataTypes.TEXT('tiny')},
+    textMail: {type: DataTypes.TEXT('tiny')},
 })
 
 module.exports = UserModel;

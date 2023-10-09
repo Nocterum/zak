@@ -41,7 +41,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Запрос: остатки+сроки+резерв', callback_data: '/beginwork'}],
+                [{text: 'Запрос: остатки+сроки+резерв🔎', callback_data: '/beginwork'}],
                 [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
                 [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
             ]
@@ -72,7 +72,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
+                [{text: 'Искать другой каталог🔎', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
         })
@@ -112,7 +112,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Зарезервировать у поставщика', callback_data: '/enterReserveNumber'}],
+                [{text: 'Зарезервировать у поставщика✉', callback_data: '/enterReserveNumber'}],
                 [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]
@@ -162,7 +162,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Отправить email', callback_data: '/sendReserveEmail'}],
+                [{text: 'Отправить email📧', callback_data: '/sendReserveEmail'}],
                 [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
                 [{text: 'В главное меню', callback_data: '/mainmenu'}],
             ]

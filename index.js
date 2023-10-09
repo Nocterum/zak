@@ -35,12 +35,9 @@ const nodemailer = require('./nodemailer');
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
 
-// lc = {};    //последняя команда
-findCatalogIndex = {};   //состояние: нужно ли зайдествовать функцию поиска каталога текстиля.
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
-let subject = {};   //тема письма
-let textMail = {};  //текст письма
+
 
 
 
@@ -276,61 +273,64 @@ const startCheckVendor = async (chatId, msg) => {
 
         const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-        if (formatedUserVendor.includes('ОРАК')
-            // formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-            // formatedUserVendor.includes('РИКСОР') 
-            // formatedUserVendor.includes('КАДО') ||
-            // formatedUserVendor.includes('АКУРА') ||
-            // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
-            // formatedUserVendor.includes('ГАЙДАРЬ') ||
-            // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-            // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
-            // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-            // formatedUserVendor.includes('АВТ') ||
-            // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
-            // formatedUserVendor.includes('ФАБРИКДЕКО') ||
-            // formatedUserVendor.includes('ШИЛИН') ||
-            // formatedUserVendor.includes('ENGLISCHDECOR') ||
-            // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
-            // formatedUserVendor.includes('ШЕВЧЕНКО') ||
-            // formatedUserVendor.includes('ФОРПОСТ') ||
-            // formatedUserVendor.includes('HOUSEOFJAB') ||
-            // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
-            // formatedUserVendor.includes('БУНТИНА') ||
-            // formatedUserVendor.includes('RUBELLI') ||
-            // formatedUserVendor.includes('ОКНАРОСТА') ||
-            // formatedUserVendor.includes('ЛОЙМИНА') ||
-            // formatedUserVendor.includes('ЛИСОХМАРА') ||
-            // formatedUserVendor.includes('ПОДРЕЗ') ||
-            // formatedUserVendor.includes('РОБЕРТС') ||
-            // formatedUserVendor.includes('ЮГАРТ') ||
-            // formatedUserVendor.includes('ПРОТОС') ||
-            // formatedUserVendor.includes('РУАЛЬЯНС') 
-        ) {
+        // if (formatedUserVendor.includes('ОРАК')
+        //     // formatedUserVendor.includes('ИНТЕРДЕКОР') ||
+        //     // formatedUserVendor.includes('РИКСОР') 
+        //     // formatedUserVendor.includes('КАДО') ||
+        //     // formatedUserVendor.includes('АКУРА') ||
+        //     // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
+        //     // formatedUserVendor.includes('ГАЙДАРЬ') ||
+        //     // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
+        //     // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
+        //     // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
+        //     // formatedUserVendor.includes('АВТ') ||
+        //     // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
+        //     // formatedUserVendor.includes('ФАБРИКДЕКО') ||
+        //     // formatedUserVendor.includes('ШИЛИН') ||
+        //     // formatedUserVendor.includes('ENGLISCHDECOR') ||
+        //     // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
+        //     // formatedUserVendor.includes('ШЕВЧЕНКО') ||
+        //     // formatedUserVendor.includes('ФОРПОСТ') ||
+        //     // formatedUserVendor.includes('HOUSEOFJAB') ||
+        //     // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
+        //     // formatedUserVendor.includes('БУНТИНА') ||
+        //     // formatedUserVendor.includes('RUBELLI') ||
+        //     // formatedUserVendor.includes('ОКНАРОСТА') ||
+        //     // formatedUserVendor.includes('ЛОЙМИНА') ||
+        //     // formatedUserVendor.includes('ЛИСОХМАРА') ||
+        //     // formatedUserVendor.includes('ПОДРЕЗ') ||
+        //     // formatedUserVendor.includes('РОБЕРТС') ||
+        //     // formatedUserVendor.includes('ЮГАРТ') ||
+        //     // formatedUserVendor.includes('ПРОТОС') ||
+        //     // formatedUserVendor.includes('РУАЛЬЯНС') 
+        // ) {
+        //     return bot.sendMessage(
+        //         chatId, 
+        //         `Чтобы <b>отправить email</b>\n с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
+        //         { parse_mode: 'HTML' }
+        //     );
+        // } else 
+        if (formatedUserVendor.includes('ОПУС')) {
             return bot.sendMessage(
                 chatId, 
-                `Чтобы <b>отправить email</b>\n с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
-                { parse_mode: 'HTML' }
-            );
-        } else if (formatedUserVendor.includes('ОПУС')) {
-            return bot.sendMessage(
-                chatId, 
-                `Чтобы <b>посмотреть остатки</b> на сайте\n"https://opusdeco.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>https://opusdeco.ru</code>\n<b>Введите артикул искомого вами объекта:</b>`,
                 { parse_mode: 'HTML' }
             );
         } else if (formatedUserVendor.includes('ДЕКОРТРЕЙД')) {
             return bot.sendMessage(
                 chatId, 
-                `Чтобы <b>посмотреть остатки</b> на сайте\n"https://dealer.decaro.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>https://dealer.decaro.ru</code>\n<b>Введите артикул искомого вами объекта:</b>`,
                 { parse_mode: 'HTML' }
             );
         } else if (formatedUserVendor.includes('ЛЕВАНТИН')) {
             return bot.sendMessage(
                 chatId, 
-                `Чтобы <b>посмотреть остатки</b> на сайте\n"http://www.galleriaarben.ru"\n<b>Введите артикул искомого вами объекта:</b>`,
+                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>http://www.galleriaarben.ru</code>\n<b>Введите артикул искомого вами объекта:</b>`,
                 { parse_mode: 'HTML' }
             );
+
         } else if  (formatedUserVendor.includes('ДЕКОРДЕЛЮКС') ||
+                    formatedUserVendor.includes('ОРАК') ||
                     formatedUserVendor.includes('ОРАК') ||
                     formatedUserVendor.includes('ДЕКОРРУС') ||
                     formatedUserVendor.includes('БАУТЕКС') ||
@@ -345,7 +345,7 @@ const startCheckVendor = async (chatId, msg) => {
                 { parse_mode: 'HTML' }
             );
             botMsgIdx = msg.message_id += 1;
-            return;
+            return;  
         } else {
             return bot.sendMessage(
                 chatId, 
@@ -817,35 +817,30 @@ const sendReserveEmail = async (chatId) => {
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
-        }
+        },
+        attributes: ['id', 'chatId', 'subject', 'textMail', 'vendorEmail']
     });
     
-    const recipient = 'nick.of.darkwood@gmail.com';     // email поставщика
-    const copy = `${user.email}`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+    // const recipient = `${user.vendorEmail}`;     // email поставщика
+    const recipient = `from90s@gmail.com`;
+    // const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+    const copy = `${user.email}`;
+    
 
     try {
         if (user.vendor !== null) {
-            const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
+            // const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');  На случай определения действий по поставщику
 
-            if (formatedUserVendor.includes('ДЕКОРДЕЛЮКС')) {
-                let result = transporter.sendMail({
-                    from: 'zakupki_bot@manders.ru',
-                    to: `${copy}`,
-                    subject: subject,
-                    text: textMail,
-                });
-
-            } else {
-                let result = transporter.sendMail({
-                    from: 'zakupki_bot@manders.ru',
-                    to: `${recipient}, ${copy}`,
-                    subject: subject,
-                    text: textMail,
-                });
-            }
+            let result = transporter.sendMail({
+                from: 'zakupki_bot@manders.ru',
+                to: `${recipient}, ${copy}, nick.of.darkwood@gmail.com`,
+                subject: user.subject,
+                text: user.textMail,
+            });
+            
             return bot.sendMessage(
                 chatId, 
-                `Сообщение с темой: \n<pre>"${subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, 
+                `Сообщение с темой: \n<pre>"${user.subject}"</pre>\nуспешно отправлено поставщику и в отдел закупок.\n\nЧтобы узнать о состоянии резерва напишите письмо с вышеупомянутой темой на <b>purchasing_internal@manders.ru</b>.`, 
                 beginWork2Options
             );
         }
@@ -3145,40 +3140,85 @@ bot.on('callback_query', async msg => {
 
         if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
-            subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
-            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
-        
+            const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
+            const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+           
+            await user.update({subject: subject, textMail: textMail}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
         } else {
 
-            subject = `Резерв ${user.vendorCode},  ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
-            textMail = `\n\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию: \nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
-        
+            const subject = `Резерв ${user.vendorCode}, ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
+            const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+            
+            await user.update({subject: subject, textMail: textMail}, {
+                where: {
+                    chatId: chatId
+                }
+            })
         }
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
+        });
+
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
             sendReserveOptions
         );
 
     } else if (data === '/preSendEmailReserveYes') {
 
-        subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-        textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        const subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
+        const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
+        await user.update({subject: subject, textMail: textMail}, {
+            where: {
+                chatId: chatId
+            }
+        })
+    
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
+        });
+
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`,
+            `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`,
             sendReserveOptions
         );
 
     } else if (data === '/preSendEmailReserveNo') {
 
-        subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-        textMail = `\n\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+        const subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
+        const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
         
+        await user.update({subject: subject, textMail: textMail}, {
+            where: {
+                chatId: chatId
+            }
+        })
+    
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
+        });
+
         return bot.sendMessage(
             chatId, 
-            `Сформирован email:\nТема сообщения: <strong>${subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${textMail}\n\n<i>Это сообщение тестовое и будет отправленно только на ${user.email}.</i>`, 
+            `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
             sendReserveOptions
         );
 
