@@ -5,7 +5,7 @@ const readFile = util.promisify(fs.readFile);
 async function readConfig() {
     
     try {
-        const data = await readFile('root/zak/config.cfg', 'utf-8');
+        const data = await readFile('/root/zak/config.cfg', 'utf-8');
         const lines = data.split('\n');
     const config = {};
     
