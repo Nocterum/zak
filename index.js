@@ -72,15 +72,15 @@ const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 
     // const bot_token = config.bot_token;
 
-    const bot = new TelegramApi(token, {
-        polling: {
-            interval: 300, //между запросами с клиента на сервер тг "млсек"
-            autoStart: true, //обработка всех команд отправленных до запуска программы
-            params: {
-                timeout:10 //таймаут между запросами "млсек"
-            }
+const bot = new TelegramApi(token, {
+    polling: {
+        interval: 300, //между запросами с клиента на сервер тг "млсек"
+        autoStart: true, //обработка всех команд отправленных до запуска программы
+        params: {
+            timeout:10 //таймаут между запросами "млсек"
         }
-    });
+    }
+});
 
 
 //МЕНЮ КОМАНД
