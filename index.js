@@ -65,11 +65,12 @@ const readConfig = async () => {
         const config = {};
     
         lines.forEach(line => {
-          const [key, value] = line.trim().split('=');
-          config[key] = value;
+            const [key, value] = line.trim().split('=');
+            config[key] = value;
         });
     
         return config;
+
     } catch (error) {
         console.error('Ошибка при чтении файла конфигурации:', error);
         throw error;
@@ -3511,7 +3512,7 @@ const start = async () => {
 const config = readConfig();
 
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
-const bot_token = config.bot_token;
+const bot_token = config.config.bot_token;
 console.log(bot_token, token);
 
 
