@@ -3510,7 +3510,6 @@ const start = async () => {
 // ======================================================================================================================================
 
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
-console.log(bot_token, token);
 
 const bot = new TelegramApi(token, {
     polling: {
