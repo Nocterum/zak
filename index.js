@@ -33,7 +33,7 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
     const {transporter} = require('./nodemailer');
     const clientRDP = require('./rdp');
     const nodemailer = require('./nodemailer');
-    const fs = require('./config');
+    // const fs = require('./config');
     const config = require('./config');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ

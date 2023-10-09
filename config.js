@@ -1,4 +1,4 @@
-const fs = require('fs');
+// const fs = require('fs');
 
 // const config = {};
 // fs.readFileSync('/root/zak/config.cfg', 'utf-8').split('\n').forEach(line => {
