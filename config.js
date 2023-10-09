@@ -1,4 +1,4 @@
-const fs = require('./index');
+const fs = require('fs');
 
 const config = {};
 fs.readFileSync('config.cfg', 'utf-8').split('\n').forEach(line => {
