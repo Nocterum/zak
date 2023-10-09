@@ -1045,20 +1045,34 @@ async function findOrac(chatId) {
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
-
-                    const bValue = row.getCell('B').value; //Еденицы измерения
-                    const cValue = row.getCell('C').value; //Колличество
+            
+                    const headerRow = firstWorksheetMSK.getRow(2);
+                    let bValue, cValue;
+            
+                    headerRow.eachCell((cell, colNumber) => {
+                        const headerCellValue = cell.value.toString().trim();
+                        
+                        if (headerCellValue === 'Ед. изм.') {
+                            bValue = row.getCell(colNumber).value;
+                        } else if (headerCellValue === 'Доступно') {
+                            cValue = row.getCell(colNumber).value;
+                        }
+                    });
+            
                     let a3Value = firstWorksheetMSK.getCell('A3').value; //Название склада
                     a3Value = a3Value.toString().split( "(" )[0];
-                    
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\nв колличестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
-                    
+            
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
+            
+                    if (bValue && cValue) {
+                        messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
+                    }
+            
                     if (botMsgIdx !== null) {
                         bot.deleteMessage(chatId, botMsgIdx);
                         botMsgIdx = null;
                     }
                 }
-                
             });
 
             if (!foundMatchOracMSK) {
@@ -1123,22 +1137,6 @@ async function findOrac(chatId) {
                     }
                 }
             });
-            //     if (formatedCellValue === formatedUserVC) {
-            //         foundMatchOracSPB = true;
-            //         const cValue = row.getCell('C').value; //Еденицы измерения
-            //         const dValue = row.getCell('D').value; //Колличество
-            //         let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
-            //         a3Value = a3Value.toString().split( "(" )[0];
-                    
-            //         messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК <b>${a3Value}</b>\nв колличестве <b>${dValue}</b> <b>${cValue}</b>\n\n`;
-                    
-            //         if (botMsgIdx !== null) {
-            //             bot.deleteMessage(chatId, botMsgIdx);
-            //             botMsgIdx = null;
-            //         }
-            //     }
-
-            // });
             
             if (!foundMatchOracSPB) {
                 
