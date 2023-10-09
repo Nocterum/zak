@@ -860,7 +860,6 @@ async function findExcelFile(
     fileNamePricelist = '',
     fileNameOracMSK = '', 
     fileNameOracSPB = '',
-    fileNameVendor = '',
     fileNameDecorDelux = '',
     fileNameDecorRus = '',
     fileNameBautex = '',
@@ -885,7 +884,6 @@ async function findExcelFile(
                 fileNamePricelist, 
                 fileNameOracMSK, 
                 fileNameOracSPB,
-                fileNameVendor,
                 fileNameDecorDelux,
                 fileNameDecorRus,
                 fileNameBautex,
@@ -908,9 +906,6 @@ async function findExcelFile(
 
             } else if (result.fileNameOracSPB) {
                 fileNameOracSPB = result.fileNameOracSPB;
-
-            } else if (result.fileNameVendor) {
-                fileNameVendor = result.fileNameVendor;
 
             } else if (result.fileNameDecorDelux) {
                 fileNameDecorDelux = result.fileNameDecorDelux;
@@ -944,8 +939,6 @@ async function findExcelFile(
                 fileNameOracMSK = filePath;
             } else if (file.toLowerCase().includes('orac_спб')) {
                 fileNameOracSPB = filePath;
-            } else if (file.toLowerCase().includes('список_поставщиков')) {
-                fileNameVendor = filePath;
             } else if (file.toLowerCase().includes('баутекс')) {
                 fileNameBautex = filePath;
             } else if (file.toLowerCase().includes('brink&campman')) {
@@ -968,7 +961,6 @@ async function findExcelFile(
             fileNamePricelist && 
             fileNameOracMSK &&
             fileNameOracSPB && 
-            fileNameVendor &&
             fileNameDecorDelux && 
             fileNameDecorRus &&
             fileNameBautex &&
@@ -985,7 +977,6 @@ async function findExcelFile(
         fileNamePricelist, 
         fileNameOracMSK,
         fileNameOracSPB,
-        fileNameVendor,
         fileNameDecorDelux,
         fileNameDecorRus,
         fileNameBautex,
@@ -2412,30 +2403,35 @@ bot.sendMessage(chatId,
 
 Производить поиск остатков на сайтах:
 <pre>opusdeco.ru</pre>
+    <code>1838</code>\t<code>Arlin</code>
+    <code>Arthouse</code>\t<code>Atelier</code>
+    <code>Aura</code>\t<code>Lincrusta</code>
+    <code>Print 4</code>\t<code>Sangiorgio</code>
+    <code>Sem - Murale</code>\t<code>York</code>
 <pre>dealer.decaro.ru</pre>
-<pre>galleriaarben.ru</pre>
+    <code>Architector</code>\t<code>Casa Mia</code>
+    <code>Coordonne</code>\t<code>Emil & Hugo</code>
+    <code>Epoca</code>\t<code>Etten</code>
+    <code>Heritage House</code>\t<code>Jaima Brown</code>
+    <code>KT-Exсlusive</code>\t<code>Mayflower</code>
+    <code>NLXL</code>\t<code>Paper & Ink</code>
+    <code>Seabrook</code>\t<code>Texam</code>
+    <code>Tiffany Design</code>\t<code>Trendsetter</code>
+    <code>Vatos</code>\t<code>Wallquest</code>
+<pre>galleriaarben.ru</pre></code>
+    <code>Galleria Arben</code>
 
-Производить поиск по файлам остатков следующих брендов:
-<code>Architects Papers</code>
-<code>ARTE</code>
-<code>Bautex</code>
-<code>Bluebellgray</code>
-<code>BN International</code>
-<code>Brink</code>
-<code>Collins & Company</code>
-<code>Eijffinger</code>
-<code>Holden</code>
-<code>Hookedonwalls</code>
-<code>Jannelli & Volpi</code>
-<code>Khroma Zoom</code>
-<code>Loymina</code>
-<code>Milassa</code>
-<code>Missoni</code>
-<code>Nina Hancock</code>
-<code>ORAC</code>
-<code>Swiss Lake</code>
-<code>Ted Beker</code>
-<code>Wedgwood</code>
+<b>Производить поиск по файлам остатков следующих брендов:</b>
+<code>Architects Papers</code>  <code>ARTE</code>
+<code>Bautex</code>             <code>Bluebellgray</code>
+<code>BN International</code>   <code>Brink</code>
+<code>Collins & Company</code>  <code>Eijffinger</code>
+<code>Holden</code>             <code>Hookedonwalls</code>
+<code>Jannelli & Volpi</code>   <code>Khroma Zoom</code>
+<code>Loymina</code>            <code>Milassa</code>
+<code>Missoni</code>            <code>Nina Hancock</code>
+<code>ORAC</code>               <code>Swiss Lake</code>
+<code>Ted Beker</code>          <code>Wedgwood</code>
 
 
 <b>Отправлять емейлы поставщику</b>
@@ -2452,7 +2448,15 @@ bot.onText(/\/updatelist/, (msg) => {
     const chatId = msg.chat.id;
 
 bot.sendMessage(chatId,
-`<b>Версия 1.0.2.4
+`<b>Версия 1.0.4.0
+Что нового:</b>
+
+Бот настроен на отправку емейлов поставщику и в отдел закупок;
+Поиск по остаткам ОРАК сделан более надёжным;
+Обнавлён список актуальных функций бота;
+Улучшение безопасности;
+------------------------------------
+<b>Версия 1.0.2.4
 Что нового:</b>
 
 упрощен процесс "знакомства с ботом";
@@ -2466,12 +2470,7 @@ bot.sendMessage(chatId,
 упрощенно редактирование емейла и никнейма ;
 отредактирован текст, устранены опечатки;
 ------------------------------------
-<b>Версия 1.0.2.1
-Что нового:</b>
-
-Возобновлен поиск по остаткам брендов:
-    Missoni
-    Jannelli & Volpi`,
+`,
         { parse_mode: 'HTML' }
     );
 });
