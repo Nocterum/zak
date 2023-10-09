@@ -3,6 +3,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
+const util = require('util');
 const ExcelJS = require('exceljs');
 const xlsjs = require('xlsjs'); //
 const XLSX = require('xlsx');
@@ -2270,25 +2271,26 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
 
+    const readFile = util.promisify(fs.readFile);
+
     async function readConfig() {
-        
         try {
-            const data = fs.readFile('/root/zak/config.cfg', 'utf-8');
+            const data = await readFile('/root/zak/config.cfg', 'utf-8');
             const lines = data.split('\n');
             const config = {};
-      
+        
             lines.forEach(line => {
               const [key, value] = line.trim().split('=');
               config[key] = value;
             });
-      
+        
             return config;
         } catch (error) {
             console.error('Ошибка при чтении файла конфигурации:', error);
             throw error;
         }
-      }
-      await readConfig();
+    }
+    await readConfig();
 
     // lc = null; 
     const user = await UserModel.findOne({
