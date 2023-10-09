@@ -56,8 +56,10 @@ const clientRDP = require('./rdp');
 // Функция прочнения файла conig.cfg
 // ======================================================================================================================================
 
-async function readConfig() {
+const readConfig = async () => {
+
     try {
+
         const data = await readFile('/root/zak/config.cfg', 'utf-8');
         const lines = data.split('\n');
         const config = {};
