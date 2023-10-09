@@ -15,9 +15,7 @@ const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
-var bot_password = {};
-var url_manders_1C = {};
-
+             
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 
@@ -67,6 +65,9 @@ function readConfigSync() {
 }
 // прочтение файла config.cfg
 const config = readConfigSync();
+
+var bot_password = config.bot_password;
+var url_manders_1C = config.url_manders_1C;
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
@@ -2239,11 +2240,6 @@ const start = async () => {
         console.log('Подключение к базе данных сломалось', err);
     }
 
-    const config = await readConfig();
-             
-    bot_password = config.bot_password
-    url_manders_1C = config.url_manders_1C
-
     // команды======================================================================================
 
     //старт
@@ -2326,8 +2322,6 @@ const start = async () => {
     bot.onText(/\/x/, async msg => {
         const chatId = msg.chat.id;
 
-        const config = await readConfig();
-
         // lc = null; 
         const user = await UserModel.findOne({
             where: {
@@ -2341,16 +2335,6 @@ const start = async () => {
                 chatId: chatId
             }
         })
-
-        return bot.sendMessage(chatId,
-            `${config.bot_token},
-            ${config.bot_password},
-            ${config.data_base_login},
-            ${config.data_base_password},
-            ${config.mail_bot_host},
-            ${config.mail_bot_user},
-            ${config.mail_bot_password},
-            ${config.url_manders_1C}`)
     });
 
     // настройки пользователя
