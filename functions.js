@@ -19,5 +19,5 @@ async function readConfig() {
 }
 
 module.exports = {
-    readConfig,
+    readConfig
 };
