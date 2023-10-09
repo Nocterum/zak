@@ -2422,17 +2422,16 @@ bot.sendMessage(chatId,
     <code>Galleria Arben</code>
 
 <b>Производить поиск по файлам остатков следующих брендов:</b>
-<code>Architects Papers</code>  <code>ARTE</code>
-<code>Bautex</code>             <code>Bluebellgray</code>
-<code>BN International</code>   <code>Brink</code>
-<code>Collins & Company</code>  <code>Eijffinger</code>
-<code>Holden</code>             <code>Hookedonwalls</code>
-<code>Jannelli & Volpi</code>   <code>Khroma Zoom</code>
-<code>Loymina</code>            <code>Milassa</code>
-<code>Missoni</code>            <code>Nina Hancock</code>
-<code>ORAC</code>               <code>Swiss Lake</code>
-<code>Ted Beker</code>          <code>Wedgwood</code>
-
+<code>Architects Papers</code>\t<code>ARTE</code>
+<code>Bautex</code>\t<code>Bluebellgray</code>
+<code>BN International</code>\t<code>Brink</code>
+<code>Collins & Company</code>\t<code>Eijffinger</code>
+<code>Holden</code>\t<code>Hookedonwalls</code>
+<code>Jannelli & Volpi</code>\t<code>Khroma Zoom</code>
+<code>Loymina</code>\t<code>Milassa</code>
+<code>Missoni</code>\t<code>Nina Hancock</code>
+<code>ORAC</code>\t<code>Swiss Lake</code>
+<code>Ted Beker</code>\t<code>Wedgwood</code>
 
 <b>Отправлять емейлы поставщику</b>
 <b>Подсказывать путь к папке с прайслистами</b>
