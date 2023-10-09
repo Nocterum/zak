@@ -3274,7 +3274,7 @@ const start = async () => {
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
                 const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
             
                 await user.update({subject: subject, textMail: textMail}, {
                     where: {
@@ -3285,7 +3285,7 @@ const start = async () => {
             } else {
 
                 const subject = `Резерв ${user.vendorCode}, ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
                 await user.update({subject: subject, textMail: textMail}, {
                     where: {
@@ -3303,7 +3303,7 @@ const start = async () => {
         } else if (data === '/preSendEmailReserveYes') {
 
             const subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
             await user.update({subject: subject, textMail: textMail}, {
                 where: {
@@ -3327,7 +3327,7 @@ const start = async () => {
         } else if (data === '/preSendEmailReserveNo') {
 
             const subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing_internal@manders.ru.`;
+            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
             await user.update({subject: subject, textMail: textMail}, {
                 where: {
