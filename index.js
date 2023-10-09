@@ -821,10 +821,8 @@ const sendReserveEmail = async (chatId) => {
         attributes: ['id', 'chatId', 'subject', 'textMail', 'vendorEmail']
     });
     
-    // const recipient = `${user.vendorEmail}`;     // email поставщика
-    const recipient = `from90s@gmail.com`;
-    // const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
-    const copy = `${user.email}`;
+    const recipient = `${user.vendorEmail}`;     // email поставщика
+    const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
     
 
     try {
@@ -2887,13 +2885,13 @@ bot.on('message', async msg => {
                 if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                     return bot.sendMessage(
                         chatId, 
-                        `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> ед.изм?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
+                        `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
                         enterReserveNumberOptions
                     );
                 } else {
                     return bot.sendMessage(
                         chatId, 
-                        `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> ед.изм?\n<i>(если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно)</i>`, 
+                        `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
                         enterReserveNumberOptions
                     );
                 }
@@ -3161,13 +3159,6 @@ bot.on('callback_query', async msg => {
                 }
             })
         }
-
-        // const user = await UserModel.findOne({
-        //     where: {
-        //         chatId: chatId
-        //     },
-        //     attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
-        // });
 
         return bot.sendMessage(
             chatId, 

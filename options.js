@@ -32,7 +32,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -41,7 +41,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Запрос: остатки+сроки+резерв🔎', callback_data: '/beginwork'}],
+                [{text: 'Запрос: остатки+сроки+резерв 🔎', callback_data: '/beginwork'}],
                 [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
                 [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
             ]
@@ -52,8 +52,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Изменить никнейм', callback_data: '/editNickname'}],
-                [{text: 'Изменить емейл', callback_data: '/editEmail'}]
+                [{text: 'Изменить никнейм 🔃', callback_data: '/editNickname'}],
+                [{text: 'Изменить емейл 📭', callback_data: '/editEmail'}]
             ]
         })
     },
@@ -62,8 +62,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/beginwork'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Продолжить ➡', callback_data: '/beginwork'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -72,8 +72,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Искать другой каталог🔎', callback_data: '/catalogСheck'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Искать другой каталог 🔎', callback_data: '/catalogСheck'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -82,8 +82,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'К следующей ступени поиска', callback_data: '/checkVendor'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'К следующей ступени поиска ➡', callback_data: '/checkVendor'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -92,8 +92,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Поиск по каталогу', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду', callback_data: '/enterBrand'}],
-                [{text: 'Остатки ORAC', callback_data: '/oracCheck'}],
+                [{text: 'Поиск по каталогу 🔎', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду', callback_data: '/enterBrand'}],
+                [{text: 'Остатки ORAC 🅾', callback_data: '/oracCheck'}],
             ]
         })
     },
@@ -112,9 +112,9 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Зарезервировать у поставщика✉', callback_data: '/enterReserveNumber'}],
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Зарезервировать у поставщика 📧', callback_data: '/enterReserveNumber'}],
+                [{text: 'Искать другой бренд 🔎', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -123,8 +123,8 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Искать другой бренд', callback_data: '/enterBrand'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Искать другой бренд 🔎', callback_data: '/enterBrand'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -133,9 +133,9 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Да', callback_data: '/preSendEmailReserveYes'},{text: 'Нет', callback_data: '/preSendEmailReserveNo'}],
-                [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Да ✅', callback_data: '/preSendEmailReserveYes'},{text: 'Нет ❌', callback_data: '/preSendEmailReserveNo'}],
+                [{text: 'Искать другой каталог 🔎', callback_data: '/catalogСheck'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -144,7 +144,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Продолжить', callback_data: '/checkVendor'}],
+                [{text: 'Продолжить ➡', callback_data: '/checkVendor'}],
             ]
         })
     },
@@ -153,7 +153,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Сохранить и продолжить', callback_data: '/preSendEmail'}],
+                [{text: 'Сохранить и продолжить 💾➡', callback_data: '/preSendEmail'}],
             ]
         })
     }, 
@@ -162,9 +162,9 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Отправить email📧', callback_data: '/sendReserveEmail'}],
-                [{text: 'Искать другой каталог', callback_data: '/catalogСheck'}],
-                [{text: 'В главное меню', callback_data: '/mainmenu'}],
+                [{text: 'Отправить email 📨', callback_data: '/sendReserveEmail'}],
+                [{text: 'Искать другой каталог 🔎', callback_data: '/catalogСheck'}],
+                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
             ]
         })
     },
@@ -172,7 +172,7 @@ module.exports = {
     resetInfoWorkOptions: {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Сбросить параметры', callback_data: '/resetInfoWork'}],
+                [{text: 'Сбросить параметры 📝', callback_data: '/resetInfoWork'}],
             ]
         })
     },
