@@ -3531,9 +3531,6 @@ function readConfigSync() {
 }
   
 const config = readConfigSync();
-console(config.bot_token);
-
-// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
