@@ -2290,7 +2290,7 @@ bot.onText(/\/x/, async msg => {
             throw error;
         }
     }
-    await readConfig();
+    const config = await readConfig();
 
     // lc = null; 
     const user = await UserModel.findOne({
