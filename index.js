@@ -1381,3 +1381,4 @@ const start = async () => {
 }
 
 start();
+module.exports = bot;

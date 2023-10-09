@@ -15,7 +15,7 @@ const {transporter} = require('./nodemailer');
 const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
 
-let botMsgIdx = {};
+let botMsgIdx = require('./botMsgIdx');
 
 // импорт кнопок
 const {
