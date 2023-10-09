@@ -1,4 +1,4 @@
-const readConfig = require('./functions.js');
+const { readConfig } = require('./functions.js');
 
 readConfig().then(config => {
     const bot_token = config.bot_token;
@@ -9,7 +9,7 @@ readConfig().then(config => {
     const mail_bot_user = config.mail_bot_user;
     const mail_bot_password = config.mail_bot_password;
     const url_manders_1C = config.url_manders_1C;
-    
+
     module.exports = {
         bot_token,
         bot_password,
