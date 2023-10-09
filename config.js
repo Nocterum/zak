@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const config = {};
-fs.readFileSync('config.cfg', 'utf-8').split('\n').forEach(line => {
+fs.readFileSync('/root/zak/config.cfg', 'utf-8').split('\n').forEach(line => {
     const [key, value] = line.trim().split('=');
     config[key] = value;
 });
