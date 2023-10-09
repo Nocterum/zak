@@ -2294,7 +2294,7 @@ bot.onText(/\/x/, async msg => {
             chatId: chatId
         }
     })
-    // await readConfig();
+    await readConfig();
 
     return bot.sendMessage(chatId,
         `${config.bot_token},
