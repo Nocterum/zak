@@ -1,4 +1,21 @@
 const { Sequelize } = require('sequelize');
+const fs  = require('fs');
+
+function readConfigSync() {
+    const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
+    const lines = data.split('\n');
+    const config = {};
+  
+    lines.forEach(line => {
+        const [key, value] = line.trim().split('=');
+        config[key] = value;
+    });
+  
+    return config;
+}
+  
+const config = readConfigSync();
+console.log(config);
 
 module.exports = new Sequelize(
     
