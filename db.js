@@ -1,4 +1,6 @@
 const {Sequelize} = require('sequelize');
+const { data_base_login, data_base_password } = require('./index');
+
 const {
 
     data_base_login,
@@ -9,8 +11,10 @@ const {
 module.exports = new Sequelize(
     
     'tgbotdb',
-    'root',
-    'root',
+    data_base_login,
+    data_base_password,
+    // 'root',
+    // 'root',
     {
         host: '127.0.0.1',
         port: '5432',

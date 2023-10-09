@@ -16,6 +16,13 @@ const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
+var bot_password = {};
+var data_base_login = {};
+var data_base_password = {};
+var mail_bot_host = {};
+var mail_bot_user = {};
+var mail_bot_password ={};
+var url_manders_1C = {};
 
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
@@ -115,7 +122,7 @@ const chekPassword = async (chatId, msg) => {
         attributes: ['id', 'chatId', 'lastCommand', 'email']
     });
 
-    if (text === '111QWER!!!') {
+    if (text === bot_password) {
 
         // lc = '/editNickname';
         await user.update({lastCommand: '/editEmail', email: '/editEmail'}, {
@@ -193,7 +200,7 @@ const startRequest1C = async (chatId, vendorCode) => {
 
     try {
 
-        const searchUrl1C = `http://post.manders.ru:10001/QuantityProduct.php?VendorCode=${vendorCode}&submit=Получить`;
+        const searchUrl1C = `${url_manders_1C}=${vendorCode}&submit=Получить`;
         const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
         if (!response) {
@@ -2233,22 +2240,14 @@ const start = async () => {
 
     const config = await readConfig();
              
-    const bot_password = config.bot_password
-    const data_base_login = config.data_base_login
-    const data_base_password = config.data_base_password
-    const mail_bot_host = config.mail_bot_host
-    const mail_bot_user = config.mail_bot_user
-    const mail_bot_password = config.mail_bot_password
-    const url_manders_1C = config.url_manders_1C
+    bot_password = config.bot_password
+    data_base_login = config.data_base_login
+    data_base_password = config.data_base_password
+    mail_bot_host = config.mail_bot_host
+    mail_bot_user = config.mail_bot_user
+    mail_bot_password = config.mail_bot_password
+    url_manders_1C = config.url_manders_1C
 
-    console.log(bot_password,
-        data_base_login,
-        data_base_password,
-        mail_bot_host,
-        mail_bot_user,
-        mail_bot_password,
-        url_manders_1C);
-        
     // команды======================================================================================
 
     //старт
