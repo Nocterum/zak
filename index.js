@@ -10,18 +10,8 @@ const { JSDOM } = require('jsdom'); //
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
-// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 
-const {
-    token,
-    bot_password,
-    data_base_login,
-    data_base_password,
-    mail_bot_host,
-    mail_bot_user,
-    mail_bot_password,
-    url_manders_1C
-  } = require('./config');
 
 const bot = new TelegramApi(token, {
     polling: {
@@ -35,15 +25,24 @@ const bot = new TelegramApi(token, {
 
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
-     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
-     beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions, 
-     enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
-const sequelize = require('./db');
-const UserModel = require('./models');
-const {transporter} = require('./nodemailer');
-const clientRDP = require('./rdp');
-const nodemailer = require('./nodemailer');
-const fs = require('./config');
+    workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
+    beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions, 
+    enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
+    const sequelize = require('./db');
+    const UserModel = require('./models');
+    const {transporter} = require('./nodemailer');
+    const clientRDP = require('./rdp');
+    const nodemailer = require('./nodemailer');
+    const fs = require('./config');
+    const {
+        bot_password,
+        data_base_login,
+        data_base_password,
+        mail_bot_host,
+        mail_bot_user,
+        mail_bot_password,
+        url_manders_1C
+      } = require('./config');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
