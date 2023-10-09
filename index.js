@@ -818,11 +818,14 @@ const sendReserveEmail = async (chatId) => {
         where: {
             chatId: chatId
         },
-        attributes: ['id', 'chatId', 'subject', 'textMail', 'vendorEmail']
+        attributes: ['id', 'chatId', 'subject', 'textMail', 'email', 'vendorEmail']
     });
     
-    const recipient = `${user.vendorEmail}`;     // email поставщика
-    const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+    // const recipient = `${user.vendorEmail}`;     // email поставщика
+    const recipient = `${user.email}`;     // email поставщика
+    // const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+    const copy = `n_kharitonov@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+
     
 
     try {
