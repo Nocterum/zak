@@ -6,7 +6,7 @@ fs.readFileSync('config.cfg', 'utf-8').split('\n').forEach(line => {
     config[key] = value;
 });
 
-const token = config['bot_token'];
+const bot_token = config['bot_token'];
 const bot_password = config['bot_password'];
 const data_base_login = config['data_base_login'];
 const data_base_password = config['data_base_password'];

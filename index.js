@@ -35,6 +35,7 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
     const nodemailer = require('./nodemailer');
     const fs = require('./config');
     const {
+        bot_token,
         bot_password,
         data_base_login,
         data_base_password,
