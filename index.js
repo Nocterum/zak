@@ -3162,12 +3162,12 @@ bot.on('callback_query', async msg => {
             })
         }
 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            },
-            attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
-        });
+        // const user = await UserModel.findOne({
+        //     where: {
+        //         chatId: chatId
+        //     },
+        //     attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
+        // });
 
         return bot.sendMessage(
             chatId, 
