@@ -50,6 +50,40 @@ const UserModel = require('./models');
 const { transporter, nodemailer } = require('./nodemailer');
 const clientRDP = require('./rdp');
 
+// прочтение файла config.cfg
+function readConfigSync() {
+    const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
+    const lines = data.split('\n');
+    const config = {};
+  
+    lines.forEach(line => {
+        const [key, value] = line.trim().split('=');
+        config[key] = value;
+    });
+  
+    return config;
+}
+  
+const config = readConfigSync();
+
+const bot = new TelegramApi(config.bot_token, {
+    polling: {
+        interval: 300, //между запросами с клиента на сервер тг "млсек"
+        autoStart: true, //обработка всех команд отправленных до запуска программы
+        params: {
+            timeout:10 //таймаут между запросами "млсек"
+        }
+    }
+});
+
+//МЕНЮ КОМАНД
+bot.setMyCommands([
+    {command: '/mainmenu', description:'Главное меню'},
+    {command: '/abilitys', description:'Актуальные функции бота'},
+    {command: '/updatelist', description:'Список обновлений'},
+    {command: '/settings', description:'Настройки'},
+]);
+
 // ======================================================================================================================================
 //ФУНКЦИИ================================================================================================================================
 // ======================================================================================================================================
@@ -3514,39 +3548,5 @@ const start = async () => {
 // ======================================================================================================================================
 //КОНЕЦ БЛОКА ФУНКЦИЙ====================================================================================================================
 // ======================================================================================================================================
-
-// прочтение файла config.cfg
-function readConfigSync() {
-    const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
-    const lines = data.split('\n');
-    const config = {};
-  
-    lines.forEach(line => {
-        const [key, value] = line.trim().split('=');
-        config[key] = value;
-    });
-  
-    return config;
-}
-  
-const config = readConfigSync();
-
-const bot = new TelegramApi(config.bot_token, {
-    polling: {
-        interval: 300, //между запросами с клиента на сервер тг "млсек"
-        autoStart: true, //обработка всех команд отправленных до запуска программы
-        params: {
-            timeout:10 //таймаут между запросами "млсек"
-        }
-    }
-});
-
-//МЕНЮ КОМАНД
-bot.setMyCommands([
-    {command: '/mainmenu', description:'Главное меню'},
-    {command: '/abilitys', description:'Актуальные функции бота'},
-    {command: '/updatelist', description:'Список обновлений'},
-    {command: '/settings', description:'Настройки'},
-]);
 
 start();
