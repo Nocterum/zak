@@ -3509,14 +3509,10 @@ const start = async () => {
 //КОНЕЦ БЛОКА ФУНКЦИЙ====================================================================================================================
 // ======================================================================================================================================
 
-const config = readConfig();
-
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
-const bot_token = config.config.bot_token;
 console.log(bot_token, token);
 
-
-const bot = new TelegramApi(bot_token, {
+const bot = new TelegramApi(token, {
     polling: {
         interval: 300, //между запросами с клиента на сервер тг "млсек"
         autoStart: true, //обработка всех команд отправленных до запуска программы
