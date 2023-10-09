@@ -15,7 +15,6 @@ function readConfigSync() {
 }
   
 const config = readConfigSync();
-console.log(config);
 
 module.exports = new Sequelize(
     

@@ -17,11 +17,6 @@ const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
 var bot_password = {};
-var data_base_login = {};
-var data_base_password = {};
-var mail_bot_host = {};
-var mail_bot_user = {};
-var mail_bot_password ={};
 var url_manders_1C = {};
 
 botMsgIdx = {};    //айди последнего сообщения от бота
@@ -2241,11 +2236,6 @@ const start = async () => {
     const config = await readConfig();
              
     bot_password = config.bot_password
-    data_base_login = config.data_base_login
-    data_base_password = config.data_base_password
-    mail_bot_host = config.mail_bot_host
-    mail_bot_user = config.mail_bot_user
-    mail_bot_password = config.mail_bot_password
     url_manders_1C = config.url_manders_1C
 
     // команды======================================================================================

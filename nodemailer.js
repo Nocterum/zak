@@ -16,15 +16,14 @@ function readConfigSync() {
 }
   
 const config = readConfigSync();
-console.log(config);
 
 module.exports = {
 
     transporter: nodemailer.createTransport({
-        host: 'post.manders.ru',
+        host: config.mail_bot_host,
         auth: {
-            user: 'Manders\\zakupki_bot',
-            pass: '1244zaazx@%',
+            user: config.mail_bot_user,
+            pass: config.mail_bot_password,
         },
         tls: {
             rejectUnauthorized: false
