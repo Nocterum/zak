@@ -49,7 +49,10 @@ const sequelize = require('./db');
 const UserModel = require('./models');
 const { transporter, nodemailer } = require('./nodemailer');
 
-// прочтение файла config.cfg
+// ======================================================================================================================================
+//ИНИЦИАЛИЗАЦИЯ БОТА=====================================================================================================================
+// ======================================================================================================================================
+// синхронная функция чтения файла config.cfg
 function readConfigSync() {
     const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
     const lines = data.split('\n');
@@ -62,7 +65,7 @@ function readConfigSync() {
   
     return config;
 }
-  
+// прочтение файла config.cfg
 const config = readConfigSync();
 
 const bot = new TelegramApi(config.bot_token, {
@@ -82,7 +85,7 @@ bot.setMyCommands([
     {command: '/updatelist', description:'Список обновлений'},
     {command: '/settings', description:'Настройки'},
 ]);
-start();
+
 // ======================================================================================================================================
 //ФУНКЦИИ================================================================================================================================
 // ======================================================================================================================================
@@ -875,11 +878,8 @@ const sendReserveEmail = async (chatId) => {
         attributes: ['id', 'chatId', 'subject', 'textMail', 'email', 'vendorEmail']
     });
     
-    // const recipient = `${user.vendorEmail}`;     // email поставщика
-    const recipient = `${user.email}`;     // email поставщика
+    const recipient = `${user.vendorEmail}`;     // email поставщика
     const copy = `purchasing@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing@manders.ru
-
-    
 
     try {
         if (user.vendor !== null) {
@@ -899,7 +899,6 @@ const sendReserveEmail = async (chatId) => {
             );
         }
         
-
     } catch (e) {
         console.error(e);
         throw new Error('Ошибка при отправке email');
@@ -3523,4 +3522,4 @@ const start = async () => {
 //КОНЕЦ БЛОКА ФУНКЦИЙ====================================================================================================================
 // ======================================================================================================================================
 
-
+start();
