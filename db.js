@@ -20,8 +20,8 @@ console.log(config);
 module.exports = new Sequelize(
     
     'tgbotdb',
-    'root',
-    'root',
+    config.data_base_login,
+    config.data_base_password,
     {
         host: '127.0.0.1',
         port: '5432',
