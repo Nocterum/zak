@@ -1,33 +1,23 @@
-// const fs = require('fs');
+const readConfig = require('./functions.js');
 
-// const config = {};
-// fs.readFileSync('/root/zak/config.cfg', 'utf-8').split('\n').forEach(line => {
-//     const [key, value] = line.trim().split('=');
-//     config[key] = value;
-// });
-
-// const util = require('util');
-// const readFile = util.promisify(fs.readFile);
-
-// async function readConfig() {
+readConfig().then(config => {
+    const bot_token = config.bot_token;
+    const bot_password = config.bot_password;
+    const data_base_login = config.data_base_login;
+    const data_base_password = config.data_base_password;
+    const mail_bot_host = config.mail_bot_host;
+    const mail_bot_user = config.mail_bot_user;
+    const mail_bot_password = config.mail_bot_password;
+    const url_manders_1C = config.url_manders_1C;
     
-//     try {
-//         const data = await readFile('/root/zak/config.cfg', 'utf-8');
-//         const lines = data.split('\n');
-//     const config = {};
-    
-//     lines.forEach(line => {
-//         const [key, value] = line.trim().split('=');
-//         config[key] = value;
-//     });
-    
-//     return config;
-// } catch (error) {
-//     console.error('Ошибка при чтении файла конфигурации:', error);
-//     throw error;
-// }
-// }
-
-
-
-// module.exports = readConfig();
+    module.exports = {
+        bot_token,
+        bot_password,
+        data_base_login,
+        data_base_password,
+        mail_bot_host,
+        mail_bot_user,
+        mail_bot_password,
+        url_manders_1C
+    };
+});

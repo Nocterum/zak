@@ -4,6 +4,7 @@ const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
+const readFile = util.promisify(fs.readFile);
 const ExcelJS = require('exceljs');
 const xlsjs = require('xlsjs'); //
 const XLSX = require('xlsx');
@@ -11,18 +12,6 @@ const { JSDOM } = require('jsdom');
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
-const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
-
-
-const bot = new TelegramApi(token, {
-    polling: {
-        interval: 300, //между запросами с клиента на сервер тг "млсек"
-        autoStart: true, //обработка всех команд отправленных до запуска программы
-        params: {
-            timeout:10 //таймаут между запросами "млсек"
-        }
-    }
-});
 
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
@@ -34,15 +23,34 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
     const {transporter} = require('./nodemailer');
     const clientRDP = require('./rdp');
     const nodemailer = require('./nodemailer');
-
+    const {
+        bot_token,
+        bot_password,
+        data_base_login,
+        data_base_password,
+        mail_bot_host,
+        mail_bot_user,
+        mail_bot_password,
+        url_manders_1C
+    } = require('./config.js');
+    
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
 
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 
-
-
+// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+ 
+const bot = new TelegramApi(bot_token, {
+    polling: {
+        interval: 300, //между запросами с клиента на сервер тг "млсек"
+        autoStart: true, //обработка всех команд отправленных до запуска программы
+        params: {
+            timeout:10 //таймаут между запросами "млсек"
+        }
+    }
+});
 
 //МЕНЮ КОМАНД
 bot.setMyCommands([
@@ -2271,27 +2279,6 @@ bot.onText(/\/game/, async msg => {
 bot.onText(/\/x/, async msg => {
     const chatId = msg.chat.id;
 
-    const readFile = util.promisify(fs.readFile);
-
-    async function readConfig() {
-        try {
-            const data = await readFile('/root/zak/config.cfg', 'utf-8');
-            const lines = data.split('\n');
-            const config = {};
-        
-            lines.forEach(line => {
-              const [key, value] = line.trim().split('=');
-              config[key] = value;
-            });
-        
-            return config;
-        } catch (error) {
-            console.error('Ошибка при чтении файла конфигурации:', error);
-            throw error;
-        }
-    }
-    const config = await readConfig();
-
     // lc = null; 
     const user = await UserModel.findOne({
         where: {
@@ -2307,14 +2294,14 @@ bot.onText(/\/x/, async msg => {
     })
 
     return bot.sendMessage(chatId,
-        `${config.bot_token},
-        ${config.bot_password},
-        ${config.data_base_login},
-        ${config.data_base_password},
-        ${config.mail_bot_host},
-        ${config.mail_bot_user},
-        ${config.mail_bot_password},
-        ${config.url_manders_1C}`)
+        `${bot_token},
+        ${bot_password},
+        ${data_base_login},
+        ${data_base_password},
+        ${mail_bot_host},
+        ${mail_bot_user},
+        ${mail_bot_password},
+        ${url_manders_1C}`)
 });
 
 // настройки пользователя
