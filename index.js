@@ -9,7 +9,6 @@ const fs = require('fs');
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
 
-const xlsjs = require('xlsjs'); //
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
