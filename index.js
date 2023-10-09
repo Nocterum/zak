@@ -2231,6 +2231,24 @@ const start = async () => {
         console.log('Подключение к базе данных сломалось', err);
     }
 
+    const config = await readConfig();
+             
+    const bot_password = config.bot_password
+    const data_base_login = config.data_base_login
+    const data_base_password = config.data_base_password
+    const mail_bot_host = config.mail_bot_host
+    const mail_bot_user = config.mail_bot_user
+    const mail_bot_password = config.mail_bot_password
+    const url_manders_1C = config.url_manders_1C
+
+    console.log(bot_password,
+        data_base_login,
+        data_base_password,
+        mail_bot_host,
+        mail_bot_user,
+        mail_bot_password,
+        url_manders_1C);
+        
     // команды======================================================================================
 
     //старт
