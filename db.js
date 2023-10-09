@@ -1,13 +1,6 @@
 const {Sequelize} = require('sequelize');
 const { data_base_login, data_base_password } = require('./index');
 
-const {
-
-    data_base_login,
-    data_base_password,
-
-  } = require('./config');
-
 module.exports = new Sequelize(
     
     'tgbotdb',
