@@ -14,12 +14,29 @@ const UserModel = require('./models');
 const {transporter} = require('./nodemailer');
 const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
+let botMsgIdx = require('./index');
 
-
-const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
-    workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
-    beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions, 
-    enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
+// импорт кнопок
+const {
+    mainMenuOptions, 
+    gameOptions, 
+    againOptions, 
+    resetOptions, 
+    resetInfoWorkOptions,
+    workOptions, 
+    work1Options, 
+    checkVendorOptions, 
+    startFindOptions, 
+    startFind1Options, 
+    startFind2Options, 
+    beginWorkOptions, 
+    beginWork2Options, 
+    mainMenuReturnOptions, 
+    settingsOptions, 
+    enterReserveNumberOptions, 
+    sendReserveOptions, 
+    beginWork3Options 
+} = require('./options');
 
 // ======================================================================================================================================
 // Функция прочнения файла conig.cfg
