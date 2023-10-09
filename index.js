@@ -3508,8 +3508,9 @@ const start = async () => {
 
 const config = readConfig();
 
-// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 const bot_token = config.bot_token;
+console.log(bot_token, token);
 
 
 const bot = new TelegramApi(bot_token, {
