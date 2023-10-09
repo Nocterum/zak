@@ -2,6 +2,7 @@
 const nodemailer = require('nodemailer');
 
 module.exports = {
+    
     transporter: nodemailer.createTransport({
         host: 'post.manders.ru',
         auth: {
