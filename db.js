@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const fs  = require('fs');
 
+// прочтение файла config.cfg
 function readConfigSync() {
     const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
     const lines = data.split('\n');

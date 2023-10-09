@@ -3516,9 +3516,26 @@ const start = async () => {
 //КОНЕЦ БЛОКА ФУНКЦИЙ====================================================================================================================
 // ======================================================================================================================================
 
-const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+// прочтение файла config.cfg
+function readConfigSync() {
+    const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
+    const lines = data.split('\n');
+    const config = {};
+  
+    lines.forEach(line => {
+        const [key, value] = line.trim().split('=');
+        config[key] = value;
+    });
+  
+    return config;
+}
+  
+const config = readConfigSync();
+console(config.bot_token);
 
-const bot = new TelegramApi(token, {
+// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+
+const bot = new TelegramApi(config.bot_token, {
     polling: {
         interval: 300, //между запросами с клиента на сервер тг "млсек"
         autoStart: true, //обработка всех команд отправленных до запуска программы
