@@ -889,8 +889,7 @@ const sendReserveEmail = async (chatId) => {
     
     // const recipient = `${user.vendorEmail}`;     // email поставщика
     const recipient = `${user.email}`;     // email поставщика
-    // const copy = `purchasing_internal@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
-    const copy = `n_kharitonov@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing_internal@manders.ru
+    const copy = `purchasing@manders.ru`;   //ВАЖНО: Ставить в копию только     purchasing@manders.ru
 
     
 
