@@ -8,14 +8,12 @@ const fs = require('fs');
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
 
-const bot = require('./index');
+// ИМПОРТЫ
+const { bot, botMsgIdx } = require('./index');
 const sequelize = require('./db');
 const UserModel = require('./models');
-const {transporter} = require('./nodemailer');
+const {transporter, nodemailer} = require('./nodemailer');
 const clientRDP = require('./rdp');
-const nodemailer = require('./nodemailer');
-
-let botMsgIdx = require('./index');
 
 // импорт кнопок
 const {
