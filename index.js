@@ -3042,6 +3042,7 @@ bot.on('callback_query', async msg => {
                 chatId: chatId
             }
         })
+
         return bot.sendMessage(
             chatId, 
             `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
