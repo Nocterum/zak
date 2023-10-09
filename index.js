@@ -2403,35 +2403,35 @@ bot.sendMessage(chatId,
 
 Производить поиск 🔎 остатков на сайтах:
 <pre>opusdeco.ru</pre>
-    <code>1838              ⚫    Arlin</code>
-    <code>Arthouse          ⚫    Atelier</code>
-    <code>Aura              ⚫    Lincrusta</code>
-    <code>Print 4           ⚫    Sangiorgio</code>
-    <code>Sem - Murale      ⚫    York</code>
+    ✅<code>1838                  ✅Arlin</code>
+    ✅<code>Arthouse              ✅Atelier</code>
+    ✅<code>Aura                  ✅Lincrusta</code>
+    ✅<code>Print 4               ✅Sangiorgio</code>
+    ✅<code>Sem - Murale          ✅York</code>
 <pre>dealer.decaro.ru</pre> 
-    <code>Architector       ⚫    Casa Mia</code>
-    <code>Coordonne         ⚫    Emil & Hugo</code>
-    <code>Epoca             ⚫    Etten</code>
-    <code>Heritage House    ⚫    Jaima Brown</code>
-    <code>KT-Exсlusive      ⚫    Mayflower</code>
-    <code>NLXL              ⚫    Paper & Ink</code>
-    <code>Seabrook          ⚫    Texam</code>
-    <code>Tiffany Design    ⚫    Trendsetter</code>
-    <code>Vatos             ⚫    Wallquest</code>
+    ✅<code>Architector           ✅Casa Mia</code>
+    ✅<code>Coordonne             ✅Emil & Hugo</code>
+    ✅<code>Epoca                 ✅Etten</code>
+    ✅<code>Heritage House        ✅Jaima Brown</code>
+    ✅<code>KT-Exсlusive          ✅Mayflower</code>
+    ✅<code>NLXL                  ✅Paper & Ink</code>
+    ✅<code>Seabrook              ✅Texam</code>
+    ✅<code>Tiffany Design        ✅Trendsetter</code>
+    ✅<code>Vatos                 ✅Wallquest</code>
 <pre>galleriaarben.ru</pre>
-    <code>Galleria Arben</code>
+    ✅<code>Galleria Arben</code>
 
 <b>Производить поиск 🔎 по файлам остатков следующих брендов:</b>
-    <code>Architects Papers ⚫    ARTE</code>
-    <code>Bautex            ⚫    Bluebellgray</code>
-    <code>BN International  ⚫    Brink</code>
-    <code>Collins & Company ⚫    Eijffinger</code>
-    <code>Holden            ⚫    Hookedonwalls</code>
-    <code>Jannelli & Volpi  ⚫    Khroma Zoom</code>
-    <code>Loymina           ⚫    Milassa</code>
-    <code>Missoni           ⚫    Nina Hancock</code>
-    <code>ORAC              ⚫    Swiss Lake</code>
-    <code>Ted Beker         ⚫    Wedgwood</code>
+    ✅<code>Architects Papers     ✅ARTE</code>
+    ✅<code>Bautex                ✅Bluebellgray</code>
+    ✅<code>BN International      ✅Brink</code>
+    ✅<code>Collins & Company     ✅Eijffinger</code>
+    ✅<code>Holden                ✅Hookedonwalls</code>
+    ✅<code>Jannelli & Volpi      ✅Khroma Zoom</code>
+    ✅<code>Loymina               ✅Milassa</code>
+    ✅<code>Missoni               ✅Nina Hancock</code>
+    ✅<code>ORAC                  ✅Swiss Lake</code>
+    ✅<code>Ted Beker             ✅Wedgwood</code>
 
 <b>Отправлять емейлы поставщику</b> 📨
 <b>Подсказывать путь к папке с прайслистами</b> 👓
