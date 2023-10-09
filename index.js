@@ -2402,13 +2402,14 @@ bot.sendMessage(chatId,
 `<b>Что умеет бот сейчас:</b>
 
 Производить поиск 🔎 остатков на сайтах:
-<strong>opusdeco.ru:</strong>
+<strong>opusdeco.ru</strong>
     ✅<code>1838                  ✅Arlin</code>
     ✅<code>Arthouse              ✅Atelier</code>
     ✅<code>Aura                  ✅Lincrusta</code>
     ✅<code>Print 4               ✅Sangiorgio</code>
     ✅<code>Sem - Murale          ✅York</code>
-<strong>dealer.decaro.ru:</strong> 
+
+<strong>dealer.decaro.ru</strong> 
     ✅<code>Architector           ✅Casa Mia</code>
     ✅<code>Coordonne             ✅Emil & Hugo</code>
     ✅<code>Epoca                 ✅Etten</code>
@@ -2418,7 +2419,8 @@ bot.sendMessage(chatId,
     ✅<code>Seabrook              ✅Texam</code>
     ✅<code>Tiffany Design        ✅Trendsetter</code>
     ✅<code>Vatos                 ✅Wallquest</code>
-<strong>galleriaarben.ru:</strong>
+
+<strong>galleriaarben.ru</strong>
     ✅<code>Galleria Arben</code>
 
 <b>Производить поиск 🔎 по файлам остатков следующих брендов:</b>
