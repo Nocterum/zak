@@ -2401,42 +2401,42 @@ bot.onText(/\/abilitys/, (msg) => {
 bot.sendMessage(chatId,
 `<b>Что умеет бот сейчас:</b>
 
-Производить поиск остатков на сайтах:
+Производить поиск 🔎 остатков на сайтах:
 <pre>opusdeco.ru</pre>
-    <code>1838              Arlin</code>
-    <code>Arthouse          Atelier</code>
-    <code>Aura              Lincrusta</code>
-    <code>Print 4           Sangiorgio</code>
-    <code>Sem - Murale      York</code>
-<pre>dealer.decaro.ru</pre>
-    <code>Architector</code>\t<code>Casa Mia</code>
-    <code>Coordonne</code>\t<code>Emil & Hugo</code>
-    <code>Epoca</code>\t<code>Etten</code>
-    <code>Heritage House</code>\t<code>Jaima Brown</code>
-    <code>KT-Exсlusive</code>\t<code>Mayflower</code>
-    <code>NLXL</code>\t<code>Paper & Ink</code>
-    <code>Seabrook</code>\t<code>Texam</code>
-    <code>Tiffany Design</code>\t<code>Trendsetter</code>
-    <code>Vatos</code>\t<code>Wallquest</code>
+    <code>1838              ⚫    Arlin</code>
+    <code>Arthouse          ⚫    Atelier</code>
+    <code>Aura              ⚫    Lincrusta</code>
+    <code>Print 4           ⚫    Sangiorgio</code>
+    <code>Sem - Murale      ⚫    York</code>
+<pre>dealer.decaro.ru</pre> 
+    <code>Architector       ⚫    Casa Mia</code>
+    <code>Coordonne         ⚫    Emil & Hugo</code>
+    <code>Epoca             ⚫    Etten</code>
+    <code>Heritage House    ⚫    Jaima Brown</code>
+    <code>KT-Exсlusive      ⚫    Mayflower</code>
+    <code>NLXL              ⚫    Paper & Ink</code>
+    <code>Seabrook          ⚫    Texam</code>
+    <code>Tiffany Design    ⚫    Trendsetter</code>
+    <code>Vatos             ⚫    Wallquest</code>
 <pre>galleriaarben.ru</pre>
     <code>Galleria Arben</code>
 
-<b>Производить поиск по файлам остатков следующих брендов:</b>
-<code>Architects Papers</code>\t<code>ARTE</code>
-<code>Bautex</code>\t<code>Bluebellgray</code>
-<code>BN International</code>\t<code>Brink</code>
-<code>Collins & Company</code>\t<code>Eijffinger</code>
-<code>Holden</code>\t<code>Hookedonwalls</code>
-<code>Jannelli & Volpi</code>\t<code>Khroma Zoom</code>
-<code>Loymina</code>\t<code>Milassa</code>
-<code>Missoni</code>\t<code>Nina Hancock</code>
-<code>ORAC</code>\t<code>Swiss Lake</code>
-<code>Ted Beker</code>\t<code>Wedgwood</code>
+<b>Производить поиск 🔎 по файлам остатков следующих брендов:</b>
+    <code>Architects Papers ⚫    ARTE</code>
+    <code>Bautex            ⚫    Bluebellgray</code>
+    <code>BN International  ⚫    Brink</code>
+    <code>Collins & Company ⚫    Eijffinger</code>
+    <code>Holden            ⚫    Hookedonwalls</code>
+    <code>Jannelli & Volpi  ⚫    Khroma Zoom</code>
+    <code>Loymina           ⚫    Milassa</code>
+    <code>Missoni           ⚫    Nina Hancock</code>
+    <code>ORAC              ⚫    Swiss Lake</code>
+    <code>Ted Beker         ⚫    Wedgwood</code>
 
-<b>Отправлять емейлы поставщику</b>
-<b>Подсказывать путь к папке с прайслистами</b>
-<b>Искать каталоги обоев и текстиля</b>
-<b>Искать остатки в 1С*</b>
+<b>Отправлять емейлы поставщику</b> 📨
+<b>Подсказывать путь к папке с прайслистами</b> 👓
+<b>Искать каталоги обоев и текстиля</b> 🔎
+<b>Искать остатки в 1С*</b> 🔎
 <i>*общее колличество</i>`,
         { parse_mode: 'HTML' }
     );
