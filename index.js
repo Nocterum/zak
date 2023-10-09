@@ -14,40 +14,60 @@ botMsgIdx = {};    //айди последнего сообщения от бо�
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 
 //ИМПОРТЫ
-const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
-    workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
-    beginWorkOptions, beginWork2Options, mainMenuReturnOptions, settingsOptions, 
-    enterReserveNumberOptions, sendReserveOptions, beginWork3Options} = require('./options');
-    const sequelize = require('./db');
-    const UserModel = require('./models');
-    const {transporter} = require('./nodemailer');
-    const clientRDP = require('./rdp');
-    const nodemailer = require('./nodemailer');
-    const { readConfig,
-            createNewUser, 
-            chekPassword,
-            editEmail, 
-            editNickname, 
-            startRequest1C,
-            startCheckVendor, 
-            startFindOpus, 
-            startFindDecaro,
-            startFindLevantin, 
-            sendReserveEmail, 
-            findExcelFile, 
-            findOrac, 
-            findCatalogWallpaper, 
-            findCatalogTextile,
-            findPricelistLink, 
-            findDecorDelux, 
-            findDecorRus,
-            findBautex, 
-            findLoymina, 
-            findSirpi,
-            findBrink } = require('./functions.js');
-    
-    
+// импорт кнопок
+const {
+    mainMenuOptions, 
+    gameOptions, 
+    againOptions, 
+    resetOptions, 
+    resetInfoWorkOptions,
+    workOptions, 
+    work1Options, 
+    checkVendorOptions, 
+    startFindOptions, 
+    startFind1Options, 
+    startFind2Options, 
+    beginWorkOptions, 
+    beginWork2Options, 
+    mainMenuReturnOptions, 
+    settingsOptions, 
+    enterReserveNumberOptions, 
+    sendReserveOptions, 
+    beginWork3Options 
+} = require('./options');
 
+const sequelize = require('./db');
+const UserModel = require('./models');
+const {transporter} = require('./nodemailer');
+const clientRDP = require('./rdp');
+const nodemailer = require('./nodemailer');
+
+// импорт функций
+const { 
+    readConfig,
+    createNewUser, 
+    chekPassword,
+    editEmail, 
+    editNickname, 
+    startRequest1C,
+    startCheckVendor, 
+    startFindOpus, 
+    startFindDecaro,
+    startFindLevantin, 
+    sendReserveEmail, 
+    findExcelFile, 
+    findOrac, 
+    findCatalogWallpaper, 
+    findCatalogTextile,
+    findPricelistLink, 
+    findDecorDelux, 
+    findDecorRus,
+    findBautex, 
+    findLoymina, 
+    findSirpi,
+    findBrink 
+} = require('./functions.js');
+    
 const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
 
     // const bot_token = config.bot_token;
