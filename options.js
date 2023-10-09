@@ -42,7 +42,7 @@ module.exports = {
         reply_markup: JSON.stringify( {
             inline_keyboard: [
                 [{text: 'Запрос: остатки+сроки+резерв 🔎', callback_data: '/beginwork'}],
-                [{text: 'Проверка наличия в 1С', callback_data: '/request1C'}],
+                [{text: 'Проверка наличия в 1С ☑', callback_data: '/request1C'}],
                 [{text: 'Функции в разработке', callback_data: '/beginwork1'}],
             ]
         })

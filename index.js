@@ -2403,7 +2403,7 @@ bot.sendMessage(chatId,
 
 Производить поиск 🔎 остатков на сайтах:
 <strong>opusdeco.ru</strong>
-    ✅<code>1838                  ✅Arlin</code>
+    ☑<code>1838                  ☑Arlin</code>
     ✅<code>Arthouse              ✅Atelier</code>
     ✅<code>Aura                  ✅Lincrusta</code>
     ✅<code>Print 4               ✅Sangiorgio</code>
