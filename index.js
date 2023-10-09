@@ -2244,16 +2244,16 @@ bot.onText(/\/start/, async msg => {
 bot.onText(/\/game/, async msg => {
     const chatId = msg.chat.id;
 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
+    });
+
     if (user.email !== '/passwordcheck') {
 
         // lc = '/game';
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            },
-            attributes: ['id', 'chatId', 'lastCommand']
-        });
-
         await user.update({lastCommand: '/game'}, {
             where: {
                 chatId: chatId
@@ -2293,16 +2293,16 @@ bot.onText(/\/x/, async msg => {
 bot.onText(/\/settings/, async msg => {
     const chatId = msg.chat.id;
 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
+    });
+
     if (user.email !== '/passwordcheck') {
 
         // lc = null; 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            },
-            attributes: ['id', 'chatId', 'lastCommand']
-        });
-    
         await user.update({lastCommand: null}, {
             where: {
                 chatId: chatId
@@ -2318,48 +2318,73 @@ bot.onText(/\/settings/, async msg => {
 });
 
 // получение имена файлов 
-bot.onText(/\/files/, (msg) => {
-
+bot.onText(/\/files/, async msg => {
     const chatId = msg.chat.id;
     const folderPath = '/root/zak/xl';
-    
-    // Получение списка файлов в папке
-    fs.readdir(folderPath, async (err, files) => {
-        if (err) {
-            console.log(err);
-            return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
-        }
-    
-        // Отправка списка файлов
-        await bot.sendMessage(chatId, 'Список файлов:');
-        files.forEach((file) => {
-            return bot.sendMessage(chatId, `<code>${file}</code>`, { parse_mode: 'HTML' } );
-        });
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
     });
 
+    if (user.email !== '/passwordcheck') {
+
+        // Получение списка файлов в папке
+        fs.readdir(folderPath, async (err, files) => {
+            if (err) {
+                console.log(err);
+                return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+            }
+        
+            // Отправка списка файлов
+            await bot.sendMessage(chatId, 'Список файлов:');
+            files.forEach((file) => {
+                return bot.sendMessage(chatId, `<code>${file}</code>`, { parse_mode: 'HTML' } );
+            });
+        });
+    }
 });
 
 // получение конкретного файла
-bot.onText(/\/getfile (.+)/, (msg, match) => {
-
+bot.onText(/\/getfile (.+)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const fileName = match[1];
-    const filePath = path.join('/root/zak/xl', fileName);
-    
-    // Проверка существования файла
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            return bot.sendMessage(chatId, 'Файл не найден.');
-        }
-    
-        // Отправка файла
-        bot.sendDocument(chatId, filePath);
-    })
 
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
+    });
+
+    if (user.email !== '/passwordcheck') {
+
+        const fileName = match[1];
+        const filePath = path.join('/root/zak/xl', fileName);
+        
+        // Проверка существования файла
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                return bot.sendMessage(chatId, 'Файл не найден.');
+            }
+        
+            // Отправка файла
+            bot.sendDocument(chatId, filePath);
+        })
+    }
 });
 
 // получение списка пользователей
-bot.onText(/\/whoiswho/, (msg) => {
+bot.onText(/\/whoiswho/, async (msg) => {
+    const chatId = msg.chat.id;
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: ['id', 'chatId', 'lastCommand', 'email']
+    });
 
     if (user.email !== '/passwordcheck') {
 
