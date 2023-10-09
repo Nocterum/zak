@@ -13,6 +13,10 @@ const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 
+const { readConfig } = require('./functions.js');
+
+
+
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 
@@ -23,16 +27,7 @@ const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOp
     const {transporter} = require('./nodemailer');
     const clientRDP = require('./rdp');
     const nodemailer = require('./nodemailer');
-    const {
-        bot_token,
-        bot_password,
-        data_base_login,
-        data_base_password,
-        mail_bot_host,
-        mail_bot_user,
-        mail_bot_password,
-        url_manders_1C
-    } = require('./config.js');
+
     
 //ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
 chats = {};
@@ -40,9 +35,9 @@ chats = {};
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
 
-// const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
+const token = '6076442091:AAGUxzIT8C7G7_hx4clixZpIi0Adtb2p2MA';
  
-const bot = new TelegramApi(bot_token, {
+const bot = new TelegramApi(token, {
     polling: {
         interval: 300, //между запросами с клиента на сервер тг "млсек"
         autoStart: true, //обработка всех команд отправленных до запуска программы
