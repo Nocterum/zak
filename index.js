@@ -5,7 +5,6 @@ const cheerio = require('cheerio');
 const XLSX = require('xlsx');
 const { JSDOM } = require('jsdom');
 const ExcelJS = require('exceljs');
-const path = require('path');
 const fs = require('fs');
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
