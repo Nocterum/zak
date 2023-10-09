@@ -2280,7 +2280,7 @@ bot.onText(/\/x/, async msg => {
     const mail_bot_user = config['mail_bot_user'];
     const mail_bot_password = config['mail_bot_password'];
     const url_manders_1C = config['url_manders_1C'];
-    
+
     // lc = null; 
     const user = await UserModel.findOne({
         where: {
@@ -2294,16 +2294,17 @@ bot.onText(/\/x/, async msg => {
             chatId: chatId
         }
     })
+    // await readConfig();
 
     return bot.sendMessage(chatId,
-        `${bot_token},
-        ${bot_password},
-        ${data_base_login},
-        ${data_base_password},
-        ${mail_bot_host},
-        ${mail_bot_user},
-        ${mail_bot_password},
-        ${url_manders_1C}`)
+        `${config.bot_token},
+        ${config.bot_password},
+        ${config.data_base_login},
+        ${config.data_base_password},
+        ${config.mail_bot_host},
+        ${config.mail_bot_user},
+        ${config.mail_bot_password},
+        ${config.url_manders_1C}`)
 });
 
 // настройки пользователя
