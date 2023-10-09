@@ -866,8 +866,9 @@ async function findExcelFile(
     fileNameBautex = '',
     fileNameLoymina = '',
     fileNameSirpi = '',
-
+    fileNameBrink = '',
     ) {
+
     const folderPath = '/root/zak/xl';
     const files = await fs.promises.readdir(folderPath);
 
@@ -1037,6 +1038,7 @@ async function findOrac(chatId) {
             let foundMatchOracMSK = false;
             
             firstWorksheetMSK.eachRow( async (row, rowNumber) => {
+
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
                 const formatedUserVC = user.vendorCode.toString().trim();
@@ -1085,6 +1087,7 @@ async function findOrac(chatId) {
             let foundMatchOracSPB = false;
 
             firstWorksheetSPB.eachRow( async (row, rowNumber) => {
+
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
                 const formatedUserVC = user.vendorCode.toString().trim();
@@ -2288,46 +2291,42 @@ bot.onText(/\/settings/, async msg => {
 // получение имена файлов 
 bot.onText(/\/files/, (msg) => {
 
-    if (user.email !== '/passwordcheck') {
-
-        const chatId = msg.chat.id;
-        const folderPath = '/root/zak/xl';
-        
-        // Получение списка файлов в папке
-        fs.readdir(folderPath, async (err, files) => {
-            if (err) {
-                console.log(err);
-                return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
-            }
-        
-            // Отправка списка файлов
-            await bot.sendMessage(chatId, 'Список файлов:');
-            files.forEach((file) => {
-                return bot.sendMessage(chatId, `<code>${file}</code>`, { parse_mode: 'HTML' } );
-            });
+    const chatId = msg.chat.id;
+    const folderPath = '/root/zak/xl';
+    
+    // Получение списка файлов в папке
+    fs.readdir(folderPath, async (err, files) => {
+        if (err) {
+            console.log(err);
+            return bot.sendMessage(chatId, 'Произошла ошибка при получении списка файлов.');
+        }
+    
+        // Отправка списка файлов
+        await bot.sendMessage(chatId, 'Список файлов:');
+        files.forEach((file) => {
+            return bot.sendMessage(chatId, `<code>${file}</code>`, { parse_mode: 'HTML' } );
         });
-    }
+    });
+
 });
 
 // получение конкретного файла
 bot.onText(/\/getfile (.+)/, (msg, match) => {
 
-    if (user.email !== '/passwordcheck') {
+    const chatId = msg.chat.id;
+    const fileName = match[1];
+    const filePath = path.join('/root/zak/xl', fileName);
+    
+    // Проверка существования файла
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return bot.sendMessage(chatId, 'Файл не найден.');
+        }
+    
+        // Отправка файла
+        bot.sendDocument(chatId, filePath);
+    })
 
-        const chatId = msg.chat.id;
-        const fileName = match[1];
-        const filePath = path.join('/root/zak/xl', fileName);
-        
-        // Проверка существования файла
-        fs.access(filePath, fs.constants.F_OK, (err) => {
-            if (err) {
-                return bot.sendMessage(chatId, 'Файл не найден.');
-            }
-        
-            // Отправка файла
-            bot.sendDocument(chatId, filePath);
-        })
-    }
 });
 
 // получение списка пользователей

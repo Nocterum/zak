@@ -92,7 +92,7 @@ module.exports = {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {
             inline_keyboard: [
-                [{text: 'Поиск по каталогу 🔎', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду', callback_data: '/enterBrand'}],
+                [{text: 'Поиск по каталогу 🔎', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду 🔎', callback_data: '/enterBrand'}],
                 [{text: 'Остатки ORAC 🅾', callback_data: '/oracCheck'}],
             ]
         })
