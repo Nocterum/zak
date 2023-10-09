@@ -15,8 +15,6 @@ const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 
 const { readConfig } = require('./functions.js');
 
-
-
 //ИМПОРТЫ
 const {mainMenuOptions, gameOptions, againOptions, resetOptions, resetInfoWorkOptions,
     workOptions, work1Options, checkVendorOptions, startFindOptions, startFind1Options, startFind2Options, 

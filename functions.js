@@ -1,4 +1,4 @@
-const readFile = require('./index');
+const { readFile } = require('fs').promises;
 
 async function readConfig() {
     try {
