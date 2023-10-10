@@ -2467,30 +2467,30 @@ const start = async () => {
         ✅<code>Sem - Murale</code><code>          </code>✅<code>York</code>
 
     <strong>dealer.decaro.ru</strong> 
-        ✅<code>Architector           ✅Casa Mia</code>
-        ✅<code>Coordonne             ✅Emil & Hugo</code>
-        ✅<code>Epoca                 ✅Etten</code>
-        ✅<code>Heritage House        ✅Jaima Brown</code>
-        ✅<code>KT-Exсlusive          ✅Mayflower</code>
-        ✅<code>NLXL                  ✅Paper & Ink</code>
-        ✅<code>Seabrook              ✅Texam</code>
-        ✅<code>Tiffany Design        ✅Trendsetter</code>
-        ✅<code>Vatos                 ✅Wallquest</code>
+        ✅<code>Architector</code><code>           </code>✅<code>Casa Mia</code>
+        ✅<code>Coordonne</code><code>             </code>✅<code>Emil & Hugo</code>
+        ✅<code>Epoca</code><code>                 </code>✅<code>Etten</code>
+        ✅<code>Heritage House</code><code>        </code>✅<code>Jaima Brown</code>
+        ✅<code>KT-Exсlusive</code><code>          </code>✅<code>Mayflower</code>
+        ✅<code>NLXL</code><code>                  </code>✅<code>Paper & Ink</code>
+        ✅<code>Seabrook</code><code>              </code>✅<code>Texam</code>
+        ✅<code>Tiffany Design</code><code>        </code>✅<code>Trendsetter</code>
+        ✅<code>Vatos</code><code>                 </code>✅<code>Wallquest</code>
 
     <strong>galleriaarben.ru</strong>
         ✅<code>Galleria Arben</code>
 
     <b>Производить поиск 🔎 по файлам остатков следующих брендов:</b>
-        ✅<code>Architects Papers     ✅ARTE</code>
-        ✅<code>Bautex                ✅Bluebellgray</code>
-        ✅<code>BN International      ✅Brink</code>
-        ✅<code>Collins & Company     ✅Eijffinger</code>
-        ✅<code>Holden                ✅Hookedonwalls</code>
-        ✅<code>Jannelli & Volpi      ✅Khroma Zoom</code>
-        ✅<code>Loymina               ✅Milassa</code>
-        ✅<code>Missoni               ✅Nina Hancock</code>
-        ✅<code>ORAC                  ✅Swiss Lake</code>
-        ✅<code>Ted Beker             ✅Wedgwood</code>
+        ✅<code>Architects Papers</code><code>     </code>✅<code>ARTE</code>
+        ✅<code>Bautex</code><code>                </code>✅<code>Bluebellgray</code>
+        ✅<code>BN International</code><code>      </code>✅<code>Brink</code>
+        ✅<code>Collins & Company</code><code>     </code>✅<code>Eijffinger</code>
+        ✅<code>Holden</code><code>                </code>✅<code>Hookedonwalls</code>
+        ✅<code>Jannelli & Volpi</code><code>      </code>✅<code>Khroma Zoom</code>
+        ✅<code>Loymina</code><code>               </code>✅<code>Milassa</code>
+        ✅<code>Missoni</code><code>               </code>✅<code>Nina Hancock</code>
+        ✅<code>ORAC</code><code>                  </code>✅<code>Swiss Lake</code>
+        ✅<code>Ted Beker</code><code>             </code>✅<code>Wedgwood</code>
 
     <b>Отправлять емейлы поставщику</b> 📨
     <b>Подсказывать путь к папке с прайслистами</b> 👓
@@ -2506,7 +2506,16 @@ const start = async () => {
         const chatId = msg.chat.id;
 
     bot.sendMessage(chatId,
-    `<b>Версия 1.0.4.0
+    `<b>Версия 1.1.1.0
+    Что нового:</b>
+
+    Повышена безопасность до необходимого уровня;
+    Добавленны инструменты для администрирования;
+    Рефакторинг кода;
+    Исправление опечаток;
+    Оптимизация и улучшение производительности;
+    ------------------------------------
+    <b>Версия 1.0.4.0
     Что нового:</b>
 
     Бот настроен на отправку емейлов поставщику и в отдел закупок;
@@ -2527,7 +2536,6 @@ const start = async () => {
 
     упрощенно редактирование емейла и никнейма ;
     отредактирован текст, устранены опечатки;
-    ------------------------------------
     `,
             { parse_mode: 'HTML' }
         );
