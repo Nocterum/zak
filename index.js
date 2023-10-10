@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 const readFile = util.promisify(fs.readFile);
+const XlsxPopulate = require('xlsx-populate');
 
 const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
@@ -1496,7 +1497,7 @@ async function findPricelistLink(chatId, cValue) {
                     const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s&-]/g, '');
                     const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s&-]/g, '');
                     console.log(formatedCellValue, formaterdCValue)
-                    
+
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
 
@@ -2472,7 +2473,7 @@ const start = async () => {
         ✅<code>Coordonne</code><code>             </code>✅<code>Emil & Hugo</code>
         ✅<code>Epoca</code><code>                 </code>✅<code>Etten</code>
         ✅<code>Heritage House</code><code>        </code>✅<code>Jaima Brown</code>
-        ✅<code>KT-Exсlusive</code><code>          </code>✅<code>Mayflower</code>
+        ✅<code>KT-Exclusive</code><code>          </code>✅<code>Mayflower</code>
         ✅<code>NLXL</code><code>                  </code>✅<code>Paper & Ink</code>
         ✅<code>Seabrook</code><code>              </code>✅<code>Texam</code>
         ✅<code>Tiffany Design</code><code>        </code>✅<code>Trendsetter</code>
@@ -2674,6 +2675,19 @@ const start = async () => {
                                 fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
 
                                 fileStream.on('end', () => {
+
+                                    // Открываем файл с помощью xlsx-populate
+                                    XlsxPopulate.fromFileAsync(filePath)
+                                        .then(workbook => {
+                                            // Получаем свойства файла
+                                            const properties = workbook.properties();
+                                        
+                                            // Изменяем свойства файла
+                                            properties.lastModifiedBy = 'Zak_bot';
+                                            // Сохраняем изменения в файле
+                                            return workbook.toFileAsync(filePath);
+                                        })
+
                                     bot.sendMessage(
                                         chatId, 
                                         `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
