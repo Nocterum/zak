@@ -1139,91 +1139,91 @@ async function findOrac(chatId) {
 
         try {
 
-            const workbookSPB = XLSX.readFile(filePathSPB);
-            const worksheetSPB = workbookSPB.Sheets[workbookSPB.SheetNames[0]];
-
-            let foundMatchOracSPB = false;
-
-            for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
-
-                const cellValue = worksheetSPB[`A${i}`]?.v;
-                const formatedCellValue = cellValue?.toString().trim().replace(/[\u00A0]/g, ' ');
-                const formatedUserVC = user.vendorCode.toString().trim();
-
-                if (formatedCellValue === formatedUserVC) {
-                    foundMatchOracSPB = true;
-                    let bValue, cValue;
-                    for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
-
-                        const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
-
-                        if (headerCellValue === 'Ед. изм.') {
-
-                            bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
-                        } else if (headerCellValue === 'Доступно') {
-                            cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
-                        }
-                    }
-
-                    let a3Value = worksheetSPB['A3']?.v; //Название склада
-                    a3Value = a3Value?.toString().split( "(" )[0];
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
-
-                    if (cValue && bValue) {
-                        messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
-                    }
-                    
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
-                }
-            }
-            
-            // const workbookSPB = new ExcelJS.Workbook();
-            // const streamSPB = fs.createReadStream(filePathSPB);
-            // const worksheetSPB = await workbookSPB.xlsx.read(streamSPB);
-            // const firstWorksheetSPB = worksheetSPB.worksheets[0];
+            // const workbookSPB = XLSX.readFile(filePathSPB);
+            // const worksheetSPB = workbookSPB.Sheets[workbookSPB.SheetNames[0]];
 
             // let foundMatchOracSPB = false;
 
-            // firstWorksheetSPB.eachRow( async (row, rowNumber) => {
+            // for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
 
-            //     const cellValue = row.getCell('A').value; //Артикул
-            //     const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
+            //     const cellValue = worksheetSPB[`A${i}`]?.v;
+            //     const formatedCellValue = cellValue?.toString().trim().replace(/[\u00A0]/g, ' ');
             //     const formatedUserVC = user.vendorCode.toString().trim();
-                
+
             //     if (formatedCellValue === formatedUserVC) {
             //         foundMatchOracSPB = true;
-            
-            //         const headerRow = firstWorksheetSPB.getRow(2);
             //         let bValue, cValue;
-            
-            //         headerRow.eachCell((cell, colNumber) => {
-            //             const headerCellValue = cell.value.toString().trim();
-                        
+            //         for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
+
+            //             const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
+
             //             if (headerCellValue === 'Ед. изм.') {
-            //                 bValue = row.getCell(colNumber).value;
+
+            //                 bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
             //             } else if (headerCellValue === 'Доступно') {
-            //                 cValue = row.getCell(colNumber).value;
+            //                 cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
             //             }
-            //         });
-            
-            //         let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
-            //         a3Value = a3Value.toString().split( "(" )[0];
-            
+            //         }
+
+            //         let a3Value = worksheetSPB['A3']?.v; //Название склада
+            //         a3Value = a3Value?.toString().split( "(" )[0];
             //         messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
-            
+
             //         if (cValue && bValue) {
             //             messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
             //         }
-            
+
             //         if (botMsgIdx !== null) {
             //             bot.deleteMessage(chatId, botMsgIdx);
             //             botMsgIdx = null;
             //         }
             //     }
-            // });
+            // }
+            
+            const workbookSPB = new ExcelJS.Workbook();
+            const streamSPB = fs.createReadStream(filePathSPB);
+            const worksheetSPB = await workbookSPB.xlsx.read(streamSPB);
+            const firstWorksheetSPB = worksheetSPB.worksheets[0];
+
+            let foundMatchOracSPB = false;
+
+            firstWorksheetSPB.eachRow( async (row, rowNumber) => {
+
+                const cellValue = row.getCell('A').value; //Артикул
+                const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
+                const formatedUserVC = user.vendorCode.toString().trim();
+                
+                if (formatedCellValue === formatedUserVC) {
+                    foundMatchOracSPB = true;
+            
+                    const headerRow = firstWorksheetSPB.getRow(2);
+                    let bValue, cValue;
+            
+                    headerRow.eachCell((cell, colNumber) => {
+                        const headerCellValue = cell.value.toString().trim();
+                        
+                        if (headerCellValue === 'Ед. изм.') {
+                            bValue = row.getCell(colNumber).value;
+                        } else if (headerCellValue === 'Доступно') {
+                            cValue = row.getCell(colNumber).value;
+                        }
+                    });
+            
+                    let a3Value = firstWorksheetSPB.getCell('A3').value; //Название склада
+                    a3Value = a3Value.toString().split( "(" )[0];
+            
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
+            
+                    if (cValue && bValue) {
+                        messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
+                    }
+            
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                }
+            });
             
             if (!foundMatchOracSPB) {
                 
