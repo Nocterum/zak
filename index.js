@@ -673,7 +673,6 @@ const startFindDecaro = async (chatId, msg) => {
                 }).get(); // преобразуем объект Cheerio в обычный массив
             
                 chars = '';
-                console.log(availabilityTableValue);
 
                 // выводим данные из каждого элемента массива propsData
                 availabilityTableValue.forEach((item) => {
@@ -759,8 +758,6 @@ const startFindLevantin = async (chatId, msg) => {
       formatedVendorCode = formatedVendorCode.replace(/\s\s/g, ' ');
       counter++;
     }
-
-    console.log(formatedVendorCode)
 
     try {
 
@@ -1156,33 +1153,41 @@ async function findOrac(chatId) {
                     foundMatchOracSPB = true;
             
                     let bValue, cValue;
-            
-                    for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
-                        const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
+                    if (worksheetSPB['!range'] && worksheetSPB['!range'].e) {
 
-                        if (headerCellValue === 'Ед. изм.') {
-                            bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
-                        } else if (headerCellValue === 'Доступно') {
-                            cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
+                        for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
+
+                            for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
+
+                                const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
+        
+                                if (headerCellValue === 'Ед. изм.') {
+                                    bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
+                                } else if (headerCellValue === 'Доступно') {
+                                    cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
+                                }
+                            }
+        
+                            let a3Value = worksheetSPB['A3']?.v; //Название склада
+                            a3Value = a3Value?.toString().split( "(" )[0];
+                    
+                            messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
+                    
+                            if (cValue && bValue) {
+                                messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
+                            }
+                    
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
                         }
-                    }
+                      } else {
+                            console.log('error');
+                      }
 
-                    let a3Value = worksheetSPB['A3']?.v; //Название склада
-                    a3Value = a3Value?.toString().split( "(" )[0];
-            
-                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
-            
-                    if (cValue && bValue) {
-                        messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
-                    }
-            
-                    if (botMsgIdx !== null) {
-                        bot.deleteMessage(chatId, botMsgIdx);
-                        botMsgIdx = null;
-                    }
                 }
             }
-            
             
             // const workbookSPB = new ExcelJS.Workbook();
             // const streamSPB = fs.createReadStream(filePathSPB);
@@ -1538,7 +1543,6 @@ async function findPricelistLink(chatId, cValue) {
 
                     const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s&-]/g, '');
                     const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s&-]/g, '');
-                    console.log(formatedCellValue, formaterdCValue)
 
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
@@ -1612,8 +1616,6 @@ async function findDecorDelux(chatId) {
                 if (cellAddress[0] === '!') continue;
               
                 const cellValue = firstWorksheet[cellAddress].v;
-
-                console.log(cellAddress)
 
                 if (cellValue !== null) {
                     let formatedCellValue = cellValue.toString().trim();
