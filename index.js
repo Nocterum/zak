@@ -1144,6 +1144,7 @@ async function findOrac(chatId) {
 
             let foundMatchOracSPB = false;
 
+            if (worksheetSPB['!range'] && worksheetSPB['!range'].e) {
             for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
                 const cellValue = worksheetSPB[`A${i}`]?.v;
                 const formatedCellValue = cellValue?.toString().trim().replace(/[\u00A0]/g, ' ');
@@ -1153,9 +1154,8 @@ async function findOrac(chatId) {
                     foundMatchOracSPB = true;
             
                     let bValue, cValue;
-                    if (worksheetSPB['!range'] && worksheetSPB['!range'].e) {
-
                         for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
+
 
                             for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
 
@@ -1182,11 +1182,11 @@ async function findOrac(chatId) {
                                 botMsgIdx = null;
                             }
                         }
-                      } else {
-                            console.log('error');
-                      }
-
+                        
+                    }
                 }
+            } else {
+                console.log('error');
             }
             
             // const workbookSPB = new ExcelJS.Workbook();
