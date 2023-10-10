@@ -239,7 +239,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                             warehouse = cells[0].textContent.trim();  // склад
                         }
                         if (cells[1] !== '') {
-                            quantity = cells[1].textContent.trim().split( "," )[0];   // колличество
+                            quantity = cells[1].textContent.trim().split( "," )[0];   // количество
                         } else {
                             quantity = '0';
                         }
@@ -1933,7 +1933,7 @@ async function findLoymina(chatId) {
                             dValue = dValueCell.v;    // Партия
                         }
                         if (kValueCell !== null && kValueCell !== undefined) {
-                            kValue = kValueCell.v     // Колличество
+                            kValue = kValueCell.v     // Количество
                         }
                         if (jValueCell !== null && jValueCell !== undefined) {
                             jValue = jValueCell.v     // Ед. измерения
@@ -2040,19 +2040,19 @@ async function findSirpi(chatId) {
                         }
 
                         const d1Value = firstWorksheet['D1'].v; // Дата поставки 1
-                        const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // колличество в поставке 1
+                        const dCell = firstWorksheet['D' + cellAddress.substring(1)]; // количество в поставке 1
                         if (dCell && dCell.v !== null && dCell.v !== undefined) {
                             message += `Дата след. поставки:\n${d1Value}\n\nБудет доступно ${dCell.v}\n`
                         }
 
                         let e1Value = firstWorksheet['E1'].v; // Дата поставки 2
-                        const eCell = firstWorksheet['E' + cellAddress.substring(1)]; // колличество в поставке 2
+                        const eCell = firstWorksheet['E' + cellAddress.substring(1)]; // количество в поставке 2
                         if (eCell && eCell.v !== null && eCell.v !== undefined) {
                             message += `Дата след. поставки:\n${e1Value}\nБудет доступно ${eCell.v}\n`
                         }
 
                         const f1Value = firstWorksheet['F1'].v; // Дата поставки 2
-                        const fCell = firstWorksheet['F' + cellAddress.substring(1)]; // колличество в поставке 3
+                        const fCell = firstWorksheet['F' + cellAddress.substring(1)]; // количество в поставке 3
                         if (fCell && fCell.v !== null && fCell.v !== undefined) {
                             message += `Дата след. поставки:\n${f1Value}\nБудет доступно ${fCell.v}\n`
                         }
@@ -2460,11 +2460,11 @@ const start = async () => {
 
     Производить поиск 🔎 остатков на сайтах:
     <strong>opusdeco.ru</strong>
-        ✅<code>1838                  ✅Arlin</code>
-        ✅<code>Arthouse              ✅Atelier</code>
-        ✅<code>Aura                  ✅Lincrusta</code>
-        ✅<code>Print 4               ✅Sangiorgio</code>
-        ✅<code>Sem - Murale          ✅York</code>
+        ✅<code>1838</code><code>                  </code>✅<code>Arlin</code>
+        ✅<code>Arthouse</code><code>              </code>✅<code>Atelier</code>
+        ✅<code>Aura</code><code>                  </code>✅<code>Lincrusta</code>
+        ✅<code>Print 4</code><code>               </code>✅<code>Sangiorgio</code>
+        ✅<code>Sem - Murale</code><code>          </code>✅<code>York</code>
 
     <strong>dealer.decaro.ru</strong> 
         ✅<code>Architector           ✅Casa Mia</code>
@@ -2496,7 +2496,7 @@ const start = async () => {
     <b>Подсказывать путь к папке с прайслистами</b> 👓
     <b>Искать каталоги обоев и текстиля</b> 🔎
     <b>Искать остатки в 1С*</b> ☑
-    <i>*общее колличество</i>`,
+    <i>*общее количество</i>`,
             { parse_mode: 'HTML' }
         );
     });
@@ -2943,7 +2943,7 @@ const start = async () => {
                         }
                         return bot.sendMessage(
                             chatId,
-                            `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите колличество:\n<i>а так же введите единицы измерения через пробел</i>`,
+                            `Хорошо!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nТеперь введите количество:\n<i>а так же введите единицы измерения через пробел</i>`,
                             { parse_mode: 'HTML' }
                         );
                     }
@@ -2995,13 +2995,13 @@ const start = async () => {
                     if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                         return bot.sendMessage(
                             chatId, 
-                            `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в колличестве <b>${user.reserveNumber.split(" ")[1]}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
+                            `Вы желаете зарезервировать партию <b>${user.reserveNumber.split(" ")[0]}</b> в количестве <b>${user.reserveNumber.split(" ")[1]}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
                             enterReserveNumberOptions
                         );
                     } else {
                         return bot.sendMessage(
                             chatId, 
-                            `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в колличестве <b>${user.reserveNumber}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
+                            `Вы желаете зарезервировать  <b>${user.vendorCode}</b> в количестве <b>${user.reserveNumber}</b> ед.изм?\n\n<i>если данные введены корректно, нажмите "<b>Cохранить и продолжить</b>"\nдля перезаписи введите информацию повторно</i>`, 
                             enterReserveNumberOptions
                         );
                     }
@@ -3017,7 +3017,7 @@ const start = async () => {
                     await user.update({reserveNumber: text});
                     return bot.sendMessage(
                         chatId, 
-                        `Отлично!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
+                        `Отлично!\n<b>Запрашиваемые вами параметры:</b>\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКоличество: ${user.reserveNumber}\n\nХорошо, теперь я могу запросить наличие и срок поставки.\nНужно поставить резерв?`, 
                         startFind2Options
                     );
 
@@ -3055,7 +3055,7 @@ const start = async () => {
 
                     return bot.sendMessage(
                         chatId, 
-                        `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКолличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
+                        `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКоличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
                         resetInfoWorkOptions
                     );
 
@@ -3234,7 +3234,7 @@ const start = async () => {
             })
 
             return bot.sendMessage(
-                chatId, `Введите номер партии и колличество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только колличество</i>`,
+                chatId, `Введите номер партии и количество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только количество</i>`,
                 { parse_mode: "HTML" }
             );
 
@@ -3250,7 +3250,7 @@ const start = async () => {
             if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
 
                 const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в колличестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в количестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
             
                 await user.update({subject: subject, textMail: textMail}, {
                     where: {
@@ -3261,7 +3261,7 @@ const start = async () => {
             } else {
 
                 const subject = `Резерв ${user.vendorCode}, ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
                 await user.update({subject: subject, textMail: textMail}, {
                     where: {
@@ -3279,7 +3279,7 @@ const start = async () => {
         } else if (data === '/preSendEmailReserveYes') {
 
             const subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
             await user.update({subject: subject, textMail: textMail}, {
                 where: {
@@ -3303,7 +3303,7 @@ const start = async () => {
         } else if (data === '/preSendEmailReserveNo') {
 
             const subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в колличестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
             await user.update({subject: subject, textMail: textMail}, {
                 where: {
