@@ -2601,7 +2601,7 @@ const start = async () => {
 
                     if (file_name.toLowerCase().includes('каталоги') ||
                         file_name.toLowerCase().includes('прайслистов')
-                        ) {
+                    ) {
 
                         let fileName = {};
                         if (file_name.toLowerCase().includes('26') && 
@@ -2609,20 +2609,20 @@ const start = async () => {
                             ) {
                             fileName = `каталоги_распределение_в_салоны_26_09_19.xlsx`;
                         }
+
                         if (file_name.toLowerCase().includes('текстиль') &&
                             file_name.toLowerCase().includes('каталоги')
                             ) {
                             fileName = `текстиль_каталоги_распределение_в_салоны.xlsx`;
                         }
+
                         if (file_name.toLowerCase().includes('прайслистов')) {
                             fileName = `список_прайслистов.xlsx`;
                         }
 
                         await bot.getFile(msg.document.file_id).then((file) => {
-
                             const fileStream = bot.getFileStream(file.file_id);
                             fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
-
                             fileStream.on('end', () => {
                                 bot.sendMessage(
                                     chatId, 
@@ -2632,93 +2632,105 @@ const start = async () => {
                             });
                         });
                         return;
-
+                        
                     // Сохранение файлов остатков. Обрезка дат, нижний регистр, замена пробелов на "_"
-                    } else if (file_name.toLowerCase().includes('orac') || 
-                                file_name.toLowerCase().includes('brink') ||
-                                file_name.toLowerCase().includes('орак') ||
-                                file_name.toLowerCase().includes('делюкс') ||
-                                file_name.toLowerCase().includes('рус') ||
-                                file_name.toLowerCase().includes('баутекс') ||
-                                file_name.toLowerCase().includes('лоймина') ||
-                                file_name.toLowerCase().includes('сирпи') ||
-                                file_name.toLowerCase().includes('delux') ||
-                                file_name.toLowerCase().includes('rus') ||
-                                file_name.toLowerCase().includes('bautex') || 
-                                file_name.toLowerCase().includes('loymina') ||
-                                file_name.toLowerCase().includes('sirpi') ||
-                                file_name.toLowerCase().includes('campman') 
-                            ) {
+                    } else if (
+                        file_name.toLowerCase().includes('orac') || 
+                        file_name.toLowerCase().includes('brink') ||
+                        file_name.toLowerCase().includes('орак') ||
+                        file_name.toLowerCase().includes('делюкс') ||
+                        file_name.toLowerCase().includes('рус') ||
+                        file_name.toLowerCase().includes('баутекс') ||
+                        file_name.toLowerCase().includes('лоймина') ||
+                        file_name.toLowerCase().includes('сирпи') ||
+                        file_name.toLowerCase().includes('delux') ||
+                        file_name.toLowerCase().includes('rus') ||
+                        file_name.toLowerCase().includes('bautex') || 
+                        file_name.toLowerCase().includes('lg') || 
+                        file_name.toLowerCase().includes('loymina') ||
+                        file_name.toLowerCase().includes('sirpi') ||
+                        file_name.toLowerCase().includes('campman') 
+                    ) {
 
-                            let fileName = {};
-                            file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
-                            let file_format = file_name.split(".")[1];  // определение формата файла
-                            
-                            if ( (file_name.toLowerCase().includes('orac') || 
-                                    file_name.toLowerCase().includes('орак')) &&
-                                (file_name.toLowerCase().includes('msk') || 
-                                    file_name.toLowerCase().includes('мск')) 
-                            ) {
-                                fileName = `orac_мск.${file_format}`;
+                        let fileName = {};
+                        file_name = file_name.replace(/\s\d+|\.\d+/g, '');  // удаление дат
+                        let file_format = file_name.split(".")[1];  // определение формата файла
 
-                            } else if ( (file_name.toLowerCase().includes('orac') || 
-                                            file_name.toLowerCase().includes('орак')) &&
-                                        (file_name.toLowerCase().includes('spb') || 
-                                            file_name.toLowerCase().includes('спб')) 
-                            ) {
-                                fileName = `orac_спб.${file_format}`;
+                        if (
+                            (file_name.toLowerCase().includes('orac') || 
+                            file_name.toLowerCase().includes('орак')) &&
+                            (file_name.toLowerCase().includes('msk') || 
+                            file_name.toLowerCase().includes('мск')) 
+                        ) {
+                            fileName = `orac_мск.${file_format}`;
 
-                            } else if ( (file_name.toLowerCase().includes('decor') || 
-                                            file_name.toLowerCase().includes('декор')) &&
-                                        (file_name.toLowerCase().includes('delux') || 
-                                            file_name.toLowerCase().includes('делюкс')) 
-                            ) {
-                                fileName = `остатки_декор_делюкс.${file_format}`;
+                        } else if ( 
+                            (file_name.toLowerCase().includes('orac') || 
+                            file_name.toLowerCase().includes('орак')) &&
+                            (file_name.toLowerCase().includes('spb') || 
+                            file_name.toLowerCase().includes('спб')) 
+                        ) {
+                            fileName = `orac_спб.${file_format}`;
 
-                            } else if ( (file_name.toLowerCase().includes('декор') || 
-                                            file_name.toLowerCase().includes('decor')) &&
-                                        (file_name.toLowerCase().includes('рус') || 
-                                            file_name.toLowerCase().includes('rus')) 
-                            ) {
-                                fileName = `остатки_декор_рус.${file_format}`;
+                        } else if ( 
+                            (file_name.toLowerCase().includes('decor') || 
+                                file_name.toLowerCase().includes('декор')) &&
+                                (file_name.toLowerCase().includes('delux') || 
+                                file_name.toLowerCase().includes('делюкс')) 
+                        ) {
+                            fileName = `остатки_декор_делюкс.${file_format}`;
 
-                            } else if (file_name.toLowerCase().includes( 'баутекс' ) || 
-                                        file_name.toLowerCase().includes( 'bautex' ) 
-                            ) {
-                                fileName = `остатки_баутекс.${file_format}`;
+                        } else if ( 
+                            (file_name.toLowerCase().includes('декор') || 
+                            file_name.toLowerCase().includes('decor')) &&
+                            (file_name.toLowerCase().includes('рус') || 
+                            file_name.toLowerCase().includes('rus')) 
+                        ) {
+                            fileName = `остатки_декор_рус.${file_format}`;
 
-                            } else if (file_name.toLowerCase().includes( 'лоймина' ) || 
-                                        file_name.toLowerCase().includes( 'loymina' ) 
-                            ) {
+                        } else if (
+                            file_name.toLowerCase().includes( 'баутекс' ) || 
+                            file_name.toLowerCase().includes( 'bautex' ) 
+                        ) {
+                            fileName = `остатки_баутекс.${file_format}`;
+                        } else if (
+                            file_name.toLowerCase().includes( 'лоймина' ) || 
+                            file_name.toLowerCase().includes( 'loymina' ) 
+                        ) {
                                 fileName = `остатки_лоймина.${file_format}`;
 
-                            } else if (file_name.toLowerCase().includes( 'brink' ) || 
-                                        file_name.toLowerCase().includes( 'campman' ) 
-                            ) {
-                                fileName = `остатки_brink&campman.${file_format}`;
+                        } else if (
+                            file_name.toLowerCase().includes( 'brink' ) || 
+                            file_name.toLowerCase().includes( 'campman' ) 
+                        ) {
+                            fileName = `остатки_brink&campman.${file_format}`;
 
-                            } else if (file_name.toLowerCase().includes( 'sirpi' ) || 
-                                        file_name.toLowerCase().includes( 'сирпи' ) 
-                            ) {
-                                fileName = `остатки_сирпи.${file_format}`;
+                        } else if (
+                            file_name.toLowerCase().includes( 'sirpi' ) || 
+                            file_name.toLowerCase().includes( 'сирпи' ) 
+                        ) {
+                            fileName = `остатки_сирпи.${file_format}`;
 
-                            }
+                        } else if (
+                            file_name.toLowerCase().includes( 'lg' )
+                        ) {
+                            fileName = `остатки_lg_ppl_wallpapper.${file_format}`;
+                        
+                        }
 
-                            await bot.getFile(msg.document.file_id).then((file) => {
-
-                                const fileStream = bot.getFileStream(file.file_id);
-                                fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
-
-                                fileStream.on('end', () => {
-
-                                    bot.sendMessage(
-                                        chatId, 
-                                        `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                        { parse_mode: 'HTML' }
-                                    );
-                                });
+                        await bot.getFile(msg.document.file_id).then((file) => {
+                            
+                            const fileStream = bot.getFileStream(file.file_id);
+                            fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                            fileStream.on('end', () => {
+                                bot.sendMessage(
+                                    chatId, 
+                                    `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                                    { parse_mode: 'HTML' }
+                                );
                             });
-                            return;
+                        });
+                        return;
 
                     } else {
                         return bot.sendMessage(
