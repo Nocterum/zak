@@ -1493,8 +1493,8 @@ async function findPricelistLink(chatId, cValue) {
                 const cellValue = row.getCell('B').value;
                 if (cellValue !== null) {
 
-                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-&]/g, '');
-                    const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s-&]/g, '');
+                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s&-]/g, '');
+                    const formaterdCValue = cValue.toString().toUpperCase().replace(/[\s&-]/g, '');
     
                     if (formatedCellValue.includes(formaterdCValue)) {
                         foundMatchPricelist = true;
@@ -1786,8 +1786,8 @@ async function findBautex(chatId) {
                 const cellValue = row.getCell('D').value;
                 if (cellValue !== null) {
                     
-                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s-&]/g, '');
-                    const formatedUserVC = user.vendorCode.toString().toUpperCase().replace(/[\s-&]/g, '');
+                    const formatedCellValue = cellValue.toString().toUpperCase().replace(/[\s&-]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().toUpperCase().replace(/[\s&-]/g, '');
                     
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
