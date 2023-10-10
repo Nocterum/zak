@@ -2685,15 +2685,25 @@ const start = async () => {
                                             // Изменяем свойства файла
                                             properties.lastModifiedBy = 'Zak_bot';
                                             // Сохраняем изменения в файле
-                                            return workbook.toFileAsync(filePath);
+                                            return workbook.outputAsync();
                                         })
+                                        .then(data => {
+                                            // Записываем данные в файл
+                                            fs.writeFile(filePath, data, (error) => {
+                                                if (error) {
+                                                    console.error(error);
+                                                } else {
 
-                                    bot.sendMessage(
-                                        chatId, 
-                                        `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                        { parse_mode: 'HTML' }
-                                    );
+                                                    bot.sendMessage(
+                                                        chatId, 
+                                                        `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                                                        { parse_mode: 'HTML' }
+                                                    );
+                                                }
+                                            });
+                                        });
                                 });
+
                             });
                             return;
 
