@@ -1144,49 +1144,40 @@ async function findOrac(chatId) {
 
             let foundMatchOracSPB = false;
 
-            if (worksheetSPB['!range'] && worksheetSPB['!range'].e) {
             for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
+
                 const cellValue = worksheetSPB[`A${i}`]?.v;
                 const formatedCellValue = cellValue?.toString().trim().replace(/[\u00A0]/g, ' ');
                 const formatedUserVC = user.vendorCode.toString().trim();
 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
-            
                     let bValue, cValue;
-                        for (let i = 2; i <= worksheetSPB['!range'].e.r; i++) {
+                    for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
 
+                        const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
 
-                            for (let j = 1; j <= worksheetSPB['!range'].e.c; j++) {
+                        if (headerCellValue === 'Ед. изм.') {
 
-                                const headerCellValue = worksheetSPB[`${XLSX.utils.encode_col(j)}2`]?.v?.toString().trim();
-        
-                                if (headerCellValue === 'Ед. изм.') {
-                                    bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
-                                } else if (headerCellValue === 'Доступно') {
-                                    cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
-                                }
-                            }
-        
-                            let a3Value = worksheetSPB['A3']?.v; //Название склада
-                            a3Value = a3Value?.toString().split( "(" )[0];
-                    
-                            messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
-                    
-                            if (cValue && bValue) {
-                                messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
-                            }
-                    
-                            if (botMsgIdx !== null) {
-                                bot.deleteMessage(chatId, botMsgIdx);
-                                botMsgIdx = null;
-                            }
+                            bValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
+                        } else if (headerCellValue === 'Доступно') {
+                            cValue = worksheetSPB[`${XLSX.utils.encode_col(j)}${i}`]?.v;
                         }
-                        
+                    }
+
+                    let a3Value = worksheetSPB['A3']?.v; //Название склада
+                    a3Value = a3Value?.toString().split( "(" )[0];
+                    messageORAC += `Артикул <b>${cellValue}</b> имеется на складе ОРАК "<b>${a3Value}</b>"\n`;
+
+                    if (cValue && bValue) {
+                        messageORAC += `в количестве <b>${cValue}</b> <b>${bValue}</b>\n\n`;
+                    }
+                    
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
                     }
                 }
-            } else {
-                console.log('error');
             }
             
             // const workbookSPB = new ExcelJS.Workbook();
