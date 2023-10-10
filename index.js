@@ -2677,7 +2677,7 @@ const start = async () => {
                                 fileStream.on('end', () => {
 
                                     // Открываем файл с помощью xlsx-populate
-                                    XlsxPopulate.fromFileAsync(filePath)
+                                    XlsxPopulate.fromFileAsync(`/root/zak/xl/${fileName}`)
                                         .then(workbook => {
                                             // Получаем свойства файла
                                             const properties = workbook.properties();
