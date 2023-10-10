@@ -2676,34 +2676,29 @@ const start = async () => {
 
                                 fileStream.on('end', () => {
 
-                                    // Открываем файл с помощью xlsx-populate
-                                    XlsxPopulate.fromFileAsync(`/root/zak/xl/${fileName}`)
-                                        .then(workbook => {
-                                            // Получаем свойства файла
-                                            const properties = workbook.properties();
+                                    // // Открываем файл с помощью xlsx-populate
+                                    // XlsxPopulate.fromFileAsync(`/root/zak/xl/${fileName}`)
+                                    //     .then(workbook => {
+                                    //         // Получаем свойства файла
+                                    //         const properties = workbook.properties();
                                         
-                                            // Изменяем свойства файла
-                                            properties.lastModifiedBy = 'Zak_bot';
-                                            // Сохраняем изменения в файле
-                                            return workbook.outputAsync();
-                                        })
-                                        .then(data => {
-                                            // Записываем данные в файл
-                                            fs.writeFile(filePath, data, (error) => {
-                                                if (error) {
-                                                    console.error(error);
-                                                } else {
-
-                                                    bot.sendMessage(
-                                                        chatId, 
-                                                        `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
-                                                        { parse_mode: 'HTML' }
-                                                    );
-                                                }
-                                            });
-                                        });
+                                    //         // Изменяем свойства файла
+                                    //         properties.lastModifiedBy = 'Zak_bot';
+                                    //         // Сохраняем изменения в файле
+                                    //         return workbook.outputAsync();
+                                    //     })
+                                    //     .then(data => {
+                                    //         // Записываем данные в файл
+                                    //         fs.writeFile(filePath, data, (error) => {
+                                    //             if (error) {
+                                    //                 console.error(error);
+                                    //             } else {}
+                                    bot.sendMessage(
+                                        chatId, 
+                                        `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                                        { parse_mode: 'HTML' }
+                                    );
                                 });
-
                             });
                             return;
 
