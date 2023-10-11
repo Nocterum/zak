@@ -3154,6 +3154,8 @@ const start = async () => {
 
                     if (isNaN(text)) {
                         await user.update({vendorCode: text.toUpperCase()});
+                    } else {
+                        await user.update({vendorCode: text});
                     }
                     await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
                     const vendorCode = user.vendorCode;
