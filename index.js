@@ -395,7 +395,8 @@ const startCheckVendor = async (chatId, msg) => {
                     formatedUserVendor.includes('БАУТЕКС') ||
                     formatedUserVendor.includes('ЛОЙМИНА') ||
                     formatedUserVendor.includes('СИРПИ') ||
-                    formatedUserVendor.includes('BRINK&CAMPMAN')
+                    formatedUserVendor.includes('BRINK&CAMPMAN') ||
+                    formatedUserVendor.includes('LITTLEGREENE')
                 ) {
 
             await bot.sendMessage(
@@ -405,7 +406,15 @@ const startCheckVendor = async (chatId, msg) => {
             );
             botMsgIdx = msg.message_id += 1;
             return;  
+
         } else {
+
+            await user.update({lastCommand: '/enterBrand'}, {
+                where: {
+                    chatId: chatId
+                }
+            })
+
             return bot.sendMessage(
                 chatId, 
                 `К сожалению, мне ещё не разрешили работать с поставщиком бренда <b>${user.brand}</b>.`,
@@ -413,6 +422,13 @@ const startCheckVendor = async (chatId, msg) => {
             );
         }
     } else {
+
+        await user.update({lastCommand: '/enterBrand'}, {
+            where: {
+                chatId: chatId
+            }
+        })
+
         return bot.sendMessage(
             chatId, `Бренд не найден, проверьте соответсвие брендов в эксель файлах:\n<b>"Каталоги  распределение в салоны 26.09.19"</b>\n<b>"Текстиль Каталоги  распределение в салоны"</b>\nc эксель файлом <b>"Список прайслистов"</b>.`,
             { parse_mode: 'HTML' }
@@ -920,6 +936,7 @@ async function findExcelFile(
     fileNameLoymina = '',
     fileNameSirpi = '',
     fileNameBrink = '',
+    fileNameLg = '',
     ) {
 
     const folderPath = '/root/zak/xl';
@@ -943,7 +960,8 @@ async function findExcelFile(
                 fileNameBautex,
                 fileNameLoymina,
                 fileNameSirpi,
-                fileNameBrink
+                fileNameBrink,
+                fileNameLg
                 );
 
             if (result.fileNameWallpaper) {
@@ -979,6 +997,9 @@ async function findExcelFile(
             } else if (result.fileNameBrink) {
                 fileNameBrink = result.fileNameBrink;
 
+            } else if (result.fileNameLg) {
+                fileNameLg = result.fileNameLg;
+
             }
 
         } else if (path.extname(file) === '.xlsx') {
@@ -997,6 +1018,8 @@ async function findExcelFile(
                 fileNameBautex = filePath;
             } else if (file.toLowerCase().includes('brink&campman')) {
                 fileNameBrink = filePath;
+            } else if (file.toLowerCase().includes('lg_ppl_wallpapper')) {
+                fileNameLg = filePath;
             }
         } else if (path.extname(file) === '.xls') {
 
@@ -1020,7 +1043,8 @@ async function findExcelFile(
             fileNameBautex &&
             fileNameLoymina &&
             fileNameSirpi &&
-            fileNameBrink
+            fileNameBrink &&
+            fileNameLg
             ) {
             break;
         }
@@ -1036,7 +1060,8 @@ async function findExcelFile(
         fileNameBautex,
         fileNameLoymina,
         fileNameSirpi,
-        fileNameBrink
+        fileNameBrink,
+        fileNameLg
     };
 }
 
@@ -2262,6 +2287,110 @@ async function findBrink(chatId) {
     }
 }
 
+async function findLittleGreenePPL(chatId) {
+
+    let fileNameLg = 'остатки_lg_ppl_wallpaper';
+
+    const result = await findExcelFile(fileNameLg);
+    const filePath = result.fileNameLg;
+
+    if (filePath) {
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        try {
+
+            const workbook = XLSX.readFile(filePath);
+            const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let foundMatch = false;
+            let message = '';
+
+            for (let cellAddress in firstWorksheet) {
+
+                if (cellAddress[0] === '!') continue;
+
+                const cellValue = firstWorksheet[cellAddress].v;
+        
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim().replace(/[\s]/g, '');
+                    const formatedUserVC = user.vendorCode.toString().trim().replace(/[\s]/g, '');
+        
+                    if (isNaN(formatedCellValue)) {
+                        formatedCellValue = formatedCellValue.toUpperCase();
+                    }
+
+                    if (formatedCellValue.includes(formatedUserVC)) {
+                        foundMatch = true;
+
+                        const aCell = firstWorksheet['A' + cellAddress.substring(1)];    // Артикул
+                        let aValue = {};
+                        const bCell = firstWorksheet['B' + cellAddress.substring(1)];    // Номенкулатура
+                        let bValue = {};
+                        const cCell = firstWorksheet['C' + cellAddress.substring(1)];   // Колличество 
+                        let cValue = {};
+
+                            if (aValue && aValue.v !== undefined) {
+                                aValue = aCell.v.toString();    // EAN штрихкод 
+                            } else {
+                                aValue = 'неизвестно';
+                            }
+
+                            if (bValue && bValue.v !== undefined) {
+                                bValue = bCell.v.toString();    // EAN штрихкод 
+                            } else {
+                                bValue = 'неизвестно';
+                            }
+
+                            if (cValue && cValue.v !== undefined) {
+                                cValue = cCell.v.toString();    // EAN штрихкод 
+                            } else {
+                                cValue = 'неизвестно';
+                            }
+
+                        message = `<b>${bValue}</b>\nАртикул: ${aValue}\nОстаток: ${cValue} рул.`
+
+                        if (botMsgIdx !== null) {
+                            bot.deleteMessage(chatId, botMsgIdx);
+                            botMsgIdx = null;
+                        }
+
+                        return bot.sendMessage(
+                            chatId, 
+                            message,
+                            startFind1Options
+                        );
+                    }
+                }
+            }
+
+            if (!foundMatch) {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с ${user.vendorCode} в файле "остатки_lg_ppl_wallpaper" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    { parse_mode: 'HTML' }
+                );
+            }
+
+        } catch (e) {
+            console.log(e);
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(chatId, `Ошибка при чтении файла ${filePath}.`);
+        }
+    }
+}
+
 // ======================================================================================================================================
 //СТАРТ РАБОТЫ ПРОГРАММЫ=================================================================================================================
 // ======================================================================================================================================
@@ -2953,6 +3082,21 @@ const start = async () => {
                         })
                         return findOrac(chatId);
 
+                    } else if (formatedUserVendor.includes('LITTLEGREENE')) {
+
+                        if (user.vendorCode.length < 4) {
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
+                            return bot.sendMessage(
+                                chatId,
+                                `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                            );
+
+                        } else {
+                            return findLittleGreenePPL(chatId);
+                        }
                     } else if (formatedUserVendor.includes('СИРПИ')) {
 
                         if (user.vendorCode.length < 4) {
