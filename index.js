@@ -1111,7 +1111,7 @@ async function findOrac(chatId) {
 
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
-                const formatedUserVC = user.vendorCode.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim().replace(/с/gi, 'c');
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracMSK = true;
@@ -1216,7 +1216,7 @@ async function findOrac(chatId) {
 
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
-                const formatedUserVC = user.vendorCode.toString().trim();
+                const formatedUserVC = user.vendorCode.toString().trim().trim().replace(/с/gi, 'c');
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
