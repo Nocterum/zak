@@ -3152,7 +3152,9 @@ const start = async () => {
 
                 } else if (user.lastCommand === '/request1C') {
 
-                    await user.update({vendorCode: text});
+                    if (isNaN(text)) {
+                        await user.update({vendorCode: text.toUpperCase()});
+                    }
                     await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
                     const vendorCode = user.vendorCode;
                     botMsgIdx = msg.message_id += 1; 
