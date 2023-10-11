@@ -2334,20 +2334,20 @@ async function findLittleGreenePPL(chatId) {
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)];   // Колличество 
                         let cValue = {};
 
-                            if (aValue && aValue.v !== undefined) {
-                                aValue = aCell.v.toString();    // EAN штрихкод 
+                            if (aCell && aCell.v !== undefined) {
+                                aValue = aCell.v.toString();    
                             } else {
                                 aValue = 'неизвестно';
                             }
 
-                            if (bValue && bValue.v !== undefined) {
-                                bValue = bCell.v.toString();    // EAN штрихкод 
+                            if (bCell && bCell.v !== undefined) {
+                                bValue = bCell.v.toString();    
                             } else {
                                 bValue = 'неизвестно';
                             }
 
-                            if (cValue && cValue.v !== undefined) {
-                                cValue = cCell.v.toString();    // EAN штрихкод 
+                            if (cCell && cCell.v !== undefined) {
+                                cValue = cCell.v.toString();    
                             } else {
                                 cValue = 'неизвестно';
                             }
