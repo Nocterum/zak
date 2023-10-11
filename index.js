@@ -2657,7 +2657,8 @@ const start = async () => {
         ✅<code>Missoni</code><code>               </code>✅<code>Nina Hancock</code>
         ✅<code>ORAC</code><code>                  </code>✅<code>Swiss Lake</code>
         ✅<code>Ted Beker</code><code>             </code>✅<code>Wedgwood</code>
-        ✅<code>Little Greene</code><code><pre> (обои)</pre>             </code>✅<code>Paint Paper Library</code><pre> (обои)</pre>   
+        ✅<code>Little Greene</code><pre> (обои)</pre>
+        ✅<code>Paint Paper Library</code><pre> (обои)</pre>   
 
     <b>Отправлять емейлы поставщику</b> 📨
     <b>Подсказывать путь к папке с прайслистами</b> 👓
