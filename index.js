@@ -1018,7 +1018,7 @@ async function findExcelFile(
                 fileNameBautex = filePath;
             } else if (file.toLowerCase().includes('brink&campman')) {
                 fileNameBrink = filePath;
-            } else if (file.toLowerCase().includes('lg_ppl_wallpapper')) {
+            } else if (file.toLowerCase().includes('lg_ppl_wallpaper')) {
                 fileNameLg = filePath;
             }
         } else if (path.extname(file) === '.xls') {
@@ -2843,7 +2843,7 @@ const start = async () => {
                         } else if (
                             file_name.toLowerCase().includes( 'lg' )
                         ) {
-                            fileName = `остатки_lg_ppl_wallpapper.${file_format}`;
+                            fileName = `остатки_lg_ppl_wallpaper.${file_format}`;
                         
                         }
 
