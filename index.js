@@ -2590,7 +2590,7 @@ const start = async () => {
     });
 
     // получение конкретного файла
-    bot.onText(/\/getconfig (.+)/, async (msg, match) => {
+    bot.onText(/\/get (.+)/, async (msg, match) => {
         const chatId = msg.chat.id;
 
         const user = await UserModel.findOne({
