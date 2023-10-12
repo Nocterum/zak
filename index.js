@@ -7,10 +7,9 @@ const ExcelJS = require('exceljs');
 const path = require('path');
 const fs = require('fs');
 const util = require('util');
+
 const readFile = util.promisify(fs.readFile);
 const XlsxPopulate = require('xlsx-populate');
-
-const FormData = require('form-data');  //
 const tough = require('tough-cookie');  //
 const { axiosCookieJarSupport } = require('axios-cookiejar-support');   //
 
@@ -2396,6 +2395,7 @@ async function findLittleGreenePPL(chatId) {
 // ======================================================================================================================================
 
 const start = async () => {
+
     console.log('Бот запщуен...')
 
     try {
@@ -2449,7 +2449,7 @@ const start = async () => {
             }
         
         } catch (e) {
-        console.log('Ошибка при создании нового пользователя', e);
+            console.log('Ошибка при создании нового пользователя', e);
         }
 
     });
@@ -2576,6 +2576,34 @@ const start = async () => {
 
             const fileName = match[1];
             const filePath = path.join('/root/zak/xl', fileName);
+
+            // Проверка существования файла
+            fs.access(filePath, fs.constants.F_OK, (err) => {
+                if (err) {
+                    return bot.sendMessage(chatId, 'Файл не найден.');
+                }
+            
+                // Отправка файла
+                bot.sendDocument(chatId, filePath);
+            })
+        }
+    });
+
+    // получение конкретного файла
+    bot.onText(/\/getconfig (.+)/, async (msg, match) => {
+        const chatId = msg.chat.id;
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            },
+            attributes: ['id', 'chatId', 'lastCommand', 'email']
+        });
+
+        if (user.email !== '/passwordcheck') {
+
+            const fileName = match[1];
+            const filePath = path.join('/root/zak/', fileName);
 
             // Проверка существования файла
             fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -2725,7 +2753,25 @@ const start = async () => {
                 if (msg.document) {
                     let file_name = msg.document.file_name;
 
-                    if (file_name.toLowerCase().includes('каталоги') ||
+                    if (file_name === 'config.cfg') {
+
+                        let fileName = {};
+                        fileName = `config.cfg`;
+
+                        await bot.getFile(msg.document.file_id).then((file) => {
+                            const fileStream = bot.getFileStream(file.file_id);
+                            fileStream.pipe(fs.createWriteStream(`/root/zak/${fileName}`));
+                            fileStream.on('end', () => {
+                                bot.sendMessage(
+                                    chatId, 
+                                    `Файл <b>${fileName}</b>\nуспешно сохранен.`, 
+                                    { parse_mode: 'HTML' }
+                                );
+                            });
+                        });
+                        return;
+
+                    } else if (file_name.toLowerCase().includes('каталоги') ||
                         file_name.toLowerCase().includes('прайслистов')
                     ) {
 
