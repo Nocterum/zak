@@ -1216,7 +1216,7 @@ async function findOrac(chatId) {
 
                 const cellValue = row.getCell('A').value; //Артикул
                 const formatedCellValue = cellValue.toString().trim().replace(/[\u00A0]/g, ' ');
-                const formatedUserVC = user.vendorCode.toString().trim().trim().replace(/с/gi, 'c');
+                const formatedUserVC = user.vendorCode.toString().trim().replace(/с/gi, 'c');
                 
                 if (formatedCellValue === formatedUserVC) {
                     foundMatchOracSPB = true;
@@ -1798,7 +1798,7 @@ async function findDecorRus(chatId) {
                 };
                 return bot.sendMessage(
                     chatId,
-                    `Совпадения с артикулом ${formatedUserVC} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
+                    `Совпадения с артикулом ${user.vendorCode} в файле "остатки_декор_рус" не найденны.\n<i>можете ввести следующий артикул для поиска</i>`,
                     { parse_mode: 'HTML' }
                 );
             }
@@ -2352,7 +2352,7 @@ async function findLittleGreenePPL(chatId) {
                                 cValue = 'неизвестно';
                             }
 
-                        message = `<b>${bValue}</b>\nАртикул: ${aValue}\nОстаток: ${cValue} рул.\n\n<i>можете ввести следующий артикул\наименование для поиска</i>`
+                        message = `<b>${bValue}</b>\nАртикул: ${aValue}\nОстаток: ${cValue} рул.\n\n<i>можете ввести следующий артикул/наименование для поиска</i>`
 
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
