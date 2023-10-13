@@ -634,9 +634,14 @@ const startFindDecaro = async (chatId, msg) => {
             }).get(); // преобразуем объект Cheerio в обычный массив
 
             propsData.forEach((item) => {
-                if (item.name === "Розничная цена") {
-                    return;
-                }
+                if (item.name === 'Розничная цена') {
+                    const priceValue = $$(element).find('.price_value').text().trim();
+                    const priceCurrency = $$(element).find('.price_currency').text().trim();
+                    const priceMeasure = $$(element).find('.price_measure').text().trim();
+                    chars += `${priceValue} ${priceCurrency}${priceMeasure}\n`;
+                    return; // прерываем выполнение цикла, если достигнут нужный элемент
+                  }
+
                 chars += `${item.name}: ${item.value}\n`;
             });
             
