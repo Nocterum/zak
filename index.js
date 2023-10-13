@@ -605,7 +605,7 @@ const startFindDecaro = async (chatId, msg) => {
     try {
 
         //Формируем URL для поиска
-        const searchUrl = `https://dealer.decaro.ru/catalog/?q=${user.vendorCode}&s=Найти`;
+        const searchUrl = `https://dealer.decaro.ru/catalog/?tab=1&SECTION_ID=&ARTICLE=${user.vendorCode}&set_filter=y`;
 
         //Отправляем запрос на сайт
         const response = await axios.get(searchUrl);
@@ -2755,8 +2755,7 @@ const start = async () => {
 
                     if (file_name === 'config.cfg') {
 
-                        let fileName = {};
-                        fileName = `config.cfg`;
+                        let fileName = `config.cfg`;
 
                         await bot.getFile(msg.document.file_id).then((file) => {
                             const fileStream = bot.getFileStream(file.file_id);
