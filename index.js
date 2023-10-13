@@ -634,6 +634,7 @@ const startFindDecaro = async (chatId, msg) => {
             }).get(); // преобразуем объект Cheerio в обычный массив
 
             propsData.forEach((item) => {
+                if (item.name === "Розничная цена") return;
                 chars += `${item.name}: ${item.value}\n`;
             });
             
@@ -732,7 +733,7 @@ const startFindDecaro = async (chatId, msg) => {
             }
             return bot.sendMessage(
                 chatId, 
-                'Товары не найдены. Это может быть связано с автоматическим переводом в кириллицу на сайте.\nПопробуйте ввести вместе с артикулом наименование коллекции, например:\n<i>mini prints sd60000</i>', 
+                `${user.vendorcode} на сайте не найден. Проверьте написание артикула`, 
                 startFind1Options
             );
         }
