@@ -636,11 +636,13 @@ const startFindDecaro = async (chatId, msg) => {
             propsData.forEach((item) => {
                 if (item.name.includes('Розничная цена') && item.name !== 'Розничная цена') {
                     const rows = item.name.split('\n'); // разделение строки на подстроки по пробелу
-                    const row1 = rows[0].trim(); // присваивание первой строки
-                    const row4 = rows[3]; // присваивание четвертой строки
-                    const row7 = rows[6]; // присваивание седьмой строки
-                    chars += `${row1}: ${row4} ${row7}\n`;
-                    return; // прерываем выполнение цикла, если достигнут нужный элемент
+                    const row1 = rows[0].trim(); // "Разничная цена"
+                    const row2 = rows[1].trim(); // старая цена
+                    const row3 = rows[2].trim(); // валюта старой цены
+                    const row5 = rows[4].trim(); // новая цена
+                    const row6 = rows[5].trim(); // валюта новой цены
+                    chars += `${row1}: <s>${row2} ${row3}/рул</s> ${row5} ${row6}/рул\n`;
+                    return;
                   }
 
                 chars += `${item.name}: ${item.value}\n`;
