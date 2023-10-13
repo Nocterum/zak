@@ -634,7 +634,9 @@ const startFindDecaro = async (chatId, msg) => {
             }).get(); // преобразуем объект Cheerio в обычный массив
 
             propsData.forEach((item) => {
-                if (item.name === "Розничная цена") return;
+                if (item.name === "Розничная цена") {
+                    return;
+                }
                 chars += `${item.name}: ${item.value}\n`;
             });
             
