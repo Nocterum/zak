@@ -635,10 +635,11 @@ const startFindDecaro = async (chatId, msg) => {
 
             propsData.forEach((item) => {
                 if (item.name.includes('Розничная цена') && item.name !== 'Розничная цена') {
-                    const priceValue = $$(element).find('.price_value').text().trim();
-                    const priceCurrency = $$(element).find('.price_currency').text().trim();
-                    const priceMeasure = $$(element).find('.price_measure').text().trim();
-                    chars += `${priceValue} ${priceCurrency}${priceMeasure}\n`;
+                    const rows = item.name.split(' '); // разделение строки на подстроки по пробелу
+                    const row1 = rows[0].trim(); // присваивание первой строки
+                    const row4 = rows[3].trim(); // присваивание четвертой строки
+                    const row7 = rows[6].trim(); // присваивание седьмой строки
+                    chars += `${row1}: ${row4}$ ${row7}\n`;
                     return; // прерываем выполнение цикла, если достигнут нужный элемент
                   }
 
