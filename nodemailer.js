@@ -14,7 +14,6 @@ function readConfigSync() {
   
     return config;
 }
-  
 const config = readConfigSync();
 
 module.exports = {
