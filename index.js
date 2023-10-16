@@ -68,6 +68,8 @@ const config = readConfigSync();
 
 var bot_password = config.bot_password;
 var url_manders_1C = config.url_manders_1C;
+var levantin_login = config.levantin_login;
+var levantin_password = config.levantin_password;
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
@@ -88,8 +90,7 @@ bot.setMyCommands([
 ]);
 
 // ======================================================================================================================================
-//ФУНКЦИИ================================================================================================================================
-// ======================================================================================================================================
+// функции ==============================================================================================================================
 // ======================================================================================================================================
 // Функция создания нового пользователя
 // ======================================================================================================================================
@@ -799,8 +800,8 @@ const startFindLevantin = async (chatId, msg) => {
                 AUTH_FORM: `Y`,
                 TYPE: `AUTH`,
                 Login: `Войти`,
-                USER_LOGIN: `Manders`,
-                USER_PASSWORD: `Manders`
+                USER_LOGIN: levantin_login,
+                USER_PASSWORD: levantin_password
             },{
                 "headers": {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -854,6 +855,7 @@ const startFindLevantin = async (chatId, msg) => {
 
             message += `\n`;
             message += `<b>В наличии:</b> ${availability.replace(/\s+/g, '')}\n\n`;
+            message += ``;
             message += `<i>можете ввести следующий артикул для поиска</i>`;
 
             if (botMsgIdx !== null) {
