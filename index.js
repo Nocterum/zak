@@ -53,6 +53,7 @@ const { transporter, nodemailer } = require('./nodemailer');
 
 function readConfigSync() {
     const data = fs.readFileSync('/root/zak/config.cfg', 'utf-8');
+    // const data = fs.readFileSync('C:\\node.js\\zak\\config.cfg', 'utf-8');
     const lines = data.split('\n');
     const config = {};
   
@@ -66,10 +67,10 @@ function readConfigSync() {
 // прочтение файла config.cfg
 const config = readConfigSync();
 
-var bot_password = config.bot_password;
-var url_manders_1C = config.url_manders_1C;
-var levantin_login = config.levantin_login;
-var levantin_password = config.levantin_password;
+const bot_password = config.bot_password;
+const url_manders_1C = config.url_manders_1C;
+const levantin_login = config.levantin_login;
+const levantin_password = config.levantin_password;
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
@@ -104,7 +105,15 @@ const createNewUser = async (chatId, msg) => {
         where: {
             chatId: chatId
         },
-        attributes: ['id', 'chatId', 'lastCommand', 'firstName', 'lastName', 'email', 'nickname']
+        attributes: [
+            'id', 
+            'chatId', 
+            'lastCommand', 
+            'firstName', 
+            'lastName', 
+            'email', 
+            'nickname'
+        ]
     });
 
     return user.update({
@@ -158,6 +167,7 @@ const chekPassword = async (chatId, msg) => {
 // ======================================================================================================================================
 
 const editEmail = async (chatId) => {
+
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
@@ -182,21 +192,32 @@ const editEmail = async (chatId) => {
 // ======================================================================================================================================
 
 const editNickname = async (chatId) => {
+
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         },
-        attributes: ['id', 'chatId', 'lastCommand']
+        attributes: [
+            'id', 
+            'chatId', 
+            'lastCommand'
+        ]
     });
     
     // lc = '/editNickname'
-    await user.update({lastCommand: '/editNickname'}, {
+    await user.update({
+        lastCommand: '/editNickname'
+    }, {
         where: {
             chatId: chatId
         }
-    })
-    return bot.sendMessage(chatId, `Введите пожалуйста Ваш никнейм\n<i>то как я буду к вам обращаться</i>:`),
-    { parse_mode: 'HTML' }
+    });
+
+    return bot.sendMessage(
+        chatId, 
+        `Введите пожалуйста Ваш никнейм\n<i>то как я буду к вам обращаться</i>:`,
+        { parse_mode: 'HTML' }
+    );
 }
 
 // ======================================================================================================================================
@@ -208,7 +229,7 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
 
         const searchUrl1C = `${url_manders_1C}=${vendorCode}&submit=Получить`;
-        const response = await axios.get(searchUrl1C,  { timeout: 5000 });
+        const response = await axios.get(searchUrl1C,  { timeout: 2000 });
 
         if (!response) {
 
@@ -290,7 +311,7 @@ const startRequest1C = async (chatId, vendorCode) => {
     
                     } else {
     
-                        messageResult1C = `${vendorCode} нигде не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('нигде не числится') 
+                        messageResult1C = `${vendorCode} по данным 1C не числится\n\n` // привязка к !findResult1C.toLowerCase().includes('не числится') 
                         return { messageResult1C };
                     }
     
@@ -1334,7 +1355,7 @@ async function findCatalogWallpaper(chatId) {
 
                         if (findResult1C) {
                             
-                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('нигде не числится');
+                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('не числится');
                             
                             if (!formatedMessageResult1C) {
     
@@ -1463,7 +1484,7 @@ async function findCatalogTextile(chatId) {
 
                         if (findResult1C) {
                             
-                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('нигде не числится');
+                            let formatedMessageResult1C = findResult1C.messageResult1C.toLowerCase().includes('не числится');
 
                             if (!formatedMessageResult1C) {
     
@@ -2524,13 +2545,20 @@ const start = async () => {
             where: {
                 chatId: chatId
             },
-            attributes: ['id', 'chatId', 'lastCommand', 'email']
+            attributes: [
+                'id', 
+                'chatId', 
+                'lastCommand', 
+                'email'
+            ]
         });
 
         if (user.email !== '/passwordcheck') {
 
             // lc = null; 
-            await user.update({lastCommand: null}, {
+            await user.update({
+                lastCommand: null
+            }, {
                 where: {
                     chatId: chatId
                 }
@@ -2943,7 +2971,11 @@ const start = async () => {
 
                 } else if (user.lastCommand === '/editEmail') {
 
-                    await user.update({email: text.toLowerCase(), lastCommand: null});
+                    await user.update({
+                        email: text.toLowerCase(),
+                        lastCommand: null
+                    });
+
                     return bot.sendMessage(
                         chatId, 
                         `Ваш email "<b>${user.email}</b>" успешно сохранён.`, 
@@ -3396,359 +3428,359 @@ const start = async () => {
 
         try {
 
-        if (data === '/mainmenu') {
+            if (data === '/mainmenu') {
 
-            if (user.lastCommand === '/game' || user.lastCommand === '/again' || user.lastCommand === '/reset') {
-                await bot.deleteMessage(
+                if (user.lastCommand === '/game' || user.lastCommand === '/again' || user.lastCommand === '/reset') {
+                    await bot.deleteMessage(
+                        chatId, 
+                        msg.message.message_id
+                    );
+                }
+                // lc = null;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
                     chatId, 
-                    msg.message.message_id
+                    `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
+                    mainMenuOptions
+                ); 
+
+            } else if (data === '/beginwork') {
+
+                if (!user.email) {
+                    await editEmail(chatId);
+                } else {
+                    await bot.sendMessage(
+                        chatId, 
+                        'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвестна возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев, когда вы уверенны, что искомый вами артикул возможно заказать у поставщика.', 
+                        workOptions
+                    );
+                } 
+                return; 
+
+            } else if (data === '/beginwork1') {
+
+                if (!user.email) {
+                    await editEmail(chatId);
+                } else {
+                    await bot.sendMessage(
+                        chatId, 
+                        'Чем могу вам помочь?', 
+                        work1Options
+                    );
+                } 
+                return; 
+
+            } else if (data === '/editNickname') {
+
+                return editNickname(chatId);
+
+            } else if (data === '/editEmail') {
+
+                return editEmail(chatId);
+
+            } else if (data === '/resetInfoWork') {
+                await user.update({
+                    catalog: null, 
+                    brand: null, 
+                    vendorCode: null, 
+                    reserveNumber: null
+                }, {
+                    where: {
+                        chatId: chatId,
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId,
+                    `Искомые параметры сброшенны.`
                 );
-            }
-            // lc = null;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
+
+            } else if (data === '/checkVendor') {
+
+                return startCheckVendor(chatId, msg);
+
+            } else if (data === '/enterBrand') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (data === '/enterReserveNumber') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, `Введите номер партии и количество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только количество</i>`,
+                    { parse_mode: "HTML" }
+                );
+
+            } else if (data === '/preSendEmail') {
+
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
+
+                    const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
+                    const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в количестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+                
+                    await user.update({subject: subject, textMail: textMail}, {
+                        where: {
+                            chatId: chatId
+                        }
+                    })
+
+                } else {
+
+                    const subject = `Резерв ${user.vendorCode}, ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
+                    const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+
+                    await user.update({subject: subject, textMail: textMail}, {
+                        where: {
+                            chatId: chatId
+                        }
+                    })
                 }
-            })
 
-            return bot.sendMessage(
-                chatId, 
-                `Вы в главном меню, ${user.nickname}\nВаш персональный id: <code>${chatId}</code>`,
-                mainMenuOptions
-            ); 
-
-        } else if (data === '/beginwork') {
-
-            if (!user.email) {
-                await editEmail(chatId);
-            } else {
-                await bot.sendMessage(
+                return bot.sendMessage(
                     chatId, 
-                    'Для начала формирования запроса по остаткам и срокам есть два пути:\n\n<b>Поиск по каталогу:</b> - для тех случаев, когда вы не знаете из какого каталога искомый вами артикул и неизвестна возможность закупки данного артикула у поставщика.\n\n<b>Поиск по бренду:</b> - для случаев, когда вы уверенны, что искомый вами артикул возможно заказать у поставщика.', 
-                    workOptions
+                    `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
+                    sendReserveOptions
                 );
-            } 
-            return; 
 
-        } else if (data === '/beginwork1') {
+            } else if (data === '/preSendEmailReserveYes') {
 
-            if (!user.email) {
-                await editEmail(chatId);
-            } else {
-                await bot.sendMessage(
-                    chatId, 
-                    'Чем могу вам помочь?', 
-                    work1Options
-                );
-            } 
-            return; 
+                const subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
+                const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
 
-        } else if (data === '/editNickname') {
-
-            return editNickname(chatId);
-
-        } else if (data === '/editEmail') {
-
-            return editEmail(chatId);
-
-        } else if (data === '/resetInfoWork') {
-            await user.update({
-                catalog: null, 
-                brand: null, 
-                vendorCode: null, 
-                reserveNumber: null
-            }, {
-                where: {
-                    chatId: chatId,
-                }
-            })
-
-            return bot.sendMessage(
-                chatId,
-                `Искомые параметры сброшенны.`
-            );
-
-        } else if (data === '/checkVendor') {
-
-            return startCheckVendor(chatId, msg);
-
-        } else if (data === '/enterBrand') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, `Для начала работы введите бренд, по которому мы будем производить поиск:`, 
-                { parse_mode: 'HTML' }
-            );
-
-        } else if (data === '/enterReserveNumber') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, `Введите номер партии и количество, которое желаете зарезервировать:<i>например: <b>268А 3</b>\nесли партия отсутствует, то введите только количество</i>`,
-                { parse_mode: "HTML" }
-            );
-
-        } else if (data === '/preSendEmail') {
-
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
-
-                const subject = `Резерв ${user.vendorCode}, партия: ${user.reserveNumber.split(" ")[0]}, ${user.reserveNumber.split(" ")[1]} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, партия: ${user.reserveNumber.split(" ")[0]} в количестве: ${user.reserveNumber.split(" ")[1]} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+                await user.update({subject: subject, textMail: textMail}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
             
-                await user.update({subject: subject, textMail: textMail}, {
+                const user = await UserModel.findOne({
                     where: {
                         chatId: chatId
-                    }
-                })
-
-            } else {
-
-                const subject = `Резерв ${user.vendorCode}, ${user.reserveNumber} ед.изм, по запросу ${chatId}`;
-                const textMail = `\nЗдравствуйте!\nПросьба поставить в резерв следующую позицию:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber} ед.изм\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
-
-                await user.update({subject: subject, textMail: textMail}, {
-                    where: {
-                        chatId: chatId
-                    }
-                })
-            }
-
-            return bot.sendMessage(
-                chatId, 
-                `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
-                sendReserveOptions
-            );
-
-        } else if (data === '/preSendEmailReserveYes') {
-
-            const subject = `Наличие+сроки+резерв ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПросьба поставить в резерв.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
-
-            await user.update({subject: subject, textMail: textMail}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-        
-            const user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                },
-                attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
-            });
-
-            return bot.sendMessage(
-                chatId, 
-                `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`,
-                sendReserveOptions
-            );
-
-        } else if (data === '/preSendEmailReserveNo') {
-
-            const subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
-            const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
-
-            await user.update({subject: subject, textMail: textMail}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-        
-            const user = await UserModel.findOne({
-                where: {
-                    chatId: chatId
-                },
-                attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
-            });
-
-            return bot.sendMessage(
-                chatId, 
-                `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
-                sendReserveOptions
-            );
-
-        } else if (data === '/sendReserveEmail') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return sendReserveEmail(chatId);
-
-        } else if (data === '/catalogСheck') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
-                { parse_mode: 'HTML' }
-            );
-
-        } else if (data === '/oracCheck') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
-                { parse_mode: 'HTML' }
-            );
-
-        } else if (data === '/request1C') {
-            // lc = '/request1C';
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
-                { parse_mode: 'HTML' }
-            );
-
-        } else if (data === '/work2') {
-            // lc = null;
-            await user.update({lastCommand: null}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                sorry, 
-                mainMenuReturnOptions
-            );
-
-        } else if (data === '/work3') {
-            // lc = null;
-            await user.update({lastCommand: null}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            return bot.sendMessage(
-                chatId, 
-                sorry, 
-                mainMenuReturnOptions
-            );
-
-        } else if (data === '/again') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            await bot.deleteMessage(
-                chatId, 
-                msg.message.message_id
-            );
-            return startGame(chatId);
-
-        } else if (data === '/infogame') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            await bot.deleteMessage(
-                chatId, 
-                msg.message.message_id
-            );
-            return bot.sendMessage(
-                chatId, 
-                `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, 
-                resetOptions
-            ); 
-
-        } else if(data === '/reset') {
-            // lc = data;
-            await user.update({lastCommand: data}, {
-                where: {
-                    chatId: chatId
-                }
-            })
-
-            await bot.deleteMessage(
-                chatId, 
-                msg.message.message_id
-            );
-            if (user) {
-                await user.update ({
-                    right: 0,
-                    wrong: 0,
+                    },
+                    attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
                 });
-            }
 
-            return bot.sendMessage(
-                chatId, 
-                `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, 
-                againOptions
-            );
+                return bot.sendMessage(
+                    chatId, 
+                    `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`,
+                    sendReserveOptions
+                );
 
-        } else if (user.lastCommand === '/game' || user.lastCommand === '/again') {
+            } else if (data === '/preSendEmailReserveNo') {
 
-            if (data == chats[chatId]) {
-                user.right += 1;
-                await user.save(chatId);
+                const subject = `Наличие+сроки ${user.vendorCode},  ${user.reserveNumber}, по запросу ${chatId}`;
+                const textMail = `\nЗдравствуйте!\nУточните, пожалуйста, наличие и срок поставки:\nартикул: ${user.vendorCode}, бренд: ${user.brand}, в количестве: ${user.reserveNumber}.\nПожалуйста пришлите обратную связь ответным письмом на purchasing@manders.ru.`;
+
+                await user.update({subject: subject, textMail: textMail}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+            
+                const user = await UserModel.findOne({
+                    where: {
+                        chatId: chatId
+                    },
+                    attributes: ['id', 'chatId', 'brand', 'subject', 'textMail']
+                });
+
+                return bot.sendMessage(
+                    chatId, 
+                    `Сформирован email:\nТема сообщения: <strong>${user.subject}</strong>\nКому: <b>поставщику ${user.brand}</b>\nКопия: <b>purchasing_internal@manders.ru</b>\nТекст сообщения:\n${user.textMail}\n`, 
+                    sendReserveOptions
+                );
+
+            } else if (data === '/sendReserveEmail') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return sendReserveEmail(chatId);
+
+            } else if (data === '/catalogСheck') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, 
+                    'Введите <b>наименование каталога</b> содержащего искомый вами товар:\n<i>(после получения результата, вы можете отправить новое наименование для поиска следующего каталога)</i>', 
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (data === '/oracCheck') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, 
+                    'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (data === '/request1C') {
+                // lc = '/request1C';
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, 
+                    'Введите искомый вами <b>артикул</b>:\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
+                    { parse_mode: 'HTML' }
+                );
+
+            } else if (data === '/work2') {
+                // lc = null;
+                await user.update({lastCommand: null}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, 
+                    sorry, 
+                    mainMenuReturnOptions
+                );
+
+            } else if (data === '/work3') {
+                // lc = null;
+                await user.update({lastCommand: null}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                return bot.sendMessage(
+                    chatId, 
+                    sorry, 
+                    mainMenuReturnOptions
+                );
+
+            } else if (data === '/again') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
+                await bot.deleteMessage(
+                    chatId, 
+                    msg.message.message_id
+                );
+                return startGame(chatId);
+
+            } else if (data === '/infogame') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
                 await bot.deleteMessage(
                     chatId, 
                     msg.message.message_id
                 );
                 return bot.sendMessage(
                     chatId, 
-                    `Ты отгадал цифру "${chats[chatId]}"`, 
-                    againOptions
-                );
-            } else {
-                user.wrong += 1;
-                await user.save();
+                    `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, 
+                    resetOptions
+                ); 
+
+            } else if(data === '/reset') {
+                // lc = data;
+                await user.update({lastCommand: data}, {
+                    where: {
+                        chatId: chatId
+                    }
+                })
+
                 await bot.deleteMessage(
                     chatId, 
                     msg.message.message_id
                 );
+                if (user) {
+                    await user.update ({
+                        right: 0,
+                        wrong: 0,
+                    });
+                }
+
                 return bot.sendMessage(
                     chatId, 
-                    `Нет, я загадал цифру "${chats[chatId]}"`, 
+                    `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, 
                     againOptions
-                );  
+                );
+
+            } else if (user.lastCommand === '/game' || user.lastCommand === '/again') {
+
+                if (data == chats[chatId]) {
+                    user.right += 1;
+                    await user.save(chatId);
+                    await bot.deleteMessage(
+                        chatId, 
+                        msg.message.message_id
+                    );
+                    return bot.sendMessage(
+                        chatId, 
+                        `Ты отгадал цифру "${chats[chatId]}"`, 
+                        againOptions
+                    );
+                } else {
+                    user.wrong += 1;
+                    await user.save();
+                    await bot.deleteMessage(
+                        chatId, 
+                        msg.message.message_id
+                    );
+                    return bot.sendMessage(
+                        chatId, 
+                        `Нет, я загадал цифру "${chats[chatId]}"`, 
+                        againOptions
+                    );  
+                }
             }
-        }
 
         } catch (err) {    
             console.log(err);  
