@@ -2236,7 +2236,7 @@ async function findBrink(chatId) {
                         foundMatch = true;
 
                         message = '';
-                        
+
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v;    // Номенкулатура
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)];   // Ячейка EAN штрихкода 
                             let cValue = {};    // EAN штрихкод 
@@ -2285,7 +2285,7 @@ async function findBrink(chatId) {
                         //         message += `Свободный остаток товара в пути: ${hValue} ед.\n`;
                         //     }
                         
-                        message += `\n<i>можете ввести следующий артикул для поиска</i>`
+                        message += `<i>можете ввести следующий артикул для поиска</i>`
                         
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
@@ -2681,7 +2681,7 @@ const start = async () => {
 
                 users.forEach((user) => {
                     
-                    const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
+                    const message = `ID: <code>${user.chatId}</code>\n${user.firstName} ${user.lastName}\nEmail: <code>${user.email}</code>`;
                     
                     bot.sendMessage(msg.chat.id,
                         message,
@@ -2751,7 +2751,20 @@ const start = async () => {
         const chatId = msg.chat.id;
 
     bot.sendMessage(chatId,
-    `<b>Версия 1.0.5.2
+    `   <b>Версия 1.0.8.0
+    Что нового:</b>
+
+    Скорректирован поиск по бренду brink:
+    Теперь, при вводе названия ковра, будут последовательно
+    сообщаться все размеры и остаток по каждому из них;
+
+    Рефакторинг кода;
+    Оптимизация и улучшение производительности;
+    Улучшение безопасности;
+    Для администраторов: теперь получая список пользователей
+    в нем будут указаны имя и фамилия каждого пользователя;
+    ------------------------------------
+    <b>Версия 1.0.5.2
     Что нового:</b>
 
     Исправлена проблема с поиском на сайте dealer.decaro.ru,
@@ -2766,15 +2779,6 @@ const start = async () => {
     Little Greene и Paint Paper Library;
     Устранены проблемы из-за которых бот не находил бренд KT-Exclusive;
     Добавленно примечание о автоматическом переводе на кирилицу при поиске на сайте Декаро;
-    ------------------------------------
-    <b>Версия 1.1.1.0
-    Что нового:</b>
-
-    Повышена безопасность до необходимого уровня;
-    Добавлены инструменты для администрирования;
-    Рефакторинг кода;
-    Исправление опечаток;
-    Оптимизация и улучшение производительности;
     `,
             { parse_mode: 'HTML' }
         );
