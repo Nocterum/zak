@@ -973,6 +973,7 @@ async function findExcelFile(
     ) {
 
     const folderPath = '/root/zak/xl';
+    // const folderPath = 'C:\\node.js\\zak\\xl';   //Dev
     const files = await fs.promises.readdir(folderPath);
 
     for (const file of files) {
@@ -2256,31 +2257,31 @@ async function findBrink(chatId) {
 
                         message += `Остаток <b>${bValue}</b> на <b>${fDate}</b>:\nEAN: ${cValue}\n\nСвободный остаток на складе: ${fValue}\n\n`;
 
-                        const gCell = firstWorksheet['G' + cellAddress.substring(1)];   // Дата следующей поставки
-                            let gValue = {};
+                        // const gCell = firstWorksheet['G' + cellAddress.substring(1)];   // Дата следующей поставки
+                        //     let gValue = {};
 
-                            if (gCell && gCell.v !== undefined) {
-                                gValue = gCell.v.toString();                                   
-                            } else {
-                                gValue = 'неизвестна';
-                            }
+                        //     if (gCell && gCell.v !== undefined) {
+                        //         gValue = gCell.v.toString();                                   
+                        //     } else {
+                        //         gValue = 'неизвестна';
+                        //     }
 
-                            if ( !isNaN(gValue) ) {
-                                const year = gValue.substring(0, 4);
-                                const month = gValue.substring(4, 6);
-                                const day = gValue.substring(6, 8);
-                                gValue = `${day}.${month}.${year}`;
-                            }
+                        //     if ( !isNaN(gValue) ) {
+                        //         const year = gValue.substring(0, 4);
+                        //         const month = gValue.substring(4, 6);
+                        //         const day = gValue.substring(6, 8);
+                        //         gValue = `${day}.${month}.${year}`;
+                        //     }
                             
-                        message += `Дата следующей поставки: ${gValue}\n`;
+                        // message += `Дата следующей поставки: ${gValue}\n`;
 
-                        const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
-                            let hValue = {};
+                        // const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
+                        //     let hValue = {};
 
-                            if (hCell !== undefined) {
-                                hValue = hCell.v.toString();    // Свободный остаток товаров в пути 
-                                message += `Свободный остаток товара в пути: ${hValue} ед.\n`;
-                            }
+                        //     if (hCell !== undefined) {
+                        //         hValue = hCell.v.toString();    // Свободный остаток товаров в пути 
+                        //         message += `Свободный остаток товара в пути: ${hValue} ед.\n`;
+                        //     }
                         
                         message += `\n<i>можете ввести следующий артикул для поиска</i>`
                         
@@ -2288,7 +2289,8 @@ async function findBrink(chatId) {
                             bot.deleteMessage(chatId, botMsgIdx);
                             botMsgIdx = null;
                         }
-                        return bot.sendMessage(
+
+                        await bot.sendMessage(
                             chatId, 
                             message,
                             startFind1Options
@@ -2576,6 +2578,7 @@ const start = async () => {
     bot.onText(/\/files/, async msg => {
         const chatId = msg.chat.id;
         const folderPath = '/root/zak/xl';
+        // const folderPath = 'C:\\node.js\\zak\\xl';   //Dev
 
         const user = await UserModel.findOne({
             where: {
@@ -2616,7 +2619,8 @@ const start = async () => {
         if (user.email !== '/passwordcheck') {
 
             const fileName = match[1];
-            const filePath = path.join('/root/zak/xl', fileName);
+            const filePath = path.join('/root/zak/xl', fileName); 
+            // const filePath = path.join('C:\\node.js\\zak\\xl', fileName);    //Dev
 
             // Проверка существования файла
             fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -2835,7 +2839,8 @@ const start = async () => {
 
                         await bot.getFile(msg.document.file_id).then((file) => {
                             const fileStream = bot.getFileStream(file.file_id);
-                            fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                            fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`)); 
+                            // fileStream.pipe(fs.createWriteStream(`C:\\node.js\\zak\\xl\\${fileName}`));  //Dev
                             fileStream.on('end', () => {
                                 bot.sendMessage(
                                     chatId, 
@@ -2935,6 +2940,7 @@ const start = async () => {
                             
                             const fileStream = bot.getFileStream(file.file_id);
                             fileStream.pipe(fs.createWriteStream(`/root/zak/xl/${fileName}`));
+                            // fileStream.pipe(fs.createWriteStream(`C:\\node.js\\zak\\xl\\${fileName}`));  //Dev
                             fileStream.on('end', () => {
                                 bot.sendMessage(
                                     chatId, 
