@@ -2674,7 +2674,9 @@ const start = async () => {
             UserModel.findAll().then((users) => {
 
                 users.forEach((user) => {
-                const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
+                    
+                    const message = `ID: <code>${user.chatId}</code>\nEmail: <code>${user.email}</code>`;
+                    
                     bot.sendMessage(msg.chat.id,
                         message,
                         { parse_mode: 'HTML' }
@@ -3437,11 +3439,13 @@ const start = async () => {
                     );
                 }
                 // lc = null;
-                await user.update({lastCommand: data}, {
+                await user.update({
+                    lastCommand: data
+                }, {
                     where: {
                         chatId: chatId
                     }
-                })
+                });
 
                 return bot.sendMessage(
                     chatId, 
