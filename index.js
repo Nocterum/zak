@@ -2235,6 +2235,8 @@ async function findBrink(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
+                        message = '';
+                        
                         const bValue = firstWorksheet['B' + cellAddress.substring(1)].v;    // Номенкулатура
                         const cCell = firstWorksheet['C' + cellAddress.substring(1)];   // Ячейка EAN штрихкода 
                             let cValue = {};    // EAN штрихкод 
