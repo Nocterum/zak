@@ -2681,7 +2681,7 @@ const start = async () => {
 
                 users.forEach((user) => {
                     
-                    const message = `ID: <code>${user.chatId}</code>\n${user.firstName} ${user.lastName}\nEmail: <code>${user.email}</code>`;
+                    const message = `ID: <code>${user.chatId}</code>\nUser:<code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
                     
                     bot.sendMessage(msg.chat.id,
                         message,
