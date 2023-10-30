@@ -1399,7 +1399,7 @@ async function findCatalogWallpaper(chatId) {
                                         parse_mode: 'HTML',
                                         reply_markup: JSON.stringify( {
                                             inline_keyboard: [
-                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cellValue.trim()}=${cValue}`}],
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cValue}`}],
                                                 [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
                                             ]
                                         })
@@ -1651,7 +1651,7 @@ async function findPricelistLink(chatId, cValue) {
             }
 
             return {messagePrice, vendor};
-            
+
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -3558,14 +3558,13 @@ const start = async () => {
 
             } else if (data.includes('checkVendor')) {
 
-                const cellValue = data.split('=')[1];
-                const cValue = data.split('=')[2];
+                const cValue = data.split('=')[1];
                 
                 await findPricelistLink(chatId, cValue);
 
                 await bot.sendMessage(
                     chatId,
-                    cellValue 
+                    cValue 
                 )
 
                 return startCheckVendor(chatId, msg);
