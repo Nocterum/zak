@@ -186,7 +186,7 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
 
         const searchUrl1C = `${url_manders_1C}=${vendorCode}&submit=Получить`;
-        const response = await axios.get(searchUrl1C,  { timeout: 2000 });
+        const response = await axios.get(searchUrl1C,  { timeout: 5000 });
 
         if (!response) {
 
@@ -1352,7 +1352,10 @@ async function findCatalogWallpaper(chatId) {
                         const pValue = row.getCell('P').value;
                         const vendorCode = bValue;
 
-                        await user.update({brand: cValue.toUpperCase()});
+                        await user.update({
+                            brand: cValue.toUpperCase()
+                        });
+
                         let findResult1C = await startRequest1C(chatId, vendorCode);
                         let PricelistLink = await findPricelistLink(chatId, cValue);
 
@@ -1392,7 +1395,15 @@ async function findCatalogWallpaper(chatId) {
                                 return bot.sendMessage(
                                     chatId, 
                                     message, 
-                                    beginWork3Options
+                                    {
+                                        parse_mode: 'HTML',
+                                        reply_markup: JSON.stringify( {
+                                            inline_keyboard: [
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: '/checkVendor'}],
+                                                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
+                                            ]
+                                        })
+                                    }
                                 );
     
                             } else {
@@ -1516,7 +1527,15 @@ async function findCatalogTextile(chatId) {
                                 await bot.sendMessage(
                                     chatId, 
                                     message, 
-                                    beginWork3Options
+                                    {
+                                        parse_mode: 'HTML',
+                                        reply_markup: JSON.stringify( {
+                                            inline_keyboard: [
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: '/checkVendor'}],
+                                                [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
+                                            ]
+                                        })
+                                    }
                                 );
 
                             } else {
