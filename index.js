@@ -1531,7 +1531,7 @@ async function findCatalogTextile(chatId) {
                                         parse_mode: 'HTML',
                                         reply_markup: JSON.stringify( {
                                             inline_keyboard: [
-                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cellValue.trim()}=${cValue}`}],
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cValue}`}],
                                                 [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
                                             ]
                                         })
