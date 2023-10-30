@@ -1399,7 +1399,7 @@ async function findCatalogWallpaper(chatId) {
                                         parse_mode: 'HTML',
                                         reply_markup: JSON.stringify( {
                                             inline_keyboard: [
-                                                [{text: 'К следующей ступени поиска ➡', callback_data: '/checkVendor'}],
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cellValue.trim()}=${cValue}`}],
                                                 [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
                                             ]
                                         })
@@ -1531,7 +1531,7 @@ async function findCatalogTextile(chatId) {
                                         parse_mode: 'HTML',
                                         reply_markup: JSON.stringify( {
                                             inline_keyboard: [
-                                                [{text: 'К следующей ступени поиска ➡', callback_data: '/checkVendor'}],
+                                                [{text: 'К следующей ступени поиска ➡', callback_data: `checkVendor=${cellValue.trim()}=${cValue}`}],
                                                 [{text: 'В главное меню 📋', callback_data: '/mainmenu'}],
                                             ]
                                         })
@@ -1651,6 +1651,7 @@ async function findPricelistLink(chatId, cValue) {
             }
 
             return {messagePrice, vendor};
+            
         } catch (error) {
             console.error('Ошибка при чтении файла Excel:', error);
         }
@@ -3555,7 +3556,17 @@ const start = async () => {
                     `Искомые параметры сброшенны.`
                 );
 
-            } else if (data === '/checkVendor') {
+            } else if (data.includes('checkVendor')) {
+
+                const cellValue = data.split('=')[1];
+                const cValue = data.split('=')[2];
+                
+                await findPricelistLink(chatId, cValue);
+
+                await bot.sendMessage(
+                    chatId,
+                    cellValue 
+                )
 
                 return startCheckVendor(chatId, msg);
 
