@@ -3560,12 +3560,7 @@ const start = async () => {
 
                 const cValue = data.split('=')[1];
                 
-                await findPricelistLink(chatId, cValue);
-
-                await bot.sendMessage(
-                    chatId,
-                    cValue 
-                )
+                await findPricelistLink(chatId, cValue);    // нужно написать функцию записи данных поставщика
 
                 return startCheckVendor(chatId, msg);
 
