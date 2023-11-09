@@ -938,7 +938,7 @@ const sendReserveEmail = async (chatId) => {
 
             let result = transporter.sendMail({
                 from: 'zakupki_bot@manders.ru',
-                to: `${copy}, nick.of.darkwood@gmail.com`, // `${recipient}, `
+                to: `${recipient}, ${copy}, nick.of.darkwood@gmail.com`,
                 subject: user.subject,
                 text: user.textMail,
             });
