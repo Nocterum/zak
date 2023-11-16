@@ -2998,6 +2998,7 @@ const start = async () => {
                         return;
 
                     } else {
+                        
                         return bot.sendMessage(
                             chatId, 
                             `В целях экономии памяти, я сохраняю лишь определённые эксель файлы\nЕсли желаете, чтобы я научился работать с вашим документом, то обратитесь к моему разработчику\nn_kharitonov@manders.ru`
@@ -3883,7 +3884,7 @@ const levantin_password = config.levantin_password;
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
-        interval: 300, //между запросами с клиента на сервер тг "млсек"
+        interval: 1000, //между запросами с клиента на сервер тг "млсек"
         autoStart: true, //обработка всех команд отправленных до запуска программы
         params: {
             timeout:10 //таймаут между запросами "млсек"
