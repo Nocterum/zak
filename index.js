@@ -1131,6 +1131,11 @@ async function findUW(chatId) {
         const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
         console.log(dataMaxQuantity);
     
+        if (botMsgIdx !== null) {
+            bot.deleteMessage(chatId, botMsgIdx);
+            botMsgIdx = null;
+        }
+        
         return bot.sendMessage(
             chatId,
             `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
