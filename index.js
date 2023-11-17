@@ -2568,9 +2568,15 @@ const start = async () => {
         })
 
         try {
+
             const vendorCode = 'base 0020'
             const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${vendorCode}`);
             console.log(responseProduct);
+
+            const $ = cheerio.load(responseProduct.data);
+            const dataMaxQuantity = $('.data-max-quantity').eq(0).text();
+            console.log(dataMaxQuantity);
+
         } catch (e) {
             
             console.log(e);
