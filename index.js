@@ -2574,7 +2574,7 @@ const start = async () => {
             console.log(responseProduct);
 
             const $ = cheerio.load(responseProduct.data);
-            const dataMaxQuantity = $('.data-max-quantity').eq(0).text();
+            const dataMaxQuantity = $('[data-max-quantity]').attr('data-max-quantity');
             console.log(dataMaxQuantity);
 
         } catch (e) {
