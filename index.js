@@ -1106,6 +1106,51 @@ async function findExcelFile(
 // функция поиска артикула ORAC
 // ======================================================================================================================================
 
+async function findUW(chatId) {
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: [
+            'id', 
+            'chatId', 
+            'lastCommand',
+            'vendorCode'
+        ]
+    });
+
+    try {
+    
+        const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${user.vendorCode}`);
+        const $ = cheerio.load(responseProduct.data);
+        const productLink = $('.name').attr('href');
+    
+        const responseProductFull = await axios.get(`https://ultrawood.ru${productLink}`);
+        const $$ = cheerio.load(responseProductFull.data);
+        const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
+        console.log(dataMaxQuantity);
+    
+        return bot.sendMessage(
+            chatId,
+            `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
+        );
+    
+    } catch (e) {
+        
+        console.log(e);
+        return bot.sendMessage(
+            chatId,
+            `Возникла ошибка в исполнении кода поиска Ultrawood:\n${e}`
+        )
+    }
+
+}
+
+// ======================================================================================================================================
+// функция поиска артикула ORAC
+// ======================================================================================================================================
+
 async function findOrac(chatId) {
         
     const resultMSK = await findExcelFile('orac_мск');
@@ -2557,7 +2602,8 @@ const start = async () => {
             attributes: [
                 'id', 
                 'chatId', 
-                'lastCommand'
+                'lastCommand',
+                'vendorCode'
             ]
         });
 
@@ -2567,23 +2613,8 @@ const start = async () => {
             }
         })
 
-        try {
 
-            const vendorCode = 'base 0020'
-            const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${vendorCode}`);
 
-            const $ = cheerio.load(responseProduct.data);
-            const dataMaxQuantity = $('.qty .qty').attr('data-max-quantity');
-            console.log(dataMaxQuantity);
-
-        } catch (e) {
-            
-            console.log(e);
-            return bot.sendMessage(
-                chatId,
-                `Возникла ошибка в исполнении кода поиска Ultrawood:\n${e}`
-            )
-        }
     });
 
     // настройки пользователя
@@ -3398,10 +3429,31 @@ const start = async () => {
 
                 } else if (user.lastCommand === '/oracCheck') {
 
-                    await user.update({vendorCode: text.toUpperCase()});
-                    await bot.sendMessage(chatId, `Идёт поиск ${text} . . .`);
-                    botMsgIdx = msg.message_id += 1; 
+                    await user.update({
+                        vendorCode: text.toUpperCase()
+                    });
+                    await bot.sendMessage(
+                        chatId, 
+                        `Идёт поиск ${text} . . .`
+                    );
+                    botMsgIdx = msg.message_id += 1;
+
                     return findOrac(chatId);
+
+                } else if (user.lastCommand === '/UWCheck') {
+
+                    await user.update({
+                        vendorCode: text.toUpperCase()
+                    });
+
+                    await bot.sendMessage(
+                        chatId, 
+                        `Идёт поиск ${text} . . .`
+                    );
+
+                    botMsgIdx = msg.message_id += 1; 
+
+                    return findUW(chatId);
 
                 } else if (text === '/infowork') {
 
@@ -3719,6 +3771,24 @@ const start = async () => {
                     'Введите искомый вами <b>артикул</b> товара ORAC :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
                     { parse_mode: 'HTML' }
                 );
+
+            } else if (data.includes('UWCheck')) {
+
+                if ( data === '/UWCheck' ) {
+
+                    await user.update({lastCommand: data}, {
+                        where: {
+                            chatId: chatId
+                        }
+                    });
+    
+                    return bot.sendMessage(
+                        chatId, 
+                        'Введите искомый вами <b>артикул</b> товара <b>ULTRA WOOD</b> :\n<i>(после получения результата, вы можете отправить другой артикул для поиска)</i>', 
+                        { parse_mode: 'HTML' }
+                    );
+
+                }
 
             } else if (data === '/request1C') {
                 // lc = '/request1C';

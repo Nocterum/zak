@@ -97,6 +97,7 @@ module.exports = {
             inline_keyboard: [
                 [{text: 'Поиск по каталогу 🔎', callback_data: '/catalogСheck'}, {text: 'Поиск по бренду 🔎', callback_data: '/enterBrand'}],
                 [{text: 'Остатки ORAC 🅾', callback_data: '/oracCheck'}],
+                [{text: 'Остатки Ultra Wood 📋', callback_data: '/UWCheck'}],
             ]
         })
     },
