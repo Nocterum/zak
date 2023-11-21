@@ -1126,20 +1126,30 @@ async function findUW(chatId) {
         const $ = cheerio.load(responseProduct.data);
         const productLink = $('.name').attr('href');
     
-        const responseProductFull = await axios.get(`https://ultrawood.ru${productLink}`);
-        const $$ = cheerio.load(responseProductFull.data);
-        const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
-        console.log(dataMaxQuantity);
-    
-        if (botMsgIdx !== null) {
-            bot.deleteMessage(chatId, botMsgIdx);
-            botMsgIdx = null;
-        }
+        if (productLink) {
+
+            const responseProductFull = await axios.get(`https://ultrawood.ru${productLink}`);
+            const $$ = cheerio.load(responseProductFull.data);
+            const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
         
-        return bot.sendMessage(
-            chatId,
-            `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
-        );
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+    
+            return bot.sendMessage(
+                chatId,
+                `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
+            );
+
+        } else {
+
+            return bot.sendMessage(
+                chatId,
+                `Артикул ${user.vendorCode} не найден на сайте поставщика.`
+            );
+
+        }
     
     } catch (e) {
         
@@ -2784,37 +2794,62 @@ const start = async () => {
 
     Производить поиск 🔎 остатков на сайтах:
     <strong>opusdeco.ru</strong>
-        ✅<code>1838</code><code>                  </code>✅<code>Arlin</code>
-        ✅<code>Arthouse</code><code>              </code>✅<code>Atelier</code>
-        ✅<code>Aura</code><code>                  </code>✅<code>Lincrusta</code>
-        ✅<code>Print 4</code><code>               </code>✅<code>Sangiorgio</code>
-        ✅<code>Sem - Murale</code><code>          </code>✅<code>York</code>
+        ✅<code>1838</code>
+        ✅<code>Arlin</code>
+        ✅<code>Arthouse</code>
+        ✅<code>Atelier</code>
+        ✅<code>Aura</code>
+        ✅<code>Lincrusta</code>
+        ✅<code>Print 4</code>
+        ✅<code>Sangiorgio</code>
+        ✅<code>Sem - Murale</code>
+        ✅<code>Ultra Wood</code>
+        ✅<code>York</code>
 
     <strong>dealer.decaro.ru</strong> 
-        ✅<code>Architector</code><code>           </code>✅<code>Casa Mia</code>
-        ✅<code>Coordonne</code><code>             </code>✅<code>Emil & Hugo</code>
-        ✅<code>Epoca</code><code>                 </code>✅<code>Etten</code>
-        ✅<code>Heritage House</code><code>        </code>✅<code>Jaima Brown</code>
-        ✅<code>KT-Exclusive</code><code>          </code>✅<code>Mayflower</code>
-        ✅<code>NLXL</code><code>                  </code>✅<code>Paper & Ink</code>
-        ✅<code>Seabrook</code><code>              </code>✅<code>Texam</code>
-        ✅<code>Tiffany Design</code><code>        </code>✅<code>Trendsetter</code>
-        ✅<code>Vatos</code><code>                 </code>✅<code>Wallquest</code>
+        ✅<code>Architector</code>
+        ✅<code>Casa Mia</code>
+        ✅<code>Coordonne</code>
+        ✅<code>Emil & Hugo</code>
+        ✅<code>Epoca</code>
+        ✅<code>Etten</code>
+        ✅<code>Heritage House</code>
+        ✅<code>Jaima Brown</code>
+        ✅<code>KT-Exclusive</code>
+        ✅<code>Mayflower</code>
+        ✅<code>NLXL</code>
+        ✅<code>Paper & Ink</code>
+        ✅<code>Seabrook</code>
+        ✅<code>Texam</code>
+        ✅<code>Tiffany Design</code>
+        ✅<code>Trendsetter</code>
+        ✅<code>Vatos</code>
+        ✅<code>Wallquest</code>
 
     <strong>galleriaarben.ru</strong>
         ✅<code>Galleria Arben</code>
 
     <b>Производить поиск 🔎 по файлам остатков следующих брендов:</b>
-        ✅<code>Architects Papers</code><code>     </code>✅<code>ARTE</code>
-        ✅<code>Bautex</code><code>                </code>✅<code>Bluebellgray</code>
-        ✅<code>BN International</code><code>      </code>✅<code>Brink</code>
-        ✅<code>Collins & Company</code><code>     </code>✅<code>Eijffinger</code>
-        ✅<code>Holden</code><code>                </code>✅<code>Hookedonwalls</code>
-        ✅<code>Jannelli & Volpi</code><code>      </code>✅<code>Khroma Zoom</code>
-        ✅<code>Loymina</code><code>               </code>✅<code>Milassa</code>
-        ✅<code>Missoni</code><code>               </code>✅<code>Nina Hancock</code>
-        ✅<code>ORAC</code><code>                  </code>✅<code>Swiss Lake</code>
-        ✅<code>Ted Beker</code><code>             </code>✅<code>Wedgwood</code>
+        ✅<code>Architects Papers</code>
+        ✅<code>ARTE</code>
+        ✅<code>Bautex</code>
+        ✅<code>Bluebellgray</code>
+        ✅<code>BN International</code>
+        ✅<code>Brink</code>
+        ✅<code>Collins & Company</code>
+        ✅<code>Eijffinger</code>
+        ✅<code>Holden</code>
+        ✅<code>Hookedonwalls</code>
+        ✅<code>Jannelli & Volpi</code>
+        ✅<code>Khroma Zoom</code>
+        ✅<code>Loymina</code>
+        ✅<code>Milassa</code>
+        ✅<code>Missoni</code>
+        ✅<code>Nina Hancock</code>
+        ✅<code>ORAC</code>
+        ✅<code>Swiss Lake</code>
+        ✅<code>Ted Beker</code>
+        ✅<code>Wedgwood</code>
         ✅<code>Little Greene</code> <code>(обои)</code>
         ✅<code>Paint Paper Library</code> <code>(обои)</code>   
 
