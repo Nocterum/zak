@@ -1144,6 +1144,11 @@ async function findUW(chatId) {
 
         } else {
 
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            
             return bot.sendMessage(
                 chatId,
                 `Артикул ${user.vendorCode} не найден на сайте поставщика.`
