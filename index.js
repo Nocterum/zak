@@ -2633,7 +2633,47 @@ const start = async () => {
             }
         })
 
+        try {
 
+            const vendorCode = `FDG3114/03`
+            const formatedVendorCode = vendorCode.replace(/\//g, '%2F');
+            const responseLink = `https://www.designersguild.com/nl/search-results/l76?search-term=${formatedVendorCode}&pagesize=48&sort=default&page=1`;
+            console.log(responseLink)
+
+            const responseDG = await axios.get(
+                responseLink,
+                {
+                    httpsAgent: agent,
+                    l_stPassUserName: 'MANDERS.STOCK',
+                    l_stPassPassword: 'stock',
+                    blnRememberMe:true
+                }
+            );
+            const $ = cheerio.load(responseDG.data);
+            const productLink = $('.product-page-grid-wrapper my-4 .pod-card').attr('href');
+            console.log(productLink);
+            
+            const responseDGProduct = await axios.get(
+                productLink,
+                {
+                    httpsAgent: agent,
+                    l_stPassUserName: 'MANDERS.STOCK',
+                    l_stPassPassword: 'stock',
+                    blnRememberMe:true
+                }
+            );
+            const $$ = cheerio.load(responseDGProduct.data);
+            const maxValue = $$('product-page-order-form-wrapper .order-form-group .number').attr('max');
+    
+            return bot.sendMessage(
+                chatId,
+                `Остаток ${vendorCode} у поставщика: ${maxValue}`
+            );
+
+        } catch (e) {
+            
+            console.log( 'Что-то пошло не так', e);
+        }
 
     });
 
