@@ -1,5 +1,6 @@
 const TelegramApi = require('node-telegram-bot-api');
 const axios = require('axios');
+const { SocksProxyAgent } = require('socks-proxy-agent');
 const cheerio = require('cheerio');
 const XLSX = require('xlsx');
 const { JSDOM } = require('jsdom');
@@ -18,6 +19,7 @@ chats = {};
              
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
+const agent = new SocksProxyAgent('socks5://user143178:fh2lqd@185.138.235.40:13398');
 
 //ИМПОРТЫ
 // импорт кнопок
