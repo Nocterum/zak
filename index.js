@@ -2652,8 +2652,7 @@ const start = async () => {
 
             const $ = cheerio.load(responseDG.data);
             
-            const productLink = $('.product-page-grid grid').attr('href');
-            console.log(productLink);
+            console.log(responseDG.data);
 
             // const productLink = $('.product-page-grid-wrapper my-4 .pod-card').attr('href');
             // console.log(productLink);
