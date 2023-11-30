@@ -2853,8 +2853,8 @@ const start = async () => {
                     'email'
                 ]
             });
-            
-            if ( user ) {
+
+
 
                 const message = `ID: <code>${user.chatId}</code>\nUser: <code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
                 bot.sendMessage(msg.chat.id,
@@ -2862,7 +2862,7 @@ const start = async () => {
                     { parse_mode: 'HTML' }
                 );
 
-            }
+
         }
     });
 
