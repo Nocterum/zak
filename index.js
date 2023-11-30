@@ -2854,15 +2854,12 @@ const start = async () => {
                 ]
             });
 
-            if ( user ) {
-
-                const message = `ID: <code>${user.chatId}</code>\nUser: <code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
-                return bot.sendMessage(msg.chat.id,
-                    message,
-                    { parse_mode: 'HTML' }
-                );
-
-            }
+            const message = `ID: <code>${user.chatId}</code>\nUser: <code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
+            
+            return bot.sendMessage(msg.chat.id,
+                message,
+                { parse_mode: 'HTML' }
+            );
 
         }
     });
