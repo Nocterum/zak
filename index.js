@@ -3614,7 +3614,7 @@ const start = async () => {
                     text !== '/abilitys' &&
                     text !== '/updatelist' &&
                     !text.startsWith('/get') &&
-                    !text.startsWith('//whois')  
+                    !text.startsWith('/whois')  
                 ) {
                             
                     return bot.sendMessage(
