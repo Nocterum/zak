@@ -2854,14 +2854,15 @@ const start = async () => {
                 ]
             });
 
-
+            if ( user ) {
 
                 const message = `ID: <code>${user.chatId}</code>\nUser: <code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
-                bot.sendMessage(msg.chat.id,
+                return bot.sendMessage(msg.chat.id,
                     message,
                     { parse_mode: 'HTML' }
                 );
 
+            }
 
         }
     });
@@ -3604,16 +3605,17 @@ const start = async () => {
                         'https://cdn.tlgrm.app/stickers/087/0cf/0870cf0d-ec03-41e5-b239-0eb164dca72e/192/1.webp'
                     );
 
-                } else if ( (text !== '/game' && 
-                                text !== '/start' && 
-                                text !== '/settings' && 
-                                text !== '/files' && 
-                                text !== '/x' &&
-                                text !== '/whoiswho' &&
-                                text !== '/abilitys' &&
-                                text !== '/updatelist' &&
-                                !text.startsWith('/get'))  
-                            ) {
+                } else if ( 
+                    text !== '/game' && 
+                    text !== '/start' && 
+                    text !== '/settings' && 
+                    text !== '/files' && 
+                    text !== '/x' &&
+                    text !== '/abilitys' &&
+                    text !== '/updatelist' &&
+                    !text.startsWith('/get') &&
+                    !text.startsWith('//whois')  
+                ) {
                             
                     return bot.sendMessage(
                         chatId,
