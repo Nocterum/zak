@@ -2832,6 +2832,40 @@ const start = async () => {
         }
     });
 
+    // получение конкретного пользователя
+    bot.onText(/\/whois (.+)/, async (msg, match) => {
+        const chatId = msg.chat.id;
+        
+        if (user.email !== '/passwordcheck') {
+
+            const userId = msg.text.split(" ")[1];
+            const user = await UserModel.findOne({
+                where: {
+                    chatId: userId
+                },
+                attributes: 
+                [
+                    'id', 
+                    'chatId',
+                    'firstName', 
+                    'lastName', 
+                    'lastCommand', 
+                    'email'
+                ]
+            });
+            
+            if ( user ) {
+
+                const message = `ID: <code>${user.chatId}</code>\nUser: <code>${user.firstName} ${user.lastName}</code>\nEmail: <code>${user.email}</code>`;
+                bot.sendMessage(msg.chat.id,
+                    message,
+                    { parse_mode: 'HTML' }
+                );
+
+            }
+        }
+    });
+
     // получение списка пользователей
     bot.onText(/\/abilitys/, (msg) => {
         const chatId = msg.chat.id;
