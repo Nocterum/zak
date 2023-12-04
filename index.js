@@ -982,7 +982,6 @@ const startFindDesignersGuild = async (chatId, msg) => {
             
             if (botMsgIdxDG !== null) {
                 bot.deleteMessage(chatId, botMsgIdxDG);
-                botMsgIdxDG = null;
             }
 
             if (botMsgIdx !== null) {
