@@ -19,7 +19,6 @@ chats = {};
              
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
-const agent = new SocksProxyAgent(ProxyAgent);
 
 //ИМПОРТЫ
 // импорт кнопок
@@ -4119,6 +4118,8 @@ const url_manders_1C = config.url_manders_1C;
 const levantin_login = config.levantin_login;
 const levantin_password = config.levantin_password;
 const ProxyAgent = config.ProxyAgent;
+
+const agent = new SocksProxyAgent(ProxyAgent);
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
