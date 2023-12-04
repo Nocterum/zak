@@ -952,7 +952,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
             chatId,
             `Маскируюсь через прокси. . .`
         );
-        const botMsgIdxDG = msg.message_id += 1;
+        const botMsgIdxDG = msg.message_id;
 
         const responseDG = await axios.get(
             responseLink, 
