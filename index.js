@@ -3194,7 +3194,10 @@ const start = async () => {
                         mainMenuOptions
                     ); 
 
-                } else if (user.lastCommand === '/editEmail') {
+                } else if (
+                    user.lastCommand === '/editEmail' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     await user.update({
                         email: text.toLowerCase(),
@@ -3207,7 +3210,10 @@ const start = async () => {
                         mainMenuReturnOptions
                     );
 
-                } else if (user.lastCommand === '/editNickname') {
+                } else if (
+                    user.lastCommand === '/editNickname' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     await user.update({nickname: text, lastCommand: null});
                     return bot.sendMessage(
@@ -3216,7 +3222,10 @@ const start = async () => {
                         mainMenuReturnOptions
                     );
 
-                } else if (user.lastCommand === '/enterBrand') {
+                } else if (
+                    user.lastCommand === '/enterBrand' &&
+                    !ignoreCommands.includes(text)
+                ) {
 
                     await user.update({brand: text.toUpperCase()});
 
@@ -3257,7 +3266,10 @@ const start = async () => {
                             }
                         }
 
-                } else if (user.lastCommand === '/enterVC') {
+                } else if (
+                    user.lastCommand === '/enterVC' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     if (isNaN(user.vendorCode)) {
                         await user.update({vendorCode: text.toUpperCase()});
@@ -3477,7 +3489,10 @@ const start = async () => {
                         );
                     }
 
-                } else if (user.lastCommand === '/request1C') {
+                } else if (
+                    user.lastCommand === '/request1C' &&
+                    !ignoreCommands.includes(text)
+                ) {
 
                     if (isNaN(text)) {
                         await user.update({vendorCode: text.toUpperCase()});
@@ -3517,7 +3532,11 @@ const start = async () => {
 
                     }
 
-                } else if (user.lastCommand === '/enterReserveNumber') {
+                } else if (
+                    user.lastCommand === '/enterReserveNumber' &&
+                    !ignoreCommands.includes(text)
+                    ) {
+
                     let counter = 0;
                     while (text.includes("  ") && counter < 3) {
                         text = text.replace(/\s\s/g, ' ');
@@ -3539,7 +3558,10 @@ const start = async () => {
                         );
                     }
 
-                } else if (user.lastCommand === '/enterNumberofVC') {
+                } else if (
+                    user.lastCommand === '/enterNumberofVC' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     // lc = null;
                     await user.update({lastCommand: null}, {
@@ -3554,7 +3576,10 @@ const start = async () => {
                         startFind2Options
                     );
 
-                } else if (user.lastCommand === '/catalogСheck') {
+                } else if (
+                    user.lastCommand === '/catalogСheck' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     await user.update({catalog: text});
 
@@ -3577,7 +3602,10 @@ const start = async () => {
                     }
                     return {Textile, Wallpaper};
 
-                } else if (user.lastCommand === '/oracCheck') {
+                } else if (
+                    user.lastCommand === '/oracCheck' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     await user.update({
                         vendorCode: text.toUpperCase()
@@ -3590,7 +3618,10 @@ const start = async () => {
 
                     return findOrac(chatId);
 
-                } else if (user.lastCommand === '/UWCheck') {
+                } else if (
+                    user.lastCommand === '/UWCheck' &&
+                    !ignoreCommands.includes(text)
+                    ) {
 
                     await user.update({
                         vendorCode: text.toUpperCase()
@@ -4128,5 +4159,6 @@ bot.setMyCommands([
     {command: '/updatelist', description:'Список обновлений'},
     {command: '/settings', description:'Настройки'},
 ]);
+const ignoreCommands =  '/mainmenu/mymovements/abilitys/updatelist/settings';
 
 start();
