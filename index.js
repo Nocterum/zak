@@ -981,7 +981,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
             const maxValue = $$('.order-form-item .order-form-controls input').attr('max');
             
             if (botMsgIdxDG !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
+                bot.deleteMessage(chatId, botMsgIdxDG);
                 botMsgIdx = null;
             }
 
