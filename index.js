@@ -333,7 +333,7 @@ const startCheckVendor = async (chatId, msg) => {
         } else if (formatedUserVendor.includes('DESIGNERSGUILD')) {
             return bot.sendMessage(
                 chatId, 
-                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>http://https://www.designersguild.com</code>\n<b>Введите артикул искомого вами объекта:</b>`,
+                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>https://www.designersguild.com</code>\n<b>Введите артикул искомого вами объекта:</b>`,
                 { parse_mode: 'HTML' }
             );
 
