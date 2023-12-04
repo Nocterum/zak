@@ -948,12 +948,6 @@ const startFindDesignersGuild = async (chatId, msg) => {
         const formatedVendorCode = user.vendorCode.replace(/\//g, '%2F');
         const responseLink = `https://www.designersguild.com/nl/search-results/l76?search-term=${formatedVendorCode}&pagesize=48&sort=default&page=1`;
 
-        await bot.sendMessage(
-            chatId,
-            `Маскируюсь через прокси. . .`
-        );
-        const botMsgIdxDG = botMsgIdx += 1;
-
         const responseDG = await axios.get(
             responseLink, 
             {
@@ -980,10 +974,6 @@ const startFindDesignersGuild = async (chatId, msg) => {
             // const productId = $$('.order-form-item .order-form-controls label').attr('for');
             const maxValue = $$('.order-form-item .order-form-controls input').attr('max');
             
-            if (botMsgIdxDG !== null) {
-                bot.deleteMessage(chatId, botMsgIdxDG);
-            }
-
             if (botMsgIdx !== null) {
                 bot.deleteMessage(chatId, botMsgIdx);
                 botMsgIdx = null;
