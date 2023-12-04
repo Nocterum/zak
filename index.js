@@ -992,7 +992,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
     
             return bot.sendMessage(
                 chatId,
-                `Остаток ${vendorCode} у поставщика: ${maxValue} ед.`
+                `Остаток ${user.vendorCode} у поставщика: ${maxValue} ед.`
             );
 
         } else {
