@@ -19,7 +19,7 @@ chats = {};
              
 botMsgIdx = {};    //айди последнего сообщения от бота
 sorry = 'Извините, я этому пока ещё учусь😅\nПрошу вас, обратитесь с данным запросом к\npurchasing_internal@manders.ru';
-const agent = new SocksProxyAgent('socks5://user143178:fh2lqd@185.138.235.40:13398');
+const agent = new SocksProxyAgent(ProxyAgent);
 
 //ИМПОРТЫ
 // импорт кнопок
@@ -312,43 +312,6 @@ const startCheckVendor = async (chatId, msg) => {
 
         const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
 
-        // if (formatedUserVendor.includes('ОРАК')
-        //     // formatedUserVendor.includes('ИНТЕРДЕКОР') ||
-        //     // formatedUserVendor.includes('РИКСОР') 
-        //     // formatedUserVendor.includes('КАДО') ||
-        //     // formatedUserVendor.includes('АКУРА') ||
-        //     // formatedUserVendor.includes('КОНТРАКТПЛЮС') ||
-        //     // formatedUserVendor.includes('ГАЙДАРЬ') ||
-        //     // formatedUserVendor.includes('ГЛОБАЛТЕКС') ||
-        //     // formatedUserVendor.includes('БЕРНИНГХЭДС') ||
-        //     // formatedUserVendor.includes('БЕКАРТТЕКСТИЛЬ') ||
-        //     // formatedUserVendor.includes('АВТ') ||
-        //     // formatedUserVendor.includes('МЕРКЬЮРИФОРДЖ') ||
-        //     // formatedUserVendor.includes('ФАБРИКДЕКО') ||
-        //     // formatedUserVendor.includes('ШИЛИН') ||
-        //     // formatedUserVendor.includes('ENGLISCHDECOR') ||
-        //     // formatedUserVendor.includes('ПОЛУНИЧЕВА') ||
-        //     // formatedUserVendor.includes('ШЕВЧЕНКО') ||
-        //     // formatedUserVendor.includes('ФОРПОСТ') ||
-        //     // formatedUserVendor.includes('HOUSEOFJAB') ||
-        //     // formatedUserVendor.includes('ЕВРОПЕЙСКИЕ') ||
-        //     // formatedUserVendor.includes('БУНТИНА') ||
-        //     // formatedUserVendor.includes('RUBELLI') ||
-        //     // formatedUserVendor.includes('ОКНАРОСТА') ||
-        //     // formatedUserVendor.includes('ЛОЙМИНА') ||
-        //     // formatedUserVendor.includes('ЛИСОХМАРА') ||
-        //     // formatedUserVendor.includes('ПОДРЕЗ') ||
-        //     // formatedUserVendor.includes('РОБЕРТС') ||
-        //     // formatedUserVendor.includes('ЮГАРТ') ||
-        //     // formatedUserVendor.includes('ПРОТОС') ||
-        //     // formatedUserVendor.includes('РУАЛЬЯНС') 
-        // ) {
-        //     return bot.sendMessage(
-        //         chatId, 
-        //         `Чтобы <b>отправить email</b>\n с запросом: остатков, срока поставки,\nа так же резервирования интересующей вас позиции бренда <b>${user.brand}</b>\n<b>Введите артикул искомого вами объекта:</b>`,
-        //         { parse_mode: 'HTML' }
-        //     );
-        // } else 
         if (formatedUserVendor.includes('ОПУС')) {
             return bot.sendMessage(
                 chatId, 
@@ -365,6 +328,13 @@ const startCheckVendor = async (chatId, msg) => {
             return bot.sendMessage(
                 chatId, 
                 `Чтобы <b>посмотреть остатки</b> на сайте\n<code>http://www.galleriaarben.ru</code>\n<b>Введите артикул искомого вами объекта:</b>`,
+                { parse_mode: 'HTML' }
+            );
+
+        } else if (formatedUserVendor.includes('DESIGNERSGUILD')) {
+            return bot.sendMessage(
+                chatId, 
+                `Чтобы <b>посмотреть остатки</b> на сайте\n<code>http://https://www.designersguild.com</code>\n<b>Введите артикул искомого вами объекта:</b>`,
                 { parse_mode: 'HTML' }
             );
 
@@ -883,15 +853,84 @@ const startFindLevantin = async (chatId, msg) => {
     }
 }
 
-const findUltraWood = async (chatId, msg) => {
+// ======================================================================================================================================
+// функция html запроса по данным из БД на сайт поставщика UltraWood
+// ======================================================================================================================================
+
+async function findUW(chatId) {
 
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
         },
         attributes: [
-            'id',
-            'chatId',
+            'id', 
+            'chatId', 
+            'lastCommand',
+            'vendorCode'
+        ]
+    });
+
+    try {
+    
+        const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${user.vendorCode}`);
+        const $ = cheerio.load(responseProduct.data);
+        const productLink = $('.name').attr('href');
+    
+        if (productLink) {
+
+            const responseProductFull = await axios.get(`https://ultrawood.ru${productLink}`);
+            const $$ = cheerio.load(responseProductFull.data);
+            const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
+        
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+    
+            return bot.sendMessage(
+                chatId,
+                `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
+            );
+
+        } else {
+
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            
+            return bot.sendMessage(
+                chatId,
+                `Артикул ${user.vendorCode} не найден на сайте поставщика.`
+            );
+
+        }
+    
+    } catch (e) {
+        
+        console.log(e);
+        return bot.sendMessage(
+            chatId,
+            `Возникла ошибка в исполнении кода поиска Ultrawood:\n${e}`
+        )
+    }
+
+}
+
+// ======================================================================================================================================
+// функция html запроса по данным из БД на сайт поставщика Designers Guild
+// ======================================================================================================================================
+
+const startFindDesignersGuild = async (chatId, msg) => {
+
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: [
+            'id', 
+            'chatId', 
             'lastCommand',
             'vendorCode'
         ]
@@ -903,21 +942,83 @@ const findUltraWood = async (chatId, msg) => {
         where: {
             chatId: chatId
         }
-    })
+    });
 
     try {
-        const vendorCode = 'base 0020'
-        const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${vendorCode}`);
-        console.log(responseProduct);
+
+        const formatedVendorCode = user.vendorCode.replace(/\//g, '%2F');
+        const responseLink = `https://www.designersguild.com/nl/search-results/l76?search-term=${formatedVendorCode}&pagesize=48&sort=default&page=1`;
+
+        await bot.sendMessage(
+            chatId,
+            `Маскируюсь через прокси. . .`
+        );
+        const botMsgIdxDG = msg.message_id += 1;
+
+        const responseDG = await axios.get(
+            responseLink, 
+            {
+                proxy: false,
+                httpsAgent: agent,
+            }
+        );
+
+        const $ = cheerio.load(responseDG.data);
+        
+        const productLink = $('div.product-page-grid.grid a.pod-card').attr('href');
+
+        if ( productLink ) {
+
+            const responseDGProduct = await axios.get(
+                `https://www.designersguild.com${productLink}`,
+                {
+                    proxy: false,
+                    httpsAgent: agent,
+                }
+            );
+            
+            const $$ = cheerio.load(responseDGProduct.data);
+            // const productId = $$('.order-form-item .order-form-controls label').attr('for');
+            const maxValue = $$('.order-form-item .order-form-controls input').attr('max');
+            
+            if (botMsgIdxDG !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+    
+            return bot.sendMessage(
+                chatId,
+                `Остаток ${vendorCode} у поставщика: ${maxValue} ед.`
+            );
+
+        } else {
+
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            
+            return bot.sendMessage(
+                chatId,
+                `Артикул ${user.vendorCode} не найден на сайте поставщика.`
+            );
+
+        }
+        
+
     } catch (e) {
         
-        console.log(e);
-        return bot.sendMessage(
-            chatId,
-            `Возникла ошибка в исполнении кода поиска Ultrawood:\n${e}`
-        )
+        console.log( 'Что-то пошло не так', e);
     }
+
 }
+
+
 // ======================================================================================================================================
 // функция отправки email с запросом на резервирование
 // ======================================================================================================================================
@@ -1102,71 +1203,6 @@ async function findExcelFile(
         fileNameBrink,
         fileNameLg
     };
-}
-
-// ======================================================================================================================================
-// функция поиска артикула ORAC
-// ======================================================================================================================================
-
-async function findUW(chatId) {
-
-    const user = await UserModel.findOne({
-        where: {
-            chatId: chatId
-        },
-        attributes: [
-            'id', 
-            'chatId', 
-            'lastCommand',
-            'vendorCode'
-        ]
-    });
-
-    try {
-    
-        const responseProduct = await axios.get(`https://ultrawood.ru/bitrix/components/dresscode/search.line/templates/version2/ajax.php?IBLOCK_ID=15ELEMENT_SORT_ORDER=asc&SEARCH_QUERY=${user.vendorCode}`);
-        const $ = cheerio.load(responseProduct.data);
-        const productLink = $('.name').attr('href');
-    
-        if (productLink) {
-
-            const responseProductFull = await axios.get(`https://ultrawood.ru${productLink}`);
-            const $$ = cheerio.load(responseProductFull.data);
-            const dataMaxQuantity = $$('.qtyBlock .qty').attr('data-max-quantity');
-        
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-    
-            return bot.sendMessage(
-                chatId,
-                `Остаток ${user.vendorCode}: ${dataMaxQuantity} шт`
-            );
-
-        } else {
-
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
-            
-            return bot.sendMessage(
-                chatId,
-                `Артикул ${user.vendorCode} не найден на сайте поставщика.`
-            );
-
-        }
-    
-    } catch (e) {
-        
-        console.log(e);
-        return bot.sendMessage(
-            chatId,
-            `Возникла ошибка в исполнении кода поиска Ultrawood:\n${e}`
-        )
-    }
-
 }
 
 // ======================================================================================================================================
@@ -2654,25 +2690,7 @@ const start = async () => {
             
             console.log(responseDG.data);
 
-            // const productLink = $('.product-page-grid-wrapper my-4 .pod-card').attr('href');
-            // console.log(productLink);
-            
-            // const responseDGProduct = await axios.get(
-            //     productLink,
-            //     {
-            //         httpsAgent: agent,
-            //         l_stPassUserName: 'MANDERS.STOCK',
-            //         l_stPassPassword: 'stock',
-            //         blnRememberMe:true
-            //     }
-            // );
-            // const $$ = cheerio.load(responseDGProduct.data);
-            // const maxValue = $$('product-page-order-form-wrapper .order-form-group .number').attr('max');
-    
-            // return bot.sendMessage(
-            //     chatId,
-            //     `Остаток ${vendorCode} у поставщика: ${maxValue}`
-            // );
+
 
         } catch (e) {
             
@@ -3275,6 +3293,22 @@ const start = async () => {
                             );
                         } else {
                             return startFindOpus(chatId);
+                        }
+
+                    } else if (formatedUserVendor === 'DESIGNERSGUILD') {
+
+                        if (user.vendorCode.length < 4) {
+
+                            if (botMsgIdx !== null) {
+                                bot.deleteMessage(chatId, botMsgIdx);
+                                botMsgIdx = null;
+                            }
+                            return bot.sendMessage(
+                                chatId,
+                                `Наименование искомого объекта не может быть короче 4х символов\nвведите артикул заново:`
+                            );
+                        } else {
+                            return startFindDesignersGuild(chatId, msg);
                         }
 
                     } else if (formatedUserVendor === 'ДЕКОРТРЕЙД') {
@@ -4084,6 +4118,7 @@ const bot_password = config.bot_password;
 const url_manders_1C = config.url_manders_1C;
 const levantin_login = config.levantin_login;
 const levantin_password = config.levantin_password;
+const ProxyAgent = config.ProxyAgent;
 
 const bot = new TelegramApi(config.bot_token, {
     polling: {
