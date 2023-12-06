@@ -2180,7 +2180,7 @@ async function findLoymina(chatId) {
                         await bot.sendMessage(
                             chatId, 
                             message,
-                            startFindOptions
+                            startFind1Options
                         );
                     };
                 }
@@ -2388,32 +2388,6 @@ async function findBrink(chatId) {
                             }
 
                         message += `Остаток <b>${bValue}</b> на <b>${fDate}</b>:\nEAN: ${cValue}\n\nСвободный остаток на складе: ${fValue}\n\n`;
-
-                        // const gCell = firstWorksheet['G' + cellAddress.substring(1)];   // Дата следующей поставки
-                        //     let gValue = {};
-
-                        //     if (gCell && gCell.v !== undefined) {
-                        //         gValue = gCell.v.toString();                                   
-                        //     } else {
-                        //         gValue = 'неизвестна';
-                        //     }
-
-                        //     if ( !isNaN(gValue) ) {
-                        //         const year = gValue.substring(0, 4);
-                        //         const month = gValue.substring(4, 6);
-                        //         const day = gValue.substring(6, 8);
-                        //         gValue = `${day}.${month}.${year}`;
-                        //     }
-                            
-                        // message += `Дата следующей поставки: ${gValue}\n`;
-
-                        // const hCell = firstWorksheet['H' + cellAddress.substring(1)];   // Ячейка свободного остатка товара в пути
-                        //     let hValue = {};
-
-                        //     if (hCell !== undefined) {
-                        //         hValue = hCell.v.toString();    // Свободный остаток товаров в пути 
-                        //         message += `Свободный остаток товара в пути: ${hValue} ед.\n`;
-                        //     }
                         
                         message += `<i>можете ввести следующий артикул для поиска</i>`
                         
