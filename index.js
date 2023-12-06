@@ -624,8 +624,10 @@ const startFindDecaro = async (chatId, msg) => {
                     }
                 })
 
-                let $ = cheerio.load(responseQty.data.data);
-                const availabilityTable = $('div.availability-table-section .item');
+            let $ = cheerio.load(responseQty.data.data);
+            const availabilityTable = $('div.availability-table-section .item');
+
+            if (availabilityTable) {
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
 
@@ -674,16 +676,29 @@ const startFindDecaro = async (chatId, msg) => {
                     chars += `${item.other}\n`
                 });
 
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
-            }
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+            
+                return bot.sendMessage(
+                    chatId,
+                    chars,
+                    startFindOptions
+                );
+            } else {
 
-            return bot.sendMessage(
-                chatId,
-                chars,
-                startFindOptions
-            );
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId, 
+                    `Ответ сайта: не удалось получить количество.`, 
+                    startFind1Options
+                );
+                
+            }
 
         } else {
 
