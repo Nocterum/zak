@@ -627,7 +627,7 @@ const startFindDecaro = async (chatId, msg) => {
             let $ = cheerio.load(responseQty.data.data);
             const availabilityTable = $('div.availability-table-section .item');
 
-            if (availabilityTable) {
+            if (availabilityTable.length < 0) {
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
 
@@ -686,6 +686,7 @@ const startFindDecaro = async (chatId, msg) => {
                     chars,
                     startFindOptions
                 );
+
             } else {
 
                 if (botMsgIdx !== null) {
