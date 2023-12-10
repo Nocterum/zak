@@ -627,7 +627,7 @@ const startFindDecaro = async (chatId, msg) => {
             let $ = cheerio.load(responseQty.data.data);
             const availabilityTable = $('div.availability-table-section .item');
 
-            if (availabilityTable.length < 0) {
+            if (availabilityTable.length > 0) {
 
                 const availabilityTableValue = availabilityTable.map((index, element) => {
 
@@ -1004,60 +1004,79 @@ const startFindDesignersGuild = async (chatId, msg) => {
             }
         );
 
-        const $ = cheerio.load(getProducts.data);
-        const FREESTOCK = $('fd[id="FREESTOCK"]').attr('value');
+        if (getProducts.length > 0) {
 
-        const getProductQuantity = await axios.post(
-            getProductQuantityLink,
-            {
-                l_stPassTag:"",
-                l_stPassProdCode: user.vendorCode
-            }, {
-                proxy: false,
-                httpsAgent: agent,
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
-                    'Content-Type': 'application/json',
-                    Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
-                }
-            }
-        );
-
-        const $$ = cheerio.load(getProductQuantity.data);
-        const BATCHNOS = $$('BATCHNOS').text();
-        const NOPIECES = $$('NOPIECES').text();
-        const PIECELENGTHS = $$('PIECELENGTHS').text();
-        const PODUEDATES = $$('PODUEDATES').text();
-        const PONOS = $$('PONOS').text();
-        const POQTYS = $$('POQTYS').text();
-
-        let message = 'Партия     Кусок     Длинна\n';
-        const batchNosArr = BATCHNOS.split('|');
-        const noPiecesArr = NOPIECES.split('|');
-        const pieceLengthsArr = PIECELENGTHS.split('|');
-
-        for (let i = 0; i < batchNosArr.length; i++) {
-          message += batchNosArr[i] + '         ' + noPiecesArr[i] + '          ' + pieceLengthsArr[i] + '\n';
-        
-        }
-
-        const podueDatesArr = PODUEDATES.split('|');
-        const poNosArr = PONOS.split('|');
-        const poQtysArr = POQTYS.split('|');
-        message += '\nDue Date     PO Number     Available\n'
-
-        for (let i = 0; i < podueDatesArr.length; i++) {
-          message += podueDatesArr[i] + '         ' + poNosArr[i] + '          ' + poQtysArr[i] + '\n';
-        
-        }
+            const $ = cheerio.load(getProducts.data);
+            const FREESTOCK = $('fd[id="FREESTOCK"]').attr('value');
     
-        console.log(message);
-
-        return bot.sendMessage(
-            chatId,
-            `Свободный остаток <b>${user.vendorCode}</b> у поставщика <b>${FREESTOCK}</b> из которых:\n${message}`,
-            { parse_mode: 'HTML' }
-        );
+            const getProductQuantity = await axios.post(
+                getProductQuantityLink,
+                {
+                    l_stPassTag:"",
+                    l_stPassProdCode: user.vendorCode
+                }, {
+                    proxy: false,
+                    httpsAgent: agent,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+                        'Content-Type': 'application/json',
+                        Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
+                    }
+                }
+            );
+    
+            const $$ = cheerio.load(getProductQuantity.data);
+            const BATCHNOS = $$('BATCHNOS').text();
+            const NOPIECES = $$('NOPIECES').text();
+            const PIECELENGTHS = $$('PIECELENGTHS').text();
+            const PODUEDATES = $$('PODUEDATES').text();
+            const PONOS = $$('PONOS').text();
+            const POQTYS = $$('POQTYS').text();
+    
+            let message = 'Партия     Кусок     Длинна\n';
+            const batchNosArr = BATCHNOS.split('|');
+            const noPiecesArr = NOPIECES.split('|');
+            const pieceLengthsArr = PIECELENGTHS.split('|');
+    
+            for (let i = 0; i < batchNosArr.length; i++) {
+              message += batchNosArr[i] + '         ' + noPiecesArr[i] + '          ' + pieceLengthsArr[i] + '\n';
+            
+            }
+    
+            const podueDatesArr = PODUEDATES.split('|');
+            const poNosArr = PONOS.split('|');
+            const poQtysArr = POQTYS.split('|');
+            message += '\nDue Date     PO Number     Available\n'
+    
+            for (let i = 0; i < podueDatesArr.length; i++) {
+              message += podueDatesArr[i] + '         ' + poNosArr[i] + '          ' + poQtysArr[i] + '\n';
+            
+            }
+        
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+    
+            return bot.sendMessage(
+                chatId,
+                `Свободный остаток <b>${user.vendorCode}</b> у поставщика <b>${FREESTOCK}</b> из которых:\n${message}`,
+                { parse_mode: 'HTML' }
+            );
+            
+        } else { 
+            
+            if (botMsgIdx !== null) {
+                bot.deleteMessage(chatId, botMsgIdx);
+                botMsgIdx = null;
+            }
+            return bot.sendMessage(
+                chatId, 
+                `Ответ сайта: не удалось получить количество.`, 
+                startFind1Options
+            );
+            
+        }
 
     } catch (e) {
         
