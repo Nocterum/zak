@@ -1054,6 +1054,8 @@ const startFindDesignersGuild = async (chatId, msg) => {
         for (let i = 0; i < podueDatesArr.length; i++) {
             if (podueDatesArr[i]) {
                 message += `${podueDatesArr[i]}     <code>${poNosArr[i]}</code>          ${poQtysArr[i]} шт.`;
+            } else {
+                message += 'не ожидается.'
             }
         }
     
