@@ -1031,24 +1031,30 @@ const startFindDesignersGuild = async (chatId, msg) => {
         const PONOS = $$('PONOS').text();
         const POQTYS = $$('POQTYS').text();
 
-        let message = 'Партия     Кусок     Длинна\n';
+        let message = 'Партия:\n';
         const batchNosArr = BATCHNOS.split('|');
         const noPiecesArr = NOPIECES.split('|');
         const pieceLengthsArr = PIECELENGTHS.split('|');
 
         for (let i = 0; i < batchNosArr.length; i++) {
-          message += batchNosArr[i] + '         ' + noPiecesArr[i] + '          ' + pieceLengthsArr[i] + '\n';
-        
+          message += `<code>${batchNosArr[i]}</code>` + '         ';
+
+          if (noPiecesArr[i]) {
+            message += `${noPiecesArr[i]} шт          `;
+          }
+          
+          message += `${pieceLengthsArr[i]} м.п.\n`;
         }
 
         const podueDatesArr = PODUEDATES.split('|');
         const poNosArr = PONOS.split('|');
         const poQtysArr = POQTYS.split('|');
-        message += '\nDue Date     PO Number     Available\n'
+        message += '\nПоступление:\n'
 
         for (let i = 0; i < podueDatesArr.length; i++) {
-          message += podueDatesArr[i] + '         ' + poNosArr[i] + '          ' + poQtysArr[i] + '\n';
-        
+            if (podueDatesArr[i]) {
+                message += `${podueDatesArr[i]}     <code>${poNosArr[i]}</code>          ${poQtysArr[i]} шт.`;
+            }
         }
     
         if (botMsgIdx !== null) {
