@@ -1004,13 +1004,8 @@ const startFindDesignersGuild = async (chatId, msg) => {
             }
         );
 
-        console.log('ЗАПРОС НОМЕР 2--------------------------------------------------------------------------------');
-        console.log(getProducts.data.toString());
-
-        // const $ = cheerio.load(getProducts.data);
-        // const PRODUCTDESC = $('fd[id="PRODUCTDESC"]').attr('value');
-        // const PRODUCTCODE = $('fd[id="PRODUCTCODE"]').attr('value');
-        // const FREESTOCK = $('fd[id="FREESTOCK"]').attr('value');
+        const $ = cheerio.load(getProducts.data);
+        const FREESTOCK = $('fd[id="FREESTOCK"]').attr('value');
 
         const getProductQuantity = await axios.post(
             getProductQuantityLink,
@@ -1026,10 +1021,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
                     Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
                 }
             }
-            );
-
-        console.log('ЗАПРОС НОМЕР 3--------------------------------------------------------------------------------');
-        console.log(getProductQuantity.data.toString());
+        );
 
         const $$ = cheerio.load(getProductQuantity.data);
         const BATCHNOS = $$('BATCHNOS').text();
@@ -1063,7 +1055,8 @@ const startFindDesignersGuild = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId,
-            `Остаток <b>${user.vendorCode}</b> у поставщика:\n${message}`
+            `Свободный остаток <b>${user.vendorCode}</b> у поставщика <b>${FREESTOCK}</b> из которых:\n${message}`,
+            { parse_mode: 'HTML' }
         );
 
     } catch (e) {
