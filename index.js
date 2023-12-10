@@ -781,7 +781,6 @@ const startFindLevantin = async (chatId, msg) => {
             });
 
             const cookies = responseAuth.headers['set-cookie'];
-            console.log(`${responseAuth.data.trim()}`);
             
             const responseProductPage = await await axios.get(`http://www.galleriaarben.ru${firstProductLink}`, {
                 headers: {
@@ -961,59 +960,111 @@ const startFindDesignersGuild = async (chatId, msg) => {
 
     try {
 
-        const formatedVendorCode = user.vendorCode.replace(/\//g, '%2F');
-        const responseLink = `https://www.designersguild.com/nl/search-results/l76?search-term=${formatedVendorCode}&pagesize=48&sort=default&page=1`;
+        const securityLink = `https://trade.designersguild.com/b2b2/Content/Security/Default.aspx/callbackVerifyLogin`;
+        const getProductsLink = `https://trade.designersguild.com/b2b2/Content/ViewProductDetails/Default.aspx/callbackGetProductDetails`;
+        const getProductQuantityLink = `https://trade.designersguild.com/b2b2/Content/StockEnquiryItemBreakdown/Default.aspx/callbackGetProductDetails`;
 
-        const responseDG = await axios.get(
-            responseLink, 
+        const securityDG = await axios.post(
+            securityLink, 
+            {
+                l_stPassUserName: loginDG,
+                l_stPassPassword: passwordDG,
+                blnRememberMe: true,
+                ignore_browser: true
+            },
             {
                 proxy: false,
                 httpsAgent: agent,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+                    'Content-Type': 'application/json'
+                }
             }
         );
 
-        const $ = cheerio.load(responseDG.data);
-        
-        const productLink = $('div.product-page-grid.grid a.pod-card').attr('href');
+        console.log(securityDG.data.toString());
+        const cookies = securityDG.headers['set-cookie'];
+            
 
-        if ( productLink ) {
-
-            const responseDGProduct = await axios.get(
-                `https://www.designersguild.com${productLink}`,
-                {
-                    proxy: false,
-                    httpsAgent: agent,
+        const getProducts = await axios.post(
+            getProductsLink, 
+            {
+                l_stPassTag : user.vendorCode,
+                l_stPassProdCode: user.vendorCode,
+                l_stPassFromOrder: 'N'
+            },
+            {
+                proxy: false,
+                httpsAgent: agent,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+                    'Content-Type': 'application/json',
+                    Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
                 }
-            );
-            
-            const $$ = cheerio.load(responseDGProduct.data);
-            // const productId = $$('.order-form-item .order-form-controls label').attr('for');
-            const maxValue = $$('.order-form-item .order-form-controls input').attr('max');
-            
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
             }
-    
-            return bot.sendMessage(
-                chatId,
-                `Остаток ${user.vendorCode} у поставщика: ${maxValue} ед.`
-            );
+        );
 
-        } else {
+        console.log('ЗАПРОС НОМЕР 2--------------------------------------------------------------------------------');
+        console.log(getProducts.data.toString());
 
-            if (botMsgIdx !== null) {
-                bot.deleteMessage(chatId, botMsgIdx);
-                botMsgIdx = null;
+        // const $ = cheerio.load(getProducts.data);
+        // const PRODUCTDESC = $('fd[id="PRODUCTDESC"]').attr('value');
+        // const PRODUCTCODE = $('fd[id="PRODUCTCODE"]').attr('value');
+        // const FREESTOCK = $('fd[id="FREESTOCK"]').attr('value');
+
+        const getProductQuantity = await axios.post(
+            getProductQuantityLink,
+            {
+                l_stPassTag:"",
+                l_stPassProdCode: user.vendorCode
+            }, {
+                proxy: false,
+                httpsAgent: agent,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+                    'Content-Type': 'application/json',
+                    Cookie: cookies.join('; ') // передаем cookies в заголовке запроса
+                }
             }
-            
-            return bot.sendMessage(
-                chatId,
-                `Артикул ${user.vendorCode} не найден на сайте поставщика.`
             );
 
-        }
+        console.log('ЗАПРОС НОМЕР 3--------------------------------------------------------------------------------');
+        console.log(getProductQuantity.data.toString());
+
+        const $$ = cheerio.load(getProductQuantity.data);
+        const BATCHNOS = $$('BATCHNOS').text();
+        const NOPIECES = $$('NOPIECES').text();
+        const PIECELENGTHS = $$('PIECELENGTHS').text();
+        const PODUEDATES = $$('PODUEDATES').text();
+        const PONOS = $$('PONOS').text();
+        const POQTYS = $$('POQTYS').text();
+
+        let message = 'Партия     Кусок     Длинна\n';
+        const batchNosArr = BATCHNOS.split('|');
+        const noPiecesArr = NOPIECES.split('|');
+        const pieceLengthsArr = PIECELENGTHS.split('|');
+
+        for (let i = 0; i < batchNosArr.length; i++) {
+          message += batchNosArr[i] + '         ' + noPiecesArr[i] + '          ' + pieceLengthsArr[i] + '\n';
         
+        }
+
+        const podueDatesArr = PODUEDATES.split('|');
+        const poNosArr = PONOS.split('|');
+        const poQtysArr = POQTYS.split('|');
+        message += '\nDue Date     PO Number     Available\n'
+
+        for (let i = 0; i < podueDatesArr.length; i++) {
+          message += podueDatesArr[i] + '         ' + poNosArr[i] + '          ' + poQtysArr[i] + '\n';
+        
+        }
+    
+        console.log(message);
+
+        return bot.sendMessage(
+            chatId,
+            `Остаток <b>${user.vendorCode}</b> у поставщика:\n${message}`
+        );
 
     } catch (e) {
         
@@ -4129,6 +4180,8 @@ const url_manders_1C = config.url_manders_1C;
 const levantin_login = config.levantin_login;
 const levantin_password = config.levantin_password;
 const ProxyAgent = config.ProxyAgent;
+const loginDG = config.loginDG;
+const passwordDG = config.passwordDG;
 
 const agent = new SocksProxyAgent(ProxyAgent);
 
