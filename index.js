@@ -1054,11 +1054,11 @@ const startFindDesignersGuild = async (chatId, msg) => {
         const pieceLengthsArr = PIECELENGTHS.split('|');
 
         for (let i = 0; i < batchNosArr.length; i++) {
-            
+
             let space = ''; // количество пробелов для выравнивания столбцов
 
-            if (batchNosArr.length < 15) {
-                const diff = 15 - batchNosArr.length;
+            if (batchNosArr[i].length < 15) {
+                const diff = 15 - batchNosArr[i].length;
                 space = ' '.repeat(diff);
             }
 
