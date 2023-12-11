@@ -963,6 +963,23 @@ const startFindDesignersGuild = async (chatId, msg) => {
         const securityLink = `https://trade.designersguild.com/b2b2/Content/Security/Default.aspx/callbackVerifyLogin`;
         const getProductsLink = `https://trade.designersguild.com/b2b2/Content/ViewProductDetails/Default.aspx/callbackGetProductDetails`;
         const getProductQuantityLink = `https://trade.designersguild.com/b2b2/Content/StockEnquiryItemBreakdown/Default.aspx/callbackGetProductDetails`;
+        let units = ''; // еденицы измерения
+
+        if ( user.vendorCode.toUpperCase().includes('P') ) {
+            units = 'рул.'
+        } else if ( user.vendorCode.toUpperCase().includes('F') ) {
+            units = 'м.п.'
+        } else if ( user.vendorCode.toUpperCase().includes('CC') ) {
+            units = 'шт.'
+        } else if ( 
+            user.vendorCode.toUpperCase().includes('CC') ||
+            user.vendorCode.toUpperCase().includes('BL') ||
+            user.vendorCode.toUpperCase().includes('RUG')
+        ) {
+            units = 'шт.'
+        } else {
+            units = 'ед.'
+        }
 
         const securityDG = await axios.post(
             securityLink, 
@@ -1043,7 +1060,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
             message += `${noPiecesArr[i]} шт          `;
           }
           
-          message += `${pieceLengthsArr[i]} м.п.\n`;
+          message += `${pieceLengthsArr[i]} ${units}\n`;
         }
 
         const podueDatesArr = PODUEDATES.split('|');
@@ -1053,7 +1070,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
 
         for (let i = 0; i < podueDatesArr.length; i++) {
             if (podueDatesArr[i]) {
-                message += `${podueDatesArr[i]}     <code>${poNosArr[i]}</code>          ${poQtysArr[i]} шт.`;
+                message += `${podueDatesArr[i]}     <code>${poNosArr[i]}</code>     ${poQtysArr[i]} ${units}`;
             } else {
                 message += 'не ожидается.'
             }
@@ -1066,7 +1083,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId,
-            `Свободный остаток <b>${user.vendorCode}</b> у поставщика <b>${FREESTOCK}</b> из которых:\n${message}`,
+            `Свободный остаток <b>${user.vendorCode}</b> у поставщика <b>${FREESTOCK} ${units}</b> из которых:\n${message}`,
             { parse_mode: 'HTML' }
         );
             
