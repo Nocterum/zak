@@ -1062,7 +1062,7 @@ const startFindDesignersGuild = async (chatId, msg) => {
                 space = ' '.repeat(diff);
             }
 
-            message += `<code>${batchNosArr[i]}</code>${space}`;
+            message += `<code>${batchNosArr[i]}</code><code>${space}</code>`;
 
             if (noPiecesArr[i]) {
               message += `${noPiecesArr[i]} шт          `;
