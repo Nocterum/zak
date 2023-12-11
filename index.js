@@ -1054,13 +1054,21 @@ const startFindDesignersGuild = async (chatId, msg) => {
         const pieceLengthsArr = PIECELENGTHS.split('|');
 
         for (let i = 0; i < batchNosArr.length; i++) {
-          message += `<code>${batchNosArr[i]}</code>` + '         ';
+            
+            let space = ''; // количество пробелов для выравнивания столбцов
 
-          if (noPiecesArr[i]) {
-            message += `${noPiecesArr[i]} шт          `;
-          }
-          
-          message += `${pieceLengthsArr[i]} ${units}\n`;
+            if (batchNosArr.length < 15) {
+                const diff = 15 - batchNosArr.length;
+                space = ' '.repeat(diff);
+            }
+
+            message += `<code>${batchNosArr[i]}</code>${space}`;
+
+            if (noPiecesArr[i]) {
+              message += `${noPiecesArr[i]} шт          `;
+            }
+
+            message += `${pieceLengthsArr[i]} ${units}\n`;
         }
 
         const podueDatesArr = PODUEDATES.split('|');
