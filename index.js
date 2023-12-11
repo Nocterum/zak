@@ -1057,8 +1057,8 @@ const startFindDesignersGuild = async (chatId, msg) => {
 
             let space = ''; // количество пробелов для выравнивания столбцов
 
-            if (batchNosArr[i].length < 15) {
-                const diff = 15 - batchNosArr[i].length;
+            if (batchNosArr[i].length < 20) {
+                const diff = 20 - batchNosArr[i].length;
                 space = ' '.repeat(diff);
             }
 
