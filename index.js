@@ -3585,7 +3585,7 @@ const start = async () => {
 
                         return bot.sendMessage(
                             chatId, 
-                            `${findResult1C.messageResult1C}`,
+                            `<b>Пока функция в тестовом режиме сверяйте остатки с базой 1С, иногда встречаются неточности</b>\n\n${findResult1C.messageResult1C}\n<b>Пока функция в тестовом режиме сверяйте остатки с базой 1С, иногда встречаются неточности</b>`,
                             { parse_mode: 'HTML' }
                         );
 
