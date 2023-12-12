@@ -254,13 +254,13 @@ const startRequest1C = async (chatId, vendorCode) => {
                             const balance = obj.quantity-obj.reserve;
 
                             if (balance) {
-                                message += `Количество: ${balance}\n`
+                                message += `Свободно: ${balance}\n`
                             }
                             if (obj.reserve > 0) {
                                 message += `Резерв: ${obj.reserve}\n`
                             }
                             if (obj.quantity > 0) {
-                                message += `Всего: ${obj.quantity}\n`
+                                message += `Общий: ${obj.quantity}\n`
                             }
                             message += `\n`
                             return message;
