@@ -252,7 +252,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                             message = '';
                             message += `<strong>${obj.warehouse}</strong>\n`
                             if (obj.warehouse === 'ТЗ СПб - Большой 28') {
-                                message += `<i)заколерованные позиции с распродажи\nуточнить цвет</i>\n`
+                                message += `<i>заколерованные позиции с распродажи\nуточнить цвет</i>\n`
                             }
                             const balance = obj.quantity-obj.reserve;
 
