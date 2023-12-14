@@ -246,7 +246,13 @@ const startRequest1C = async (chatId, vendorCode) => {
                     }
                     let message = '';
                     let messageResult1C = formatedData.map(obj => {
-                        if (obj.warehouse === undefined) {
+                        if (
+                            obj.warehouse === undefined ||
+                            obj.warehouse === 'Основной Брак' ||
+                            obj.warehouse === 'Недостача' ||
+                            obj.warehouse.includes('Уцененные') ||
+                            obj.warehouse.includes('уцененных')
+                            ) {
                             return "";
                         } else {
                             message = '';
