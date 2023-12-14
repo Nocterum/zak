@@ -187,7 +187,7 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
 // PLGUM5&submit=Получить
         const searchUrl1C = `${url_manders_1C}=${vendorCode}&submit=Получить`;
-        const response = await axios.get(searchUrl1C,  { timeout: 5000 });
+        const response = await axios.get(searchUrl1C,  { timeout: 10000 });
 
         if (!response) {
 
@@ -251,9 +251,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         } else {
                             message = '';
                             message += `<strong>${obj.warehouse}</strong>\n`
-                            if (obj.warehouse === 'ТЗ СПб - Большой 28') {
-                                message += `<i>заколерованные позиции с распродажи\nнеобходимо уточнить цвет</i>\n`
-                            }
+
                             const balance = obj.quantity-obj.reserve;
 
                             if (balance) {
@@ -1328,6 +1326,7 @@ async function findOrac(chatId) {
     if (findResult1C) {
 
         messageORAC = `По данным 1С:\n${findResult1C.messageResult1C}\n\n`;
+
     } else {
 
         messageORAC += `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>\n\n`
@@ -3588,7 +3587,7 @@ const start = async () => {
 
                         return bot.sendMessage(
                             chatId, 
-                            `<b><i>Пока функция в тестовом режиме сверяйте остатки с базой 1С, иногда встречаются неточности</i></b>\n\n${findResult1C.messageResult1C}\n<b><i>Пока функция в тестовом режиме сверяйте остатки с базой 1С, иногда встречаются неточности</i></b>`,
+                            `${findResult1C.messageResult1C}\n`,
                             { parse_mode: 'HTML' }
                         );
 
