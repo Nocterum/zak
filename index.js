@@ -187,8 +187,12 @@ const startRequest1C = async (chatId, vendorCode) => {
     try {
 // PLGUM5&submit=Получить
         const searchUrl1C = `${url_manders_1C}=${vendorCode}&submit=Получить`;
-        const response = await axios.get(searchUrl1C,  { timeout: 5000 });
-        console.log(response.data)
+        const response = await axios.get(
+            searchUrl1C,  
+            {
+                timeout: 5000,
+                httpAgent: agent
+            });
 
         if (!response) {
 
