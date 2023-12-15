@@ -115,7 +115,7 @@ const chekPassword = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId, 
-            `В доступе отказано.\nВведите пароль:`
+            `В доступе отказано.\nПароль мог измениться. Уточните новый пароль у Харитонова Никиты.\nВведите пароль:`
         );
     }
 }
@@ -190,8 +190,7 @@ const startRequest1C = async (chatId, vendorCode) => {
         const response = await axios.get(
             searchUrl1C,  
             {
-                timeout: 5000,
-                httpAgent: agent
+                timeout: 3000,
             });
 
         if (!response) {
