@@ -2775,9 +2775,12 @@ async function findsupplierOrderStatus(chatId) {
                             { parse_mode: 'HTML' }
                         );
                     } else if (gCell && gCell.v !== undefined) {
+                        const excelDate = new Date((gCell.v - 25569) * 86400 * 1000); // преобразование числа в дату
+                        const formattedDate = excelDate.toLocaleDateString(); // форматирование даты в нужный формат
+                        
                         return bot.sendMessage(
                             chatId,
-                            `${message}Оплачено фабрике ${gCell.v}`,
+                            `${message}Оплачено фабрике ${formattedDate}`,
                             { parse_mode: 'HTML' }
                         );
                     } else {
