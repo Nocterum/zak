@@ -1916,9 +1916,9 @@ async function findDecorDelux(chatId) {
                         let iValue = {};
                     
                         if (iCell && iCell.v !== undefined) {
-                          iValue = iCell.v; // Свободный остаток
+                            iValue = iCell.v; // Свободный остаток
                         } else {
-                          iValue = '0';
+                            iValue = '0';
                         }
                     
                         if (botMsgIdx !== null) {
@@ -2634,6 +2634,167 @@ async function findLittleGreenePPL(chatId) {
     }
 }
 
+async function findsupplierOrderStatus(chatId) {
+    const user = await UserModel.findOne({
+        where: {
+            chatId: chatId
+        },
+        attributes: [
+            'id', 
+            'chatId', 
+            'lastCommand',
+            'vendorCode',
+        ]
+    });
+
+    try {
+        const filePath = '/root/zak/xl/ГАНТ.xlsx';
+
+        const user = await UserModel.findOne({
+            where: {
+                chatId: chatId
+            }
+        });
+
+        const workbook = XLSX.readFile(filePath);
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const secondWorksheet = workbook.Sheets[workbook.SheetNames[1]];
+        const numberOfOrder = user.vendorCode;
+
+        let indexOfOrder = '';
+
+        let foundMatch = false;
+        async function searchIndex() {
+
+        for (let cellAddress in firstWorksheet) {
+            if (cellAddress[0] === '!') continue;
+            const cellValue = firstWorksheet[cellAddress].v;
+
+            if (cellValue !== null) {
+                let formatedCellValue = cellValue.toString().trim();
+                const formatedUserVC = numberOfOrder.toString().trim();
+            
+                if (isNaN(formatedCellValue)) {
+                  formatedCellValue = formatedCellValue.toUpperCase();
+                }
+                if (formatedCellValue.includes(formatedUserVC)) {
+                    foundMatch = true;
+                
+                    const mCell = firstWorksheet['M' + cellAddress.substring(1)]; // Ячейка Комментарий
+                    let mValue = {};
+                
+                    if (mCell && mCell.v !== undefined) {
+                        mValue = mCell.v; // Свободный остаток
+                    } else {
+                        mValue = '0';
+                    }
+                    if (mValue) {
+                        if (mValue) {
+                            const regex = /([A-Z]+\(.*?\))/;
+                            if (regex.test(mValue)) {
+                                const match = regex.exec(mValue);
+                                if (match) {
+                                    indexOfOrder = match[1];
+                                    // await bot.sendMessage(
+                                    //     chatId, 
+                                    //     `Заказ: ${numberOfOrder}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`,
+                                    //     { parse_mode: 'HTML' }
+                                    // );
+                                    return indexOfOrder;
+                                } else {
+                                    return bot.sendMessage(
+                                        chatId, 
+                                        `Комментарий в заказе <b>${numberOfOrder}</b> отсутствует`,
+                                        { parse_mode: 'HTML' }
+                                    );
+                                }
+                            } else {
+                                return bot.sendMessage(
+                                    chatId, 
+                                    `Индекс заказа <b>${numberOfOrder}</b> отсутствует в комментарии ${indexOfOrder}`,
+                                    { parse_mode: 'HTML' }
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+            if (!foundMatch) {
+                if (botMsgIdx !== null) {
+                    bot.deleteMessage(chatId, botMsgIdx);
+                    botMsgIdx = null;
+                }
+                return bot.sendMessage(
+                    chatId,
+                    `Совпадения с заказом ${numberOfOrder} в файле не найденны.\n<i>проверьте номер заказа поставщику</i>`,
+                    { parse_mode: 'HTML' }
+                );
+            }
+        }
+        await searchIndex();
+
+        for (let cellAddress in secondWorksheet) {
+            if (cellAddress[0] === '!') continue;
+            const cellValue = secondWorksheet[cellAddress].v;
+
+            if (cellValue !== null) {
+                let formatedCellValue = cellValue.toString().trim();
+                const formatedIndex = indexOfOrder.toString().trim();
+            
+                if (isNaN(formatedCellValue)) {
+                  formatedCellValue = formatedCellValue.toUpperCase();
+                }
+                if (indexOfOrder.length === 0) {
+
+                } else if (formatedCellValue.includes(formatedIndex)) {
+                    foundMatch = true;
+
+                    const gCell = secondWorksheet['G' + cellAddress.substring(1)]; // Оплаченно фабрике
+                    const kCell = secondWorksheet['K' + cellAddress.substring(1)]; // Отгружено
+                    const nCell = secondWorksheet['N' + cellAddress.substring(1)]; // Вышел со склада перегрузки
+                    const rCell = secondWorksheet['R' + cellAddress.substring(1)]; // Поступил на СВХ
+                    const message = `Статус заказа <b>${numberOfOrder}</b>:\n`;
+
+                    if (rCell && rCell.v !== undefined) {
+                        return bot.sendMessage(
+                            chatId,
+                            `${message}Поступил на СВХ`,
+                            { parse_mode: 'HTML' }
+                        );
+                    } else if (nCell && nCell.v !== undefined) {
+                        return bot.sendMessage(
+                            chatId,
+                            `${message}Вышел со склада перегрузки`,
+                            { parse_mode: 'HTML' }
+                        );
+                    } else if (kCell && kCell.v !== undefined) {
+                        return bot.sendMessage(
+                            chatId,
+                            `${message}Отгружено`,
+                            { parse_mode: 'HTML' }
+                        );
+                    } else if (gCell && gCell.v !== undefined) {
+                        return bot.sendMessage(
+                            chatId,
+                            `${message}Оплачено фабрике ${gCell.v}`,
+                            { parse_mode: 'HTML' }
+                        );
+                    } else {
+                        return bot.sendMessage(
+                            chatId,
+                            `${message}Не оплачено фабрике`,
+                            { parse_mode: 'HTML' }
+                        );
+                    }
+                }
+            }
+        }
+
+    } catch (e) {
+        console.log( 'Что-то пошло не так', e);
+    }
+}
 // ======================================================================================================================================
 // старт работы программы =================================================================================================================
 // ======================================================================================================================================
@@ -3116,8 +3277,10 @@ const start = async () => {
                         });
                         return;
 
-                    } else if (file_name.toLowerCase().includes('каталоги') ||
-                        file_name.toLowerCase().includes('прайслистов')
+                    } else if (
+                        file_name.toLowerCase().includes('каталоги') ||
+                        file_name.toLowerCase().includes('прайслистов') ||
+                        file_name.toLowerCase().includes('ГАНТ') 
                     ) {
 
                         let fileName = {};
@@ -3135,6 +3298,10 @@ const start = async () => {
 
                         if (file_name.toLowerCase().includes('прайслистов')) {
                             fileName = `список_прайслистов.xlsx`;
+                        }
+
+                        if (file_name.toLowerCase().includes('ГАНТ')) {
+                            fileName = `ГАНТ.xlsx`;
                         }
 
                         await bot.getFile(msg.document.file_id).then((file) => {
@@ -3720,6 +3887,16 @@ const start = async () => {
 
                     return findUW(chatId);
 
+                } else if (
+                    user.lastCommand === '/supplierOrderStatus' &&
+                    !ignoreCommands.includes(text)) {
+                    
+                    await user.update({
+                        vendorCode: text
+                    });
+
+                    return findsupplierOrderStatus();
+
                 } else if (text === '/infowork') {
 
                     return bot.sendMessage(
@@ -4070,13 +4247,28 @@ const start = async () => {
                     { parse_mode: 'HTML' }
                 );
 
+            } else if (data === '/supplierOrderStatus') {
+                // lc = null;
+                await user.update({
+                    lastCommand: data
+                }, 
+                {
+                    where: {
+                        chatId: chatId
+                    }
+                });
+
+                return bot.sendMessage(
+                    chatId,
+                    `Введите номер заказа поставщику:`
+                );
             } else if (data === '/work2') {
                 // lc = null;
                 await user.update({lastCommand: null}, {
                     where: {
                         chatId: chatId
                     }
-                })
+                });
 
                 return bot.sendMessage(
                     chatId, 
