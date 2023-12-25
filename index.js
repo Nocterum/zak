@@ -2699,19 +2699,19 @@ async function findsupplierOrderStatus(chatId) {
                                     const match = regex.exec(mValue);
                                     if (match) {
                                         indexOfOrder = match[1];
-                                        console.log(`Заказ: ${numberOfOrder}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`);
+                                        console.log(`Заказ: ${formatedCellValue}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`);
                                         return indexOfOrder;
                                     } else {
                                         return bot.sendMessage(
                                             chatId, 
-                                            `Комментарий в заказе <b>${numberOfOrder}</b> отсутствует`,
+                                            `Комментарий в заказе <b>${formatedCellValue}</b> отсутствует`,
                                             { parse_mode: 'HTML' }
                                         );
                                     }
                                 } else {
                                     return bot.sendMessage(
                                         chatId, 
-                                        `Индекс заказа <b>${numberOfOrder}</b> отсутствует в комментарии ${indexOfOrder}`,
+                                        `Индекс заказа <b>${formatedCellValue}</b> отсутствует в комментарии ${indexOfOrder}`,
                                         { parse_mode: 'HTML' }
                                     );
                                 }
@@ -2793,7 +2793,7 @@ async function findsupplierOrderStatus(chatId) {
                     } else {
                         return bot.sendMessage(
                             chatId,
-                            `${message}Не оплачено фабрике`,
+                            `${message} Ещё не оплачено фабрике`,
                             { parse_mode: 'HTML' }
                         );
                     }
