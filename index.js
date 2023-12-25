@@ -3303,7 +3303,7 @@ const start = async () => {
                             fileName = `список_прайслистов.xlsx`;
                         }
 
-                        if (file_name.toLowerCase().includes('ГАНТ')) {
+                        if (file_name.toLowerCase().includes('гант')) {
                             fileName = `ГАНТ.xlsx`;
                         }
 
