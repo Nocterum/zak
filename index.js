@@ -2681,7 +2681,7 @@ async function findsupplierOrderStatus(chatId) {
                     if (isNaN(formatednumberOfOrder)) {
                         formatednumberOfOrder = formatednumberOfOrder.toUpperCase();
                     }
-                    if (formatedCellValue === formatednumberOfOrder) {
+                    if (formatedCellValue.includes(formatednumberOfOrder)) {
                         foundMatch = true;
                     
                         const mCell = firstWorksheet['M' + cellAddress.substring(1)]; // Ячейка Комментарий
@@ -2781,10 +2781,13 @@ async function findsupplierOrderStatus(chatId) {
                     } else if (gCell && gCell.v !== undefined) {
                         const excelDate = new Date((gCell.v - 25569) * 86400 * 1000); // преобразование числа в дату
                         const formattedDate = excelDate.toLocaleDateString(); // форматирование даты в нужный формат
-                        
+                        const MM = formattedDate.split("/")[0];
+                        const DD = formattedDate.split("/")[1];
+                        const YY = formattedDate.split("/")[2];
+
                         return bot.sendMessage(
                             chatId,
-                            `${message}Оплачено фабрике ${formattedDate}`,
+                            `${message}Оплачено фабрике ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else {
