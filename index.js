@@ -3283,7 +3283,7 @@ const start = async () => {
                     } else if (
                         file_name.toLowerCase().includes('каталоги') ||
                         file_name.toLowerCase().includes('прайслистов') ||
-                        file_name.toLowerCase().includes('ГАНТ') 
+                        file_name.toLowerCase().includes('гант') 
                     ) {
 
                         let fileName = {};
