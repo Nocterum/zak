@@ -2673,12 +2673,12 @@ async function findsupplierOrderStatus(chatId) {
 
             if (cellValue !== null) {
                 let formatedCellValue = cellValue.toString().trim().split("/")[0];
-                const formatedUserVC = numberOfOrder.toString().trim();
+                const formatedIndex = numberOfOrder.toString().trim();
             
                 if (isNaN(formatedCellValue)) {
                   formatedCellValue = formatedCellValue.toUpperCase();
                 }
-                if (formatedCellValue.includes(formatedUserVC)) {
+                if (formatedCellValue === formatedIndex) {
                     foundMatch = true;
                 
                     const mCell = firstWorksheet['M' + cellAddress.substring(1)]; // Ячейка Комментарий
