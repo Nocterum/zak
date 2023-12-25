@@ -2734,7 +2734,8 @@ async function findsupplierOrderStatus(chatId) {
             }
         }
         await searchIndex(chatId);
-
+        foundMatch = false;
+        
         for (let cellAddress in secondWorksheet) {
             if (cellAddress[0] === '!') continue;
             const cellValue = secondWorksheet[cellAddress].v;
@@ -2793,6 +2794,13 @@ async function findsupplierOrderStatus(chatId) {
                     }
                 }
             }
+        }
+        if (!foundMatch) {
+            return bot.sendMessage(
+                chatId,
+                `Совпадения с индексом заказа поставщику ${numberOfOrder} в таблице статусов не найденны.\n<i>Вероятно необходимо обновить таблицу статусов</i>`,
+                { parse_mode: 'HTML' }
+            );
         }
 
     } catch (e) {
