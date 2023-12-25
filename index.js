@@ -2665,74 +2665,73 @@ async function findsupplierOrderStatus(chatId) {
         let indexOfOrder = '';
 
         let foundMatch = false;
-        async function searchIndex() {
+        async function searchIndex(chatId) {
 
-        for (let cellAddress in firstWorksheet) {
-            if (cellAddress[0] === '!') continue;
-            const cellValue = firstWorksheet[cellAddress].v;
+            for (let cellAddress in firstWorksheet) {
+                if (cellAddress[0] === '!') continue;
+                const cellValue = firstWorksheet[cellAddress].v;
 
-            if (cellValue !== null) {
-                let formatedCellValue = cellValue.toString().trim().split("/")[0];
-                const formatedIndex = numberOfOrder.toString().trim();
-            
-                if (isNaN(formatedCellValue)) {
-                  formatedCellValue = formatedCellValue.toUpperCase();
-                }
-                if (formatedCellValue === formatedIndex) {
-                    foundMatch = true;
+                if (cellValue !== null) {
+                    let formatedCellValue = cellValue.toString().trim().toUpperCase();
+                    let formatednumberOfOrder = numberOfOrder.toString().trim();
                 
-                    const mCell = firstWorksheet['M' + cellAddress.substring(1)]; // Ячейка Комментарий
-                    let mValue = {};
-                
-                    if (mCell && mCell.v !== undefined) {
-                        mValue = mCell.v; // Свободный остаток
-                    } else {
-                        mValue = '0';
+                    if (isNaN(formatedCellValue)) {
+                      formatedCellValue = formatedCellValue.toUpperCase();
                     }
-                    if (mValue) {
+                    if (isNaN(formatednumberOfOrder)) {
+                        formatednumberOfOrder = formatednumberOfOrder.toUpperCase();
+                    }
+                    if (formatedCellValue === formatednumberOfOrder) {
+                        foundMatch = true;
+                    
+                        const mCell = firstWorksheet['M' + cellAddress.substring(1)]; // Ячейка Комментарий
+                        let mValue = {};
+                    
+                        if (mCell && mCell.v !== undefined) {
+                            mValue = mCell.v; // Свободный остаток
+                        } else {
+                            mValue = '0';
+                        }
                         if (mValue) {
-                            const regex = /([A-Z]+\(.*?\))/;
-                            if (regex.test(mValue)) {
-                                const match = regex.exec(mValue);
-                                if (match) {
-                                    indexOfOrder = match[1];
-                                    // await bot.sendMessage(
-                                    //     chatId, 
-                                    //     `Заказ: ${numberOfOrder}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`,
-                                    //     { parse_mode: 'HTML' }
-                                    // );
-                                    return indexOfOrder;
+                            if (mValue) {
+                                const regex = /([A-Z]+\(.*?\))/;
+                                if (regex.test(mValue)) {
+                                    const match = regex.exec(mValue);
+                                    if (match) {
+                                        indexOfOrder = match[1];
+                                        console.log(`Заказ: ${numberOfOrder}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`);
+                                        return indexOfOrder;
+                                    } else {
+                                        return bot.sendMessage(
+                                            chatId, 
+                                            `Комментарий в заказе <b>${numberOfOrder}</b> отсутствует`,
+                                            { parse_mode: 'HTML' }
+                                        );
+                                    }
                                 } else {
                                     return bot.sendMessage(
                                         chatId, 
-                                        `Комментарий в заказе <b>${numberOfOrder}</b> отсутствует`,
+                                        `Индекс заказа <b>${numberOfOrder}</b> отсутствует в комментарии ${indexOfOrder}`,
                                         { parse_mode: 'HTML' }
                                     );
                                 }
-                            } else {
-                                return bot.sendMessage(
-                                    chatId, 
-                                    `Индекс заказа <b>${numberOfOrder}</b> отсутствует в комментарии ${indexOfOrder}`,
-                                    { parse_mode: 'HTML' }
-                                );
                             }
                         }
                     }
                 }
             }
-        }
-            if (!foundMatch) {
-                if (botMsgIdx !== null) {
-                    bot.deleteMessage(chatId, botMsgIdx);
-                    botMsgIdx = null;
+                if (!foundMatch) {
+                    if (botMsgIdx !== null) {
+                        bot.deleteMessage(chatId, botMsgIdx);
+                        botMsgIdx = null;
+                    }
+                    return bot.sendMessage(
+                        chatId,
+                        `Совпадения с заказом ${numberOfOrder} в файле не найденны.\n<i>проверьте номер заказа поставщику</i>`,
+                        { parse_mode: 'HTML' }
+                    );
                 }
-                return bot.sendMessage(
-                    chatId,
-                    `Совпадения с заказом ${numberOfOrder} в файле не найденны.\n<i>проверьте номер заказа поставщику</i>`,
-                    { parse_mode: 'HTML' }
-                );
             }
-        }
         await searchIndex(chatId);
         foundMatch = false;
 
@@ -2741,11 +2740,14 @@ async function findsupplierOrderStatus(chatId) {
             const cellValue = secondWorksheet[cellAddress].v;
 
             if (cellValue !== null) {
-                let formatedCellValue = cellValue.toString().trim();
+                let formatedCellValue = cellValue.toString().trim().split("/")[0];
                 const formatedIndex = indexOfOrder.toString().trim();
             
                 if (isNaN(formatedCellValue)) {
                   formatedCellValue = formatedCellValue.toUpperCase();
+                }
+                if (isNaN(formatedIndex)) {
+                    formatedIndex = formatedIndex.toUpperCase();
                 }
                 if (indexOfOrder.length === 0) {
 
@@ -2795,6 +2797,7 @@ async function findsupplierOrderStatus(chatId) {
                 }
             }
         }
+        
         if (!foundMatch) {
             return bot.sendMessage(
                 chatId,
