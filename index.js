@@ -2741,7 +2741,7 @@ async function findsupplierOrderStatus(chatId) {
 
             if (cellValue !== null) {
                 let formatedCellValue = cellValue.toString().trim().split("/")[0];
-                const formatedIndex = indexOfOrder.toString().trim();
+                let formatedIndex = indexOfOrder.toString().trim();
             
                 if (isNaN(formatedCellValue)) {
                   formatedCellValue = formatedCellValue.toUpperCase();
