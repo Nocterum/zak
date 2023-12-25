@@ -2635,6 +2635,7 @@ async function findLittleGreenePPL(chatId) {
 }
 
 async function findsupplierOrderStatus(chatId) {
+
     const user = await UserModel.findOne({
         where: {
             chatId: chatId
@@ -2732,7 +2733,7 @@ async function findsupplierOrderStatus(chatId) {
                 );
             }
         }
-        await searchIndex();
+        await searchIndex(chatId);
 
         for (let cellAddress in secondWorksheet) {
             if (cellAddress[0] === '!') continue;
