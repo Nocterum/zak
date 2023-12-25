@@ -2672,7 +2672,7 @@ async function findsupplierOrderStatus(chatId) {
             const cellValue = firstWorksheet[cellAddress].v;
 
             if (cellValue !== null) {
-                let formatedCellValue = cellValue.toString().trim();
+                let formatedCellValue = cellValue.toString().trim().split("/")[0];
                 const formatedUserVC = numberOfOrder.toString().trim();
             
                 if (isNaN(formatedCellValue)) {
