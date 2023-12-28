@@ -4309,7 +4309,7 @@ const start = async () => {
                 );
             } else if (data === '/MorrisTextile') {
 
-                return findBrink(chatId);
+                return startCheckVendor(chatId);
 
             } else if (data === '/MorrisWallpapper') {
                 // lc = null;
