@@ -103,6 +103,16 @@ module.exports = {
         })
     },
 
+    choiseOption: {
+        parse_mode: 'HTML',
+        reply_markup: JSON.stringify( {
+            inline_keyboard: [
+                [{text: 'Ткани Morris', callback_data: '/MorrisTextile'}],
+                [{text: 'Обои Morris', callback_data: '/MorrisWallpapper'}],
+            ]
+        })
+    },
+
     work1Options: {
         parse_mode: 'HTML',
         reply_markup: JSON.stringify( {

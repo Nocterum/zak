@@ -34,6 +34,7 @@ const {
     startFindOptions, 
     startFind1Options, 
     startFind2Options, 
+    choiseOption,
     beginWorkOptions, 
     beginWork2Options, 
     mainMenuReturnOptions, 
@@ -316,11 +317,15 @@ const startCheckVendor = async (chatId, msg) => {
         attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendor']
     });
 
-    await user.update({lastCommand: '/enterVC'}, {
+    await user.update(
+        {
+            lastCommand: '/enterVC'
+        }, 
+        {
         where: {
             chatId: chatId
         }
-    })
+    });
 
     if (user.vendor !== null) {
 
@@ -373,7 +378,11 @@ const startCheckVendor = async (chatId, msg) => {
 
         } else {
 
-            await user.update({lastCommand: '/enterBrand'}, {
+            await user.update(
+                {
+                lastCommand: '/enterBrand'
+            }, 
+            {
                 where: {
                     chatId: chatId
                 }
@@ -387,7 +396,11 @@ const startCheckVendor = async (chatId, msg) => {
         }
     } else {
 
-        await user.update({lastCommand: '/enterBrand'}, {
+        await user.update(
+            {
+                lastCommand: '/enterBrand'
+            }, 
+            {
             where: {
                 chatId: chatId
             }
@@ -414,7 +427,11 @@ const startFindOpus = async (chatId) => {
         attributes: ['id', 'chatId', 'lastCommand', 'brand', 'vendorCode']
     });
 
-    await user.update({lastCommand: '/enterVC'}, {
+    await user.update(
+        {
+            lastCommand: '/enterVC'
+        }, 
+        {
         where: {
             chatId: chatId
         }
@@ -2763,19 +2780,19 @@ async function findsupplierOrderStatus(chatId) {
                     if (rCell && rCell.v !== undefined) {
                         return bot.sendMessage(
                             chatId,
-                            `${message}Поступил на СВХ`,
+                            `${message}Поступил на СВХ ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (nCell && nCell.v !== undefined) {
                         return bot.sendMessage(
                             chatId,
-                            `${message}Вышел со склада перегрузки`,
+                            `${message}Вышел со склада перегрузки ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (kCell && kCell.v !== undefined) {
                         return bot.sendMessage(
                             chatId,
-                            `${message}Отгружено`,
+                            `${message}Отгружено ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (gCell && gCell.v !== undefined) {
@@ -3525,6 +3542,12 @@ const start = async () => {
                                     chatId,
                                     `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
                                 )
+                            } else if (user.brand === 'MORRIS') {
+                                return bot.sendMessage(
+                                    chatId,
+                                    `Уточните, какой товар бренда ${text.toUpperCase()} вы хотите найти`,
+                                    choiseOption
+                                );
                             } else {
                                 await bot.sendMessage(
                                     chatId,
@@ -3547,7 +3570,7 @@ const start = async () => {
                     }
                     await bot.sendMessage(chatId, 'Идёт обработка вашего запроса . . .');
                     const formatedUserVendor = user.vendor.replace(/[\s-]/g, '');
-                    botMsgIdx = msg.message_id += 1; 
+                    botMsgIdx = msg.message_id += 1;
 
                     if (formatedUserVendor === 'ОПУС') {
 
@@ -4085,7 +4108,11 @@ const start = async () => {
 
             } else if (data === '/enterBrand') {
                 // lc = data;
-                await user.update({lastCommand: data}, {
+                await user.update(
+                    {
+                        lastCommand: data
+                    },
+                    {
                     where: {
                         chatId: chatId
                     }
@@ -4280,7 +4307,11 @@ const start = async () => {
                     chatId,
                     `Введите номер заказа поставщику:`
                 );
-            } else if (data === '/work2') {
+            } else if (data === '/MorrisTextile') {
+
+                return findBrink(chatId);
+
+            } else if (data === '/MorrisWallpapper') {
                 // lc = null;
                 await user.update({lastCommand: null}, {
                     where: {
@@ -4290,22 +4321,8 @@ const start = async () => {
 
                 return bot.sendMessage(
                     chatId, 
-                    sorry, 
-                    mainMenuReturnOptions
-                );
-
-            } else if (data === '/work3') {
-                // lc = null;
-                await user.update({lastCommand: null}, {
-                    where: {
-                        chatId: chatId
-                    }
-                })
-
-                return bot.sendMessage(
-                    chatId, 
-                    sorry, 
-                    mainMenuReturnOptions
+                    `К сожалению, меня ещё не научили искать остатки по обоям бренда <b>${user.brand}</b>.`,
+                    { parse_mode: 'HTML' }
                 );
 
             } else if (data === '/again') {
