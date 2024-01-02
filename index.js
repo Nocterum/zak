@@ -2759,7 +2759,6 @@ async function findsupplierOrderStatus(chatId) {
             if (cellAddress.charAt(0) !== "A") {
                 continue;
             }
-        // for (let cellAddress in secondWorksheet) {
 
             const cellValue = secondWorksheet[cellAddress].v;
 
@@ -2817,7 +2816,7 @@ async function findsupplierOrderStatus(chatId) {
 
                         return bot.sendMessage(
                             chatId,
-                            `${message}Отгружено ${DD}/${MM}/${YY}`,
+                            `${message}Отгружен ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (gCell && gCell.v !== undefined) {
@@ -2829,13 +2828,13 @@ async function findsupplierOrderStatus(chatId) {
 
                         return bot.sendMessage(
                             chatId,
-                            `${message}Оплачено фабрике ${DD}/${MM}/${YY}`,
+                            `${message}Оплачен фабрике ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else {
                         return bot.sendMessage(
                             chatId,
-                            `${message}Ещё не оплачено фабрике`,
+                            `${message}Ещё не оплачен фабрике`,
                             { parse_mode: 'HTML' }
                         );
                     }
