@@ -2775,7 +2775,7 @@ async function findsupplierOrderStatus(chatId) {
                 }
                 if (indexOfOrder.length === 0) {
 
-                } else if (formatedCellValue.includes(formatedIndex)) {
+                } else if (formatedCellValue === formatedIndex) {
                     foundMatch = true;
 
                     const gCell = secondWorksheet['G' + cellAddress.substring(1)]; // Оплаченно фабрике
