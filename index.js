@@ -799,14 +799,16 @@ const startFindLevantin = async (chatId, msg) => {
 
         if (firstProductLink) { 
 
-            const responseAuth = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, {
+            const responseAuth = await axios.post(`http://www.galleriaarben.ru/ajax/auth.php`, 
+            {
                 backurl: `/ajax/auth.php`,
                 AUTH_FORM: `Y`,
                 TYPE: `AUTH`,
                 Login: `Войти`,
                 USER_LOGIN: levantin_login,
                 USER_PASSWORD: levantin_password
-            },{
+            },
+            {
                 "headers": {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 }
@@ -2752,8 +2754,13 @@ async function findsupplierOrderStatus(chatId) {
         await searchIndex(chatId);
         foundMatch = false;
 
-        for (let cellAddress in secondWorksheet) {
-            if (cellAddress[0] === '!') continue;
+        for (let i = Object.keys(secondWorksheet).length - 1; i >= 0; i--) {
+            const cellAddress = Object.keys(secondWorksheet)[i];
+            if (cellAddress.charAt(0) !== "A") {
+                continue;
+            }
+        // for (let cellAddress in secondWorksheet) {
+
             const cellValue = secondWorksheet[cellAddress].v;
 
             if (cellValue !== null) {
@@ -2778,18 +2785,36 @@ async function findsupplierOrderStatus(chatId) {
                     const message = `Статус заказа <b>${numberOfOrder}</b>:\n`;
 
                     if (rCell && rCell.v !== undefined) {
+                        const excelDate = new Date((rCell.v - 25569) * 86400 * 1000); // преобразование числа в дату
+                        const formattedDate = excelDate.toLocaleDateString(); // форматирование даты в нужный формат
+                        const MM = formattedDate.split("/")[0];
+                        const DD = formattedDate.split("/")[1];
+                        const YY = formattedDate.split("/")[2];
+
                         return bot.sendMessage(
                             chatId,
                             `${message}Поступил на СВХ ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (nCell && nCell.v !== undefined) {
+                        const excelDate = new Date((nCell.v - 25569) * 86400 * 1000); // преобразование числа в дату
+                        const formattedDate = excelDate.toLocaleDateString(); // форматирование даты в нужный формат
+                        const MM = formattedDate.split("/")[0];
+                        const DD = formattedDate.split("/")[1];
+                        const YY = formattedDate.split("/")[2];
+
                         return bot.sendMessage(
                             chatId,
                             `${message}Вышел со склада перегрузки ${DD}/${MM}/${YY}`,
                             { parse_mode: 'HTML' }
                         );
                     } else if (kCell && kCell.v !== undefined) {
+                        const excelDate = new Date((kCell.v - 25569) * 86400 * 1000); // преобразование числа в дату
+                        const formattedDate = excelDate.toLocaleDateString(); // форматирование даты в нужный формат
+                        const MM = formattedDate.split("/")[0];
+                        const DD = formattedDate.split("/")[1];
+                        const YY = formattedDate.split("/")[2];
+
                         return bot.sendMessage(
                             chatId,
                             `${message}Отгружено ${DD}/${MM}/${YY}`,
@@ -2816,6 +2841,7 @@ async function findsupplierOrderStatus(chatId) {
                     }
                 }
             }
+            if (foundMatch) break;
         }
         
         if (!foundMatch) {
