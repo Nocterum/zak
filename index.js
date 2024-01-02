@@ -2835,7 +2835,7 @@ async function findsupplierOrderStatus(chatId) {
                     } else {
                         return bot.sendMessage(
                             chatId,
-                            `${message} Ещё не оплачено фабрике`,
+                            `${message}Ещё не оплачено фабрике`,
                             { parse_mode: 'HTML' }
                         );
                     }
