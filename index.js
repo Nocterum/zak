@@ -116,7 +116,7 @@ const chekPassword = async (chatId, msg) => {
 
         return bot.sendMessage(
             chatId, 
-            `В доступе отказано.\nПароль мог измениться. Уточните новый пароль у Харитонова Никиты.\nВведите пароль:`
+            `В доступе отказано.\nПароль мог измениться. Уточните новый пароль.\nВведите пароль:`
         );
     }
 }
@@ -1914,11 +1914,13 @@ async function findDecorDelux(chatId) {
             let foundMatch = false;
 
             for (let cellAddress in firstWorksheet) {
+
                 if (cellAddress[0] === '!') continue;
               
                 const cellValue = firstWorksheet[cellAddress].v;
 
                 if (cellValue !== null) {
+                    
                     let formatedCellValue = cellValue.toString().trim();
                     const formatedUserVC = user.vendorCode.toString().trim();
               
@@ -2712,28 +2714,26 @@ async function findsupplierOrderStatus(chatId) {
                             mValue = '0';
                         }
                         if (mValue) {
-                            if (mValue) {
-                                const regex = /([A-Z]+\(.*?\))/;
-                                if (regex.test(mValue)) {
-                                    const match = regex.exec(mValue);
-                                    if (match) {
-                                        indexOfOrder = match[1];
-                                        console.log(`Заказ: ${formatedCellValue}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`);
-                                        return indexOfOrder;
-                                    } else {
-                                        return bot.sendMessage(
-                                            chatId, 
-                                            `Комментарий в заказе <b>${formatedCellValue}</b> отсутствует`,
-                                            { parse_mode: 'HTML' }
-                                        );
-                                    }
+                            const regex = /([A-Z]+\(.*?\))/;
+                            if (regex.test(mValue)) {
+                                const match = regex.exec(mValue);
+                                if (match) {
+                                    indexOfOrder = match[1];
+                                    console.log(`Заказ: ${formatedCellValue}\nкомментарий: ${mValue}\nиндекс: ${indexOfOrder}`);
+                                    return indexOfOrder;
                                 } else {
                                     return bot.sendMessage(
                                         chatId, 
-                                        `Индекс заказа <b>${formatedCellValue}</b> отсутствует в комментарии ${indexOfOrder}`,
+                                        `Комментарий в заказе <b>${formatedCellValue}</b> отсутствует`,
                                         { parse_mode: 'HTML' }
                                     );
                                 }
+                            } else {
+                                return bot.sendMessage(
+                                    chatId, 
+                                    `Индекс заказа <b>${formatedCellValue}</b> отсутствует в комментарии ${indexOfOrder}`,
+                                    { parse_mode: 'HTML' }
+                                );
                             }
                         }
                     }
