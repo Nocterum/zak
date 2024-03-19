@@ -19,6 +19,7 @@ const UserModel = sequelize.define( 'user', {
     textMail: {type: DataTypes.TEXT},
     cookie: {type: DataTypes.TEXT},
     authToken: {type: DataTypes.TEXT},
+    messageId: {type: DataTypes.TEXT},
 })
 
 module.exports = UserModel;

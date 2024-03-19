@@ -519,7 +519,10 @@ const startFindOpus = async (chatId) => {
 
                 if (expectedArrivalTable.length === 1) {
                     // Отправляем информацию о поставках товара
-                    bot.sendMessage(chatId, `${expectedArrivalContent}`, startFindOptions);
+                    bot.sendMessage(chatId,
+                        `${expectedArrivalContent}`,
+                        startFindOptions
+                    );
                     console.log('информация о поставках при отсутсвии наличия, успешно отправлена');
                     return;
 
@@ -2273,25 +2276,25 @@ async function findLoymina(chatId) {
 
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
                         let dValue = '';
-                        const kValueCell = firstWorksheet['K' + cellAddress.substring(1)];
-                        let kValue = '';
-                        const jValueCell = firstWorksheet['J' + cellAddress.substring(1)];
-                        let jValue = '';
+                        const iValueCell = firstWorksheet['I' + cellAddress.substring(1)];
+                        let iValue = '';
+                        const gValueCell = firstWorksheet['G' + cellAddress.substring(1)];
+                        let gValue = '';
 
                         if (dValueCell !== null && dValueCell !== undefined) {
                             dValue = dValueCell.v;    // Партия
                         }
-                        if (kValueCell !== null && kValueCell !== undefined) {
-                            kValue = kValueCell.v     // Количество
+                        if (iValueCell !== null && iValueCell !== undefined) {
+                            iValue = iValueCell.v     // Количество
                         }
-                        if (jValueCell !== null && jValueCell !== undefined) {
-                            jValue = jValueCell.v     // Ед. измерения
+                        if (gValueCell !== null && gValueCell !== undefined) {
+                            gValue = gValueCell.v     // Ед. измерения
                         }
 
                         let message = '';
                         message += `<b>${dValue}</b>\n`;
-                        message += `В наличии: <b>${kValue}</b> `;
-                        message += `<b>${jValue}</b>\n`;
+                        message += `В наличии: <b>${iValue}</b> `;
+                        message += `<b>${gValue}</b>\n`;
                             
                         if (botMsgIdx !== null) {
                             bot.deleteMessage(chatId, botMsgIdx);
@@ -2919,86 +2922,35 @@ const start = async () => {
 
     });
 
-    // начать игру
-    bot.onText(/\/game/, async msg => {
-        const chatId = msg.chat.id;
+    // // начать игру
+    // bot.onText(/\/game/, async msg => {
+    //     const chatId = msg.chat.id;
 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            },
-            attributes: ['id', 'chatId', 'lastCommand', 'email']
-        });
+    //     const user = await UserModel.findOne({
+    //         where: {
+    //             chatId: chatId
+    //         },
+    //         attributes: ['id', 'chatId', 'lastCommand', 'email']
+    //     });
 
-        if (user.email !== '/passwordcheck') {
+    //     if (user.email !== '/passwordcheck') {
 
-            // lc = '/game';
-            await user.update({lastCommand: '/game'}, {
-                where: {
-                    chatId: chatId
-                }
-            })
+    //         // lc = '/game';
+    //         await user.update({lastCommand: '/game'}, {
+    //             where: {
+    //                 chatId: chatId
+    //             }
+    //         })
 
-            const randomNumber = Math.floor(Math.random() * 10)
-            chats[chatId] = randomNumber;
-            return bot.sendMessage(
-                chatId, 
-                `Отгадай число😏`, 
-                gameOptions
-            );
-        }
-    });
-
-    // для тестирования
-    bot.onText(/\/x/, async msg => {
-        const chatId = msg.chat.id;
-
-        // lc = null; 
-        const user = await UserModel.findOne({
-            where: {
-                chatId: chatId
-            },
-            attributes: [
-                'id', 
-                'chatId', 
-                'lastCommand',
-                'vendorCode'
-            ]
-        });
-
-        await user.update({lastCommand: null}, {
-            where: {
-                chatId: chatId
-            }
-        })
-
-        try {
-
-            const vendorCode = `FDG3114/03`
-            const formatedVendorCode = vendorCode.replace(/\//g, '%2F');
-            const responseLink = `https://www.designersguild.com/nl/search-results/l76?search-term=${formatedVendorCode}&pagesize=48&sort=default&page=1`;
-            console.log(responseLink);
-
-            const responseDG = await axios.get(
-                responseLink, 
-                {
-                    proxy: false,
-                    httpsAgent: agent,
-                }
-            );
-
-            const $ = cheerio.load(responseDG.data);
-            
-            console.log(responseDG.data);
-
-
-
-        } catch (e) {
-            
-            console.log( 'Что-то пошло не так', e);
-        }
-
-    });
+    //         const randomNumber = Math.floor(Math.random() * 10)
+    //         chats[chatId] = randomNumber;
+    //         return bot.sendMessage(
+    //             chatId, 
+    //             `Отгадай число😏`, 
+    //             gameOptions
+    //         );
+    //     }
+    // });
 
     // настройки пользователя
     bot.onText(/\/settings/, async msg => {
@@ -3081,7 +3033,6 @@ const start = async () => {
 
             const fileName = match[1];
             const filePath = path.join('/root/zak/xl', fileName); 
-            // const filePath = path.join('C:\\node.js\\zak\\xl', fileName);    //Dev
 
             // Проверка существования файла
             fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -3872,7 +3823,9 @@ const start = async () => {
                         text = text.replace(/\s\s/g, ' ');
                         counter++;
                     }
-                    await user.update({reserveNumber: text});
+                    await user.update({
+                        reserveNumber: text
+                    });
 
                     if ((user.reserveNumber) !== (user.reserveNumber.split(" ")[0])) {
                         return bot.sendMessage(
@@ -3976,28 +3929,6 @@ const start = async () => {
 
                     return findsupplierOrderStatus(chatId);
 
-                } else if (text === '/infowork') {
-
-                    return bot.sendMessage(
-                        chatId, 
-                        `${user.nickname} вот, что вы искали:\n\nКаталог: ${user.catalog}\nБренд: ${user.brand}\nАртикул: ${user.vendorCode}\nКоличество: ${user.reserveNumber}\n\nВаш email: ${user.email}`,
-                        resetInfoWorkOptions
-                    );
-
-                } else if (text === '/infogame') {
-
-                    // lc = null;
-                    await user.update({lastCommand: null}, {
-                        where: {
-                            chatId: chatId
-                        }
-                    })
-
-                    return bot.sendMessage(
-                        chatId, 
-                        `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, resetOptions
-                    );
-
                 } else if (text.toLowerCase().includes('привет')) {
 
                     return bot.sendSticker(
@@ -4043,16 +3974,16 @@ const start = async () => {
 
         console.log(msg);
 
-        //функция перезапуска игры
-        const startGame = async (chatId) => {
-            const randomNumber = Math.floor(Math.random() * 10)
-            chats[chatId] = randomNumber;
-            return bot.sendMessage(
-                chatId, 
-                `Отгадывай:`, 
-                gameOptions
-            );
-        }
+        // //функция перезапуска игры
+        // const startGame = async (chatId) => {
+        //     const randomNumber = Math.floor(Math.random() * 10)
+        //     chats[chatId] = randomNumber;
+        //     return bot.sendMessage(
+        //         chatId, 
+        //         `Отгадывай:`, 
+        //         gameOptions
+        //     );
+        // }
 
         const user = await UserModel.findOne({
             where: {
@@ -4363,90 +4294,6 @@ const start = async () => {
                     { parse_mode: 'HTML' }
                 );
 
-            } else if (data === '/again') {
-                // lc = data;
-                await user.update({lastCommand: data}, {
-                    where: {
-                        chatId: chatId
-                    }
-                })
-
-                await bot.deleteMessage(
-                    chatId, 
-                    msg.message.message_id
-                );
-                return startGame(chatId);
-
-            } else if (data === '/infogame') {
-                // lc = data;
-                await user.update({lastCommand: data}, {
-                    where: {
-                        chatId: chatId
-                    }
-                })
-
-                await bot.deleteMessage(
-                    chatId, 
-                    msg.message.message_id
-                );
-                return bot.sendMessage(
-                    chatId, 
-                    `Правильных ответов: "${user.right}"\nНеправильных ответов: "${user.wrong}"`, 
-                    resetOptions
-                ); 
-
-            } else if(data === '/reset') {
-                // lc = data;
-                await user.update({lastCommand: data}, {
-                    where: {
-                        chatId: chatId
-                    }
-                })
-
-                await bot.deleteMessage(
-                    chatId, 
-                    msg.message.message_id
-                );
-                if (user) {
-                    await user.update ({
-                        right: 0,
-                        wrong: 0,
-                    });
-                }
-
-                return bot.sendMessage(
-                    chatId, 
-                    `Результаты игры сброшенны:\nправильных ${user.right},\nнеправильных ${user.wrong}`, 
-                    againOptions
-                );
-
-            } else if (user.lastCommand === '/game' || user.lastCommand === '/again') {
-
-                if (data == chats[chatId]) {
-                    user.right += 1;
-                    await user.save(chatId);
-                    await bot.deleteMessage(
-                        chatId, 
-                        msg.message.message_id
-                    );
-                    return bot.sendMessage(
-                        chatId, 
-                        `Ты отгадал цифру "${chats[chatId]}"`, 
-                        againOptions
-                    );
-                } else {
-                    user.wrong += 1;
-                    await user.save();
-                    await bot.deleteMessage(
-                        chatId, 
-                        msg.message.message_id
-                    );
-                    return bot.sendMessage(
-                        chatId, 
-                        `Нет, я загадал цифру "${chats[chatId]}"`, 
-                        againOptions
-                    );  
-                }
             }
 
         } catch (err) {    
