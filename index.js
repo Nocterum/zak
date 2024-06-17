@@ -1646,7 +1646,7 @@ async function findCatalogWallpaper(chatId) {
     
                                 return bot.sendMessage(
                                     chatId, 
-                                    `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
+                                    `Каталога в салонах нет.\nОбратитесь к Пономарёвой Ирине за уточнением возможности заказа данного артикула.\nponomareva_i@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`,
                                     { parse_mode: 'HTML' }
                                 );
                             }
@@ -1778,7 +1778,7 @@ async function findCatalogTextile(chatId) {
 
                                 return bot.sendMessage(
                                 chatId, 
-                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
+                                `Каталога в салонах нет.\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nponomareva_i@manders.ru\n<code>+7 966 321-80-08</code>\n\n${PricelistLink.messagePrice}`, 
                                 { parse_mode: 'HTML' }
                                 );
                             }
@@ -3544,7 +3544,7 @@ const start = async () => {
                             } else if (user.brand === 'RASCH') {
                                 return bot.sendMessage(
                                     chatId,
-                                    `Возможность продажи бренда Rasch нужно уточнить у Юлии Скрибник!`
+                                    `Возможность продажи бренда Rasch нужно уточнить у Пономарёвой Ирины!`
                                 )
                             } else if (user.brand === 'MORRIS') {
                                 return bot.sendMessage(
@@ -3555,7 +3555,7 @@ const start = async () => {
                             } else {
                                 await bot.sendMessage(
                                     chatId,
-                                    `<b>Бренд найден</b>✅\nВАЖНО: <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Юлии Скрибник!</u>\n\n${PricelistLink.messagePrice}`,
+                                    `<b>Бренд найден</b>✅\nВАЖНО: <u>Уточняйте наличие каталога.\nБез каталога в наличии, продажа запрещена! Возможность продажи уточнить у Пономарёвой Ирины!</u>\n\n${PricelistLink.messagePrice}`,
                                     { parse_mode: 'HTML' }
                                 )
                                 return startCheckVendor(chatId, msg);
@@ -3894,7 +3894,7 @@ const start = async () => {
                         }
                             return bot.sendMessage(
                             chatId, 
-                            `Такого каталога у нас нет\nОбратитесь к Юлии Скрибник за уточнением возможности заказа данного артикула.\nskribnik@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
+                            `Такого каталога у нас нет\nОбратитесь к Пономарёвой Ирине за уточнением возможности заказа данного артикула.\nponomareva_i@manders.ru\n<code>+7 966 321-80-08</code>\n\n`, 
                             {parse_mode: 'HTML'}
                         );
                     }
