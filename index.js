@@ -2274,6 +2274,8 @@ async function findLoymina(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
+                        const сValueCell = firstWorksheet['С' + cellAddress.substring(1)];
+                        let сValue = '';
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
                         let dValue = '';
                         const iValueCell = firstWorksheet['I' + cellAddress.substring(1)];
@@ -2281,6 +2283,9 @@ async function findLoymina(chatId) {
                         const gValueCell = firstWorksheet['G' + cellAddress.substring(1)];
                         let gValue = '';
 
+                        if (сValueCell !== null && сValueCell !== undefined) {
+                            сValue = сValueCell.v;    // Партия
+                        }
                         if (dValueCell !== null && dValueCell !== undefined) {
                             dValue = dValueCell.v;    // Партия
                         }
@@ -2292,7 +2297,15 @@ async function findLoymina(chatId) {
                         }
 
                         let message = '';
-                        message += `<b>${dValue}</b>\n`;
+                        if ( сValue === null ) {
+                            
+                            message += `<b>${dValue}</b>\n`;
+
+                        } else {
+
+                            message += `<b>${сValue}</b>\n`;
+                            
+                        }
                         message += `В наличии: <b>${iValue}</b> `;
                         message += `<b>${gValue}</b>\n`;
                             
@@ -2554,6 +2567,10 @@ async function findBrink(chatId) {
     }
 }
 
+// ======================================================================================================================================
+// функция поиска остатков по поставщику Little Greene и PPL
+// ======================================================================================================================================
+
 async function findLittleGreenePPL(chatId) {
 
     let fileNameLg = 'остатки_lg_ppl_wallpaper';
@@ -2657,6 +2674,10 @@ async function findLittleGreenePPL(chatId) {
         }
     }
 }
+
+// ======================================================================================================================================
+// функция поиска статуса поставки ГАНТ
+// ======================================================================================================================================
 
 async function findsupplierOrderStatus(chatId) {
 
