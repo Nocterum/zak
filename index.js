@@ -2274,7 +2274,7 @@ async function findLoymina(chatId) {
                     if (formatedCellValue.includes(formatedUserVC)) {
                         foundMatch = true;
 
-                        const сValueCell = firstWorksheet['С' + cellAddress.substring(1)];
+                        const сValueCell = firstWorksheet['C' + cellAddress.substring(1)];
                         let сValue = '';
                         const dValueCell = firstWorksheet['D' + cellAddress.substring(1)];
                         let dValue = '';
@@ -2297,15 +2297,9 @@ async function findLoymina(chatId) {
                         }
 
                         let message = '';
-                        if ( сValue.length < 4 ) {
-                            
-                            message += `<b>${dValue}</b>\n`;
 
-                        } else {
-
-                            message += `<b>${сValue}</b>\n`;
-
-                        }
+                        // message += `<b>${dValue}</b>\n`;
+                        message += `<b>${сValue}</b>\n`;
                         message += `В наличии: <b>${iValue}</b> `;
                         message += `<b>${gValue}</b>\n`;
                             
