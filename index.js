@@ -2297,14 +2297,14 @@ async function findLoymina(chatId) {
                         }
 
                         let message = '';
-                        if ( сValue === null ) {
+                        if ( сValue.length < 4 ) {
                             
                             message += `<b>${dValue}</b>\n`;
 
                         } else {
 
                             message += `<b>${сValue}</b>\n`;
-                            
+
                         }
                         message += `В наличии: <b>${iValue}</b> `;
                         message += `<b>${gValue}</b>\n`;
