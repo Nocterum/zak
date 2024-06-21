@@ -280,7 +280,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         }
                     }).join('');
     
-                    if (messageResult1C.length !== 0 && messageResult1C.toString !== 'Склад') {
+                    if (messageResult1C.length !== 0 && messageResult1C.toString !== obj.warehouse.toString) {
     
                         return { messageResult1C };
     
