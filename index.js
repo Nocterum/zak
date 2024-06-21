@@ -267,14 +267,14 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                             if (balance) {
                                 message += `Свободно: ${balance}\n`
-                            }
-                            if (obj.reserve > 0) {
+                            }  
+                            else if (obj.reserve > 0) {
                                 message += `Резерв: ${obj.reserve}\n`
                             }
-                            if (obj.quantity > 0) {
+                            else if (obj.quantity > 0) {
                                 message += `Общий: ${obj.quantity}\n`
                             }
-                            if (message.toString === obj.warehouse.toString) {
+                            else if (message.toString === obj.warehouse.toString) {
                                 message = `${vendorCode} по данным 1C не числится\n\n`
                             }
                             message += `\n`
