@@ -279,7 +279,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         }
                     }).join('');
     
-                    if (messageResult1C.length !== 0 && messageResult1C.length > 7) {
+                    if (messageResult1C.length !== 0 && messageResult1C !== "Склад") {
     
                         return { messageResult1C };
     
