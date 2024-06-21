@@ -265,24 +265,25 @@ const startRequest1C = async (chatId, vendorCode) => {
 
                             const balance = obj.quantity-obj.reserve;
 
-                            if (balance) {
-                                message += `Свободно: ${balance}\n`
-                            }  
-                            else if (obj.reserve > 0) {
-                                message += `Резерв: ${obj.reserve}\n`
-                            }
-                            else if (obj.quantity > 0) {
-                                message += `Общий: ${obj.quantity}\n`
-                            }
-                            else if (message.toString === obj.warehouse.toString) {
+                            if (message.toString === obj.warehouse.toString) {
                                 message = `${vendorCode} по данным 1C не числится\n\n`
+                            } else {
+                                if (balance) {
+                                    message += `Свободно: ${balance}\n`
+                                }  
+                                if (obj.reserve > 0) {
+                                    message += `Резерв: ${obj.reserve}\n`
+                                }
+                                if (obj.quantity > 0) {
+                                    message += `Общий: ${obj.quantity}\n`
+                                }
                             }
                             message += `\n`
                             return message;
                         }
                     }).join('');
     
-                    if (messageResult1C.length !== 0 && messageResult1C.toString !== 'Склад') {
+                    if (messageResult1C.length !== 0) {
     
                         return { messageResult1C };
     
