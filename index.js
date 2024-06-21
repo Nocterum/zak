@@ -274,7 +274,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                             if (obj.quantity > 0) {
                                 message += `Общий: ${obj.quantity}\n`
                             }
-                            if (message === obj.warehouse) {
+                            if (message.toString === obj.warehouse.toString) {
                                 message = `${vendorCode} по данным 1C не числится\n\n`
                             }
                             message += `\n`
