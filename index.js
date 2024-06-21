@@ -279,7 +279,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         }
                     }).join('');
     
-                    if (messageResult1C.length !== 0 && messageResult1C.length > 10) {
+                    if (messageResult1C.length !== 0 && messageResult1C.toString.length > 8) {
     
                         return { messageResult1C };
     
