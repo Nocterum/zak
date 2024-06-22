@@ -256,12 +256,13 @@ const startRequest1C = async (chatId, vendorCode) => {
                             obj.warehouse === 'Основной Брак' ||
                             obj.warehouse === 'Недостача' ||
                             obj.warehouse.includes('Уцененные') ||
+                            obj.warehouse.includes('Склад') ||
                             obj.warehouse.includes('уцененных')
                             ) {
                             return "";
                         } else {
                             message = '';
-                            // message += `<strong>${obj.warehouse}</strong>\n`
+                            message += `<strong>${obj.warehouse}</strong>\n`
 
                             const balance = obj.quantity-obj.reserve;
 
