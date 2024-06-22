@@ -3286,7 +3286,7 @@ const start = async () => {
         let text = msg.text;
         const chatId = msg.chat.id;
 
-        console.log(msg)
+        console.log(`${msg.from.id}: ${msg.from.first_name} ${msg.from.last_name}\n${msg.data}: ${msg.text}`);
 
         const user = await UserModel.findOne({
             where: {
@@ -3989,7 +3989,7 @@ const start = async () => {
         const data = msg.data;
         const chatId = msg.message.chat.id;
 
-        console.log(msg);
+        console.log(`${msg.from.id}: ${msg.from.first_name} ${msg.from.last_name}\n${msg.data}: ${msg.text}`);
 
         // //функция перезапуска игры
         // const startGame = async (chatId) => {
