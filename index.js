@@ -3824,7 +3824,7 @@ const start = async () => {
 
                         return bot.sendMessage(
                             chatId, 
-                            `Подключение к 1С временно недоступно\n<i>это норма во внерабочее время магазинов</i>`,
+                            `Подключение к 1С временно недоступно\n${findResult1C}`,
                             { parse_mode: 'HTML' }
                         );
 
