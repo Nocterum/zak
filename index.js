@@ -261,7 +261,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                             return "";
                         } else {
                             message = '';
-                            message += `<strong>${obj.warehouse}</strong>\n`
+                            // message += `<strong>${obj.warehouse}</strong>\n`
 
                             const balance = obj.quantity-obj.reserve;
 
@@ -280,7 +280,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                         }
                     }).join('');
     
-                    if (messageResult1C.length !== 0 && messageResult1C.toString !== obj.warehouse.toString) {
+                    if (messageResult1C.length !== 0 ) {
     
                         return { messageResult1C };
     
