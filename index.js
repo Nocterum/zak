@@ -264,7 +264,9 @@ const startRequest1C = async (chatId, vendorCode) => {
                             message = '';
                             message += `<strong>${obj.warehouse}</strong>\n`
 
-                            const balance = obj.quantity-obj.reserve;
+                            const quantityEdited = obj.quantity.replace(/\s+/g, '')
+
+                            const balance = quantityEdited-obj.reserve;
 
                             if (balance) {
                                 message += `Свободно: ${balance}\n`
