@@ -275,7 +275,7 @@ const startRequest1C = async (chatId, vendorCode) => {
                                 message += `Резерв: ${obj.reserve}\n`
                             }
                             if (obj.quantity > 0) {
-                                message += `Общий: ${obj.quantity}\n`
+                                message += `Общий: ${quantityEdited}\n`
                             }
                             
                             message += `\n`
