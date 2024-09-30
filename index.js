@@ -224,12 +224,12 @@ const startRequest1C = async (chatId, vendorCode) => {
                             warehouse = cells[0].textContent.trim();  // склад
                         }
                         if (cells[1] !== '') {
-                            quantity = cells[1].textContent.trim().split( "," )[0];   // количество
+                            quantity = cells[1].textContent.trim().split( "," )[0].replace(/\s+/g, '');   // количество
                         } else {
                             quantity = '0';
                         }
                         if (cells[2] !== '') {
-                            reserve = cells[2].textContent.trim().split( "," )[0];     // резерв
+                            reserve = cells[2].textContent.trim().split( "," )[0].replace(/\s+/g, '');     // резерв
                         } else {
                             reserve = '0';
                         }
@@ -264,9 +264,9 @@ const startRequest1C = async (chatId, vendorCode) => {
                             message = '';
                             message += `<strong>${obj.warehouse}</strong>\n`
 
-                            const quantityEdited = obj.quantity.replace(/\s+/g, '')
+                            // const quantityEdited = obj.quantity.replace(/\s+/g, '') // Удаление пробелов в 
 
-                            const balance = quantityEdited-obj.reserve;
+                            const balance = obj.quantity-obj.reserve;
 
                             if (balance) {
                                 message += `Свободно: ${balance}\n`
@@ -274,8 +274,8 @@ const startRequest1C = async (chatId, vendorCode) => {
                             if (obj.reserve > 0) {
                                 message += `Резерв: ${obj.reserve}\n`
                             }
-                            if (quantityEdited > 0) {
-                                message += `Общий: ${quantityEdited}\n`
+                            if (obj.quantity > 0) {
+                                message += `Общий: ${obj.quantity}\n`
                             }
                             
                             message += `\n`
